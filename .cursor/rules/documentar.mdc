@@ -1,0 +1,7 @@
+---
+description: Sempre que fizer algum componente, alteração etc. adicionar no readme, criar o commit e subir pro git 
+globs:
+alwaysApply: false
+---
+
+
