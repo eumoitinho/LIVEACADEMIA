@@ -12,27 +12,27 @@ export default function TrabalheConoscoPage() {
     position: "",
     experience: "",
     message: "",
-    resume: null,
+    resume: null as File | null,
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [fileName, setFileName] = useState("")
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormState((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0]
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
     if (file) {
       setFormState((prev) => ({ ...prev, resume: file }))
       setFileName(file.name)
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
 
@@ -99,7 +99,7 @@ export default function TrabalheConoscoPage() {
   ]
 
   return (
-    <main className="min-h-screen pt-24 pb-12">
+    <main className="min-h-screen pt-24 pb-12 bg-live-bg">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -107,10 +107,10 @@ export default function TrabalheConoscoPage() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className="section-title">
-            Trabalhe <span className="text-gradient">Conosco</span>
+          <h1 className="text-5xl font-bold text-live-textPrimary mb-6">
+            Trabalhe <span className="text-live-accent">Conosco</span>
           </h1>
-          <p className="section-subtitle">
+          <p className="text-xl text-live-textSecondary">
             Faça parte do time Live Academia e ajude a transformar vidas através do fitness.
           </p>
         </motion.div>
@@ -123,8 +123,8 @@ export default function TrabalheConoscoPage() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="app-card p-8">
-              <h2 className="text-2xl font-bold text-white mb-6">Envie seu currículo</h2>
+            <div className="bg-live-border/10 p-8 rounded-2xl border border-live-border/30">
+              <h2 className="text-2xl font-bold text-live-textPrimary mb-6">Envie seu currículo</h2>
 
               {isSubmitted ? (
                 <motion.div
@@ -135,8 +135,8 @@ export default function TrabalheConoscoPage() {
                   <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
                     <Check className="h-8 w-8 text-green-400" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Currículo enviado com sucesso!</h3>
-                  <p className="text-gray-300">
+                  <h3 className="text-xl font-bold text-live-textPrimary mb-2">Currículo enviado com sucesso!</h3>
+                  <p className="text-live-textSecondary">
                     Agradecemos seu interesse em fazer parte do nosso time. Analisaremos seu currículo e entraremos em
                     contato em breve.
                   </p>
@@ -145,7 +145,7 @@ export default function TrabalheConoscoPage() {
                 <form onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                      <label htmlFor="name" className="block text-gray-300 mb-2 font-medium">
+                      <label htmlFor="name" className="block text-live-textSecondary mb-2 font-medium">
                         Nome completo
                       </label>
                       <input
@@ -155,11 +155,11 @@ export default function TrabalheConoscoPage() {
                         value={formState.name}
                         onChange={handleInputChange}
                         required
-                        className="modern-input"
+                        className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent"
                       />
                     </div>
                     <div>
-                      <label htmlFor="email" className="block text-gray-300 mb-2 font-medium">
+                      <label htmlFor="email" className="block text-live-textSecondary mb-2 font-medium">
                         E-mail
                       </label>
                       <input
@@ -169,14 +169,14 @@ export default function TrabalheConoscoPage() {
                         value={formState.email}
                         onChange={handleInputChange}
                         required
-                        className="modern-input"
+                        className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
-                      <label htmlFor="phone" className="block text-gray-300 mb-2 font-medium">
+                      <label htmlFor="phone" className="block text-live-textSecondary mb-2 font-medium">
                         Telefone
                       </label>
                       <input
@@ -186,11 +186,11 @@ export default function TrabalheConoscoPage() {
                         value={formState.phone}
                         onChange={handleInputChange}
                         required
-                        className="modern-input"
+                        className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent"
                       />
                     </div>
                     <div>
-                      <label htmlFor="position" className="block text-gray-300 mb-2 font-medium">
+                      <label htmlFor="position" className="block text-live-textSecondary mb-2 font-medium">
                         Cargo desejado
                       </label>
                       <select
@@ -199,9 +199,9 @@ export default function TrabalheConoscoPage() {
                         value={formState.position}
                         onChange={handleInputChange}
                         required
-                        className="modern-input"
+                        className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent"
                       >
-                        <option value="">Selecione uma opção</option>
+                        <option value="">Selecione um cargo</option>
                         {positions.map((position) => (
                           <option key={position} value={position}>
                             {position}
@@ -212,28 +212,22 @@ export default function TrabalheConoscoPage() {
                   </div>
 
                   <div className="mb-6">
-                    <label htmlFor="experience" className="block text-gray-300 mb-2 font-medium">
-                      Experiência
+                    <label htmlFor="experience" className="block text-live-textSecondary mb-2 font-medium">
+                      Experiência profissional
                     </label>
-                    <select
+                    <textarea
                       id="experience"
                       name="experience"
                       value={formState.experience}
                       onChange={handleInputChange}
-                      required
-                      className="modern-input"
-                    >
-                      <option value="">Selecione uma opção</option>
-                      <option value="Sem experiência">Sem experiência</option>
-                      <option value="Menos de 1 ano">Menos de 1 ano</option>
-                      <option value="1-3 anos">1-3 anos</option>
-                      <option value="3-5 anos">3-5 anos</option>
-                      <option value="Mais de 5 anos">Mais de 5 anos</option>
-                    </select>
+                      rows={4}
+                      className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent"
+                      placeholder="Descreva sua experiência profissional..."
+                    />
                   </div>
 
                   <div className="mb-6">
-                    <label htmlFor="message" className="block text-gray-300 mb-2 font-medium">
+                    <label htmlFor="message" className="block text-live-textSecondary mb-2 font-medium">
                       Mensagem (opcional)
                     </label>
                     <textarea
@@ -242,99 +236,115 @@ export default function TrabalheConoscoPage() {
                       value={formState.message}
                       onChange={handleInputChange}
                       rows={4}
-                      className="modern-input"
-                    ></textarea>
+                      className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent"
+                      placeholder="Conte-nos por que você gostaria de trabalhar conosco..."
+                    />
                   </div>
 
                   <div className="mb-8">
-                    <label className="block text-gray-300 mb-2 font-medium">Currículo (PDF, DOC ou DOCX)</label>
+                    <label htmlFor="resume" className="block text-live-textSecondary mb-2 font-medium">
+                      Currículo (PDF)
+                    </label>
                     <div className="relative">
                       <input
                         type="file"
                         id="resume"
                         name="resume"
                         onChange={handleFileChange}
-                        accept=".pdf,.doc,.docx"
-                        required
-                        className="sr-only"
+                        accept=".pdf"
+                        className="hidden"
                       />
                       <label
                         htmlFor="resume"
-                        className="flex items-center justify-center gap-2 modern-input cursor-pointer hover:border-[#ffcb00]/50 transition-colors"
+                        className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg cursor-pointer hover:bg-live-border/10 transition"
                       >
-                        <Upload className="h-5 w-5 text-[#ffcb00]" />
-                        <span>{fileName || "Selecionar arquivo"}</span>
+                        <Upload className="h-5 w-5" />
+                        {fileName || "Selecionar arquivo"}
                       </label>
                     </div>
                   </div>
 
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                  <button
+                    type="submit"
                     disabled={isSubmitting}
-                    className="btn-primary w-full"
+                    className="w-full bg-live-accent text-live-bg font-bold py-3 px-6 rounded-lg hover:bg-live-yellowLight transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
-                        <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                        <Loader2 className="h-5 w-5 animate-spin" />
                         Enviando...
                       </>
                     ) : (
                       "Enviar currículo"
                     )}
-                  </motion.button>
+                  </button>
                 </form>
               )}
             </div>
           </motion.div>
 
-          {/* Content */}
-          <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
-            <h2 className="text-3xl font-bold text-white mb-8">Por que trabalhar na Live Academia?</h2>
+          {/* Benefits */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-8"
+          >
+            <div>
+              <h2 className="text-3xl font-bold text-live-textPrimary mb-4">Por que trabalhar na Live Academia?</h2>
+              <p className="text-live-textSecondary mb-8">
+                Junte-se a uma empresa que valoriza pessoas, inovação e resultados.
+              </p>
+            </div>
 
-            <div className="space-y-6 mb-8">
+            <div className="space-y-6">
               {benefits.map((item, index) => (
                 <motion.div
-                  key={index}
+                  key={item.title}
                   initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="app-card p-6 group"
+                  className="flex items-start gap-4"
                 >
-                  <div className="flex items-start gap-4">
-                    <div
-                      className={`w-12 h-12 rounded-xl bg-gradient-to-r ${item.color} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}
-                    >
-                      <item.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-                      <p className="text-gray-300 leading-relaxed">{item.description}</p>
-                    </div>
+                  <div className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                    <item.icon className="w-6 h-6 text-live-textPrimary" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-live-textPrimary mb-2">{item.title}</h3>
+                    <p className="text-live-textSecondary">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
 
-            <div className="app-card p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Processo seletivo</h3>
-              <ol className="space-y-4">
-                {[
-                  "Análise de currículo",
-                  "Entrevista inicial (online ou presencial)",
-                  "Teste prático (para cargos específicos)",
-                  "Entrevista final",
-                  "Contratação",
-                ].map((step, index) => (
-                  <li key={index} className="flex items-start">
-                    <div className="h-8 w-8 rounded-full bg-[#ffcb00] flex items-center justify-center text-black text-sm font-bold mr-4 mt-0.5 flex-shrink-0">
-                      {index + 1}
-                    </div>
-                    <span className="text-gray-300 font-medium">{step}</span>
-                  </li>
-                ))}
-              </ol>
+            <div className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30">
+              <h3 className="text-xl font-bold text-live-textPrimary mb-4">Processo seletivo</h3>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-live-accent rounded-full flex items-center justify-center text-live-bg font-bold text-sm">
+                    1
+                  </div>
+                  <span className="text-live-textSecondary">Envio do currículo</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-live-accent rounded-full flex items-center justify-center text-live-bg font-bold text-sm">
+                    2
+                  </div>
+                  <span className="text-live-textSecondary">Análise da equipe de RH</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-live-accent rounded-full flex items-center justify-center text-live-bg font-bold text-sm">
+                    3
+                  </div>
+                  <span className="text-live-textSecondary">Entrevista presencial</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-live-accent rounded-full flex items-center justify-center text-live-bg font-bold text-sm">
+                    4
+                  </div>
+                  <span className="text-live-textSecondary">Contratação e integração</span>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>

@@ -405,7 +405,7 @@ export default function LocationCarousel() {
   }, [currentIndex])
 
   return (
-    <section className="py-20 bg-black">
+    <section className="py-20 bg-live-bg">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -414,9 +414,9 @@ export default function LocationCarousel() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl font-bold text-white mb-4">Encontre a Live mais perto de você</h2>
-          <p className="text-gray-300 mb-4">Estamos presentes em diversos pontos de Manaus.</p>
-          <Link href="/unidades" className="text-[#ffcb00] hover:text-[#ffd740] transition font-semibold">
+          <h2 className="text-4xl font-bold text-live-textPrimary mb-4">Encontre a Live mais perto de você</h2>
+          <p className="text-live-textSecondary mb-4">Estamos presentes em diversos pontos de Manaus.</p>
+          <Link href="/unidades" className="text-live-accent hover:text-live-yellowLight transition font-semibold">
             Ver todas as unidades
           </Link>
         </motion.div>
@@ -444,7 +444,7 @@ export default function LocationCarousel() {
           </div>
 
           <div className="flex justify-center mt-8 gap-4">
-            <button onClick={prevSlide} className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-white" aria-label="Anterior">
+            <button onClick={prevSlide} className="p-2 rounded-full bg-live-border hover:bg-live-border/80 text-live-textPrimary" aria-label="Anterior">
               <ChevronLeft className="h-6 w-6" />
             </button>
             <div className="flex gap-2">
@@ -452,11 +452,11 @@ export default function LocationCarousel() {
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-2 h-2 rounded-full ${index === currentIndex ? "bg-[#ffcb00] w-6" : "bg-gray-600"}`}
+                  className={`w-2 h-2 rounded-full ${index === currentIndex ? "bg-live-accent w-6" : "bg-live-border"}`}
                 />
               ))}
             </div>
-            <button onClick={nextSlide} className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 text-white" aria-label="Próximo">
+            <button onClick={nextSlide} className="p-2 rounded-full bg-live-border hover:bg-live-border/80 text-live-textPrimary" aria-label="Próximo">
               <ChevronRight className="h-6 w-6" />
             </button>
           </div>
@@ -485,27 +485,27 @@ function LocationCard({ location, featured = false }: LocationCardProps) {
   const getTypeColor = () => {
     switch (location.type) {
       case "tradicional":
-        return "bg-[#ffcb00] text-black";
+        return "bg-live-accent text-live-bg";
       case "premium":
-        return "bg-[#ffcb00] text-black";
+        return "bg-live-accent text-live-bg";
       case "diamante":
-        return "bg-[#afafaf] text-black";
+        return "bg-live-gray text-live-bg";
       default:
-        return "bg-gray-600 text-white";
+        return "bg-live-border text-live-textPrimary";
     }
   }
 
   return (
-    <div className={`bg-gray-900 p-6 rounded-lg border border-gray-800 hover:border-[#ffcb00]/50 transition ${featured ? "shadow-lg" : ""}`}>
-      <h3 className="text-xl font-bold text-white mb-2">{location.name}</h3>
-      <div className="flex items-center text-gray-400 mb-4">
+    <div className={`bg-live-border/10 p-6 rounded-lg border border-live-border/30 hover:border-live-accent/50 transition ${featured ? "shadow-lg" : ""}`}>
+      <h3 className="text-xl font-bold text-live-textPrimary mb-2">{location.name}</h3>
+      <div className="flex items-center text-live-textSecondary mb-4">
         <MapPin className="h-4 w-4 mr-2" />
         <p>{location.address}</p>
       </div>
-      <p className="text-gray-300 mb-4">{location.hours}</p>
+      <p className="text-live-textSecondary mb-4">{location.hours}</p>
       <div className="flex flex-wrap gap-2 mb-4">
         {location.features.map((feature: string, i: number) => (
-          <span key={i} className="text-sm bg-gray-800 px-3 py-1 rounded-full text-gray-300">
+          <span key={i} className="text-sm bg-live-border/20 px-3 py-1 rounded-full text-live-textSecondary">
             {feature}
           </span>
         ))}
@@ -515,11 +515,11 @@ function LocationCard({ location, featured = false }: LocationCardProps) {
           {location.type.toUpperCase()}
         </span>
         {location.tourUrl ? (
-          <Link href={location.tourUrl} className="text-[#ffcb00] hover:text-[#ffd740] font-semibold">
+          <Link href={location.tourUrl} className="text-live-accent hover:text-live-yellowLight font-semibold">
             Tour Virtual
           </Link>
         ) : (
-          <span className="text-gray-400">Tour em breve</span>
+          <span className="text-live-textTernary">Tour em breve</span>
         )}
       </div>
     </div>

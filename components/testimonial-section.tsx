@@ -56,7 +56,7 @@ export default function TestimonialSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">O que nossos alunos dizem</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-live-textPrimary mb-4">O que nossos alunos dizem</h2>
           <p className="text-lg text-live-textSecondary">Histórias reais de quem vive a transformação todos os dias.</p>
         </motion.div>
 
@@ -71,7 +71,7 @@ export default function TestimonialSection() {
             {testimonials.map((testimonial) => (
               <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/3">
                 <div className="p-1">
-                  <div className="bg-black p-8 rounded-2xl border border-live-border h-full flex flex-col">
+                  <div className="bg-live-border/10 p-8 rounded-2xl border border-live-border/30 h-full flex flex-col">
                     <Quote className="h-10 w-10 text-live-accent mb-4" />
                     <p className="text-live-textSecondary italic mb-6 flex-grow">"{testimonial.content}"</p>
                     <div className="flex items-center gap-4 mt-auto">
@@ -81,7 +81,7 @@ export default function TestimonialSection() {
                         className="h-14 w-14 rounded-full object-cover border-2 border-live-accent"
                       />
                       <div>
-                        <h4 className="font-bold text-white">{testimonial.name}</h4>
+                        <h4 className="font-bold text-live-textPrimary">{testimonial.name}</h4>
                         <p className="text-sm text-live-textTernary">{testimonial.role}</p>
                       </div>
                     </div>
@@ -90,8 +90,8 @@ export default function TestimonialSection() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="text-white bg-live-accent border-none" />
-          <CarouselNext className="text-white bg-live-accent border-none" />
+          <CarouselPrevious className="text-live-bg bg-live-accent border-none" />
+          <CarouselNext className="text-live-bg bg-live-accent border-none" />
         </Carousel>
       </div>
     </section>

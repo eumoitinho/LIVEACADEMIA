@@ -23,7 +23,7 @@ export default function FloatingButton() {
   const buttons = [
     { icon: <Phone className="h-5 w-5" />, label: "Ligar", color: "bg-green-600 hover:bg-green-500", link: "tel:+559233456789" },
     { icon: <MessageCircle className="h-5 w-5" />, label: "WhatsApp", color: "bg-green-600 hover:bg-green-500", link: "https://wa.me/5592999999999" },
-    { icon: <Instagram className="h-5 w-5" />, label: "Instagram", color: "bg-[#ffcb00] hover:bg-[#ffd740] text-black", link: "https://instagram.com/liveacademiamanaus" },
+    { icon: <Instagram className="h-5 w-5" />, label: "Instagram", color: "bg-live-accent hover:bg-live-yellowLight text-live-bg", link: "https://instagram.com/liveacademiamanaus" },
   ]
 
   return (
@@ -50,7 +50,7 @@ export default function FloatingButton() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium ${button.color}`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-live-bg font-medium ${button.color}`}
                   >
                     {button.label} {button.icon}
                   </motion.a>
@@ -60,7 +60,7 @@ export default function FloatingButton() {
           </AnimatePresence>
           <button
             onClick={toggleOpen}
-            className="w-14 h-14 rounded-full bg-[#ffcb00] text-black flex items-center justify-center shadow-lg hover:shadow-xl transition"
+            className="w-14 h-14 rounded-full bg-live-accent text-live-bg flex items-center justify-center shadow-lg hover:shadow-xl transition hover:bg-live-yellowLight"
           >
             {isOpen ? <X className="h-6 w-6" /> : '+'}
           </button>

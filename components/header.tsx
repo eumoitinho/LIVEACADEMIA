@@ -44,8 +44,10 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-5 lg:px-20 py-3 transition-all duration-500">
       <div
-        className={`max-w-[1000px] mx-auto p-4 backdrop-blur-md rounded-[20px] shadow-[0px_0px_15px_0px_rgba(0,0,0,0.07)] border flex justify-between items-center transition-all duration-500 ${
-          isScrolled ? "bg-white/95 border-gray-200" : "bg-white/5 border-white/10"
+        className={`max-w-[1000px] mx-auto p-4 backdrop-blur-xl rounded-3xl shadow-2xl border flex justify-between items-center transition-all duration-500 ${
+          isScrolled 
+            ? "bg-black/80 border-zinc-800/50 shadow-black/20" 
+            : "bg-black/20 border-zinc-800/20 shadow-black/10"
         }`}
       >
         {/* Left Side - Logo + Navigation */}
@@ -61,44 +63,44 @@ export default function Header() {
           <div className="hidden lg:flex justify-start items-start gap-4">
             <button
               onClick={() => smoothScrollTo("sobre")}
-              className={`px-3 py-2 flex justify-start items-center gap-2 rounded-lg transition-all duration-500 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer ${
                 isScrolled
-                  ? `${isActiveSection("sobre") ? "text-live-accent bg-live-accent/10" : "text-[#1b304a]"} hover:bg-gray-100`
-                  : `${isActiveSection("sobre") ? "text-live-accent bg-white/20" : "text-white"} hover:bg-white/10`
+                  ? `${isActiveSection("sobre") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
+                  : `${isActiveSection("sobre") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
               }`}
             >
-              <div className="text-sm font-normal">Sobre Nós</div>
+              <div className="text-sm font-medium">Sobre Nós</div>
             </button>
 
             <button
               onClick={() => smoothScrollTo("servicos")}
-              className={`px-3 py-2 flex justify-start items-center gap-2 rounded-lg transition-all duration-500 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer ${
                 isScrolled
-                  ? `${isActiveSection("servicos") ? "text-live-accent bg-live-accent/10" : "text-[#1b304a]"} hover:bg-gray-100`
-                  : `${isActiveSection("servicos") ? "text-live-accent bg-white/20" : "text-white"} hover:bg-white/10`
+                  ? `${isActiveSection("servicos") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
+                  : `${isActiveSection("servicos") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
               }`}
             >
-              <div className="text-sm font-normal">Modalidades</div>
+              <div className="text-sm font-medium">Modalidades</div>
             </button>
 
             <Link
               href="/planos"
-              className={`px-3 py-2 flex justify-start items-center gap-2 rounded-lg transition-all duration-500 ${
-                isScrolled ? "text-[#1b304a] hover:bg-gray-100" : "text-white hover:bg-white/10"
+              className={`px-4 py-2 rounded-xl transition-all duration-300 ${
+                isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
             >
-              <div className="text-sm font-normal">Planos</div>
+              <div className="text-sm font-medium">Planos</div>
             </Link>
 
             <button
               onClick={() => smoothScrollTo("contato")}
-              className={`px-3 py-2 flex justify-start items-center gap-2 rounded-lg transition-all duration-500 cursor-pointer ${
+              className={`px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer ${
                 isScrolled
-                  ? `${isActiveSection("contato") ? "text-live-accent bg-live-accent/10" : "text-[#1b304a]"} hover:bg-gray-100`
-                  : `${isActiveSection("contato") ? "text-live-accent bg-white/20" : "text-white"} hover:bg-white/10`
+                  ? `${isActiveSection("contato") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
+                  : `${isActiveSection("contato") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
               }`}
             >
-              <div className="text-sm font-normal">Contato</div>
+              <div className="text-sm font-medium">Contato</div>
             </button>
           </div>
         </div>
@@ -108,25 +110,25 @@ export default function Header() {
           {/* Phone */}
           <Link
             href="tel:+5592920000000"
-            className={`px-3 py-2 rounded-lg flex justify-center items-center transition-all duration-500 ${
-              isScrolled ? "text-[#1b304a] hover:bg-gray-100" : "text-white hover:bg-white/10"
+            className={`px-4 py-2 rounded-xl transition-all duration-300 ${
+              isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
             }`}
           >
-            <div className="text-sm font-normal">(92) 92000-0000</div>
+            <div className="text-sm font-medium">(92) 92000-0000</div>
           </Link>
 
           {/* Matricule-se Button */}
           <Link
             href="/planos"
-            className="px-6 py-2.5 bg-live-accent hover:bg-opacity-90 rounded-full border-2 border-live-accent flex justify-center items-center gap-2 transition-all duration-300 transform hover:scale-105"
+            className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 rounded-2xl border border-yellow-500/30 flex justify-center items-center gap-2 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
           >
-            <div className="text-white text-sm font-medium">Matricule-se</div>
+            <div className="text-black text-sm font-semibold">Matricule-se</div>
           </Link>
         </div>
 
         {/* Mobile Menu Button */}
         <button
-          className={`lg:hidden transition-colors duration-500 ${isScrolled ? "text-[#1b304a]" : "text-white"}`}
+          className={`lg:hidden transition-colors duration-300 ${isScrolled ? "text-zinc-300 hover:text-white" : "text-zinc-300 hover:text-white"}`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -136,8 +138,8 @@ export default function Header() {
       {/* Mobile Navigation */}
       {isMenuOpen && (
         <div
-          className={`lg:hidden mt-3 max-w-[1000px] mx-auto p-4 backdrop-blur-md rounded-[20px] shadow-[0px_0px_15px_0px_rgba(0,0,0,0.07)] border animate-in slide-in-from-top duration-300 ${
-            isScrolled ? "bg-white/95 border-gray-200" : "bg-white/5 border-white/10"
+          className={`lg:hidden mt-3 max-w-[1000px] mx-auto p-6 backdrop-blur-xl rounded-3xl shadow-2xl border animate-in slide-in-from-top duration-300 ${
+            isScrolled ? "bg-black/80 border-zinc-800/50" : "bg-black/20 border-zinc-800/20"
           }`}
         >
           <nav className="space-y-4">
@@ -146,10 +148,10 @@ export default function Header() {
                 smoothScrollTo("sobre")
                 setIsMenuOpen(false)
               }}
-              className={`block w-full text-left px-4 py-3 rounded-lg transition-colors font-normal cursor-pointer ${
+              className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-300 font-medium cursor-pointer ${
                 isScrolled
-                  ? `${isActiveSection("sobre") ? "text-live-accent bg-live-accent/10" : "text-[#1b304a]"} hover:bg-gray-100`
-                  : `${isActiveSection("sobre") ? "text-live-accent bg-white/20" : "text-white"} hover:bg-white/10`
+                  ? `${isActiveSection("sobre") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
+                  : `${isActiveSection("sobre") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
               }`}
             >
               Sobre Nós
@@ -159,18 +161,18 @@ export default function Header() {
                 smoothScrollTo("servicos")
                 setIsMenuOpen(false)
               }}
-              className={`block w-full text-left px-4 py-3 rounded-lg transition-colors font-normal cursor-pointer ${
+              className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-300 font-medium cursor-pointer ${
                 isScrolled
-                  ? `${isActiveSection("servicos") ? "text-live-accent bg-live-accent/10" : "text-[#1b304a]"} hover:bg-gray-100`
-                  : `${isActiveSection("servicos") ? "text-live-accent bg-white/20" : "text-white"} hover:bg-white/10`
+                  ? `${isActiveSection("servicos") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
+                  : `${isActiveSection("servicos") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
               }`}
             >
               Modalidades
             </button>
             <Link
               href="/planos"
-              className={`block px-4 py-3 rounded-lg transition-colors font-normal ${
-                isScrolled ? "text-[#1b304a] hover:bg-gray-100" : "text-white hover:bg-white/10"
+              className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+                isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
               onClick={() => setIsMenuOpen(false)}
             >
@@ -181,26 +183,26 @@ export default function Header() {
                 smoothScrollTo("contato")
                 setIsMenuOpen(false)
               }}
-              className={`block w-full text-left px-4 py-3 rounded-lg transition-colors font-normal cursor-pointer ${
+              className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-300 font-medium cursor-pointer ${
                 isScrolled
-                  ? `${isActiveSection("contato") ? "text-live-accent bg-live-accent/10" : "text-[#1b304a]"} hover:bg-gray-100`
-                  : `${isActiveSection("contato") ? "text-live-accent bg-white/20" : "text-white"} hover:bg-white/10`
+                  ? `${isActiveSection("contato") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
+                  : `${isActiveSection("contato") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
               }`}
             >
               Contato
             </button>
-            <div className={`pt-4 border-t space-y-3 ${isScrolled ? "border-gray-200" : "border-white/20"}`}>
+            <div className={`pt-4 border-t space-y-3 ${isScrolled ? "border-zinc-800" : "border-zinc-800/30"}`}>
               <Link
                 href="tel:+5592920000000"
-                className={`block px-4 py-3 rounded-lg transition-colors font-normal ${
-                  isScrolled ? "text-[#1b304a] hover:bg-gray-100" : "text-white hover:bg-white/10"
+                className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+                  isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
                 }`}
               >
                 (92) 92000-0000
               </Link>
               <Link
                 href="/planos"
-                className="w-full bg-live-accent hover:bg-opacity-90 text-white rounded-full font-medium flex items-center justify-center gap-2 px-4 py-3"
+                className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black rounded-2xl font-semibold flex items-center justify-center gap-2 px-4 py-3 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25 transition-all duration-300 transform hover:scale-105"
               >
                 Matricule-se
               </Link>

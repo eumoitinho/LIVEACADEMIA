@@ -44,24 +44,22 @@ export default function AppPage() {
   ]
 
   return (
-    <main className="min-h-screen pt-24 pb-12">
-      <div className="container mx-auto px-4">
+    <main className="min-h-screen bg-live-bg text-live-textPrimary pt-20">
+      <div className="container mx-auto px-4 py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h1 className="section-title">
-            App <span className="text-gradient">Live Academia</span>
+          <h1 className="text-5xl font-bold mb-6">
+            App <span className="text-live-accent">Live Academia</span>
           </h1>
-          <p className="section-subtitle">
-            Tenha a academia na palma da sua mão. Acompanhe seus treinos, agende aulas, monitore sua evolução e muito
-            mais.
+          <p className="text-xl text-live-textSecondary max-w-3xl mx-auto">
+            Tenha a academia na palma da sua mão. Baixe o app e transforme sua experiência fitness.
           </p>
         </motion.div>
 
-        {/* Hero Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -69,9 +67,9 @@ export default function AppPage() {
             transition={{ duration: 0.8 }}
             className="order-2 lg:order-1"
           >
-            <div className="app-card p-8">
-              <h2 className="text-3xl font-bold text-white mb-6">Transforme sua experiência fitness</h2>
-              <p className="text-white text-lg mb-8 leading-relaxed">
+            <div className="bg-live-border/10 p-8 rounded-2xl border border-live-border/30">
+              <h2 className="text-3xl font-bold text-live-textPrimary mb-6">Transforme sua experiência fitness</h2>
+              <p className="text-live-textSecondary text-lg mb-8 leading-relaxed">
                 O App Live Academia foi desenvolvido para tornar sua jornada fitness mais simples, eficiente e
                 motivadora. Com uma interface intuitiva e recursos exclusivos, você terá tudo o que precisa para
                 alcançar seus objetivos.
@@ -121,15 +119,15 @@ export default function AppPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="app-card p-4 w-24 h-24">
+                <div className="bg-live-border/10 p-4 w-24 h-24 rounded-2xl border border-live-border/30">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-[#ffcb00] mb-1">QR</div>
-                    <div className="text-xs text-gray-400">Escaneie</div>
+                    <div className="text-2xl font-bold text-live-accent mb-1">QR</div>
+                    <div className="text-xs text-live-textTernary">Escaneie</div>
                   </div>
                 </div>
-                <div className="text-white">
+                <div className="text-live-textPrimary">
                   <p className="font-medium">Escaneie o QR Code para</p>
-                  <p className="text-sm text-gray-400">baixar o aplicativo</p>
+                  <p className="text-sm text-live-textTernary">baixar o aplicativo</p>
                 </div>
               </div>
             </div>
@@ -142,8 +140,8 @@ export default function AppPage() {
             className="order-1 lg:order-2 relative"
           >
             <div className="relative floating-element">
-              <div className="absolute -inset-8 bg-[#ffcb00]/10 rounded-3xl blur-2xl"></div>
-              <div className="relative app-card p-8">
+              <div className="absolute -inset-8 bg-live-accent/10 rounded-3xl blur-2xl"></div>
+              <div className="relative bg-live-border/10 p-8 rounded-2xl border border-live-border/30">
                 <img
                   src="/placeholder.svg?height=600&width=300"
                   alt="App Live Academia"
@@ -162,13 +160,13 @@ export default function AppPage() {
           className="mb-20"
         >
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Veja como funciona</h2>
-            <p className="text-white text-lg max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">Veja como funciona</h2>
+            <p className="text-live-textSecondary text-lg max-w-3xl mx-auto">
               Assista ao vídeo demonstrativo e conheça todas as funcionalidades do App Live Academia.
             </p>
           </div>
 
-          <div className="app-card p-6">
+          <div className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30">
             <div className="relative aspect-video rounded-2xl overflow-hidden">
               <img
                 src="/placeholder.svg?height=720&width=1280"
@@ -179,12 +177,12 @@ export default function AppPage() {
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="w-20 h-20 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center border-2 border-[#ffcb00]"
+                  className="w-20 h-20 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center border-2 border-live-accent"
                 >
-                  <div className="w-16 h-16 rounded-full bg-[#ffcb00] flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-live-accent flex items-center justify-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-8 w-8 text-black"
+                      className="h-8 w-8 text-live-bg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -217,8 +215,8 @@ export default function AppPage() {
           className="mb-20"
         >
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Funcionalidades</h2>
-            <p className="text-white text-lg max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">Funcionalidades</h2>
+            <p className="text-live-textSecondary text-lg max-w-3xl mx-auto">
               Conheça os recursos exclusivos que tornam o App Live Academia essencial para sua rotina fitness.
             </p>
           </div>
@@ -231,15 +229,15 @@ export default function AppPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="app-card p-6 group"
+                className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30 group"
               >
                 <div
                   className={`w-12 h-12 rounded-xl bg-gradient-to-r ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
                 >
-                  <feature.icon className="w-6 h-6 text-white" />
+                  <feature.icon className="w-6 h-6 text-live-textPrimary" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-white leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-bold text-live-textPrimary mb-2">{feature.title}</h3>
+                <p className="text-live-textSecondary leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -253,8 +251,8 @@ export default function AppPage() {
           className="mb-20"
         >
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Conheça a interface</h2>
-            <p className="text-white text-lg max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">Conheça a interface</h2>
+            <p className="text-live-textSecondary text-lg max-w-3xl mx-auto">
               Uma experiência de usuário intuitiva e moderna para facilitar sua jornada fitness.
             </p>
           </div>
@@ -262,7 +260,7 @@ export default function AppPage() {
           <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-hide">
             {[1, 2, 3, 4, 5].map((item) => (
               <div key={item} className="min-w-[250px] snap-center">
-                <div className="app-card p-4">
+                <div className="bg-live-border/10 p-4 rounded-2xl border border-live-border/30">
                   <img
                     src={`/placeholder.svg?height=500&width=250&text=Screenshot ${item}`}
                     alt={`Screenshot ${item}`}
@@ -274,36 +272,56 @@ export default function AppPage() {
           </div>
         </motion.div>
 
-        {/* Download CTA */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="max-w-4xl mx-auto"
+          className="text-center"
         >
-          <div className="app-card p-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#ffcb00]/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#ffcb00]/10 rounded-full blur-3xl"></div>
-
-            <div className="relative z-10">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-white mb-4">Baixe agora e transforme sua experiência fitness</h2>
-                <p className="text-white text-lg max-w-3xl mx-auto">
-                  Disponível para iOS e Android. Baixe gratuitamente e comece a aproveitar todos os benefícios.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-center gap-6">
-                <motion.a href="#" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="btn-primary">
-                  <Download size={20} />
-                  <span>Google Play</span>
-                </motion.a>
-
-                <motion.a href="#" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="btn-primary">
-                  <Download size={20} />
-                  <span>App Store</span>
-                </motion.a>
-              </div>
+          <div className="bg-live-border/10 p-12 rounded-3xl border border-live-border/30">
+            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">Baixe agora e transforme sua experiência fitness</h2>
+            <p className="text-live-textSecondary text-lg max-w-3xl mx-auto mb-8">
+              Junte-se a milhares de alunos que já transformaram sua rotina com o App Live Academia.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a href="#" className="hover:scale-105 transition-transform">
+                <svg width="180" height="60" viewBox="0 0 180 60" className="rounded-lg">
+                  <rect width="180" height="60" rx="8" fill="#000000" />
+                  <rect width="180" height="60" rx="8" fill="none" stroke="#ffcb00" strokeWidth="1" />
+                  <g transform="translate(12, 12)">
+                    <path d="M3 3v30l7.5-7.5L3 3z" fill="#ffcb00" />
+                    <path d="M10.5 25.5L21 15l-10.5-10.5v21z" fill="#ffcb00" />
+                    <path d="M21 15l7.5-4.5L21 6v9z" fill="#ffcb00" />
+                    <path d="M21 15v9l7.5-4.5L21 15z" fill="#ffcb00" />
+                  </g>
+                  <text x="50" y="20" fill="white" fontSize="10" fontWeight="300">
+                    Disponível no
+                  </text>
+                  <text x="50" y="35" fill="white" fontSize="16" fontWeight="600">
+                    Google Play
+                  </text>
+                </svg>
+              </a>
+              <a href="#" className="hover:scale-105 transition-transform">
+                <svg width="180" height="60" viewBox="0 0 180 60" className="rounded-lg">
+                  <rect width="180" height="60" rx="8" fill="#000000" />
+                  <rect width="180" height="60" rx="8" fill="none" stroke="#ffcb00" strokeWidth="1" />
+                  <g transform="translate(12, 12)">
+                    <path
+                      d="M20.5 10.5c-1.5 0-3.5-1.5-3.5-3.5s2-3.5 3.5-3.5 3.5 1.5 3.5 3.5-2 3.5-3.5 3.5zm-3 21c-2 0-4-2-4-4s2-4 4-4h6c2 0 4 2 4 4s-2 4-4 4h-6z"
+                      fill="#ffcb00"
+                    />
+                    <circle cx="20.5" cy="7" r="2" fill="#ffcb00" />
+                  </g>
+                  <text x="50" y="20" fill="white" fontSize="10" fontWeight="300">
+                    Baixar na
+                  </text>
+                  <text x="50" y="35" fill="white" fontSize="16" fontWeight="600">
+                    App Store
+                  </text>
+                </svg>
+              </a>
             </div>
           </div>
         </motion.div>

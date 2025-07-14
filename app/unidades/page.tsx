@@ -19,26 +19,26 @@ export default function Unidades() {
 
 
   return (
-    <main className="min-h-screen bg-black text-white pt-20">
+    <main className="min-h-screen bg-live-bg text-live-textPrimary pt-20">
       <section className="py-20">
         <div className="container mx-auto px-4">
           <h1 className="text-5xl font-bold text-center mb-12">Nossas Unidades</h1>
-          <p className="text-center text-gray-300 mb-12">Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.</p>
+          <p className="text-center text-live-textSecondary mb-12">Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.</p>
           {/* Filtros */}
           <div className="flex gap-4 mb-12 justify-center">
-            <select onChange={(e) => setFilterType(e.target.value)} className="bg-gray-900 p-2 rounded">
+            <select onChange={(e) => setFilterType(e.target.value)} className="bg-live-bg border border-live-border text-live-textPrimary p-2 rounded">
               <option value="todos">Tipo: Todos</option>
               <option value="tradicional">Tradicional</option>
               <option value="premium">Premium</option>
               <option value="diamante">Diamante</option>
             </select>
-            <select onChange={(e) => setFilterService(e.target.value)} className="bg-gray-900 p-2 rounded">
+            <select onChange={(e) => setFilterService(e.target.value)} className="bg-live-bg border border-live-border text-live-textPrimary p-2 rounded">
               <option value="todos">Serviço: Todos</option>
               <option value="Climatização">Climatização</option>
               <option value="Espaço Relax">Espaço Relax</option>
               {/* Adicione mais opções baseadas em features */}
             </select>
-            <select onChange={(e) => setFilterRegion(e.target.value)} className="bg-gray-900 p-2 rounded">
+            <select onChange={(e) => setFilterRegion(e.target.value)} className="bg-live-bg border border-live-border text-live-textPrimary p-2 rounded">
               <option value="todos">Região: Todos</option>
               <option value="Adrianópolis">Adrianópolis</option>
               {/* Adicione regiões únicas */}
@@ -51,23 +51,23 @@ export default function Unidades() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="bg-gray-900 p-6 rounded-lg border border-gray-800"
+                className="bg-live-border/10 p-6 rounded-lg border border-live-border/30"
               >
                 <h3 className="text-xl font-bold mb-2">{location.name}</h3>
-                <p className="text-gray-300 mb-2">{location.address}</p>
-                <p className="text-gray-400 mb-4">{location.hours}</p>
+                <p className="text-live-textSecondary mb-2">{location.address}</p>
+                <p className="text-live-textTernary mb-4">{location.hours}</p>
                 <ul className="space-y-1 mb-4">
                   {location.features.map((feature: string) => (
-                    <li key={feature} className="text-gray-300 flex gap-2">
-                      <CheckCircle className="h-4 w-4 text-[#ffcb00]" /> {feature}
+                    <li key={feature} className="text-live-textSecondary flex gap-2">
+                      <CheckCircle className="h-4 w-4 text-live-accent" /> {feature}
                     </li>
                   ))}
                 </ul>
-                <Link href="/planos" className="text-[#ffcb00] font-bold">
+                <Link href="/planos" className="text-live-accent font-bold">
                   Compare os planos | MATRICULE-SE AQUI
                 </Link>
                 {location.tourUrl && (
-                  <Link href={location.tourUrl} className="block mt-2 text-[#ffcb00] font-bold">
+                  <Link href={location.tourUrl} className="block mt-2 text-live-accent font-bold">
                     Faça um tour virtual
                   </Link>
                 )}
