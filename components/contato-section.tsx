@@ -1,64 +1,56 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Instagram, Facebook, Youtube, MessageCircle, Phone, MapPin } from "lucide-react"
-import Link from "next/link"
+import { Phone, Mail, MapPin, Clock, MessageCircle, Send } from "lucide-react"
+import { useState } from "react"
 
-const redesSociais = [
-  {
-    nome: "Instagram",
-    url: "https://www.instagram.com/liveacademiamanaus/",
-    icon: Instagram,
-    descricao: "Siga-nos no Instagram para dicas de treino, motivação e novidades da Live Academia",
-    gradient: "from-pink-500 to-purple-600"
-  },
-  {
-    nome: "YouTube",
-    url: "https://www.youtube.com/@liveacademiaoficial",
-    icon: Youtube,
-    descricao: "Acompanhe nossos vídeos de treino, aulas e conteúdo exclusivo",
-    gradient: "from-red-500 to-red-600"
-  },
-  {
-    nome: "Facebook",
-    url: "https://web.facebook.com/liveacademiamanaus",
-    icon: Facebook,
-    descricao: "Conecte-se conosco no Facebook para ficar por dentro de todas as novidades",
-    gradient: "from-blue-500 to-blue-600"
-  }
-]
-
-const contatos = [
+const contactInfo = [
   {
     icon: Phone,
-    titulo: "Central de Atendimento",
-    info: "(92) 3000-0000",
-    descricao: "Horário: Segunda a sexta, 6h às 22h"
+    title: "WhatsApp",
+    info: "(92) 99999-9999",
+    action: "Chamar agora",
+    highlight: true
   },
   {
-    icon: MessageCircle,
-    titulo: "WhatsApp",
-    info: "(92) 9 9999-9999",
-    descricao: "Atendimento rápido e direto"
+    icon: Mail,
+    title: "Email",
+    info: "contato@liveacademia.com.br",
+    action: "Enviar email",
+    highlight: false
   },
   {
     icon: MapPin,
-    titulo: "Endereços",
-    info: "35+ unidades em Manaus",
-    descricao: "Encontre a unidade mais próxima"
+    title: "Unidades",
+    info: "35+ locais em Manaus",
+    action: "Ver no mapa",
+    highlight: false
+  },
+  {
+    icon: Clock,
+    title: "Horário",
+    info: "Seg-Dom: 6h às 23h",
+    action: "Ver horários",
+    highlight: false
   }
 ]
 
 export default function ContatoSection() {
+  const [formData, setFormData] = useState({
+    nome: "",
+    telefone: "",
+    mensagem: ""
+  })
+
   return (
-    <section className="relative py-20 px-6 lg:px-12 overflow-hidden bg-black">
-      {/* Background Effects */}
+    <section id="contato" className="py-20 relative overflow-hidden bg-black">
+      {/* Background gradient */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 right-1/4 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -67,124 +59,129 @@ export default function ContatoSection() {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6">
-            <span className="text-zinc-400 text-sm font-medium">Entre em contato</span>
+            <span className="text-zinc-400 text-sm font-medium">Fale conosco</span>
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
-            Fale <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">conosco</span>
+          
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Pronto para <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">começar</span>?
           </h2>
-          <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
-            Estamos prontos para ajudar você a dar o primeiro passo em direção a uma vida mais saudável e ativa.
+          <p className="text-zinc-400 text-lg max-w-3xl mx-auto">
+            Escolha a melhor forma de entrar em contato. Estamos aqui para ajudar.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 mb-16">
-          {/* Redes Sociais */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-2xl font-bold text-white mb-8 text-center lg:text-left">
-              Siga-nos nas redes sociais
-            </h3>
-            <div className="space-y-6">
-              {redesSociais.map((rede, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <Link href={rede.url} target="_blank" rel="noopener noreferrer">
-                    <div className="bg-zinc-900/50 rounded-2xl p-6 backdrop-blur-xl border border-zinc-700 hover:border-yellow-500/50 transition-all duration-300 group">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                          <rede.icon className="w-6 h-6 text-black" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-lg font-bold text-white mb-1">{rede.nome}</h4>
-                          <p className="text-zinc-400 text-sm">{rede.descricao}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Contatos */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="text-2xl font-bold text-white mb-8 text-center lg:text-left">
-              Outras formas de contato
-            </h3>
-            <div className="space-y-6">
-              {contatos.map((contato, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-zinc-900/50 rounded-2xl p-6 backdrop-blur-xl border border-zinc-700"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center">
-                      <contato.icon className="w-6 h-6 text-black" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-lg font-bold text-white mb-1">{contato.titulo}</h4>
-                      <p className="text-yellow-400 font-semibold mb-1">{contato.info}</p>
-                      <p className="text-zinc-400 text-sm">{contato.descricao}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+        {/* Contact Options */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 max-w-5xl mx-auto">
+          {contactInfo.map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className={`group relative rounded-3xl border transition-all duration-300 ${
+                item.highlight 
+                  ? 'bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border-yellow-500/20 hover:border-yellow-500/40' 
+                  : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700'
+              }`}
+            >
+              <div className="p-6">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 ${
+                  item.highlight 
+                    ? 'bg-gradient-to-r from-yellow-400 to-amber-500' 
+                    : 'bg-zinc-800 group-hover:bg-zinc-700'
+                } transition-colors`}>
+                  <item.icon className={`w-6 h-6 ${item.highlight ? 'text-black' : 'text-zinc-400'}`} />
+                </div>
+                <h3 className="text-white font-semibold mb-1">{item.title}</h3>
+                <p className={`text-sm mb-3 ${item.highlight ? 'text-yellow-400' : 'text-zinc-400'}`}>
+                  {item.info}
+                </p>
+                <button className={`text-sm font-medium ${
+                  item.highlight 
+                    ? 'text-yellow-400 hover:text-yellow-300' 
+                    : 'text-zinc-500 hover:text-white'
+                } transition-colors`}>
+                  {item.action} →
+                </button>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        {/* CTA Final */}
+        {/* Simple Contact Form */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
           viewport={{ once: true }}
-          className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 rounded-3xl p-8 lg:p-12 backdrop-blur-xl text-center"
+          className="max-w-2xl mx-auto"
         >
-          <h3 className="text-3xl font-bold text-white mb-4">
-            Pronto para começar sua <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">transformação?</span>
-          </h3>
-          <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
-            Venha fazer parte da maior rede de academias de Manaus e descubra o poder de uma vida mais ativa, saudável e feliz.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/planos">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
+          <div className="bg-zinc-900/50 backdrop-blur-xl rounded-3xl border border-zinc-800 p-8">
+            <h3 className="text-2xl font-bold text-white mb-6 text-center">
+              Envie uma mensagem rápida
+            </h3>
+            
+            <div className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Seu nome"
+                    className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-2xl text-white placeholder-zinc-500 focus:border-yellow-500/50 focus:outline-none transition-colors"
+                    value={formData.nome}
+                    onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <input
+                    type="tel"
+                    placeholder="WhatsApp"
+                    className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-2xl text-white placeholder-zinc-500 focus:border-yellow-500/50 focus:outline-none transition-colors"
+                    value={formData.telefone}
+                    onChange={(e) => setFormData({...formData, telefone: e.target.value})}
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <textarea
+                  placeholder="Como podemos ajudar?"
+                  rows={3}
+                  className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-2xl text-white placeholder-zinc-500 focus:border-yellow-500/50 focus:outline-none transition-colors resize-none"
+                  value={formData.mensagem}
+                  onChange={(e) => setFormData({...formData, mensagem: e.target.value})}
+                />
+              </div>
+              
+              <button
+                onClick={() => console.log('Enviar mensagem:', formData)}
+                className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-black py-4 rounded-2xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02] flex items-center justify-center gap-2"
               >
-                MATRICULE-SE AGORA
-              </motion.button>
-            </Link>
-            <Link href="/unidades">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="border border-zinc-700 text-zinc-300 hover:text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:bg-zinc-800/50 backdrop-blur-sm"
-              >
-                VER UNIDADES
-              </motion.button>
-            </Link>
+                <Send className="w-5 h-5" />
+                Enviar mensagem
+              </button>
+            </div>
           </div>
+        </motion.div>
+
+        {/* WhatsApp Floating CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <p className="text-zinc-500 text-sm">Prefere falar direto?</p>
+          <a 
+            href="https://wa.me/5592999999999" 
+            target="_blank"
+            className="inline-flex items-center gap-2 mt-3 text-green-500 hover:text-green-400 transition-colors font-medium group"
+          >
+            <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+            Chamar no WhatsApp agora
+          </a>
         </motion.div>
       </div>
     </section>
