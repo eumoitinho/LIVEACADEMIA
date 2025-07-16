@@ -1,48 +1,34 @@
-import { Dumbbell, ShieldCheck, Smartphone, Users, CheckCircle, Star } from "lucide-react"
+import { Dumbbell, ShieldCheck, Smartphone, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
 import Image from "next/image"
 
 const beneficios = [
   {
-    icon: Dumbbell,
-    title: "Estrutura Moderna",
-    description: "Equipamentos de última geração e ambiente climatizado para seu conforto.",
-    color: "from-yellow-400 to-amber-500",
-    image: "/images/academia-1.webp",
-  },
-  {
     icon: ShieldCheck,
-    title: "Sem Fidelidade",
-    description: "Treine sem contratos longos, sem taxas de cancelamento ou anuidade.",
-    color: "from-amber-500 to-yellow-600",
-    image: "/images/academia-2.webp",
-  },
-  {
-    icon: Smartphone,
-    title: "App Exclusivo",
-    description: "Acompanhe treinos, agende aulas e monitore sua evolução pelo app.",
-    color: "from-yellow-500 to-amber-600",
-    image: "/images/academia-3.webp",
-  },
-  {
-    icon: Users,
-    title: "Equipe Qualificada",
-    description: "Profissionais prontos para te ajudar a alcançar seus objetivos.",
+    title: "Planos flexíveis",
+    description: "Em qualquer plano, você treina sem fidelidade, taxas de cancelamento, manutenção ou anuidade.",
     color: "from-yellow-400 to-amber-500",
-    image: "/images/academia-4.webp",
-  },
-  {
-    icon: CheckCircle,
-    title: "Aulas Coletivas",
-    description: "Diversas modalidades para você treinar com motivação e diversão.",
-    color: "from-amber-500 to-yellow-600",
     image: "/images/academia-1.webp",
   },
   {
     icon: Star,
-    title: "Avaliação Excelente",
-    description: "Nota média 4.8 nas avaliações dos nossos alunos.",
-    color: "from-yellow-500 to-amber-600",
+    title: "Espaços exclusivos",
+    description: "Desfrute de áreas como Espaço Relax, Espaço Yoga e o maior Studio de Bike Indoor da região Norte com o plano Diamante.",
+    color: "from-amber-500 to-yellow-600",
     image: "/images/academia-2.webp",
+  },
+  {
+    icon: Users,
+    title: "Aulas coletivas",
+    description: "Diversifique seu treino com uma grade variada de aulas e aproveite o ambiente coletivo para socializar e manter a disciplina.",
+    color: "from-yellow-500 to-amber-600",
+    image: "/images/academia-3.webp",
+  },
+  {
+    icon: Snowflake,
+    title: "Climatização",
+    description: "Treine com mais conforto nos ambientes climatizados disponíveis nas unidades Diamante, Premium e Tradicional Climatizada.",
+    color: "from-yellow-400 to-amber-500",
+    image: "/images/academia-4.webp",
   },
 ]
 
@@ -68,7 +54,7 @@ export default function BeneficiosSection() {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {beneficios.map((beneficio, idx) => (
             <div
               key={idx}

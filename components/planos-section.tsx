@@ -6,15 +6,19 @@ import Image from "next/image"
 
 const planos = [
   {
-    nome: "Tradicional",
-    preco: "79",
+    nome: "TRADICIONAL",
+    preco: "119,90",
     periodo: "mês",
-    descricao: "Perfeito para começar",
+    descricao: "Treine em todas as unidades Tradicionais, incluindo as Tradicionais Climatizadas.",
     beneficios: [
-      "Acesso às unidades tradicionais",
-      "Aulas coletivas inclusas",
-      "App Live Academia",
-      "Sem taxa de matrícula"
+      "Sem fidelidade",
+      "Sem taxa de cancelamento",
+      "Sem taxa de manutenção",
+      "Sem taxa de anuidade",
+      "Acesso ao app Live Academia",
+      "Aulas coletivas",
+      "Climatização (apenas unidades Torquato Bemol e Tiradentes)",
+      "Atendimento aos domingos (consultar unidade)"
     ],
     gradient: "from-zinc-700 to-zinc-900",
     icone: Check,
@@ -22,36 +26,29 @@ const planos = [
     image: "/images/academia-1.webp"
   },
   {
-    nome: "Premium",
-    preco: "109",
+    nome: "DIAMANTE",
+    preco: "159,90",
     periodo: "mês",
-    descricao: "O mais escolhido",
+    descricao: "Treine em todas as unidades da rede em Manaus, exceto Morada do Sol e Alphaville.",
     beneficios: [
-      "Tudo do plano Tradicional",
-      "Unidades Premium climatizadas",
-      "Espaço Relax e Yoga",
-      "Studio de Bike Indoor"
-    ],
-    gradient: "from-yellow-600 to-amber-700",
-    icone: Star,
-    popular: true,
-    destaque: true,
-    image: "/images/academia-2.webp"
-  },
-  {
-    nome: "Diamante",
-    preco: "149",
-    periodo: "mês",
-    descricao: "Experiência completa",
-    beneficios: [
-      "Acesso total ilimitado",
-      "Personal trainer incluso",
-      "Nutricionista",
-      "Benefícios VIP"
+      "Sem fidelidade",
+      "Sem taxa de cancelamento",
+      "Sem taxa de manutenção",
+      "Sem taxa de anuidade",
+      "Acesso ao app Live Academia",
+      "Espaço Relax",
+      "Espaço Yoga",
+      "Espaço Pose",
+      "Acesso ao Studio de Bike",
+      "Aulas coletivas",
+      "Climatização",
+      "Atendimento aos domingos"
     ],
     gradient: "from-amber-500 to-yellow-600",
     icone: Crown,
-    popular: false,
+    popular: true,
+    destaque: true,
+    badge: "O mais vendido",
     image: "/images/academia-3.webp"
   }
 ]
@@ -77,14 +74,14 @@ export default function PlanosSection() {
             <span className="text-zinc-400 text-sm font-medium">Planos sem pegadinha</span>
           </div>
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
-            Escolha o <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">plano ideal</span>
+            Conheça nossos <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">planos</span>
           </h2>
           <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
-            Sem fidelidade, sem anuidade, sem taxa de cancelamento. Simples assim.
+            Escolha o plano que melhor se adapta às suas necessidades e comece sua jornada fitness hoje mesmo.
           </p>
         </motion.div>
         
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {planos.map((plano, idx) => (
             <motion.div
               key={plano.nome}
@@ -118,7 +115,7 @@ export default function PlanosSection() {
                   <div className="absolute top-6 right-6 z-20">
                     <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
                       <Sparkles className="w-3 h-3" />
-                      Mais Popular
+                      {plano.badge}
                     </div>
                   </div>
                 )}
@@ -131,7 +128,7 @@ export default function PlanosSection() {
                       <plano.icone className="w-6 h-6 text-white" />
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">{plano.nome}</h3>
-                    <p className="text-zinc-400 text-sm">{plano.descricao}</p>
+                    <p className="text-zinc-400 text-sm leading-relaxed">{plano.descricao}</p>
                   </div>
 
                   {/* Price */}
@@ -147,6 +144,7 @@ export default function PlanosSection() {
                       </span>
                       <span className="text-zinc-400 text-lg">/{plano.periodo}</span>
                     </div>
+                    <p className="text-yellow-400 text-sm font-medium mt-2">Oferta por tempo limitado</p>
                   </div>
 
                   {/* Benefits */}
@@ -173,7 +171,7 @@ export default function PlanosSection() {
                       ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
                       : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
                   }`}>
-                    Começar agora
+                    MATRICULE-SE AGORA
                   </button>
                 </div>
               </div>
@@ -189,41 +187,9 @@ export default function PlanosSection() {
           viewport={{ once: true }}
           className="mt-16 text-center"
         >
-          <div className="inline-flex flex-wrap justify-center gap-8 text-sm text-zinc-400">
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-yellow-500" />
-              <span>Cancele quando quiser</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-yellow-500" />
-              <span>Sem fidelidade</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-yellow-500" />
-              <span>Troca de plano gratuita</span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          viewport={{ once: true }}
-          className="mt-16 text-center"
-        >
-          <div className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 rounded-3xl p-8 backdrop-blur-xl max-w-3xl mx-auto">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Ainda em dúvida?
-            </h3>
-            <p className="text-zinc-300 mb-6">
-              Experimente gratuitamente por 7 dias. Sem compromisso.
-            </p>
-            <button className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-3 rounded-2xl font-semibold hover:shadow-lg hover:shadow-yellow-500/25 transition-all duration-300 hover:scale-105">
-              Começar teste grátis
-            </button>
-          </div>
+          <p className="text-zinc-400 text-sm">
+            Os preços, serviços e condições promocionais podem variar de acordo com a academia escolhida.
+          </p>
         </motion.div>
       </div>
     </section>

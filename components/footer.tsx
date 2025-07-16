@@ -16,19 +16,19 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <Link
-                href="https://instagram.com/liveacademia"
+                href="https://www.instagram.com/liveacademiamanaus/"
                 className="w-10 h-10 rounded-full bg-zinc-800 hover:bg-gradient-to-r hover:from-yellow-400 hover:to-amber-500 hover:text-black flex items-center justify-center transition-all duration-300"
               >
                 <Instagram size={18} />
               </Link>
               <Link
-                href="https://facebook.com/liveacademia"
+                href="https://web.facebook.com/liveacademiamanaus"
                 className="w-10 h-10 rounded-full bg-zinc-800 hover:bg-gradient-to-r hover:from-yellow-400 hover:to-amber-500 hover:text-black flex items-center justify-center transition-all duration-300"
               >
                 <Facebook size={18} />
               </Link>
               <Link
-                href="https://youtube.com/liveacademia"
+                href="https://www.youtube.com/@liveacademiaoficial"
                 className="w-10 h-10 rounded-full bg-zinc-800 hover:bg-gradient-to-r hover:from-yellow-400 hover:to-amber-500 hover:text-black flex items-center justify-center transition-all duration-300"
               >
                 <Youtube size={18} />
@@ -43,7 +43,8 @@ export default function Footer() {
                 { name: "Home", href: "/" },
                 { name: "Unidades", href: "/unidades" },
                 { name: "Planos", href: "/planos" },
-                { name: "APP", href: "/app" },
+                { name: "Aulas Coletivas", href: "/aulas-coletivas" },
+                { name: "Day Use", href: "/day-use" },
                 { name: "Trabalhe Conosco", href: "/trabalhe-conosco" },
               ].map((item) => (
                 <li key={item.name}>

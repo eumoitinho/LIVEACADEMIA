@@ -2,8 +2,32 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { Users, MapPin, Star, Award } from "lucide-react"
 
 export default function AboutSection() {
+  const stats = [
+    {
+      number: "10K+",
+      label: "Alunos ativos",
+      icon: Users
+    },
+    {
+      number: "35+",
+      label: "Unidades",
+      icon: MapPin
+    },
+    {
+      number: "4.9",
+      label: "Avaliação média",
+      icon: Star
+    },
+    {
+      number: "10+",
+      label: "Anos de experiência",
+      icon: Award
+    }
+  ]
+
   return (
     <section className="relative py-20 px-6 lg:px-12 overflow-hidden bg-live-bg" id="sobre">
       {/* Fundo animado */}
@@ -11,7 +35,7 @@ export default function AboutSection() {
       <div className="absolute inset-0 bg-gradient-to-tr from-live-accent/10 via-transparent to-live-accent/5 opacity-50"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center mb-16">
           {/* Conteúdo esquerdo */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -26,15 +50,12 @@ export default function AboutSection() {
             </div>
             <div>
               <h2 className="text-4xl lg:text-5xl font-bold text-live-textPrimary mb-6 leading-tight">
-                Transformando vidas com
-                <span className="bg-gradient-to-r from-live-accent to-live-yellowLight bg-clip-text text-transparent"> saúde e bem-estar</span>
+                Seu treino, suas
+                <span className="bg-gradient-to-r from-live-accent to-live-yellowLight bg-clip-text text-transparent"> regras</span>
               </h2>
               <div className="space-y-6 text-live-textSecondary text-lg leading-relaxed">
                 <p>
                   A Live Academia está presente em Manaus há mais de 10 anos, oferecendo estrutura moderna, equipamentos de última geração e profissionais altamente qualificados para te ajudar a alcançar seus objetivos.
-                </p>
-                <p>
-                  Aqui você encontra planos flexíveis, ambiente acolhedor e acompanhamento personalizado para transformar seu corpo e sua vida.
                 </p>
               </div>
             </div>
@@ -59,6 +80,36 @@ export default function AboutSection() {
             </div>
           </motion.div>
         </div>
+
+        {/* Estatísticas */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-8"
+        >
+          {stats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-live-accent/20 to-live-accent/40 rounded-2xl flex items-center justify-center">
+                <stat.icon className="w-8 h-8 text-live-accent" />
+              </div>
+              <div className="text-3xl md:text-4xl font-bold text-live-textPrimary mb-2">
+                {stat.number}
+              </div>
+              <div className="text-live-textSecondary text-sm">
+                {stat.label}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
     </section>
   )

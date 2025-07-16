@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Activity, BarChart3, Eye, Zap, ArrowRight } from "lucide-react"
+import { Activity, BarChart3, Eye, Zap, ArrowRight, CheckCircle } from "lucide-react"
 
 const dadosBioimpedancia = [
   {
@@ -24,6 +24,12 @@ const dadosBioimpedancia = [
     titulo: "Água Corporal",
     descricao: "Quantidade de água no organismo para hidratação ideal"
   }
+]
+
+const beneficiosBioimpedancia = [
+  "É um exame fundamental para traçar metas realistas e acompanhar sua evolução de forma objetiva",
+  "Disponível em diversas unidades Diamante",
+  "Acompanhe sua evolução de forma objetiva e personalizada"
 ]
 
 export default function BioimpedanciaSection() {
@@ -64,9 +70,16 @@ export default function BioimpedanciaSection() {
           >
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-white mb-4">Dados Completos da Bioimpedância</h3>
-              <p className="text-zinc-400 leading-relaxed">
-                É um exame fundamental para traçar metas realistas e acompanhar sua evolução de forma objetiva.
-              </p>
+              <div className="space-y-3 mb-6">
+                {beneficiosBioimpedancia.map((beneficio, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle className="w-3 h-3 text-yellow-500" />
+                    </div>
+                    <span className="text-zinc-300 text-sm leading-relaxed">{beneficio}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

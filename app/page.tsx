@@ -16,6 +16,7 @@ import ModalidadesSection from "@/components/modalidades-section"
 import ContatoSection from "@/components/contato-section"
 import WellhubSection from "@/components/wellhub-section"
 import BioimpedanciaSection from "@/components/bioimpedancia-section"
+import EstruturaSection from "@/components/estrutura-section"
 
 export default function Home() {
   return (
@@ -27,6 +28,8 @@ export default function Home() {
       <UnidadesCarousel />
 
       <BeneficiosSection />
+
+      <EstruturaSection />
 
       <ModalidadesSection />
 

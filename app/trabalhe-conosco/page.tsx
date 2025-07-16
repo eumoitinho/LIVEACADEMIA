@@ -110,8 +110,10 @@ export default function TrabalheConoscoPage() {
           <h1 className="text-5xl font-bold text-live-textPrimary mb-6">
             Trabalhe <span className="text-live-accent">Conosco</span>
           </h1>
-          <p className="text-xl text-live-textSecondary">
-            Faça parte do time Live Academia e ajude a transformar vidas através do fitness.
+          <p className="text-xl text-live-textSecondary max-w-3xl mx-auto">
+            Faça parte do time Live Academia e ajude a transformar vidas através do fitness. 
+            Somos a maior rede de academias de Manaus e estamos sempre em busca de profissionais 
+            apaixonados por saúde e bem-estar.
           </p>
         </motion.div>
 
@@ -221,8 +223,8 @@ export default function TrabalheConoscoPage() {
                       value={formState.experience}
                       onChange={handleInputChange}
                       rows={4}
-                      className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent"
                       placeholder="Descreva sua experiência profissional..."
+                      className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent resize-none"
                     />
                   </div>
 
@@ -235,9 +237,9 @@ export default function TrabalheConoscoPage() {
                       name="message"
                       value={formState.message}
                       onChange={handleInputChange}
-                      rows={4}
-                      className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent"
+                      rows={3}
                       placeholder="Conte-nos por que você gostaria de trabalhar conosco..."
+                      className="w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg focus:outline-none focus:ring-2 focus:ring-live-accent resize-none"
                     />
                   </div>
 
@@ -249,17 +251,16 @@ export default function TrabalheConoscoPage() {
                       <input
                         type="file"
                         id="resume"
-                        name="resume"
-                        onChange={handleFileChange}
                         accept=".pdf"
+                        onChange={handleFileChange}
                         className="hidden"
                       />
                       <label
                         htmlFor="resume"
-                        className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg cursor-pointer hover:bg-live-border/10 transition"
+                        className="flex items-center gap-3 px-4 py-3 bg-live-bg border border-live-border text-live-textPrimary rounded-lg cursor-pointer hover:bg-live-border/20 transition-colors"
                       >
                         <Upload className="h-5 w-5" />
-                        {fileName || "Selecionar arquivo"}
+                        <span>{fileName || "Escolher arquivo"}</span>
                       </label>
                     </div>
                   </div>
@@ -267,7 +268,7 @@ export default function TrabalheConoscoPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-live-accent text-live-bg font-bold py-3 px-6 rounded-lg hover:bg-live-yellowLight transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-live-accent to-yellow-500 text-black font-bold py-4 rounded-lg hover:from-yellow-400 hover:to-live-accent transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
@@ -291,60 +292,43 @@ export default function TrabalheConoscoPage() {
             className="space-y-8"
           >
             <div>
-              <h2 className="text-3xl font-bold text-live-textPrimary mb-4">Por que trabalhar na Live Academia?</h2>
-              <p className="text-live-textSecondary mb-8">
-                Junte-se a uma empresa que valoriza pessoas, inovação e resultados.
+              <h2 className="text-3xl font-bold text-live-textPrimary mb-6">Por que trabalhar conosco?</h2>
+              <p className="text-live-textSecondary text-lg mb-8">
+                Junte-se a uma empresa que valoriza seus colaboradores e oferece oportunidades únicas de crescimento.
               </p>
             </div>
 
-            <div className="space-y-6">
-              {benefits.map((item, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {benefits.map((benefit, index) => (
                 <motion.div
-                  key={item.title}
+                  key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="flex items-start gap-4"
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-live-border/10 p-6 rounded-xl border border-live-border/30"
                 >
-                  <div className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                    <item.icon className="w-6 h-6 text-live-textPrimary" />
+                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${benefit.color} flex items-center justify-center mb-4`}>
+                    <benefit.icon className="h-6 w-6 text-white" />
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-live-textPrimary mb-2">{item.title}</h3>
-                    <p className="text-live-textSecondary">{item.description}</p>
-                  </div>
+                  <h3 className="text-lg font-bold text-live-textPrimary mb-2">{benefit.title}</h3>
+                  <p className="text-live-textSecondary text-sm">{benefit.description}</p>
                 </motion.div>
               ))}
             </div>
 
-            <div className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30">
-              <h3 className="text-xl font-bold text-live-textPrimary mb-4">Processo seletivo</h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-live-accent rounded-full flex items-center justify-center text-live-bg font-bold text-sm">
-                    1
-                  </div>
-                  <span className="text-live-textSecondary">Envio do currículo</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-live-accent rounded-full flex items-center justify-center text-live-bg font-bold text-sm">
-                    2
-                  </div>
-                  <span className="text-live-textSecondary">Análise da equipe de RH</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-live-accent rounded-full flex items-center justify-center text-live-bg font-bold text-sm">
-                    3
-                  </div>
-                  <span className="text-live-textSecondary">Entrevista presencial</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-live-accent rounded-full flex items-center justify-center text-live-bg font-bold text-sm">
-                    4
-                  </div>
-                  <span className="text-live-textSecondary">Contratação e integração</span>
-                </div>
-              </div>
+            <div className="bg-gradient-to-r from-live-accent/10 to-yellow-500/10 p-6 rounded-xl border border-live-accent/20">
+              <h3 className="text-xl font-bold text-live-textPrimary mb-3">Vagas disponíveis</h3>
+              <p className="text-live-textSecondary mb-4">
+                Temos oportunidades em diversas áreas e unidades. Envie seu currículo e faça parte do nosso time!
+              </p>
+              <ul className="text-live-textSecondary space-y-2">
+                <li>• Personal Trainers</li>
+                <li>• Professores de Aulas Coletivas</li>
+                <li>• Recepcionistas</li>
+                <li>• Nutricionistas</li>
+                <li>• Gerentes de Unidade</li>
+                <li>• Estagiários</li>
+              </ul>
             </div>
           </motion.div>
         </div>

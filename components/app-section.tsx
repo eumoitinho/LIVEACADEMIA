@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { Smartphone, Activity, Calendar, BarChart3, Bell, Users } from "lucide-react"
+import { Smartphone, Activity, Calendar, BarChart3, Bell, Users, CheckCircle } from "lucide-react"
 
 const features = [
   { icon: Activity, title: "Treinos Personalizados", description: "Exercícios adaptados ao seu objetivo" },
@@ -11,6 +11,15 @@ const features = [
   { icon: Bell, title: "Notificações", description: "Lembretes de treino e aulas" },
   { icon: Users, title: "Comunidade", description: "Conecte-se com outros alunos" },
   { icon: Smartphone, title: "Check-in Digital", description: "Entre na academia com o celular" },
+]
+
+const beneficios = [
+  "Acompanhe seus treinos e monitore sua evolução",
+  "Agende aulas coletivas e receba lembretes",
+  "Acesse sua ficha de treino personalizada",
+  "Conecte-se com outros alunos da comunidade",
+  "Receba notificações sobre novidades e eventos",
+  "Faça check-in digital nas unidades"
 ]
 
 export default function AppSection() {
@@ -46,24 +55,21 @@ export default function AppSection() {
               sua jornada fitness e maximiza seus resultados.
             </p>
 
-            {/* Features Grid */}
-            <div className="grid grid-cols-2 gap-4 mb-10">
-              {features.map((feature, index) => (
+            {/* Benefícios */}
+            <div className="space-y-4 mb-10">
+              {beneficios.map((beneficio, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.05 }}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="flex items-start gap-3 group"
+                  className="flex items-center gap-3"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center flex-shrink-0 group-hover:bg-yellow-500/10 group-hover:border-yellow-500/20 transition-all duration-300">
-                    <feature.icon className="w-5 h-5 text-yellow-500" />
+                  <div className="w-6 h-6 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="w-4 h-4 text-yellow-500" />
                   </div>
-                  <div>
-                    <h4 className="text-white font-medium text-sm">{feature.title}</h4>
-                    <p className="text-zinc-500 text-xs mt-0.5">{feature.description}</p>
-                  </div>
+                  <span className="text-zinc-300 text-sm">{beneficio}</span>
                 </motion.div>
               ))}
             </div>

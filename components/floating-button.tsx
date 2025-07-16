@@ -21,9 +21,9 @@ export default function FloatingButton() {
   const toggleOpen = () => setIsOpen(!isOpen)
 
   const buttons = [
-    { icon: <Phone className="h-5 w-5" />, label: "Ligar", color: "bg-green-600 hover:bg-green-500", link: "tel:+559233456789" },
+    { icon: <Phone className="h-5 w-5" />, label: "Ligar", color: "bg-green-600 hover:bg-green-500", link: "tel:+5592999999999" },
     { icon: <MessageCircle className="h-5 w-5" />, label: "WhatsApp", color: "bg-green-600 hover:bg-green-500", link: "https://wa.me/5592999999999" },
-    { icon: <Instagram className="h-5 w-5" />, label: "Instagram", color: "bg-live-accent hover:bg-live-yellowLight text-live-bg", link: "https://instagram.com/liveacademiamanaus" },
+    { icon: <Instagram className="h-5 w-5" />, label: "Instagram", color: "bg-live-accent hover:bg-live-yellowLight text-live-bg", link: "https://www.instagram.com/liveacademiamanaus/" },
   ]
 
   return (

@@ -42,8 +42,17 @@ export default function Unidades() {
     <main className="min-h-screen bg-gradient-to-br from-live-bg via-live-bg to-live-accent/5 text-live-textPrimary pt-20">
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h1 className="text-5xl font-bold text-center mb-12">Nossas Unidades</h1>
-          <p className="text-center text-live-textSecondary mb-12">Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.</p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h1 className="text-5xl font-bold mb-6">Encontre a Live mais perto de você</h1>
+            <p className="text-xl text-live-textSecondary max-w-3xl mx-auto">
+              Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.
+            </p>
+          </motion.div>
           
           {/* Filtros */}
           <div className="flex gap-4 mb-12 justify-center flex-wrap">
@@ -182,6 +191,21 @@ export default function Unidades() {
               />
             ))}
           </div>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-center mt-16"
+          >
+            <Link
+              href="/planos"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-live-accent to-yellow-500 text-black font-bold shadow-lg hover:shadow-xl hover:shadow-live-accent/25 transition-all duration-300 transform hover:scale-105"
+            >
+              VER TODAS AS UNIDADES
+            </Link>
+          </motion.div>
         </div>
       </section>
     </main>

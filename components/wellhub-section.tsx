@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Award, Gift, Users, Star, ArrowRight } from "lucide-react"
+import { Award, Gift, Users, Star, ArrowRight, CheckCircle } from "lucide-react"
 
 const beneficiosWellhub = [
   {
@@ -24,6 +24,12 @@ const beneficiosWellhub = [
     titulo: "Sorteios Mensais",
     descricao: "Concorra a sorteios de brindes mensalmente"
   }
+]
+
+const beneficiosDetalhados = [
+  "Após 15 acessos mensais, assinantes Silver e Silver+ ganham uma bioimpedância ou uma análise corporal 3D",
+  "Mais dois acessos Diamante para seus convidados",
+  "Concorra a sorteios de brindes mensalmente"
 ]
 
 export default function WellhubSection() {
@@ -95,10 +101,16 @@ export default function WellhubSection() {
                 <Award className="w-10 h-10 text-black" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-4">Benefícios Exclusivos</h3>
-              <p className="text-zinc-300 leading-relaxed">
-                Após 15 acessos mensais, assinantes Silver e Silver+ ganham uma bioimpedância ou uma análise corporal 3D 
-                e mais dois acessos Diamante para seus convidados. Além disso, você ainda concorre a sorteios de brindes mensalmente.
-              </p>
+              <div className="space-y-3 text-left">
+                {beneficiosDetalhados.map((beneficio, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <CheckCircle className="w-3 h-3 text-yellow-500" />
+                    </div>
+                    <span className="text-zinc-300 text-sm leading-relaxed">{beneficio}</span>
+                  </div>
+                ))}
+              </div>
             </div>
             
             <div className="text-center">

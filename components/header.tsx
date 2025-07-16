@@ -72,16 +72,23 @@ export default function Header() {
               <div className="text-sm font-medium">Sobre Nós</div>
             </button>
 
-            <button
-              onClick={() => smoothScrollTo("servicos")}
-              className={`px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer ${
-                isScrolled
-                  ? `${isActiveSection("servicos") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
-                  : `${isActiveSection("servicos") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
+            <Link
+              href="/unidades"
+              className={`px-4 py-2 rounded-xl transition-all duration-300 ${
+                isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
             >
-              <div className="text-sm font-medium">Modalidades</div>
-            </button>
+              <div className="text-sm font-medium">Unidades</div>
+            </Link>
+
+            <Link
+              href="/aulas-coletivas"
+              className={`px-4 py-2 rounded-xl transition-all duration-300 ${
+                isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
+              }`}
+            >
+              <div className="text-sm font-medium">Aulas Coletivas</div>
+            </Link>
 
             <Link
               href="/planos"
@@ -109,12 +116,12 @@ export default function Header() {
         <div className="hidden lg:flex justify-start items-center gap-4">
           {/* Phone */}
           <Link
-            href="tel:+5592920000000"
+            href="tel:+5592999999999"
             className={`px-4 py-2 rounded-xl transition-all duration-300 ${
               isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
             }`}
           >
-            <div className="text-sm font-medium">(92) 92000-0000</div>
+            <div className="text-sm font-medium">(92) 99999-9999</div>
           </Link>
 
           {/* Matricule-se Button */}
@@ -156,19 +163,24 @@ export default function Header() {
             >
               Sobre Nós
             </button>
-            <button
-              onClick={() => {
-                smoothScrollTo("servicos")
-                setIsMenuOpen(false)
-              }}
-              className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-300 font-medium cursor-pointer ${
-                isScrolled
-                  ? `${isActiveSection("servicos") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
-                  : `${isActiveSection("servicos") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
+            <Link
+              href="/unidades"
+              className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+                isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
+              onClick={() => setIsMenuOpen(false)}
             >
-              Modalidades
-            </button>
+              Unidades
+            </Link>
+            <Link
+              href="/aulas-coletivas"
+              className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+                isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
+              }`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Aulas Coletivas
+            </Link>
             <Link
               href="/planos"
               className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
@@ -193,16 +205,20 @@ export default function Header() {
             </button>
             <div className={`pt-4 border-t space-y-3 ${isScrolled ? "border-zinc-800" : "border-zinc-800/30"}`}>
               <Link
-                href="tel:+5592920000000"
+                href="tel:+5592999999999"
                 className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
                   isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
                 }`}
               >
-                (92) 92000-0000
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  <span>(92) 99999-9999</span>
+                </div>
               </Link>
               <Link
                 href="/planos"
-                className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black rounded-2xl font-semibold flex items-center justify-center gap-2 px-4 py-3 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25 transition-all duration-300 transform hover:scale-105"
+                className="block w-full px-4 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 rounded-2xl text-black font-semibold text-center transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
+                onClick={() => setIsMenuOpen(false)}
               >
                 Matricule-se
               </Link>

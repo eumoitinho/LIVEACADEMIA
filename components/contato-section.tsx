@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Phone, Mail, MapPin, Clock, MessageCircle, Send } from "lucide-react"
+import { Phone, Mail, MapPin, Clock, MessageCircle, Send, Instagram, Facebook, Youtube } from "lucide-react"
 import { useState } from "react"
 
 const contactInfo = [
@@ -32,6 +32,27 @@ const contactInfo = [
     info: "Seg-Dom: 6h às 23h",
     action: "Ver horários",
     highlight: false
+  }
+]
+
+const socialMedia = [
+  {
+    name: "Instagram",
+    url: "https://www.instagram.com/liveacademiamanaus/",
+    icon: Instagram,
+    color: "from-pink-500 to-purple-500"
+  },
+  {
+    name: "YouTube",
+    url: "https://www.youtube.com/@liveacademiaoficial",
+    icon: Youtube,
+    color: "from-red-500 to-red-600"
+  },
+  {
+    name: "Facebook",
+    url: "https://web.facebook.com/liveacademiamanaus",
+    icon: Facebook,
+    color: "from-blue-500 to-blue-600"
   }
 ]
 
@@ -108,6 +129,34 @@ export default function ContatoSection() {
             </motion.div>
           ))}
         </div>
+
+        {/* Social Media */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h3 className="text-2xl font-bold text-white mb-8">Siga-nos nas redes sociais</h3>
+          <div className="flex justify-center gap-6">
+            {socialMedia.map((social, index) => (
+              <motion.a
+                key={index}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+                viewport={{ once: true }}
+                className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${social.color} flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl`}
+              >
+                <social.icon className="w-8 h-8 text-white" />
+              </motion.a>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Simple Contact Form */}
         <motion.div
