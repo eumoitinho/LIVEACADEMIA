@@ -1,170 +1,230 @@
 "use client"
 
-import { CheckCircle, Star, Crown, ArrowRight, Zap, Shield, Users } from "lucide-react"
+import { Check, Star, Crown, Sparkles } from "lucide-react"
+import { motion } from "framer-motion"
+import Image from "next/image"
 
 const planos = [
   {
     nome: "Tradicional",
-    preco: "R$ 79,90/mês",
-    destaque: false,
+    preco: "79",
+    periodo: "mês",
+    descricao: "Perfeito para começar",
     beneficios: [
-      "Sem fidelidade",
-      "Acesso a todas as unidades tradicionais",
+      "Acesso às unidades tradicionais",
       "Aulas coletivas inclusas",
       "App Live Academia",
-      "Sem taxa de matrícula",
+      "Sem taxa de matrícula"
     ],
-    cor: "from-yellow-400 to-orange-500",
-    icone: CheckCircle,
-    badge: "Mais Popular",
-    popularidade: "85% dos alunos"
+    gradient: "from-zinc-700 to-zinc-900",
+    icone: Check,
+    popular: false,
+    image: "/images/academia-1.webp"
   },
   {
     nome: "Premium",
-    preco: "R$ 109,90/mês",
-    destaque: true,
+    preco: "109",
+    periodo: "mês",
+    descricao: "O mais escolhido",
     beneficios: [
-      "Todos os benefícios do Tradicional",
-      "Acesso a unidades Premium",
-      "Climatização",
+      "Tudo do plano Tradicional",
+      "Unidades Premium climatizadas",
       "Espaço Relax e Yoga",
-      "Acesso ao Studio de Bike",
+      "Studio de Bike Indoor"
     ],
-    cor: "from-yellow-500 to-amber-600",
+    gradient: "from-yellow-600 to-amber-700",
     icone: Star,
-    badge: "Recomendado",
-    popularidade: "92% dos alunos"
+    popular: true,
+    destaque: true,
+    image: "/images/academia-2.webp"
   },
   {
     nome: "Diamante",
-    preco: "R$ 149,90/mês",
-    destaque: false,
+    preco: "149",
+    periodo: "mês",
+    descricao: "Experiência completa",
     beneficios: [
-      "Todos os benefícios do Premium",
-      "Acesso ilimitado a todas as unidades",
-      "Consultoria personalizada",
-      "Acesso VIP a eventos",
-      "Brindes exclusivos",
+      "Acesso total ilimitado",
+      "Personal trainer incluso",
+      "Nutricionista",
+      "Benefícios VIP"
     ],
-    cor: "from-amber-500 to-yellow-600",
+    gradient: "from-amber-500 to-yellow-600",
     icone: Crown,
-    badge: "Exclusivo",
-    popularidade: "98% dos alunos"
-  },
+    popular: false,
+    image: "/images/academia-3.webp"
+  }
 ]
 
 export default function PlanosSection() {
   return (
-    <section className="relative py-20 px-6 lg:px-12 overflow-hidden" id="planos">
+    <section className="relative py-20 px-6 lg:px-12 overflow-hidden bg-black" id="planos">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-yellow-500/10 to-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
       </div>
       
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
           <div className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6">
-            <span className="text-zinc-400 text-sm font-medium">Planos para todos os objetivos</span>
+            <span className="text-zinc-400 text-sm font-medium">Planos sem pegadinha</span>
           </div>
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
-            Escolha o <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">plano ideal</span> para você
+            Escolha o <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">plano ideal</span>
           </h2>
           <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
-            Liberdade, tecnologia e benefícios exclusivos em todos os planos.
+            Sem fidelidade, sem anuidade, sem taxa de cancelamento. Simples assim.
           </p>
-        </div>
+        </motion.div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {planos.map((plano, idx) => (
-            <div
+            <motion.div
               key={plano.nome}
-              className={`relative group ${
-                plano.destaque 
-                  ? "bg-gradient-to-br from-zinc-900/80 to-zinc-800/80 border-2 border-yellow-500/50 shadow-2xl" 
-                  : "bg-zinc-900/50 border border-zinc-800/50"
-              } backdrop-blur-xl rounded-3xl p-8 hover:border-yellow-500/50 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 overflow-hidden`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: idx * 0.1 }}
+              viewport={{ once: true }}
+              className={`relative group ${plano.destaque ? 'md:-mt-4' : ''}`}
             >
-              {/* Glow Effect */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${plano.cor} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500`} />
-              
-              {/* Badge */}
-              {plano.badge && (
-                <div className="absolute top-4 right-4">
-                  <div className={`px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${plano.cor} text-black`}>
-                    {plano.badge}
-                  </div>
+              {/* Card Container */}
+              <div className={`relative h-full rounded-3xl overflow-hidden border transition-all duration-500 ${
+                plano.destaque 
+                  ? 'border-yellow-500/50 shadow-2xl shadow-yellow-500/10' 
+                  : 'border-zinc-800/50 hover:border-zinc-700/50'
+              }`}>
+                
+                {/* Background Image */}
+                <div className="absolute inset-0 z-0">
+                  <Image
+                    src={plano.image}
+                    alt={plano.nome}
+                    fill
+                    className="object-cover opacity-10 group-hover:opacity-20 transition-opacity duration-700"
+                    quality={85}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black" />
                 </div>
-              )}
-              
-              <div className="relative z-10">
-                {/* Header */}
-                <div className="flex items-center gap-3 mb-6">
-                  <div className={`w-16 h-16 bg-gradient-to-br ${plano.cor} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 relative overflow-hidden`}>
-                    <div className="absolute inset-0 bg-white/20 rounded-2xl"></div>
-                    <plano.icone className="h-8 w-8 text-black relative z-10" />
+
+                {/* Popular Badge */}
+                {plano.popular && (
+                  <div className="absolute top-6 right-6 z-20">
+                    <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" />
+                      Mais Popular
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white">{plano.nome}</h3>
-                    <p className="text-zinc-400 text-sm">{plano.popularidade}</p>
+                )}
+
+                {/* Content */}
+                <div className="relative z-10 p-8">
+                  {/* Header */}
+                  <div className="mb-8">
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${plano.gradient} flex items-center justify-center mb-4`}>
+                      <plano.icone className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">{plano.nome}</h3>
+                    <p className="text-zinc-400 text-sm">{plano.descricao}</p>
                   </div>
-                </div>
-                
-                {/* Price */}
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">
-                      {plano.preco.split('/')[0]}
-                    </span>
-                    <span className="text-zinc-400">/mês</span>
+
+                  {/* Price */}
+                  <div className="mb-8">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-zinc-400 text-lg">R$</span>
+                      <span className={`text-5xl font-bold ${
+                        plano.destaque 
+                          ? 'bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent' 
+                          : 'text-white'
+                      }`}>
+                        {plano.preco}
+                      </span>
+                      <span className="text-zinc-400 text-lg">/{plano.periodo}</span>
+                    </div>
                   </div>
-                  <p className="text-zinc-500 text-sm mt-1">Sem taxa de matrícula</p>
-                </div>
-                
-                {/* Benefits */}
-                <ul className="space-y-4 mb-8">
-                  {plano.beneficios.map((b, i) => (
-                    <li key={i} className="flex items-start gap-3 text-zinc-300">
-                      <div className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <CheckCircle className="h-3 w-3 text-black" />
-                      </div>
-                      <span className="text-sm leading-relaxed">{b}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                {/* CTA Button */}
-                <button className={`w-full py-4 rounded-2xl bg-gradient-to-r ${plano.cor} text-black font-bold shadow-lg hover:shadow-xl hover:shadow-yellow-500/25 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2 group/btn relative overflow-hidden`}>
-                  <div className="absolute inset-0 bg-white/20 rounded-2xl"></div>
-                  <span className="relative z-10">Matricule-se</span>
-                  <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300 relative z-10" />
-                </button>
-                
-                {/* Additional Info */}
-                <div className="mt-4 text-center">
-                  <p className="text-zinc-500 text-xs">Cancelamento gratuito a qualquer momento</p>
+
+                  {/* Benefits */}
+                  <ul className="space-y-4 mb-8">
+                    {plano.beneficios.map((beneficio, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                          plano.destaque 
+                            ? 'bg-yellow-500/20' 
+                            : 'bg-zinc-800'
+                        }`}>
+                          <Check className={`w-3 h-3 ${
+                            plano.destaque ? 'text-yellow-500' : 'text-zinc-400'
+                          }`} />
+                        </div>
+                        <span className="text-zinc-300 text-sm leading-relaxed">{beneficio}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* CTA Button */}
+                  <button className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 ${
+                    plano.destaque
+                      ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
+                      : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
+                  }`}>
+                    Começar agora
+                  </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-        
+
+        {/* Additional Info */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="mt-16 text-center"
+        >
+          <div className="inline-flex flex-wrap justify-center gap-8 text-sm text-zinc-400">
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-yellow-500" />
+              <span>Cancele quando quiser</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-yellow-500" />
+              <span>Sem fidelidade</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-yellow-500" />
+              <span>Troca de plano gratuita</span>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 rounded-3xl p-8 backdrop-blur-xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-16 text-center"
+        >
+          <div className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 rounded-3xl p-8 backdrop-blur-xl max-w-3xl mx-auto">
             <h3 className="text-2xl font-bold text-white mb-4">
               Ainda em dúvida?
             </h3>
-            <p className="text-zinc-300 mb-6 max-w-2xl mx-auto">
-              Experimente gratuitamente por 7 dias e descubra por que somos a academia mais escolhida de Manaus.
+            <p className="text-zinc-300 mb-6">
+              Experimente gratuitamente por 7 dias. Sem compromisso.
             </p>
-            <button className="bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black px-8 py-3 rounded-2xl font-semibold transition-all duration-300 flex items-center gap-2 mx-auto group">
-              <span>Experimente Grátis</span>
-              <Zap className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
+            <button className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-3 rounded-2xl font-semibold hover:shadow-lg hover:shadow-yellow-500/25 transition-all duration-300 hover:scale-105">
+              Começar teste grátis
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

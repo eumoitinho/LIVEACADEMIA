@@ -1,97 +1,186 @@
-import Image from "next/image"
-import { CheckCircle } from "lucide-react"
+"use client"
+
+import { motion } from "framer-motion"
+import { Smartphone, Play, Download, Check } from "lucide-react"
+import Link from "next/link"
 
 const funcionalidades = [
-  "Check-in facial",
-  "Treinos personalizados",
-  "Agendamento de aulas",
-  "Histórico de treinos",
-  "Avaliações físicas",
-  "Comunicação com personal",
+  {
+    icon: Check,
+    text: "Visualize seus treinos, com vídeos explicativos sobre a execução correta dos exercícios"
+  },
+  {
+    icon: Check,
+    text: "Consulte o vencimento do seu plano"
+  },
+  {
+    icon: Check,
+    text: "Renove seu plano diretamente pelo app"
+  },
+  {
+    icon: Check,
+    text: "Confira a grade de aulas coletivas, por unidade"
+  },
+  {
+    icon: Check,
+    text: "Receba notificações e comunicados importantes sobre a sua unidade (função disponível somente no App Treino)"
+  }
+]
+
+const apps = [
+  {
+    nome: "App Live",
+    descricao: "Aplicativo principal da Live Academia",
+    playStore: "https://play.google.com/store/apps/details?id=br.com.w12.liveacademia&hl=pt_BR",
+    appStore: "https://apps.apple.com/br/app/live-academia/id6745790187"
+  },
+  {
+    nome: "App Treino",
+    descricao: "Aplicativo para acompanhar seus treinos",
+    playStore: "https://play.google.com/store/apps/details?id=com.pacto",
+    appStore: "https://apps.apple.com/br/app/treino/id862662527"
+  }
 ]
 
 export default function AppSection() {
   return (
-    <section className="relative py-20 px-6 lg:px-12 overflow-hidden bg-live-bg" id="app">
+    <section className="relative py-20 px-6 lg:px-12 overflow-hidden bg-zinc-900">
+      {/* Background Effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/4 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl" />
+      </div>
+
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Texto */}
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-live-textPrimary mb-6">
-              App <span className="bg-gradient-to-r from-live-accent to-live-yellowLight bg-clip-text text-transparent">Live Academia</span>
-            </h2>
-            <p className="text-live-textSecondary text-lg mb-8 leading-relaxed">
-              Tenha a academia na palma da sua mão. Acompanhe seus treinos, agende aulas, monitore sua evolução e muito mais com nossa tecnologia de ponta.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              {funcionalidades.map((feature, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-live-accent flex items-center justify-center flex-shrink-0">
-                    <CheckCircle size={16} className="text-live-bg" />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6">
+            <span className="text-zinc-400 text-sm font-medium">Aplicativos móveis</span>
+          </div>
+          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+            Seu treino na <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">palma da mão</span>
+          </h2>
+          <p className="text-xl text-zinc-400 max-w-4xl mx-auto">
+            A Live Academia conta com dois aplicativos exclusivos (App Live e App Treino) para facilitar sua jornada fitness 
+            e melhorar sua experiência de treino -- dentro e fora da academia!
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          {/* Funcionalidades */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <div className="space-y-6">
+              {funcionalidades.map((funcionalidade, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex items-start gap-4"
+                >
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 flex items-center justify-center flex-shrink-0 mt-1">
+                    <funcionalidade.icon className="w-4 h-4 text-black" />
                   </div>
-                  <span className="text-live-textSecondary font-medium">{feature}</span>
-                </div>
+                  <p className="text-zinc-300 leading-relaxed">{funcionalidade.text}</p>
+                </motion.div>
               ))}
             </div>
-            <div className="flex flex-wrap gap-4">
-              {/* Google Play Store SVG */}
-              <a href="#" className="hover:scale-105 transition-transform">
-                <svg width="150" height="50" viewBox="0 0 150 50" className="rounded-lg">
-                  <rect width="150" height="50" rx="6" fill="#000000" />
-                  <rect width="150" height="50" rx="6" fill="none" stroke="#ffd740" strokeWidth="1" />
-                  <g transform="translate(8, 8)">
-                    <path d="M2 2v24l6-6L2 2z" fill="#ffd740" />
-                    <path d="M8 20L16 12L8 4v16z" fill="#ffd740" />
-                    <path d="M16 12l6-3.5L16 5v7z" fill="#ffd740" />
-                    <path d="M16 12v7l6-3.5L16 12z" fill="#ffd740" />
-                  </g>
-                  <text x="40" y="16" fill="white" fontSize="8" fontWeight="300">
-                    Disponível no
-                  </text>
-                  <text x="40" y="28" fill="white" fontSize="12" fontWeight="600">
-                    Google Play
-                  </text>
-                </svg>
-              </a>
-              {/* Apple App Store SVG */}
-              <a href="#" className="hover:scale-105 transition-transform">
-                <svg width="150" height="50" viewBox="0 0 150 50" className="rounded-lg">
-                  <rect width="150" height="50" rx="6" fill="#000000" />
-                  <rect width="150" height="50" rx="6" fill="none" stroke="#ffd740" strokeWidth="1" />
-                  <g transform="translate(8, 8)">
-                    <path
-                      d="M16 8c-1.2 0-2.8-1.2-2.8-2.8s1.6-2.8 2.8-2.8 2.8 1.2 2.8 2.8-1.6 2.8-2.8 2.8zm-2.4 16.8c-1.6 0-3.2-1.6-3.2-3.2s1.6-3.2 3.2-3.2h4.8c1.6 0 3.2 1.6 3.2 3.2s-1.6 3.2-3.2 3.2h-4.8z"
-                      fill="#ffd740"
-                    />
-                    <circle cx="16" cy="5.6" r="1.6" fill="#ffd740" />
-                  </g>
-                  <text x="40" y="16" fill="white" fontSize="8" fontWeight="300">
-                    Baixar na
-                  </text>
-                  <text x="40" y="28" fill="white" fontSize="12" fontWeight="600">
-                    App Store
-                  </text>
-                </svg>
-              </a>
-            </div>
-          </div>
-          {/* Mockup do app */}
-          <div className="relative flex justify-center">
-            <div className="relative floating-element">
-              <div className="absolute -inset-8 bg-live-accent/10 rounded-3xl blur-2xl"></div>
-              <div className="relative bg-live-border/20 p-8 rounded-2xl shadow-xl">
-                <Image
-                  src="/images/academia-1.webp"
-                  alt="App Live Academia"
-                  width={250}
-                  height={500}
-                  className="max-w-full rounded-2xl shadow-xl max-h-[500px] mx-auto"
-                />
+          </motion.div>
+
+          {/* App Visual */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <div className="relative">
+              <div className="w-64 h-64 mx-auto bg-gradient-to-br from-yellow-400 to-amber-500 rounded-3xl flex items-center justify-center mb-8">
+                <Smartphone className="w-32 h-32 text-black" />
               </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 rounded-3xl blur-xl"></div>
             </div>
-          </div>
+            <p className="text-zinc-400 text-lg">
+              Interface intuitiva e moderna para facilitar sua jornada fitness
+            </p>
+          </motion.div>
         </div>
+
+        {/* Apps Download */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="bg-zinc-800/50 rounded-3xl p-8 lg:p-12 backdrop-blur-xl border border-zinc-700"
+        >
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Disponíveis para <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">Google Play e App Store</span>
+            </h3>
+            <p className="text-zinc-400 text-lg">
+              Baixe agora e tenha acesso completo aos seus treinos e funcionalidades exclusivas.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {apps.map((app, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-zinc-900/50 rounded-2xl p-6 backdrop-blur-xl border border-zinc-700"
+              >
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl flex items-center justify-center">
+                    <Smartphone className="w-8 h-8 text-black" />
+                  </div>
+                  <h4 className="text-xl font-bold text-white mb-2">{app.nome}</h4>
+                  <p className="text-zinc-400 text-sm">{app.descricao}</p>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  <Link href={app.playStore} target="_blank" rel="noopener noreferrer">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      <Play className="w-5 h-5" />
+                      Google Play
+                    </motion.button>
+                  </Link>
+                  
+                  <Link href={app.appStore} target="_blank" rel="noopener noreferrer">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      <Download className="w-5 h-5" />
+                      App Store
+                    </motion.button>
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   )
-} 
+}

@@ -1,39 +1,64 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Phone, Mail, MapPin, Clock, MessageCircle, Send } from "lucide-react"
+import { Instagram, Facebook, Youtube, MessageCircle, Phone, MapPin } from "lucide-react"
+import Link from "next/link"
 
-const contactInfo = [
+const redesSociais = [
   {
-    icon: Phone,
-    title: "Telefone",
-    info: "(92) 99999-9999",
-    description: "Atendimento de segunda a sexta"
+    nome: "Instagram",
+    url: "https://www.instagram.com/liveacademiamanaus/",
+    icon: Instagram,
+    descricao: "Siga-nos no Instagram para dicas de treino, motivação e novidades da Live Academia",
+    gradient: "from-pink-500 to-purple-600"
   },
   {
-    icon: Mail,
-    title: "Email",
-    info: "contato@liveacademia.com.br",
-    description: "Respondemos em até 24h"
+    nome: "YouTube",
+    url: "https://www.youtube.com/@liveacademiaoficial",
+    icon: Youtube,
+    descricao: "Acompanhe nossos vídeos de treino, aulas e conteúdo exclusivo",
+    gradient: "from-red-500 to-red-600"
+  },
+  {
+    nome: "Facebook",
+    url: "https://web.facebook.com/liveacademiamanaus",
+    icon: Facebook,
+    descricao: "Conecte-se conosco no Facebook para ficar por dentro de todas as novidades",
+    gradient: "from-blue-500 to-blue-600"
+  }
+]
+
+const contatos = [
+  {
+    icon: Phone,
+    titulo: "Central de Atendimento",
+    info: "(92) 3000-0000",
+    descricao: "Horário: Segunda a sexta, 6h às 22h"
+  },
+  {
+    icon: MessageCircle,
+    titulo: "WhatsApp",
+    info: "(92) 9 9999-9999",
+    descricao: "Atendimento rápido e direto"
   },
   {
     icon: MapPin,
-    title: "Endereço",
-    info: "Manaus, Amazonas",
-    description: "Múltiplas unidades na cidade"
-  },
-  {
-    icon: Clock,
-    title: "Horário",
-    info: "Segunda a Domingo",
-    description: "Das 6h às 23h"
+    titulo: "Endereços",
+    info: "35+ unidades em Manaus",
+    descricao: "Encontre a unidade mais próxima"
   }
 ]
 
 export default function ContatoSection() {
   return (
-    <section id="contato" className="py-20 relative overflow-hidden">
-      <div className="container mx-auto px-4 relative z-10">
+    <section className="relative py-20 px-6 lg:px-12 overflow-hidden bg-black">
+      {/* Background Effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 right-1/4 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -42,194 +67,126 @@ export default function ContatoSection() {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6">
-            <span className="text-zinc-400 text-sm font-medium">Fale conosco</span>
+            <span className="text-zinc-400 text-sm font-medium">Entre em contato</span>
           </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Entre em <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">Contato</span>
+          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+            Fale <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">conosco</span>
           </h2>
-          <p className="text-zinc-300 text-lg max-w-3xl mx-auto">
-            Estamos aqui para ajudar você a começar sua jornada fitness. Entre em contato conosco!
+          <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
+            Estamos prontos para ajudar você a dar o primeiro passo em direção a uma vida mais saudável e ativa.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Informações de Contato */}
+        <div className="grid lg:grid-cols-2 gap-12 mb-16">
+          {/* Redes Sociais */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold text-white mb-8">
-              Informações de Contato
+            <h3 className="text-2xl font-bold text-white mb-8 text-center lg:text-left">
+              Siga-nos nas redes sociais
             </h3>
-            
             <div className="space-y-6">
-              {contactInfo.map((item, index) => (
+              {redesSociais.map((rede, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="flex items-start space-x-4"
                 >
-                  <div className="bg-gradient-to-r from-yellow-400 to-amber-500 p-3 rounded-2xl shadow-lg">
-                    <item.icon className="h-6 w-6 text-black" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold text-lg">{item.title}</h4>
-                    <p className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent font-medium">{item.info}</p>
-                    <p className="text-zinc-400 text-sm">{item.description}</p>
-                  </div>
+                  <Link href={rede.url} target="_blank" rel="noopener noreferrer">
+                    <div className="bg-zinc-900/50 rounded-2xl p-6 backdrop-blur-xl border border-zinc-700 hover:border-yellow-500/50 transition-all duration-300 group">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <rede.icon className="w-6 h-6 text-black" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-lg font-bold text-white mb-1">{rede.nome}</h4>
+                          <p className="text-zinc-400 text-sm">{rede.descricao}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
                 </motion.div>
               ))}
             </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="mt-12 bg-zinc-900/50 backdrop-blur-xl p-8 rounded-3xl border border-zinc-800/50"
-            >
-              <h4 className="text-xl font-bold text-white mb-4">
-                Horários de Funcionamento
-              </h4>
-              <div className="space-y-2 text-zinc-300">
-                <div className="flex justify-between">
-                  <span>Segunda a Sexta:</span>
-                  <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent font-medium">6h às 23h</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Sábado:</span>
-                  <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent font-medium">7h às 22h</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Domingo:</span>
-                  <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent font-medium">8h às 20h</span>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
 
-          {/* Formulário de Contato */}
+          {/* Contatos */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="bg-zinc-900/50 backdrop-blur-xl p-8 rounded-3xl border border-zinc-800/50"
           >
-            <h3 className="text-2xl font-bold text-white mb-6">
-              Envie sua Mensagem
+            <h3 className="text-2xl font-bold text-white mb-8 text-center lg:text-left">
+              Outras formas de contato
             </h3>
-            
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="nome" className="block text-white font-medium mb-2">
-                    Nome Completo
-                  </label>
-                  <input
-                    type="text"
-                    id="nome"
-                    className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-2xl text-white placeholder-zinc-400 focus:border-yellow-500 focus:outline-none transition-colors"
-                    placeholder="Seu nome completo"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-white font-medium mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-2xl text-white placeholder-zinc-400 focus:border-yellow-500 focus:outline-none transition-colors"
-                    placeholder="seu@email.com"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label htmlFor="telefone" className="block text-white font-medium mb-2">
-                  Telefone
-                </label>
-                <input
-                  type="tel"
-                  id="telefone"
-                  className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-2xl text-white placeholder-zinc-400 focus:border-yellow-500 focus:outline-none transition-colors"
-                  placeholder="(92) 99999-9999"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="assunto" className="block text-white font-medium mb-2">
-                  Assunto
-                </label>
-                <select
-                  id="assunto"
-                  className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-2xl text-white focus:border-yellow-500 focus:outline-none transition-colors"
+            <div className="space-y-6">
+              {contatos.map((contato, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-zinc-900/50 rounded-2xl p-6 backdrop-blur-xl border border-zinc-700"
                 >
-                  <option value="">Selecione um assunto</option>
-                  <option value="matricula">Matrícula</option>
-                  <option value="planos">Planos e Preços</option>
-                  <option value="horarios">Horários de Aulas</option>
-                  <option value="unidades">Unidades</option>
-                  <option value="outro">Outro</option>
-                </select>
-              </div>
-              
-              <div>
-                <label htmlFor="mensagem" className="block text-white font-medium mb-2">
-                  Mensagem
-                </label>
-                <textarea
-                  id="mensagem"
-                  rows={4}
-                  className="w-full px-4 py-3 bg-zinc-800/50 border border-zinc-700 rounded-2xl text-white placeholder-zinc-400 focus:border-yellow-500 focus:outline-none transition-colors resize-none"
-                  placeholder="Digite sua mensagem aqui..."
-                ></textarea>
-              </div>
-              
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
-              >
-                <Send className="h-5 w-5" />
-                <span>Enviar Mensagem</span>
-              </button>
-            </form>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center">
+                      <contato.icon className="w-6 h-6 text-black" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-lg font-bold text-white mb-1">{contato.titulo}</h4>
+                      <p className="text-yellow-400 font-semibold mb-1">{contato.info}</p>
+                      <p className="text-zinc-400 text-sm">{contato.descricao}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
 
-        {/* WhatsApp CTA */}
+        {/* CTA Final */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mt-16"
+          className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 rounded-3xl p-8 lg:p-12 backdrop-blur-xl text-center"
         >
-          <div className="bg-gradient-to-r from-green-500 to-green-600 p-8 rounded-3xl inline-block shadow-2xl hover:shadow-green-500/25 transition-all duration-300">
-            <div className="flex items-center space-x-4">
-              <MessageCircle className="h-8 w-8 text-white" />
-              <div className="text-left">
-                <h3 className="text-xl font-bold text-white">
-                  Atendimento via WhatsApp
-                </h3>
-                <p className="text-white/90">
-                  Resposta mais rápida e direta
-                </p>
-              </div>
-            </div>
-            <button className="mt-4 bg-white text-green-600 px-6 py-3 rounded-2xl font-semibold hover:bg-gray-100 transition-all duration-300">
-              Falar no WhatsApp
-            </button>
+          <h3 className="text-3xl font-bold text-white mb-4">
+            Pronto para começar sua <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">transformação?</span>
+          </h3>
+          <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
+            Venha fazer parte da maior rede de academias de Manaus e descubra o poder de uma vida mais ativa, saudável e feliz.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/planos">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
+              >
+                MATRICULE-SE AGORA
+              </motion.button>
+            </Link>
+            <Link href="/unidades">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="border border-zinc-700 text-zinc-300 hover:text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:bg-zinc-800/50 backdrop-blur-sm"
+              >
+                VER UNIDADES
+              </motion.button>
+            </Link>
           </div>
         </motion.div>
       </div>
     </section>
   )
-} 
+}
