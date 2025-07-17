@@ -69,7 +69,7 @@ export default function Header() {
                   : `${isActiveSection("sobre") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
               }`}
             >
-              <div className="text-sm font-medium">Sobre Nós</div>
+              <div className="text-xs font-medium">Sobre Nós</div>
             </button>
 
             <Link
@@ -78,7 +78,7 @@ export default function Header() {
                 isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
             >
-              <div className="text-sm font-medium">Unidades</div>
+              <div className="text-xs font-medium">Unidades</div>
             </Link>
 
             <Link
@@ -87,7 +87,7 @@ export default function Header() {
                 isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
             >
-              <div className="text-sm font-medium">Aulas Coletivas</div>
+              <div className="text-xs font-medium">Aulas Coletivas</div>
             </Link>
 
             <Link
@@ -96,7 +96,7 @@ export default function Header() {
                 isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
             >
-              <div className="text-sm font-medium">Planos</div>
+              <div className="text-xs font-medium">Planos</div>
             </Link>
 
             <button
@@ -107,7 +107,7 @@ export default function Header() {
                   : `${isActiveSection("contato") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
               }`}
             >
-              <div className="text-sm font-medium">Contato</div>
+              <div className="text-xs font-medium">Contato</div>
             </button>
           </div>
         </div>
@@ -121,7 +121,7 @@ export default function Header() {
               isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
             }`}
           >
-            <div className="text-sm font-medium">(92) 99999-9999</div>
+            <div className="text-xs font-medium">(92) 99999-9999</div>
           </Link>
 
           {/* Matricule-se Button */}
@@ -129,7 +129,7 @@ export default function Header() {
             href="/planos"
             className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 rounded-2xl border border-yellow-500/30 flex justify-center items-center gap-2 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
           >
-            <div className="text-black text-sm font-semibold">Matricule-se</div>
+            <div className="text-black text-xs font-semibold">Matricule-se</div>
           </Link>
         </div>
 
@@ -155,7 +155,7 @@ export default function Header() {
                 smoothScrollTo("sobre")
                 setIsMenuOpen(false)
               }}
-              className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-300 font-medium cursor-pointer ${
+              className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-300 text-xs font-medium cursor-pointer ${
                 isScrolled
                   ? `${isActiveSection("sobre") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
                   : `${isActiveSection("sobre") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
@@ -165,7 +165,7 @@ export default function Header() {
             </button>
             <Link
               href="/unidades"
-              className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+              className={`block px-4 py-3 rounded-xl transition-all duration-300 text-xs font-medium ${
                 isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
               onClick={() => setIsMenuOpen(false)}
@@ -174,7 +174,7 @@ export default function Header() {
             </Link>
             <Link
               href="/aulas-coletivas"
-              className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+              className={`block px-4 py-3 rounded-xl transition-all duration-300 text-xs font-medium ${
                 isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
               onClick={() => setIsMenuOpen(false)}
@@ -183,7 +183,7 @@ export default function Header() {
             </Link>
             <Link
               href="/planos"
-              className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+              className={`block px-4 py-3 rounded-xl transition-all duration-300 text-xs font-medium ${
                 isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
               }`}
               onClick={() => setIsMenuOpen(false)}
@@ -195,7 +195,7 @@ export default function Header() {
                 smoothScrollTo("contato")
                 setIsMenuOpen(false)
               }}
-              className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-300 font-medium cursor-pointer ${
+              className={`block w-full text-left px-4 py-3 rounded-xl transition-all duration-300 text-xs font-medium cursor-pointer ${
                 isScrolled
                   ? `${isActiveSection("contato") ? "text-white bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30" : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"}`
                   : `${isActiveSection("contato") ? "text-white bg-gradient-to-r from-yellow-400/30 to-amber-500/30 border border-yellow-500/50" : "text-zinc-300 hover:text-white hover:bg-white/10"}`
@@ -206,7 +206,7 @@ export default function Header() {
             <div className={`pt-4 border-t space-y-3 ${isScrolled ? "border-zinc-800" : "border-zinc-800/30"}`}>
               <Link
                 href="tel:+5592999999999"
-                className={`block px-4 py-3 rounded-xl transition-all duration-300 font-medium ${
+                className={`block px-4 py-3 rounded-xl transition-all duration-300 text-xs font-medium ${
                   isScrolled ? "text-zinc-300 hover:text-white hover:bg-zinc-800/50" : "text-zinc-300 hover:text-white hover:bg-white/10"
                 }`}
               >
@@ -217,7 +217,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/planos"
-                className="block w-full px-4 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 rounded-2xl text-black font-semibold text-center transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
+                className="block w-full px-4 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 rounded-2xl text-black text-xs font-semibold text-center transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Matricule-se
