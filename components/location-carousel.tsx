@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { ChevronLeft, ChevronRight, MapPin } from "lucide-react"
 import Link from "next/link"
 
-const locations = [
+export const locations = [
   // Tradicionais
   {
     id: "cachoeirinha",
@@ -250,81 +250,8 @@ const locations = [
     hours: "Seg-Sex: 5h-24h | Sáb: 8h-17h | Dom: 8h-14h | Feriado: 7h-17h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "Atendimento domingos", "App acesso"],
     type: "diamante",
-    tourUrl: "https://www.google.com/local/place/fid/0x926c1b208a571047:0xd3acefd0084ce2be/photosphere?iu=https://lh5.googleusercontent.com/p/AF1QipMIP1oCDhXjEjLBir9O5JSTEjH4II6p9IKJ6MyF%3Dw160-h106-k-no-pi0-ya326-ro-0-fo100&ik=CAoSLEFGMVFpcE1JUDFvQ0RoWGpFakxCaXI5TzVKU1RFakg0SUk2cDlJS0o2TXlG",
+    tourUrl: "https://www.google.com/local/place/fid/0x926c1b9358b4a66d:0xa59d30976a07a255/photosphere?iu=https://lh5.googleusercontent.com/p/AF1QipPmk1ANVpCwQZ3-FQwyL-fhHQMNg2FYnPIQbMIf%3Dw160-h106-k-no-pi-0-ya236.99998-ro0-fo100&ik=CAoSLEFGMVFpcFBtazFBTlZwQ3dRWjMtRlF3eW0tZmhIUU1OZzJGWW5QSVFiTUlm",
   },
-  {
-    id: "laranjeiras",
-    name: "Laranjeiras",
-    address: "Avenida Professor Nilton Lins, 1984, Flores",
-    hours: "Seg-Sex: 5h-23h | Sáb: 6h-15h | Dom: 13h30-16h30 | Feriado: 7h-12h",
-    features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "Atendimento domingos", "App acesso"],
-    type: "diamante",
-    tourUrl: "https://www.google.com/local/place/fid/0x926c1bc15bee4d19:0x34a7cdf6126f1326/photosphere?iu=https://lh5.googleusercontent.com/p/AF1QipOR7Fuf6d_crzR1d1WzD6XyIuT4v0VIzK2Jd8bO%3Dw160-h106-k-no-pi-0-ya347.66-ro-0-fo100&ik=CAoSLEFGMVFpcE9SN0Z1ZjZkX2NyelIxZDFXekQ2WHlJdVQ0djBWSXpLMkpkOGJP",
-  },
-  {
-    id: "morada-do-sol",
-    name: "Morada do Sol",
-    address: "Avenida Guilherme Paraense, 02, Adrianópolis",
-    hours: "Seg-Sex: 5h-23h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
-    features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
-    type: "diamante",
-    tourUrl: "https://www.google.com/local/place/fid/0x926c1b4521fd49bb:0xbf3a9e8ca4577a2/photosphere?iu=https://lh5.googleusercontent.com/p/AF1QipPMsv-RmlcRKdurIf76N_VB-BSHzcjwQXoMzpba%3Dw160-h106-k-no-pi-0.112540185-ya40.56747-ro-0-fo100&ik=CAoSLEFGMVFpcFBNc3YtUm1sY1JLZHVySWY3Nk5fVkItQlNIemNqd1FYb016cGJh",
-  },
-  {
-    id: "nova-cidade",
-    name: "Nova Cidade",
-    address: "Avenida Margarita, 695, Nova Cidade",
-    hours: "Seg-Sex: 5h-23h | Sáb: 8h-17h | Dom: 8h-14h | Feriado: 8h-17h",
-    features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "Atendimento domingos", "App acesso"],
-    type: "diamante",
-    tourUrl: null, // AINDA NÃO TEM TOUR
-  },
-  {
-    id: "planalto",
-    name: "Planalto",
-    address: "Rua Salim Kahane, 3586, Planalto",
-    hours: "Seg-Sex: 5h-23h | Sáb: 7h-17h | Dom: 8h-12h / 16h-20h | Feriado: 8h-20h",
-    features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "Atendimento domingos", "App acesso"],
-    type: "diamante",
-    tourUrl: null, // AINDA NÃO TEM TOUR
-  },
-  {
-    id: "ponta-negra",
-    name: "Ponta Negra",
-    address: "Rua Raul Pompéia, 37, Ponta Negra",
-    hours: "Seg-Sex: 5h-23h | Sáb: 7h-17h | Dom: 8h-14h | Feriado: 7h-17h",
-    features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "Atendimento domingos", "App acesso"],
-    type: "diamante",
-    tourUrl: "https://www.google.com/maps/uv?pb=!1s0x926c114022a0b17d%3A0x2a9e91b6b12e8d18!3m1!7e115!4s%2Fmaps%2Fplace%2FLive%2BPonta%2BNegra%2F%40-3.0962455%2C-60.0512277%2C3a%2C75y%2C94.56h%2C90t%2Fdata%3D*213m4*211e1*213m2*211suQT-VO9ob_nOZNzK6dhtoQ*212e0*214m2*213m1*211s0x926c114022a0b17d%3A0x2a9e91b6b12e8d18%3Fsa%3DX%26ved%3D2ahUKEwjX1Je43amJAxV0ppUCHTaQLEgQpx96BAgSEAA!5sLive%20Ponta%20Negra%20-%20Pesquisa%20Google!15sCgIgAQ&imagekey=!1e10!2sAF1QipMNqB-sgV2UAKAjHaAx5dNH8od8XaSgo146YfU1&cr=le_a7&hl=pt-BR&ved=1t%3A206134&ictx=111",
-  },
-  {
-    id: "torquato-santos-dumont-diamante",
-    name: "Torquato Santos Dumont",
-    address: "Avenida Torquato Tapajós, 5555, Da Paz",
-    hours: "Seg-Sex: 5h-23h | Sáb: 8h-20h | Dom: 9h-12h / 16h-20h | Feriado: 8h-20h",
-    features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "Atendimento domingos", "App acesso"],
-    type: "diamante",
-    tourUrl: "https://www.google.com/local/place/fid/0x926c1a762f955ed3:0xb99d5ff85beebf7d/photosphere?iu=https://lh5.googleusercontent.com/p/AF1QipMw53g3AZtxizUMbo-n-BjAByo-6TXgQlmhUexN%3Dw160-h106-k-no-pi-0.112540185-ya86.16746-ro-0-fo100&ik=CAoSLEFGMVFpcE13NTNnM0FadHhpelVNYm8tbi1CakFCeW8tNlRYZ1FsbWhVZXhO",
-  },
-  {
-    id: "torres-diamante",
-    name: "Torres",
-    address: "Rua Mitiko, 397, Parque Dez de Novembro",
-    hours: "Seg-Sex: 5h-23h | Sáb: 7h-17h | Dom: 9h-12h | Feriado: 7h-17h",
-    features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "Atendimento domingos", "App acesso"],
-    type: "diamante",
-    tourUrl: null, // AINDA NÃO TEM TOUR
-  },
-  {
-    id: "vieiralves",
-    name: "Vieiralves",
-    address: "Avenida Djalma Batista, 700, Nossa Senhora das Graças",
-    hours: "Seg-Sex: 5h-24h | Sáb: 8h-18h | Dom: 9h-12h | Feriado: 7h-17h",
-    features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "Atendimento domingos", "App acesso"],
-    type: "diamante",
-    tourUrl: null, // AINDA NÃO TEM TOUR
-  },
-  // Inaugurações
   {
     id: "bom-prato",
     name: "Bom Prato",

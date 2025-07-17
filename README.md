@@ -94,10 +94,18 @@ LIVEACADEMIA/
 ### Páginas Principais
 - **Home** - Página inicial com todas as seções
 - **Planos** - Detalhamento completo dos planos
-- **Unidades** - Localização das academias
+- **Unidades** - Localização das academias com filtros e carrossel
 - **Aulas Coletivas** - Modalidades disponíveis
 - **Day Use** - Serviço de uso diário
 - **Trabalhe Conosco** - Formulário de candidatura
+
+### Página de Unidades
+- **Filtros** - Por tipo (Tradicional, Premium, Diamante, Em Inauguração)
+- **Filtros** - Por serviço (Climatização, Espaço Relax, Yoga, etc.)
+- **Filtros** - Por região (Adrianópolis, Centro, Cidade Nova, etc.)
+- **Carrossel** - Navegação infinita com botões e indicadores
+- **Cards** - Informações completas de cada unidade
+- **Tour Virtual** - Links para tours 360° das unidades
 
 ### Seções da Home
 1. **Hero** - Apresentação principal

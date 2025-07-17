@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
-import { ChevronLeft, ChevronRight, CheckCircle, Link } from "lucide-react"
-import locations from "@/components/location-carousel"
+import { ChevronLeft, ChevronRight, CheckCircle, Link, MapPin } from "lucide-react"
+import { locations } from "@/components/location-carousel"
 
 export default function Unidades() {
   const [filterType, setFilterType] = useState("todos")
@@ -12,7 +12,7 @@ export default function Unidades() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
 
-  const filteredLocations = (Array.isArray(locations) ? locations : []).filter((loc: any) => {
+  const filteredLocations = locations.filter((loc: any) => {
     if (filterType !== "todos" && loc.type !== filterType) return false
     if (filterService !== "todos" && !loc.features.includes(filterService)) return false
     if (filterRegion !== "todos" && !loc.address.includes(filterRegion)) return false
@@ -64,6 +64,7 @@ export default function Unidades() {
               <option value="tradicional">Tradicional</option>
               <option value="premium">Premium</option>
               <option value="diamante">Diamante</option>
+              <option value="inauguracao">Em Inauguração</option>
             </select>
             <select 
               onChange={(e) => setFilterService(e.target.value)} 
@@ -73,7 +74,11 @@ export default function Unidades() {
               <option value="Climatização">Climatização</option>
               <option value="Espaço Relax">Espaço Relax</option>
               <option value="Espaço Yoga">Espaço Yoga</option>
+              <option value="Espaço Pose">Espaço Pose</option>
               <option value="Studio de Bike">Studio de Bike</option>
+              <option value="Atendimento domingos">Atendimento domingos</option>
+              <option value="Aulas coletivas">Aulas coletivas</option>
+              <option value="App acesso">App acesso</option>
             </select>
             <select 
               onChange={(e) => setFilterRegion(e.target.value)} 
@@ -81,12 +86,21 @@ export default function Unidades() {
             >
               <option value="todos">Região: Todos</option>
               <option value="Adrianópolis">Adrianópolis</option>
+              <option value="Aleixo">Aleixo</option>
               <option value="Centro">Centro</option>
+              <option value="Cidade de Deus">Cidade de Deus</option>
               <option value="Cidade Nova">Cidade Nova</option>
               <option value="Compensa">Compensa</option>
+              <option value="Coroado">Coroado</option>
               <option value="Dom Pedro">Dom Pedro</option>
+              <option value="Flores">Flores</option>
+              <option value="Japiim">Japiim</option>
+              <option value="Parque 10">Parque 10</option>
               <option value="Petrópolis">Petrópolis</option>
+              <option value="Planalto">Planalto</option>
+              <option value="Raiz">Raiz</option>
               <option value="Tarumã">Tarumã</option>
+              <option value="Tancredo Neves">Tancredo Neves</option>
             </select>
           </div>
 
@@ -124,51 +138,43 @@ export default function Unidades() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="flex-shrink-0 w-full md:w-1/3 lg:w-1/4"
                 >
-                  <div className="bg-live-bg/50 backdrop-blur-sm p-6 rounded-xl border border-live-border/30 hover:border-live-accent/50 hover:bg-live-bg/70 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-live-accent/10 h-full">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xl font-bold text-live-textPrimary">{location.name}</h3>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        location.type === 'diamante' ? 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-black' :
-                        location.type === 'premium' ? 'bg-gradient-to-r from-gray-400 to-gray-600 text-white' :
-                        'bg-gradient-to-r from-live-accent/20 to-live-accent/40 text-live-accent'
-                      }`}>
-                        {location.type === 'diamante' ? '💎 Diamante' : 
-                         location.type === 'premium' ? '⭐ Premium' : '🏋️ Tradicional'}
-                      </span>
+                  <div className="bg-live-border/10 p-6 rounded-lg border border-live-border/30 hover:border-live-accent/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-live-accent/10 h-full">
+                    <h3 className="text-xl font-bold text-live-textPrimary mb-2">{location.name}</h3>
+                    <div className="flex items-center text-live-textSecondary mb-4">
+                      <MapPin className="h-4 w-4 mr-2" />
+                      <p className="text-sm">{location.address}</p>
                     </div>
-                    
-                    <p className="text-live-textSecondary mb-3 text-sm">{location.address}</p>
-                    <p className="text-live-textTernary mb-4 text-xs">{location.hours}</p>
-                    
-                    <div className="space-y-2 mb-4">
-                      {location.features.slice(0, 3).map((feature: string) => (
-                        <div key={feature} className="text-live-textSecondary flex items-center gap-2 text-sm">
-                          <CheckCircle className="h-4 w-4 text-live-accent flex-shrink-0" />
-                          <span className="truncate">{feature}</span>
-                        </div>
+                    <p className="text-live-textSecondary mb-4 text-sm">{location.hours}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {location.features.slice(0, 3).map((feature: string, i: number) => (
+                        <span key={i} className="text-xs bg-live-border/20 px-2 py-1 rounded-full text-live-textSecondary">
+                          {feature}
+                        </span>
                       ))}
                       {location.features.length > 3 && (
-                        <div className="text-live-accent text-xs">
-                          +{location.features.length - 3} mais recursos
-                        </div>
+                        <span className="text-xs text-live-accent">
+                          +{location.features.length - 3} mais
+                        </span>
                       )}
                     </div>
-                    
-                    <div className="space-y-2">
-                      <Link 
-                        href="/planos" 
-                        className="block w-full text-center bg-gradient-to-r from-live-accent to-yellow-500 text-black font-bold py-2 px-4 rounded-lg hover:from-yellow-400 hover:to-live-accent transition-all duration-300 text-sm"
-                      >
-                        COMPARAR PLANOS
-                      </Link>
-                      {location.tourUrl && (
+                    <div className="flex justify-between items-center">
+                      <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                        location.type === 'diamante' ? 'bg-live-gray text-live-bg' :
+                        location.type === 'premium' ? 'bg-live-accent text-live-bg' :
+                        'bg-live-accent text-live-bg'
+                      }`}>
+                        {location.type.toUpperCase()}
+                      </span>
+                      {location.tourUrl ? (
                         <Link 
                           href={location.tourUrl} 
                           target="_blank"
-                          className="block w-full text-center border border-live-accent/50 text-live-accent font-semibold py-2 px-4 rounded-lg hover:bg-live-accent/10 transition-all duration-300 text-sm"
+                          className="text-live-accent hover:text-live-yellowLight font-semibold text-sm"
                         >
-                          🏠 TOUR VIRTUAL
+                          Tour Virtual
                         </Link>
+                      ) : (
+                        <span className="text-live-textTernary text-sm">Tour em breve</span>
                       )}
                     </div>
                   </div>
