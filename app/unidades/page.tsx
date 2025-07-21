@@ -1,16 +1,15 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
-import { ChevronLeft, ChevronRight, CheckCircle, Link, MapPin } from "lucide-react"
-import { locations } from "@/components/location-carousel"
+import { MapPin } from "lucide-react"
+import Link from "next/link"
+import { locations } from "@/lib/locations"
 
 export default function Unidades() {
   const [filterType, setFilterType] = useState("todos")
   const [filterService, setFilterService] = useState("todos")
   const [filterRegion, setFilterRegion] = useState("todos")
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const carouselRef = useRef<HTMLDivElement>(null)
 
   const filteredLocations = locations.filter((loc: any) => {
     if (filterType !== "todos" && loc.type !== filterType) return false
@@ -18,25 +17,6 @@ export default function Unidades() {
     if (filterRegion !== "todos" && !loc.address.includes(filterRegion)) return false
     return true
   })
-
-  // Criar array infinito duplicando os cards
-  const infiniteLocations = [...filteredLocations, ...filteredLocations, ...filteredLocations]
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % filteredLocations.length)
-  }
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + filteredLocations.length) % filteredLocations.length)
-  }
-
-  // Auto-scroll infinito
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide()
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [filteredLocations.length])
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-live-bg via-live-bg to-live-accent/5 text-live-textPrimary pt-20">
@@ -104,99 +84,96 @@ export default function Unidades() {
             </select>
           </div>
 
-          {/* Carrossel Infinito */}
-          <div className="relative overflow-hidden">
-            {/* Botões de navegação */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-live-bg/80 backdrop-blur-sm border border-live-border/30 text-live-textPrimary p-3 rounded-full hover:bg-live-accent/20 hover:border-live-accent/50 transition-all duration-300 shadow-lg"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-            
-            <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-live-bg/80 backdrop-blur-sm border border-live-border/30 text-live-textPrimary p-3 rounded-full hover:bg-live-accent/20 hover:border-live-accent/50 transition-all duration-300 shadow-lg"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-
-            {/* Container do carrossel */}
-            <div 
-              ref={carouselRef}
-              className="flex gap-6 transition-transform duration-500 ease-in-out"
-              style={{
-                transform: `translateX(-${currentIndex * (100 / 3)}%)`,
-                width: `${(infiniteLocations.length / 3) * 100}%`
-              }}
-            >
-              {infiniteLocations.map((location: any, index: number) => (
-                <motion.div
-                  key={`${location.id}-${index}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="flex-shrink-0 w-full md:w-1/3 lg:w-1/4"
-                >
-                  <div className="bg-live-border/10 p-6 rounded-lg border border-live-border/30 hover:border-live-accent/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-live-accent/10 h-full">
-                    <h3 className="text-xl font-bold text-live-textPrimary mb-2">{location.name}</h3>
-                    <div className="flex items-center text-live-textSecondary mb-4">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      <p className="text-sm">{location.address}</p>
-                    </div>
-                    <p className="text-live-textSecondary mb-4 text-sm">{location.hours}</p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {location.features.slice(0, 3).map((feature: string, i: number) => (
-                        <span key={i} className="text-xs bg-live-border/20 px-2 py-1 rounded-full text-live-textSecondary">
-                          {feature}
+          {/* Grid de Unidades */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {filteredLocations.map((location: any, index: number) => (
+              <motion.div
+                key={location.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="w-full"
+              >
+                {location.type !== "inauguracao" ? (
+                  <Link href={`/unidades/${location.id}`} className="block h-full group">
+                    <div className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30 hover:border-live-accent/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-live-accent/10 h-full cursor-pointer group-hover:scale-[1.02]">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-xl font-bold text-live-textPrimary group-hover:text-live-accent transition-colors">{location.name}</h3>
+                        <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                          location.type === 'diamante' ? 'bg-live-gray text-live-bg' :
+                          location.type === 'premium' ? 'bg-live-accent text-live-bg' :
+                          'bg-live-accent text-live-bg'
+                        }`}>
+                          {location.type.toUpperCase()}
                         </span>
-                      ))}
-                      {location.features.length > 3 && (
-                        <span className="text-xs text-live-accent">
-                          +{location.features.length - 3} mais
+                      </div>
+                      
+                      <div className="flex items-start gap-3 mb-3">
+                        <MapPin className="h-4 w-4 text-live-accent mt-1 flex-shrink-0" />
+                        <p className="text-sm text-live-textSecondary">{location.address}</p>
+                      </div>
+                      
+                      <p className="text-live-textSecondary mb-4 text-sm">{location.hours}</p>
+                      
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {location.features.slice(0, 3).map((feature: string, i: number) => (
+                          <span key={i} className="text-xs bg-live-border/20 px-2 py-1 rounded-full text-live-textSecondary">
+                            {feature}
+                          </span>
+                        ))}
+                        {location.features.length > 3 && (
+                          <span className="text-xs text-live-accent">
+                            +{location.features.length - 3} mais
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center justify-between mt-auto pt-4">
+                        {location.tourUrl && (
+                          <span className="text-live-accent font-semibold text-sm">
+                            Tour Virtual
+                          </span>
+                        )}
+                        <span className="text-live-accent font-semibold text-sm ml-auto group-hover:text-live-yellowLight transition-colors">
+                          Ver Detalhes →
                         </span>
-                      )}
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                        location.type === 'diamante' ? 'bg-live-gray text-live-bg' :
-                        location.type === 'premium' ? 'bg-live-accent text-live-bg' :
-                        'bg-live-accent text-live-bg'
-                      }`}>
-                        {location.type.toUpperCase()}
+                  </Link>
+                ) : (
+                  <div className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30 transition-all duration-300 shadow-lg h-full opacity-60">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-bold text-live-textPrimary">{location.name}</h3>
+                      <span className="text-xs px-3 py-1 rounded-full font-medium bg-live-border text-live-textPrimary">
+                        EM BREVE
                       </span>
-                      {location.tourUrl ? (
-                        <Link 
-                          href={location.tourUrl} 
-                          target="_blank"
-                          className="text-live-accent hover:text-live-yellowLight font-semibold text-sm"
-                        >
-                          Tour Virtual
-                        </Link>
-                      ) : (
-                        <span className="text-live-textTernary text-sm">Tour em breve</span>
-                      )}
+                    </div>
+                    
+                    <div className="flex items-start gap-3 mb-3">
+                      <MapPin className="h-4 w-4 text-live-textSecondary mt-1 flex-shrink-0" />
+                      <p className="text-sm text-live-textSecondary">{location.address}</p>
+                    </div>
+                    
+                    <p className="text-live-textSecondary mb-4 text-sm">{location.hours}</p>
+                    
+                    <div className="flex items-center justify-center mt-auto pt-4">
+                      <span className="text-live-textTernary text-sm">
+                        Inauguração em breve
+                      </span>
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Indicadores */}
-          <div className="flex justify-center mt-8 gap-2">
-            {filteredLocations.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentIndex 
-                    ? 'bg-live-accent scale-125' 
-                    : 'bg-live-border/50 hover:bg-live-border'
-                }`}
-              />
+                )}
+              </motion.div>
             ))}
           </div>
+          
+          {filteredLocations.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-xl text-live-textSecondary">
+                Nenhuma unidade encontrada com os filtros selecionados.
+              </p>
+            </div>
+          )}
 
           {/* CTA */}
           <motion.div
@@ -205,12 +182,17 @@ export default function Unidades() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-center mt-16"
           >
-            <Link
-              href="/planos"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-live-accent to-yellow-500 text-black font-bold shadow-lg hover:shadow-xl hover:shadow-live-accent/25 transition-all duration-300 transform hover:scale-105"
-            >
-              VER TODAS AS UNIDADES
-            </Link>
+            <div className="space-y-4">
+              <p className="text-lg text-live-textSecondary mb-6">
+                Clique em qualquer unidade para ver todos os detalhes, modalidades e benefícios!
+              </p>
+              <Link
+                href="/planos"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-live-accent to-yellow-500 text-black font-bold shadow-lg hover:shadow-xl hover:shadow-live-accent/25 transition-all duration-300 transform hover:scale-105"
+              >
+                VER PLANOS E PREÇOS
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

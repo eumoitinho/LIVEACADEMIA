@@ -422,8 +422,8 @@ function LocationCard({ location, featured = false }: LocationCardProps) {
     }
   }
 
-  return (
-    <div className={`bg-live-border/10 p-6 rounded-lg border border-live-border/30 hover:border-live-accent/50 transition ${featured ? "shadow-lg" : ""}`}>
+  const cardContent = (
+    <div className={`bg-live-border/10 p-6 rounded-lg border border-live-border/30 hover:border-live-accent/50 transition ${featured ? "shadow-lg" : ""} cursor-pointer`}>
       <h3 className="text-xl font-bold text-live-textPrimary mb-2">{location.name}</h3>
       <div className="flex items-center text-live-textSecondary mb-4">
         <MapPin className="h-4 w-4 mr-2" />
@@ -442,7 +442,7 @@ function LocationCard({ location, featured = false }: LocationCardProps) {
           {location.type.toUpperCase()}
         </span>
         {location.tourUrl ? (
-          <Link href={location.tourUrl} className="text-live-accent hover:text-live-yellowLight font-semibold">
+          <Link href={location.tourUrl} className="text-live-accent hover:text-live-yellowLight font-semibold" onClick={(e) => e.stopPropagation()}>
             Tour Virtual
           </Link>
         ) : (
@@ -451,4 +451,16 @@ function LocationCard({ location, featured = false }: LocationCardProps) {
       </div>
     </div>
   )
+
+  // Se não é unidade em inauguração, envolve com Link para a página da unidade
+  if (location.type !== "inauguracao") {
+    return (
+      <Link href={`/unidades/${location.id}`}>
+        {cardContent}
+      </Link>
+    )
+  }
+
+  // Se é unidade em inauguração, apenas o card sem link
+  return cardContent
 }

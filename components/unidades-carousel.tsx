@@ -81,10 +81,23 @@ const unidades = [
 
 type UnidadeComDistancia = typeof unidades[0] & { distancia?: number }
 
+// Mapeamento de nomes para IDs das unidades
+const unidadeNameToId = {
+  "Live Academia - Centro": "centro",
+  "Live Academia - Cachoeirinha": "cachoeirinha",
+  "Live Academia - Cidade Nova": "chapeu-goiano", // Assumindo que é Chapéu Goiano baseado no endereço
+  "Live Academia - Ponta Negra": "flores", // Assumindo baseado na localização
+  "Live Academia - Adrianópolis": "adrianopolis",
+  "Live Academia - Flores": "flores"
+}
+
 // Componente de Card melhorado
 function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
+  const unidadeId = unidadeNameToId[unidade.nome as keyof typeof unidadeNameToId] || 
+    unidade.nome.toLowerCase().replace('live academia - ', '').replace(/\s+/g, '-')
+  
   return (
-    <Link href={unidade.link} target="_blank" className="block group">
+    <Link href={`/unidades/${unidadeId}`} className="block group">
       <div className="relative overflow-hidden rounded-3xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 shadow-lg transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-500/10 hover:border-zinc-700/50 hover:-translate-y-1">
         {/* Imagem com maior qualidade */}
         <div className="relative h-[380px] overflow-hidden">

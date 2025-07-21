@@ -2,7 +2,6 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-import LiveLogo from "./live-logo"
 
 export default function HeroSection() {
   return (
@@ -57,9 +56,9 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="mb-8"
+          className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6"
         >
-          <LiveLogo className="w-32 h-32 mx-auto mb-6" />
+          <span className="text-zinc-400 text-sm font-medium">Academia sem fidelidade</span>
         </motion.div>
 
         <motion.h1
@@ -68,30 +67,19 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-tight"
         >
-          Transforme seu corpo
+          SEU TREINO,
           <br />
-          <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">e sua vida</span>
+          <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">SUAS REGRAS!</span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-xl text-zinc-300 mb-6 max-w-3xl mx-auto"
+          className="text-xl text-zinc-300 mb-10 max-w-2xl mx-auto"
         >
-          A maior rede de academias de Manaus, com planos flexíveis e sem fidelidade para você treinar do seu jeito.
+          Sem fidelidade, sem anuidade, sem pegadinha. A academia que respeita seu bolso e seu tempo.
         </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mb-8"
-        >
-          <div className="inline-flex items-center rounded-full border border-yellow-500/30 px-6 py-3 bg-yellow-500/10 backdrop-blur-sm">
-            <span className="text-yellow-400 text-lg font-semibold">Planos a partir de R$ 119,90</span>
-          </div>
-        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -105,8 +93,18 @@ export default function HeroSection() {
               whileTap={{ scale: 0.95 }}
               className="bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black px-10 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
             >
-              MATRICULE-SE AGORA
+              Comece agora
               <ArrowRight size={22} />
+            </motion.button>
+          </Link>
+          
+          <Link href="/planos">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="border border-zinc-700 text-zinc-300 hover:text-white px-10 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:bg-zinc-800/50 backdrop-blur-sm"
+            >
+              Ver planos
             </motion.button>
           </Link>
         </motion.div>

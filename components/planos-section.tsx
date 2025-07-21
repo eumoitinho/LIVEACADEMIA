@@ -7,7 +7,7 @@ import Image from "next/image"
 const planos = [
   {
     nome: "TRADICIONAL",
-    preco: "119,90",
+    preco: "119,90*",
     periodo: "mês",
     descricao: "Treine em todas as unidades Tradicionais, incluindo as Tradicionais Climatizadas.",
     beneficios: [
@@ -27,7 +27,7 @@ const planos = [
   },
   {
     nome: "DIAMANTE",
-    preco: "159,90",
+    preco: "159,90*",
     periodo: "mês",
     descricao: "Treine em todas as unidades da rede em Manaus, exceto Morada do Sol e Alphaville.",
     beneficios: [
@@ -188,7 +188,7 @@ export default function PlanosSection() {
           className="mt-16 text-center"
         >
           <p className="text-zinc-400 text-sm">
-            Os preços, serviços e condições promocionais podem variar de acordo com a academia escolhida.
+            Os preços, serviços e condições promocionais podem variar de acordo com a unidade escolhida.
           </p>
         </motion.div>
       </div>
