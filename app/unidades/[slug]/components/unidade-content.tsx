@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { MapPin, Clock, CheckCircle, Star, Phone, ExternalLink } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import PlanosCards from "@/components/planos-cards"
 import CheckoutModal from "@/components/checkout-modal"
+import { useUnit } from "@/contexts/unit-context"
 
 interface UnidadeContentProps {
   unidade: {
@@ -35,6 +36,20 @@ interface UnidadeContentProps {
 export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string} | null>(null)
+  const { setCurrentUnit } = useUnit()
+
+  useEffect(() => {
+    if (unidade.logo) {
+      setCurrentUnit({
+        name: unidade.name,
+        logo: unidade.logo
+      })
+    }
+
+    return () => {
+      setCurrentUnit(null)
+    }
+  }, [unidade, setCurrentUnit])
 
   const handleMatricular = (plano: {name: string; price: string}) => {
     setSelectedPlano(plano)

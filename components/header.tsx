@@ -5,11 +5,13 @@ import Link from "next/link"
 import Image from "next/image"
 import { Menu, X, Phone } from "lucide-react"
 import LiveLogo from "./live-logo"
+import { useUnit } from "@/contexts/unit-context"
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("")
+  const { currentUnit } = useUnit()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,7 +57,22 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/">
-              <LiveLogo className={`h-8 w-auto transition-all duration-500 ${isScrolled ? "" : "brightness-0 invert"}`} />
+              {currentUnit && currentUnit.logo ? (
+                <div className="flex items-center gap-2">
+                  <img 
+                    src={currentUnit.logo}
+                    alt={`Logo ${currentUnit.name}`}
+                    className="h-8 w-auto object-contain"
+                  />
+                  <span className={`text-sm font-semibold transition-all duration-500 ${
+                    isScrolled ? "text-white" : "text-white"
+                  }`}>
+                    {currentUnit.name}
+                  </span>
+                </div>
+              ) : (
+                <LiveLogo className={`h-8 w-auto transition-all duration-500 ${isScrolled ? "" : "brightness-0 invert"}`} />
+              )}
             </Link>
           </div>
 
