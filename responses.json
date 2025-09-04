@@ -1,0 +1,329 @@
+
+
+
+
+
+
+
+/*
+ * Dados da academia
+ */
+{
+	"return": {
+		"codigo": 1,
+		"cidade": "MANAUS",
+		"estado": "AMAZONAS",
+		"telefone": "",
+		"endereco": "AVENIDA DJALMA BATISTA",
+		"latitude": "",
+		"chave": "7724bf6109e5370177c8129aa431b922",
+		"nome": "LIVE - VIEIRALVES",
+		"cep": "69.053-000",
+		"complemento": "LOTES 01 A 05 CONJU",
+		"moeda": "R$",
+		"imagens": [],
+		"usarSistemaInternacional": false,
+		"logo": "https://cdn1.pactorian.net/7724bf6109e5370177c8129aa431b922/3ISnhfvjxox*ybUNrupT9B5qyII6ZIqjWg4AGh4Te6U=/jtGo7xfGreYfjucCmU7FZg==.jpg",
+		"email": "ATENDIMENTO@LIVEACADEMIA.COM.BR",
+		"longitude": "",
+		"locale": "pt_BR",
+		"mascaraTelefone": "",
+		"utilizaGestaoClientesComRestricoes": true,
+		"habilitarValidacaoHorariosMesmaTurma": false
+	}
+}
+
+/*
+ * Configurações do hotsite/checkout
+ */
+
+{
+	"return": {
+		"habilitarAgendamentoAulaExperimentalLinkVisitante": false,
+		"configSescHabilitada": false,
+		"googleTagIdHotsite": "",
+		"cor": "#ffcc00",
+		"usarFormaPagamentoPlanoProduto": false,
+		"apresentarValorTotalDoPlanoNaTelaDeSelecaoDoPlano": false,
+		"urlLinkGooglePlay": "",
+		"apresentarCartao": false,
+		"apresentarCartaoVenda": true,
+		"urlLinkAppleStore": "",
+		"apresentarTermoAceiteLinkPag": false,
+		"apresentarCPFLinkPag": false,
+		"apresentarCartaoRegua": false,
+		"apresentarPix": true,
+		"analyticsId": "",
+		"cobrarProdutoJuntoAdesaoMatricula": "false",
+		"exibirTipoDocumentoTelaVendasOnline": false,
+		"temaescuro": false,
+		"primeiraCobrancaPixEGuardarCartao": false,
+		"tipoConvenio": "",
+		"detalharParcelaTelaCheckout": "false",
+		"apresentarBoletoRegua": false,
+		"selecionarUnidadeListaPlano": false,
+		"modalidadesIniciarSelecionadasContratoTurma": false,
+		"apresentarPixRegua": true,
+		"ativarLinksGooglePlayEAppleStore": false,
+		"permitirMudarTipoParcelamento": false,
+		"apresentarPixVenda": false,
+		"temaclaro": true,
+		"apresentarDtFaturaLinkPag": false,
+		"permiteVendaProdutoAlunoOutraUnidade": false,
+		"apresentarvaloranuidade": "false",
+		"apresentarBoletoVenda": false,
+		"permiteRenovacaoDeContrato": false,
+		"exibeDataUtilizacao": false,
+		"apresentarBoleto": false,
+		"camposAdicionais": [
+			"TELEFONE",
+			"CEP",
+			"ENDERECO",
+			"NUMERO",
+			"BAIRRO",
+			"COMPLEMENTO",
+			"SEXO",
+			"DT_NASCIMENTO",
+			"CUPOM_DESCONTO"
+		],
+		"camposAdicionaisProduto": [
+			"TELEFONE",
+			"CEP",
+			"ENDERECO",
+			"NUMERO",
+			"BAIRRO",
+			"SEXO",
+			"DT_NASCIMENTO",
+			"CUPOM_DESCONTO"
+		],
+		"permitecontratosconcomintante": "false",
+		"camposAdicionaisProdutoFlow": [
+			""
+		],
+		"cobrarPrimeiraParcelaCompra": "true",
+		"permiteProsseguirMesmoCpfOuEmailCadastroVisitante": true,
+		"tokenApiConversao": "",
+		"verificarCpfAlunoAntesEscolha": false,
+		"camposAdicionaisProdutoPlano": [],
+		"url": "",
+		"camposAdicionaisPlanoFlow": [
+			""
+		],
+		"pixelId": "",
+		"habilitarPreCadastro": false,
+		"tema": "",
+		"googleTagId": "",
+		"titulocheckout": "Bora treinar?"
+	}
+}
+
+/*
+ * Simulação de contrato
+ */
+
+
+{
+	"return": {
+		"codigo": 0,
+		"codigoCliente": 0,
+		"valorFinal": 2158.8,
+		"contratoEnviado": false,
+		"reciboEnviado": false,
+		"situacaoContrato": "Matrícula",
+		"dataLancamento": "04/09/2025 - 12:15:30",
+		"vigenciaDe": " - ",
+		"vigenciaAteAjustada": "03/09/2026",
+		"situacao": "Ativo",
+		"nomePlano": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS)",
+		"modalidades": [
+			{
+				"codigo": 0,
+				"modalidade": "MUSCULAÇÃO",
+				"nrVezesSemana": 7,
+				"nrsVezesSemana": null,
+				"selected": false,
+				"utilizarTurma": false
+			}
+		],
+		"produtos": [
+			{
+				"codigo": null,
+				"descricao": "ACESSO DIAMANTE",
+				"valor": {
+					"source": "0.0",
+					"parsedValue": 0
+				},
+				"nrDiasVigencia": null,
+				"tipoProduto": "SE",
+				"dataCobranca": " - "
+			},
+			{
+				"codigo": null,
+				"descricao": "MATRÍCULA",
+				"valor": {
+					"source": "0.0",
+					"parsedValue": 0
+				},
+				"nrDiasVigencia": null,
+				"tipoProduto": "MA",
+				"dataCobranca": " - "
+			},
+			{
+				"codigo": null,
+				"descricao": "TAXA DE ANUIDADE PLANO RECORRÊNCIA",
+				"valor": {
+					"source": "0.0",
+					"parsedValue": 0
+				},
+				"nrDiasVigencia": null,
+				"tipoProduto": "TA",
+				"dataCobranca": "01/01/2026"
+			}
+		],
+		"parcelas": [
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 09/2025",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 10/2025",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 11/2025",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 12/2025",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 01/2026",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 02/2026",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 03/2026",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 04/2026",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 05/2026",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 06/2026",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 07/2026",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			},
+			{
+				"codigo": null,
+				"descricao": "PLANO ASSINATURA DIAMANTE  SEM FIDELIDADE R$179,90 - 2025 (2 CONVIDADOS) - 08/2026",
+				"valor": 179.9,
+				"nrDiasVigencia": null,
+				"tipoProduto": "PM",
+				"dataCobranca": ""
+			}
+		],
+		"valorMensal": {
+			"source": "0.0",
+			"parsedValue": 0
+		},
+		"valorBase": 2158.8,
+		"valorAnuidade": {
+			"source": "0.0",
+			"parsedValue": 0
+		},
+		"valorMatricula": {
+			"source": "0.0",
+			"parsedValue": 0
+		},
+		"valorProRata": {
+			"source": "0.0",
+			"parsedValue": 0
+		},
+		"valorPrimeiraParcela": 179.9,
+		"diaVencimentoAnuidade": 0,
+		"mesVencimentoAnuidade": "",
+		"valorAdesao": {
+			"source": "0.0",
+			"parsedValue": 0
+		},
+		"codigoPlano": 918,
+		"maxVezesParcelarAdesao": 0,
+		"msgValidacao": "",
+		"numeroMeses": 0,
+		"crossfit": false,
+		"situacaoSubordinada": "",
+		"permiteMarcarAula": false,
+		"vendaCreditoTreino": false,
+		"nrParcelas": 0,
+		"horarioDescricao": "",
+		"permiteRenovar": false,
+		"simulacao": false,
+		"bolsa": false,
+		"maxVezesParcelarProduto": 0,
+		"descricaoCobrancaPrimeiraParcela": "Hoje",
+		"anoCobrancaAnuidade": 2026,
+		"permiterenovacaoautomatica": false,
+		"renovacaoautomaticasimnao": false,
+		"renovacao": false,
+		"rematricula": false,
+		"porcentagemUsadaContrato": 0
+	}
+}
+
+/*

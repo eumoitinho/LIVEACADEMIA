@@ -49,7 +49,7 @@ class PactoAPI {
   }
 
   /**
-   * Autentica na API Pacto Soluções
+   * Autentica com a da API da Pacto 
    */
   async authenticate(): Promise<boolean> {
     try {
@@ -411,3 +411,4 @@ export const processCheckout = async (
       return { success: false, error: 'Método de pagamento inválido' }
   }
 }
+
