@@ -33,6 +33,13 @@ const estruturas = [
     categoria: "exclusivo"
   },
   {
+    titulo: "Espaço Yoga",
+    descricao: "Área exclusiva para a prática de Yoga",
+    icon: Sparkles,
+    disponibilidade: "Unidades Diamante",
+    categoria: "exclusivo"
+  },
+  {
     titulo: "Espaço Bodybuilding",
     descricao: "Área com máquinas de musculação para alta performance",
     icon: Target,

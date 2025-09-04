@@ -10,14 +10,14 @@ const modalidadesHome = [
     subtitle: "Ritmo e movimento",
     title: "Fitdance",
     description: "Ritmo e movimento para queimar calorias e liberar o estresse.",
-    image: "https://elements.envato.com/pt-br/group-of-multi-ethnic-sport-man-and-women-p…",
+    image: "/images/academia-1.webp",
     style: "col-span-12 sm:col-span-4"
   },
   {
     subtitle: "Simule rotas e percursos",
     title: "Top Ride",
     description: "Simule rotas, percursos e pistas de treino com técnicas de ciclismo.",
-    image: "https://drive.google.com/file/d/1aHS883ZYUc5_mFL1uLO1YB9ot4EC6CQn/view?usp=sharing",
+    image: "/images/academia-2.webp",
     style: "col-span-12 sm:col-span-4"
   },
   {

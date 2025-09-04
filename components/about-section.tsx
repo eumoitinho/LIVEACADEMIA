@@ -71,7 +71,7 @@ export default function AboutSection() {
           >
             <div className="relative bg-live-border/20 backdrop-blur-sm rounded-3xl p-3 border border-live-border/30 shadow-2xl">
               <Image
-                src="https://drive.google.com/file/d/1PXWBxvS2h45nV4ecGcwbT7WtxldpriOG/view?usp=sharing"
+                src="/images/academia-1.webp"
                 alt="Estrutura Live Academia"
                 width={600}
                 height={400}
