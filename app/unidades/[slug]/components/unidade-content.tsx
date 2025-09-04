@@ -1,9 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { MapPin, Clock, CheckCircle, Star, Phone, ExternalLink } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import PlanosCards from "@/components/planos-cards"
+import CheckoutModal from "@/components/checkout-modal"
 
 interface UnidadeContentProps {
   unidade: {
@@ -14,6 +17,12 @@ interface UnidadeContentProps {
     features: string[]
     type: string
     tourUrl?: string | null
+    logo?: string | null
+    planos?: Array<{
+      name: string
+      price: string
+    }>
+    hotsite?: string
   }
   data: {
     modalidades: string[]
@@ -23,6 +32,19 @@ interface UnidadeContentProps {
 }
 
 export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string} | null>(null)
+
+  const handleMatricular = (plano: {name: string; price: string}) => {
+    setSelectedPlano(plano)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedPlano(null)
+  }
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-live-bg via-live-bg to-live-accent/5 text-live-textPrimary pt-20">
       {/* Hero Section */}
@@ -33,18 +55,31 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4 mb-6">
+            <div className="max-w-6xl mx-auto">
+              {/* Logo da Unidade */}
+              {unidade.logo && (
+                <div className="flex justify-center mb-8">
+                  <div className="w-32 h-32 bg-live-border/10 rounded-2xl p-4 border border-live-border/30">
+                    <img 
+                      src={unidade.logo} 
+                      alt={`Logo ${unidade.name}`}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex items-center justify-center gap-4 mb-6">
                 <span className={`px-4 py-2 rounded-full text-sm font-bold ${
                   unidade.type === 'diamante' ? 'bg-live-gray text-live-bg' :
                   unidade.type === 'premium' ? 'bg-live-accent text-live-bg' :
-                  'bg-live-accent text-live-bg'
+                  'bg-green-500 text-white'
                 }`}>
                   LIVE {unidade.type.toUpperCase()}
                 </span>
               </div>
               
-              <h1 className="text-5xl lg:text-6xl font-bold mb-6">
+              <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-center">
                 Live Academia <span className="text-live-accent">{unidade.name}</span>
               </h1>
               
@@ -87,6 +122,15 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </motion.div>
         </div>
       </section>
+
+      {/* Cards de Planos */}
+      {unidade.planos && unidade.planos.length > 0 && (
+        <PlanosCards 
+          planos={unidade.planos}
+          unidadeName={unidade.name}
+          onMatricular={handleMatricular}
+        />
+      )}
 
       {/* Galeria de Fotos */}
       <section className="py-16">
@@ -245,6 +289,15 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </motion.div>
         </div>
       </section>
+
+      {/* Modal de Checkout */}
+      <CheckoutModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        plano={selectedPlano}
+        unidadeName={unidade.name}
+        unidadeId={unidade.id}
+      />
     </main>
   )
 }

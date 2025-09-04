@@ -85,7 +85,7 @@ export default function Unidades() {
           </div>
 
           {/* Grid de Unidades */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {filteredLocations.map((location: any, index: number) => (
               <motion.div
                 key={location.id}
@@ -96,70 +96,107 @@ export default function Unidades() {
               >
                 {location.type !== "inauguracao" ? (
                   <Link href={`/unidades/${location.id}`} className="block h-full group">
-                    <div className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30 hover:border-live-accent/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-live-accent/10 h-full cursor-pointer group-hover:scale-[1.02]">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-bold text-live-textPrimary group-hover:text-live-accent transition-colors">{location.name}</h3>
-                        <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                          location.type === 'diamante' ? 'bg-live-gray text-live-bg' :
-                          location.type === 'premium' ? 'bg-live-accent text-live-bg' :
-                          'bg-live-accent text-live-bg'
-                        }`}>
-                          {location.type.toUpperCase()}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-start gap-3 mb-3">
-                        <MapPin className="h-4 w-4 text-live-accent mt-1 flex-shrink-0" />
-                        <p className="text-sm text-live-textSecondary">{location.address}</p>
-                      </div>
-                      
-                      <p className="text-live-textSecondary mb-4 text-sm">{location.hours}</p>
-                      
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {location.features.slice(0, 3).map((feature: string, i: number) => (
-                          <span key={i} className="text-xs bg-live-border/20 px-2 py-1 rounded-full text-live-textSecondary">
-                            {feature}
-                          </span>
-                        ))}
-                        {location.features.length > 3 && (
-                          <span className="text-xs text-live-accent">
-                            +{location.features.length - 3} mais
-                          </span>
+                    <div className="bg-live-border/10 rounded-2xl border border-live-border/30 hover:border-live-accent/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-live-accent/10 h-full cursor-pointer group-hover:scale-[1.02] overflow-hidden">
+                      {/* Header com Logo */}
+                      <div className="relative h-48 bg-gradient-to-br from-live-accent/10 to-live-accent/5">
+                        {location.logo && (
+                          <div className="absolute inset-0 flex items-center justify-center p-6">
+                            <img 
+                              src={location.logo} 
+                              alt={`Logo ${location.name}`}
+                              className="max-h-full max-w-full object-contain"
+                            />
+                          </div>
                         )}
+                        <div className="absolute top-4 right-4">
+                          <span className={`text-xs px-3 py-1 rounded-full font-medium ${
+                            location.type === 'diamante' ? 'bg-live-gray text-live-bg' :
+                            location.type === 'premium' ? 'bg-live-accent text-live-bg' :
+                            'bg-green-500 text-white'
+                          }`}>
+                            {location.type.toUpperCase()}
+                          </span>
+                        </div>
                       </div>
                       
-                      <div className="flex items-center justify-between mt-auto pt-4">
-                        {location.tourUrl && (
-                          <span className="text-live-accent font-semibold text-sm">
-                            Tour Virtual
+                      {/* Content */}
+                      <div className="p-6">
+                        <div className="mb-4">
+                          <h3 className="text-xl font-bold text-live-textPrimary group-hover:text-live-accent transition-colors mb-2">
+                            {location.name}
+                          </h3>
+                          <div className="flex items-start gap-2 mb-3">
+                            <MapPin className="h-4 w-4 text-live-accent mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-live-textSecondary">{location.address}</p>
+                          </div>
+                        </div>
+                        
+                        <p className="text-live-textSecondary mb-4 text-sm">{location.hours}</p>
+                        
+                        {/* Features */}
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {location.features.slice(0, 3).map((feature: string, i: number) => (
+                            <span key={i} className="text-xs bg-live-border/20 px-2 py-1 rounded-full text-live-textSecondary">
+                              {feature}
+                            </span>
+                          ))}
+                          {location.features.length > 3 && (
+                            <span className="text-xs text-live-accent">
+                              +{location.features.length - 3} mais
+                            </span>
+                          )}
+                        </div>
+                        
+                        {/* Bottom Actions */}
+                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-live-border/20">
+                          <div className="flex items-center gap-3">
+                            {location.tourUrl && (
+                              <span className="text-live-accent font-semibold text-sm">
+                                Tour Virtual
+                              </span>
+                            )}
+                            {location.planos && location.planos.length > 0 && (
+                              <span className="text-green-600 font-semibold text-sm">
+                                A partir de R$ {location.planos[0].price}
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-live-accent font-semibold text-sm group-hover:text-live-yellowLight transition-colors">
+                            Ver Detalhes →
                           </span>
-                        )}
-                        <span className="text-live-accent font-semibold text-sm ml-auto group-hover:text-live-yellowLight transition-colors">
-                          Ver Detalhes →
-                        </span>
+                        </div>
                       </div>
                     </div>
                   </Link>
                 ) : (
-                  <div className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30 transition-all duration-300 shadow-lg h-full opacity-60">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xl font-bold text-live-textPrimary">{location.name}</h3>
-                      <span className="text-xs px-3 py-1 rounded-full font-medium bg-live-border text-live-textPrimary">
-                        EM BREVE
-                      </span>
+                  <div className="bg-live-border/10 rounded-2xl border border-live-border/30 transition-all duration-300 shadow-lg h-full opacity-60 overflow-hidden">
+                    {/* Header Placeholder */}
+                    <div className="h-48 bg-gradient-to-br from-live-border/20 to-live-border/5 flex items-center justify-center">
+                      <div className="text-4xl text-live-textSecondary">🚧</div>
+                      <div className="absolute top-4 right-4">
+                        <span className="text-xs px-3 py-1 rounded-full font-medium bg-live-border text-live-textPrimary">
+                          EM BREVE
+                        </span>
+                      </div>
                     </div>
                     
-                    <div className="flex items-start gap-3 mb-3">
-                      <MapPin className="h-4 w-4 text-live-textSecondary mt-1 flex-shrink-0" />
-                      <p className="text-sm text-live-textSecondary">{location.address}</p>
-                    </div>
-                    
-                    <p className="text-live-textSecondary mb-4 text-sm">{location.hours}</p>
-                    
-                    <div className="flex items-center justify-center mt-auto pt-4">
-                      <span className="text-live-textTernary text-sm">
-                        Inauguração em breve
-                      </span>
+                    {/* Content */}
+                    <div className="p-6">
+                      <div className="mb-4">
+                        <h3 className="text-xl font-bold text-live-textPrimary mb-2">{location.name}</h3>
+                        <div className="flex items-start gap-2 mb-3">
+                          <MapPin className="h-4 w-4 text-live-textSecondary mt-0.5 flex-shrink-0" />
+                          <p className="text-sm text-live-textSecondary">{location.address}</p>
+                        </div>
+                      </div>
+                      
+                      <p className="text-live-textSecondary mb-4 text-sm">{location.hours}</p>
+                      
+                      <div className="flex items-center justify-center mt-auto pt-4 border-t border-live-border/20">
+                        <span className="text-live-textTernary text-sm">
+                          Inauguração em breve
+                        </span>
+                      </div>
                     </div>
                   </div>
                 )}

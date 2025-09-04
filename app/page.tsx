@@ -39,9 +39,7 @@ export default function Home() {
       <AppSection />
 
       {/* INSERIR AS DUAS NOVAS SEÇÕES AQUI */}
-      <WellhubSection />
-      
-      <BioimpedanciaSection />
+   
 
       <ContatoSection />
 
