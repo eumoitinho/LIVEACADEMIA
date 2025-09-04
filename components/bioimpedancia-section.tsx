@@ -70,6 +70,13 @@ export default function BioimpedanciaSection() {
           >
             <div className="mb-8">
               <h3 className="text-2xl font-bold text-white mb-4">Dados Completos da Bioimpedância</h3>
+              <div className="w-full h-64 mb-6 overflow-hidden rounded-2xl">
+                <img
+                  src="https://drive.google.com/file/d/1a4cFH9Yvy27obPrJmj1xI8Wx52gduike/view?usp=drive_link"
+                  alt="Bioimpedância"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <div className="space-y-3 mb-6">
                 {beneficiosBioimpedancia.map((beneficio, index) => (
                   <div key={index} className="flex items-start gap-3">
@@ -115,6 +122,13 @@ export default function BioimpedanciaSection() {
                 <Eye className="w-10 h-10 text-black" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-4">Análise Corporal 3D</h3>
+              <div className="w-full h-64 mb-6 overflow-hidden rounded-2xl">
+                <img
+                  src="https://www.icloud.com/sharedalbum/pt-br/#B1e5ON9t3HQdTpy;E276AC5E-5BB6-4B27-B276-6B1F2D6660D8"
+                  alt="Avaliação 3D"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <p className="text-zinc-300 leading-relaxed mb-6">
                 Para uma experiência ainda mais inovadora, a unidade Flores Diamante conta com a exclusiva 
                 Análise Corporal 3D da Bodygee. Esta tecnologia representa uma evolução da bioimpedância tradicional, 

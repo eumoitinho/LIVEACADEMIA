@@ -7,28 +7,28 @@ const beneficios = [
     title: "Planos flexíveis",
     description: "Em qualquer plano, você treina sem fidelidade, taxas de cancelamento, manutenção ou anuidade.",
     color: "from-yellow-400 to-amber-500",
-    image: "/images/academia-1.webp",
+    image: "https://drive.google.com/file/d/1ywRiPc4U94rz8KxwYthYSoiaQxBXVTTX/view?usp=sharing",
   },
   {
     icon: Star,
     title: "Espaços exclusivos",
-    description: "Desfrute de áreas como Espaço Relax, Espaço Yoga e o maior Studio de Bike Indoor da região Norte com o plano Diamante.",
+    description: "Desfrute de áreas como Espaço Relax, Espaço Bodybuilding e o maior Studio de Bike Indoor da região Norte com o plano Diamante.",
     color: "from-amber-500 to-yellow-600",
-    image: "/images/academia-2.webp",
+    image: "https://www.icloud.com/sharedalbum/pt-br/#B1e5ON9t3HQdTpy;327E145B-2088-4BFD-95D2-6B18072B1744",
   },
   {
     icon: Users,
     title: "Aulas coletivas",
     description: "Diversifique seu treino com uma grade variada de aulas e aproveite o ambiente coletivo para socializar e manter a disciplina.",
     color: "from-yellow-500 to-amber-600",
-    image: "/images/academia-3.webp",
+    image: "https://elements.envato.com/pt-br/young-women-in-training-clothes-and-shoes-are-doin-SM2AYY5",
   },
   {
     icon: Snowflake,
     title: "Climatização",
     description: "Treine com mais conforto nos ambientes climatizados disponíveis nas unidades Diamante, Premium e Tradicional Climatizada.",
     color: "from-yellow-400 to-amber-500",
-    image: "/images/academia-4.webp",
+    image: "https://drive.google.com/file/d/1E2hF9Une3Jy0_71Iy_fxUDEIFIvJl9zv/view?usp=sharing",
   },
 ]
 

@@ -8,7 +8,12 @@
       "WebFetch(domain:livemargarita.hotsite.in)",
       "WebFetch(domain:pedroteixeira.hotsite.in)",
       "Bash(git checkout:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "WebFetch(domain:cachoeirinha.hotsite.in)",
+      "WebFetch(domain:centro.hotsite.in)",
+      "WebFetch(domain:silves.hotsite.in)",
+      "WebFetch(domain:liveplanalto.hotsite.in)",
+      "WebFetch(domain:app.pactosolucoes.com.br)"
     ],
     "deny": []
   }
