@@ -97,26 +97,40 @@ export default function Unidades() {
                 {location.type !== "inauguracao" ? (
                   <Link href={`/unidades/${location.id}`} className="block h-full group">
                     <div className="bg-live-border/10 rounded-2xl border border-live-border/30 hover:border-live-accent/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-live-accent/10 h-full cursor-pointer group-hover:scale-[1.02] overflow-hidden">
-                      {/* Header com Logo */}
-                      <div className="relative h-48 bg-gradient-to-br from-live-accent/10 to-live-accent/5">
-                        {location.logo && (
-                          <div className="absolute inset-0 flex items-center justify-center p-6">
-                            <img 
-                              src={location.logo} 
-                              alt={`Logo ${location.name}`}
-                              className="max-h-full max-w-full object-contain"
-                            />
-                          </div>
+                      {/* Header com Foto da Academia */}
+                      <div className="relative h-48 overflow-hidden">
+                        {location.photo && (
+                          <img 
+                            src={location.photo} 
+                            alt={`Interior da academia ${location.name}`}
+                            className="w-full h-full object-cover"
+                          />
                         )}
+                        {/* Overlay com gradiente */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                        
                         <div className="absolute top-4 right-4">
-                          <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                            location.type === 'diamante' ? 'bg-live-gray text-live-bg' :
-                            location.type === 'premium' ? 'bg-live-accent text-live-bg' :
-                            'bg-green-500 text-white'
+                          <span className={`text-xs px-3 py-1 rounded-full font-medium backdrop-blur-sm ${
+                            location.type === 'diamante' ? 'bg-live-gray/90 text-white' :
+                            location.type === 'premium' ? 'bg-live-accent/90 text-white' :
+                            'bg-green-500/90 text-white'
                           }`}>
                             {location.type.toUpperCase()}
                           </span>
                         </div>
+                        
+                        {/* Logo pequeno no canto inferior esquerdo */}
+                        {location.logo && (
+                          <div className="absolute bottom-4 left-4">
+                            <div className="w-12 h-12 bg-white/90 rounded-lg p-1 backdrop-blur-sm">
+                              <img 
+                                src={location.logo} 
+                                alt={`Logo ${location.name}`}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
                       
                       {/* Content */}

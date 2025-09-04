@@ -18,6 +18,7 @@ interface UnidadeContentProps {
     type: string
     tourUrl?: string | null
     logo?: string | null
+    photo?: string | null
     planos?: Array<{
       name: string
       price: string
