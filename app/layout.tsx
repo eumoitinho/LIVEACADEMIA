@@ -20,17 +20,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return (
-    <html lang="pt-BR">
-      <body className={inter.className}>
-        <UnitProvider>
-          <div className="min-h-screen flex flex-col bg-live-bg text-live-textPrimary">
-            <Header />
-            <div className="flex-grow">{children}</div>
-            <Footer />
-          </div>
-        </UnitProvider>
-      </body>
-    </html>
-  )
+    return (
+      <html lang="pt-BR">
+        <head>
+          <script src="https://api.tracking.ninetwo.com.br/script/live-academia" async></script>
+        </head>
+        <body className={inter.className}>
+          <UnitProvider>
+            <div className="min-h-screen flex flex-col bg-live-bg text-live-textPrimary">
+              <Header />
+              <div className="flex-grow">{children}</div>
+              <Footer />
+            </div>
+          </UnitProvider>
+        </body>
+      </html>
+    )
 }
