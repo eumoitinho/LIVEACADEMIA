@@ -3,7 +3,10 @@
     "allow": [
       "Bash(npm run build:*)",
       "Bash(chmod:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(timeout:*)",
+      "WebFetch(domain:livemargarita.hotsite.in)",
+      "WebFetch(domain:pedroteixeira.hotsite.in)"
     ],
     "deny": []
   }

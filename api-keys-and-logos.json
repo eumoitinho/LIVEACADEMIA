@@ -1,0 +1,160 @@
+{
+  "metadata": {
+    "description": "Live Academia API keys and logos data",
+    "baseApiUrl": "https://app.pactosolucoes.com.br/api/prest/v2/vendas/{chave}/unidade/1",
+    "updated": "2025-09-04",
+    "knownWorking": 2,
+    "totalUnits": 35
+  },
+  "knownApiKeys": {
+    "fcceacc50b1db2fc4e8872b06099c142": {
+      "nome": "LIVE - MARGARITA",
+      "logo": "https://cdn1.pactorian.net/fcceacc50b1db2fc4e8872b06099c142/3ISnhfvjxox*ybUNrupT9B5qyII6ZIqjWg4AGh4Te6U=/jtGo7xfGreYfjucCmU7FZg==.jpg",
+      "cidade": "MANAUS",
+      "estado": "AMAZONAS",
+      "endereco": "AVENIDA MARGARITA",
+      "hotsite": "https://livemargarita.hotsite.in",
+      "unitId": "margarita-diamante"
+    },
+    "7724bf6109e5370177c8129aa431b922": {
+      "nome": "LIVE - VIEIRALVES",
+      "logo": "https://cdn1.pactorian.net/7724bf6109e5370177c8129aa431b922/3ISnhfvjxox*ybUNrupT9B5qyII6ZIqjWg4AGh4Te6U=/jtGo7xfGreYfjucCmU7FZg==.jpg",
+      "cidade": "MANAUS",
+      "estado": "AMAZONAS", 
+      "endereco": "AVENIDA DJALMA BATISTA",
+      "hotsite": "https://liveacademias.hotsite.in/home",
+      "unitId": "vieiralves-diamante"
+    }
+  },
+  "hotsiteMapping": {
+    "https://bomprato.hotsite.in": {
+      "unitName": "Bom Prato Diamante",
+      "unitId": "bom-prato-diamante",
+      "status": "needs_key"
+    },
+    "https://liveacademiacidadenova.hotsite.in/home": {
+      "unitName": "CT Cidade Nova",
+      "unitId": "ct-cidade-nova", 
+      "status": "needs_key"
+    },
+    "https://cachoeirinha.hotsite.in": {
+      "unitName": "Cachoeirinha",
+      "unitId": "cachoeirinha",
+      "status": "needs_key"
+    },
+    "https://livemcamapua.hotsite.in": {
+      "unitName": "Camapuã",
+      "unitId": "camapua",
+      "status": "needs_key"
+    },
+    "https://centro.hotsite.in": {
+      "unitName": "Centro", 
+      "unitId": "centro",
+      "status": "needs_key"
+    },
+    "https://livechapeugoiano.hotsite.in": {
+      "unitName": "Chapéu Goiano",
+      "unitId": "chapeu-goiano",
+      "status": "needs_key"
+    },
+    "https://livecidadededeus.hotsite.in": {
+      "unitName": "Cidade de Deus",
+      "unitId": "cidade-de-deus",
+      "status": "needs_key"
+    },
+    "https://compensa.hotsite.in/home": {
+      "unitName": "Compensa",
+      "unitId": "compensa",
+      "status": "needs_key"
+    },
+    "https://livedompedro.hotsite.in/": {
+      "unitName": "Dom Pedro",
+      "unitId": "dom-pedro",
+      "status": "needs_key"
+    },
+    "https://liveacademiaflores.hotsite.in": {
+      "unitName": "Flores Diamante",
+      "unitId": "flores-diamante",
+      "status": "needs_key"
+    },
+    "https://livejapiim.hotsite.in/home": {
+      "unitName": "Japiim",
+      "unitId": "japiim", 
+      "status": "needs_key"
+    },
+    "https://livemargarita.hotsite.in/home": {
+      "unitName": "Margarita Diamante",
+      "unitId": "margarita-diamante",
+      "chave": "fcceacc50b1db2fc4e8872b06099c142",
+      "status": "working"
+    },
+    "https://pedroteixeira.hotsite.in": {
+      "unitName": "Pedro Teixeira Diamante",
+      "unitId": "pedro-teixeira-diamante",
+      "status": "needs_key"
+    },
+    "https://liveplanalto.hotsite.in": {
+      "unitName": "Planalto Diamante", 
+      "unitId": "planalto-diamante",
+      "status": "needs_key"
+    },
+    "https://liverodrigues.hotsite.in": {
+      "unitName": "Rodrigues Grande Circular Premium",
+      "unitId": "rodrigues-grande-circular",
+      "status": "needs_key"
+    },
+    "https://silves.hotsite.in": {
+      "unitName": "Silves",
+      "unitId": "silves",
+      "status": "needs_key"
+    },
+    "https://livesumauma.hotsite.in": {
+      "unitName": "Sumaúma",
+      "unitId": "sumauma",
+      "status": "needs_key"
+    },
+    "https://livetiradentes.hotsite.in": {
+      "unitName": "Tiradentes Climatizada",
+      "unitId": "tiradentes",
+      "status": "needs_key"
+    },
+    "https://allegro.hotsite.in": {
+      "unitName": "Torquato Allegro",
+      "unitId": "torquato-allegro",
+      "status": "needs_key"
+    },
+    "https://livetorquato1.hotsite.in/home": {
+      "unitName": "Torquato Santos Dumont", 
+      "unitId": "torquato-santos-dumont",
+      "status": "needs_key"
+    },
+    "https://liveacademiastorres.hotsite.in/home": {
+      "unitName": "Torres",
+      "unitId": "torres",
+      "status": "needs_key"
+    },
+    "https://liveacademias.hotsite.in/home": {
+      "unitName": "Vieiralves Diamante",
+      "unitId": "vieiralves-diamante", 
+      "chave": "7724bf6109e5370177c8129aa431b922",
+      "status": "working"
+    },
+    "https://vitoriacoroado.hotsite.in": {
+      "unitName": "Vitória Coroado Premium",
+      "unitId": "vitoria-coroado",
+      "status": "needs_key"
+    }
+  },
+  "discoveryMethods": [
+    "Inspect hotsite JavaScript for API calls",
+    "Look for 32-character hex strings in page source",
+    "Check network tab in browser dev tools",
+    "Try common hash patterns based on unit names"
+  ],
+  "apiEndpoints": {
+    "unidade": "/v2/vendas/{chave}/unidade/{id}",
+    "menu": "/v1/hotsite/{chave}/menu/{id}",
+    "planos": "/v2/vendas/{chave}/planos",
+    "configuracao": "/v2/vendas/{chave}/configuracao"
+  }
+}
