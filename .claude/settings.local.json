@@ -6,7 +6,9 @@
       "Bash(node:*)",
       "Bash(timeout:*)",
       "WebFetch(domain:livemargarita.hotsite.in)",
-      "WebFetch(domain:pedroteixeira.hotsite.in)"
+      "WebFetch(domain:pedroteixeira.hotsite.in)",
+      "Bash(git checkout:*)",
+      "Bash(git restore:*)"
     ],
     "deny": []
   }
