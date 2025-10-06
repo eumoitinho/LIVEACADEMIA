@@ -13,36 +13,24 @@ import UnidadesCarousel from "@/components/unidades-carousel"
 import BeneficiosSection from "@/components/beneficios-section"
 import AppSection from "@/components/app-section"
 import ModalidadesSection from "@/components/modalidades-section"
-import WellhubSection from "@/components/wellhub-section"
-import BioimpedanciaSection from "@/components/bioimpedancia-section"
 import EstruturaSection from "@/components/estrutura-section"
+// (Wellhub / Bioimpedancia poderão virar seções CMS futuramente)
+
+// TODO: Substituir este layout estatico por renderer dinâmico baseado em Sanity (getHomePage + map de sections)
 
 export default function Home() {
+  // Por enquanto mantendo render estático até hook de CMS ser conectado.
   return (
     <main className="min-h-screen relative">
       <HeroSection />
-
       <AboutSection />
-
       <UnidadesCarousel />
-
       <BeneficiosSection />
-
       <EstruturaSection />
-
       <ModalidadesSection />
-
-      {/* Plans Section */}
       <PlanosSection />
-
       <AppSection />
-
-      {/* INSERIR AS DUAS NOVAS SEÇÕES AQUI */}
-   
-
-      {/* Testimonials */}
       <TestimonialSection />
-
       <FloatingButton />
     </main>
   )
