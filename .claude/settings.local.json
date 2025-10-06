@@ -16,7 +16,8 @@
       "WebFetch(domain:app.pactosolucoes.com.br)",
       "Bash(./scripts/fetch-logos-curl.sh:*)",
       "Bash(wget:*)",
-      "Read(//home/moitinho/Downloads/**)"
+      "Read(//home/moitinho/Downloads/**)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

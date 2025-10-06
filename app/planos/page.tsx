@@ -167,6 +167,6 @@ export default function Planos() {
       </section>
     </main>
   )
-}-e 
+}
 
 export const dynamic = 'force-dynamic'
