@@ -18,7 +18,8 @@
       "Bash(wget:*)",
       "Read(//home/moitinho/Downloads/**)",
       "Bash(find:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Read(//tmp/**)"
     ],
     "deny": []
   }
