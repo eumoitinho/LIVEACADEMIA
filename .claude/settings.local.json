@@ -17,7 +17,8 @@
       "Bash(./scripts/fetch-logos-curl.sh:*)",
       "Bash(wget:*)",
       "Read(//home/moitinho/Downloads/**)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(curl:*)"
     ],
     "deny": []
   }
