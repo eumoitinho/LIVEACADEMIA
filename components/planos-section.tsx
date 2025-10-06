@@ -120,7 +120,7 @@ export default function PlanosSection({ data }: Props) {
                     {plano.numero}
                   </span>
                   <div className="flex items-center gap-1">
-                    {plano.dots.map((dot, i) => (
+                    {plano.dots.map((dot: boolean, i: number) => (
                       <span
                         key={i}
                         className={`h-1.5 w-1.5 rounded-full ${plano.destaque

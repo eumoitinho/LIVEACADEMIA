@@ -114,7 +114,6 @@ export default function AboutSection({ data }: Props) {
             )}
           </motion.div>
         </div>
-        </div>
         {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
