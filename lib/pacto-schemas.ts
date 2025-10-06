@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const TokenResponseSchema = z.object({
-  token: z.string(),
+  return: z.string(), // API Pacto retorna "return" não "token"
   expiresIn: z.number().optional(),
 })
 

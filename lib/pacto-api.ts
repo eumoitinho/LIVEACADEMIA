@@ -106,23 +106,33 @@ class PactoAPI {
     const cached = this.tokenCache.get(cacheKey)
     if (cached && Date.now() < cached.expiresAt - 30_000) return cached.token
     const url = `${this.baseURL}/psec/vendas/token`
+    console.log(`[PactoAPI] Authenticating: URL=${url}, redeKey=${redeKey.substring(0,10)}..., publicKey=${publicKey.substring(0,10)}...`)
+
+    // Tentar Bearer token com redeKey (similar à V2)
     const response = await this.request(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ redeKey, publicKey }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${redeKey}`
+      },
+      body: JSON.stringify({ publicKey }),
       timeoutMs: 10000,
       retries: 1,
     })
+    console.log(`[PactoAPI] Auth response: status=${response.status}, ok=${response.ok}`)
     if (!response.ok) {
+      const errorBody = await response.text()
+      console.error(`[PactoAPI] Auth failed: ${response.status} - ${errorBody}`)
       throw new Error(`Erro na autenticação V3: ${response.status}`)
     }
     const json = await response.json()
+    console.log(`[PactoAPI] Auth response body:`, JSON.stringify(json))
     const parsed: TokenResponse = safeParse(TokenResponseSchema, json, 'TokenResponse')
     const expiresAt = (json as any).expiresIn
       ? Date.now() + (json as any).expiresIn * 1000
       : Date.now() + 15 * 60 * 1000
-    this.tokenCache.set(cacheKey, { token: parsed.token, expiresAt })
-    return parsed.token
+    this.tokenCache.set(cacheKey, { token: parsed.return, expiresAt })
+    return parsed.return
   }
 
   /**
@@ -179,7 +189,10 @@ class PactoAPI {
   async simularVenda(redeKey: string, publicKey: string, planoId: string, payload: { unidade: string; valor?: number; cupom?: string; paymentMethod?: string }): Promise<Simulacao | null> {
     try {
       const token = await this.authenticate(redeKey, publicKey)
-      const response = await this.request(`${this.baseURL}/psec/vendas/simularVenda/${planoId}`, {
+      const url = `${this.baseURL}/psec/vendas/simularVenda/${planoId}`
+      console.log(`[PactoAPI] simularVenda: URL=${url}, planoId=${planoId}, payload=`, JSON.stringify(payload))
+      console.log(`[PactoAPI] simularVenda: Using token=${token.substring(0,20)}...`)
+      const response = await this.request(url, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -187,7 +200,12 @@ class PactoAPI {
         },
         body: JSON.stringify(payload),
       })
-      if (!response.ok) throw new Error(`Erro na simulação: ${response.status}`)
+      console.log(`[PactoAPI] simularVenda response: status=${response.status}, ok=${response.ok}`)
+      if (!response.ok) {
+        const errorBody = await response.text()
+        console.error(`[PactoAPI] simularVenda failed: ${response.status} - ${errorBody}`)
+        throw new Error(`Erro na simulação: ${response.status}`)
+      }
       const data = await response.json()
       return safeParse(SimulacaoSchema, data, 'Simulacao')
     } catch (error) {
