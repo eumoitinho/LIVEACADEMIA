@@ -131,131 +131,95 @@ export default function EstruturaSection() {
           </motion.p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {estruturas.map((estrutura, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.12, ease: easing }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className={`group relative bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 backdrop-blur-xl p-6 rounded-3xl border border-zinc-800/50 hover:border-yellow-500/30 transition-all duration-500 ${estrutura.glowColor} shadow-lg hover:shadow-2xl`}
-            >
-              {/* Animated Background Glow */}
-              <motion.div
-                className={`absolute inset-0 bg-gradient-to-br ${estrutura.color} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500`}
-                whileHover={{ opacity: 0.15 }}
-              />
-
-              {/* Badge de disponibilidade */}
-              <motion.div
-                className="absolute top-4 right-4"
-                whileHover={{ scale: 1.05 }}
+        {/* Marquees em duas filas */}
+        <div className="relative mt-6 space-y-8">
+          <style jsx>{`
+            @keyframes marquee-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+            @keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+          `}</style>
+          {([0,1] as const).map(row => {
+            // Alternar direção
+            const animation = row === 0 ? 'marquee-left 55s linear infinite' : 'marquee-right 55s linear infinite'
+            // Dividir itens em duas listas (intercalar para variedade)
+            const items = estruturas.filter((_, i) => (i + row) % 2 === 0)
+            return (
+              <div
+                key={row}
+                className="mx-auto max-w-7xl overflow-hidden"
+                style={{
+                  maskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
+                  WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)'
+                }}
               >
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                  estrutura.categoria === 'exclusivo'
-                    ? 'bg-gradient-to-r from-yellow-500/20 to-amber-500/20 text-yellow-300 border border-yellow-500/30'
-                    : 'bg-zinc-800/70 text-zinc-300 border border-zinc-700/50'
-                }`}>
-                  {estrutura.disponibilidade}
-                </span>
-              </motion.div>
-
-              {/* Ícone com animação */}
-              <motion.div
-                className="w-16 h-16 rounded-2xl bg-gradient-to-br from-zinc-800/70 to-zinc-900/70 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
-                whileHover={{ rotate: 5, scale: 1.1 }}
-              >
-                <estrutura.icon className={`w-8 h-8 ${
-                  estrutura.categoria === 'exclusivo' ? 'text-yellow-400' : 'text-zinc-400'
-                } group-hover:text-yellow-300 transition-colors duration-300`} />
-              </motion.div>
-
-              {/* Conteúdo */}
-              <motion.h3
-                className="text-xl font-bold text-white mb-3 group-hover:text-yellow-400 transition-colors duration-300"
-                whileHover={{ x: 5 }}
-                transition={{ duration: 0.2 }}
-              >
-                {estrutura.titulo}
-              </motion.h3>
-              <motion.p
-                className="text-zinc-400 text-sm leading-relaxed mb-4 group-hover:text-zinc-300 transition-colors duration-300"
-                whileHover={{ x: 3 }}
-                transition={{ duration: 0.2 }}
-              >
-                {estrutura.descricao}
-              </motion.p>
-
-              {/* Indicador de categoria com animação */}
-              {estrutura.categoria === 'exclusivo' && (
-                <motion.div
-                  className="flex items-center gap-2"
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
-                  viewport={{ once: true }}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.2, rotate: 10 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <CheckCircle className="w-4 h-4 text-yellow-500" />
-                  </motion.div>
-                  <span className="text-xs text-yellow-500 font-medium">Exclusivo Diamante</span>
-                </motion.div>
-              )}
-
-              {/* Sparkle effect for exclusive items */}
-              {estrutura.categoria === 'exclusivo' && (
-                <motion.div
-                  className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                >
-                  <Sparkles className="w-4 h-4 text-yellow-400" />
-                </motion.div>
-              )}
-            </motion.div>
-          ))}
+                <div className="flex w-max" style={{ animation, willChange: 'transform' }}>
+                  {[0,1].map(dup => (
+                    <div key={dup} className="flex flex-shrink-0 gap-4 pr-4">
+                      {items.map((estrutura, index) => {
+                        const exclusivo = estrutura.categoria === 'exclusivo'
+                        return (
+                          <div
+                            key={estrutura.titulo + '-' + row + '-' + dup + '-' + index}
+                            className={`group relative overflow-hidden rounded-2xl border ${exclusivo
+                              ? 'border-yellow-400/40 bg-gradient-to-br from-zinc-900/80 via-zinc-950/80 to-black'
+                              : 'border-zinc-800/60 bg-gradient-to-br from-zinc-900/70 to-zinc-950/80'} shadow-[0_4px_14px_-3px_rgba(0,0,0,0.55)] hover:shadow-[0_6px_26px_-6px_rgba(0,0,0,0.65)] transition-all duration-500 w-[240px] sm:w-[280px] lg:w-[320px] h-[150px] sm:h-[170px] lg:h-[190px] p-5 flex flex-col justify-between`}
+                          >
+                            {/* Glow ring for exclusivos */}
+                            {exclusivo && (
+                              <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-yellow-500/30 group-hover:ring-yellow-400/60 transition duration-500" />
+                            )}
+                            {/* Animated subtle gradient accent */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-gradient-to-tr from-yellow-500/10 via-transparent to-amber-500/10" />
+                            <div className="flex items-start gap-3 relative z-10">
+                              <div className={`w-14 h-14 rounded-xl flex items-center justify-center bg-gradient-to-br ${exclusivo ? 'from-yellow-400 to-amber-500 shadow-yellow-500/30' : 'from-zinc-700 to-zinc-800 shadow-black/40'} shadow-inner ring-1 ring-zinc-700/60 group-hover:scale-105 group-hover:rotate-1 transition-transform duration-300`}>
+                                <estrutura.icon className={`w-7 h-7 ${exclusivo ? 'text-black' : 'text-yellow-300'} drop-shadow`} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="text-base sm:text-lg font-semibold tracking-tight text-white leading-snug line-clamp-2 group-hover:text-yellow-300 transition-colors">
+                                  {estrutura.titulo}
+                                </h3>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between text-[11px] sm:text-xs mt-2 relative z-10">
+                              <div className="flex items-center gap-1.5 font-medium text-zinc-400 group-hover:text-zinc-300 transition-colors">
+                                {exclusivo && <CheckCircle className="w-4 h-4 text-yellow-400" />}
+                                <span className="truncate max-w-[140px] lg:max-w-[180px]">{estrutura.disponibilidade}</span>
+                              </div>
+                              {exclusivo && (
+                                <span className="text-[10px] sm:text-[11px] font-semibold px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-300 ring-1 ring-yellow-400/30 backdrop-blur-sm">
+                                  Exclusivo
+                                </span>
+                              )}
+                            </div>
+                            {/* Hover sheen */}
+                            <div className="absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl pointer-events-none" style={{ background: 'linear-gradient(120deg, rgba(250,204,21,0.15), transparent 35%, transparent 65%, rgba(245,158,11,0.15))' }} />
+                            {/* Bottom bar accent */}
+                            <div className="absolute left-0 right-0 bottom-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-400/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
         </div>
 
         {/* Enhanced CTA */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8, ease: easing }}
+          transition={{ duration: 0.8, delay: 0.6, ease: easing }}
           viewport={{ once: true }}
-          className="text-center mt-20"
+          className="text-center mt-16"
         >
-          <motion.div
-            className="bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 backdrop-blur-xl p-8 rounded-3xl border border-zinc-800/50 hover:border-yellow-500/30 max-w-3xl mx-auto shadow-lg hover:shadow-2xl hover:shadow-yellow-500/10 transition-all duration-500"
-            whileHover={{ scale: 1.02 }}
+          <motion.button
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-yellow-500/30 transition-all duration-300 hover:scale-105"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              transition={{ duration: 0.5, delay: 1, ease: easing }}
-              viewport={{ once: true }}
-              className="w-16 h-16 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            >
-              <Zap className="w-8 h-8 text-black" />
-            </motion.div>
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Conheça nossa estrutura completa
-            </h3>
-            <p className="text-zinc-400 mb-6">
-              Visite uma de nossas unidades e descubra todos os espaços exclusivos disponíveis para você.
-            </p>
-            <motion.button
-              className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-3 rounded-2xl font-semibold hover:shadow-lg hover:shadow-yellow-500/25 transition-all duration-300 hover:scale-105"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Agendar visita
-            </motion.button>
-          </motion.div>
+            <Zap className="w-5 h-5" /> Agendar visita
+          </motion.button>
         </motion.div>
       </div>
     </section>

@@ -2,135 +2,112 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { Users, MapPin, Star, Award } from "lucide-react"
+
 
 export default function AboutSection() {
   const easing = [0.16, 1, 0.3, 1] as const
 
   const stats = [
-    {
-      number: "10K+",
-      label: "Alunos ativos",
-      icon: Users,
-    },
-    {
-      number: "35+",
-      label: "Unidades",
-      icon: MapPin,
-    },
-    {
-      number: "4.9",
-      label: "Avaliação média",
-      icon: Star,
-    },
-    {
-      number: "10+",
-      label: "Anos de experiência",
-      icon: Award,
-    },
+    { number: "10K+", label: "Alunos ativos" },
+    { number: "35+", label: "Unidades" },
+    { number: "4.9", label: "Avaliação média" },
+    { number: "10+", label: "Anos de experiência" },
   ]
 
   return (
-    <section id="sobre" className="relative py-24 px-6 lg:px-12 overflow-hidden bg-black">
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-[#0f0f10] to-black" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,203,0,0.16),_transparent_55%)]" />
-      <div className="max-w-6xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: easing }}
-          viewport={{ once: true, amount: 0.3 }}
-          className="bg-black/80 backdrop-blur-md rounded-3xl shadow-[0_40px_120px_-60px_rgba(255,203,0,0.6)] overflow-hidden"
-        >
-          <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="px-8 lg:px-14 py-12">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: easing }}
-                viewport={{ once: true }}
-                className="mb-10 flex items-center gap-3"
-              >
-                <span className="h-2 w-10 rounded-full bg-[#ffcb00]" />
-                <span className="text-xs font-semibold tracking-[0.3em] text-white/60 uppercase">
-                  Sobre a Live Academia
-                </span>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.18, ease: easing }}
-                viewport={{ once: true }}
-                className="space-y-6"
-              >
-                <h2 className="text-3xl lg:text-4xl font-semibold text-white leading-tight">
-                  Fitness sem barreiras: estrutura premium, planos flexíveis e acompanhamento real
-                </h2>
-                <p className="text-base leading-relaxed text-white/70">
-                  Estamos há mais de uma década transformando a rotina de quem busca saúde e performance em Manaus. Na
-                  Live Academia você encontra equipamentos de ponta, metodologias exclusivas e profissionais dedicados a
-                  guiar cada conquista.
-                </p>
-                <div className="grid sm:grid-cols-2 gap-4 pt-2">
-                  <div className="rounded-2xl border border-white/10 px-5 py-4 bg-white/5 backdrop-blur-sm">
-                    <span className="text-xs uppercase tracking-[0.2em] text-white/60">Nossa essência</span>
-                    <p className="mt-3 text-sm text-white/80 leading-relaxed">
-                      Flexibilidade total: treine sem fidelidade, com liberdade para usar qualquer unidade da rede.
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 px-5 py-4 bg-white/5 backdrop-blur-sm">
-                    <span className="text-xs uppercase tracking-[0.2em] text-white/60">Experiência</span>
-                    <p className="mt-3 text-sm text-white/80 leading-relaxed">
-                      Aulas especiais, avaliações frequentes e tecnologia de monitoramento em todas as modalidades.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 32 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.28, ease: easing }}
-                viewport={{ once: true }}
-                className="mt-12 grid grid-cols-2 gap-6"
-              >
-                {stats.map(({ number, label, icon: Icon }) => (
-                  <div key={label} className="rounded-2xl border border-white/10 px-5 py-4 bg-white/5 backdrop-blur-sm">
-                    <div className="flex items-center gap-3">
-                      <div className="h-11 w-11 rounded-2xl bg-[#ffcb00]/10 text-[#ffcb00] flex items-center justify-center">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <span className="text-2xl font-semibold text-white tracking-tight">
-                          {number}
-                        </span>
-                        <p className="text-sm text-white/60 leading-snug">{label}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: easing }}
+    <section id="sobre" className="relative py-28 px-6 lg:px-12 overflow-hidden bg-black">
+      {/* Minimal textured background (no slideshow) */}
+      <div className="absolute inset-0 -z-10 opacity-[0.12] [mask-image:radial-gradient(circle_at_center,black,transparent_70%)] pointer-events-none" style={{ backgroundImage: "repeating-linear-gradient(45deg,rgba(255,255,255,0.15)_0_2px,transparent_2px_10px)" }} />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_25%_20%,rgba(255,203,0,0.18),transparent_60%)]" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,0.85))]" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(0,0,0,0.9),rgba(0,0,0,0.65),rgba(0,0,0,0.9))]" />
+      <div className="relative z-10 max-w-6xl mx-auto">
+        {/* Bloco principal com grid 2 colunas */}
+        <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 items-start">
+          {/* Coluna texto */}
+          <div className="flex flex-col">
+            {/* Removido badge de título */}
+            <div className="sr-only">Sobre a Live Academia</div>
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, ease: easing }}
               viewport={{ once: true }}
-              className="relative"
+              className="text-4xl lg:text-5xl font-semibold tracking-tight text-white leading-[1.05] mb-8"
             >
-              <div className="h-full w-full rounded-3xl overflow-hidden">
-                <Image
-                  src="/images/academia-2.webp"
-                  alt="Estrutura Live Academia"
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 1024px) 40vw, 80vw"
-                />
-              </div>
-            </motion.div>
+              Transformamos treino em rotina sustentável e resultado real
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.05, ease: easing }}
+              viewport={{ once: true }}
+              className="text-lg text-white/70 max-w-2xl leading-relaxed"
+            >
+              Somos uma rede criada em Manaus focada em experiência premium acessível: liberdade para treinar em qualquer unidade, avaliação constante e suporte humano de verdade — sem enrolação e sem barreiras.
+            </motion.p>
+            <motion.ul
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: easing }}
+              viewport={{ once: true }}
+              className="mt-10 space-y-4"
+            >
+              {[
+                'Planos flexíveis sem fidelidade e acesso multiunidade',
+                'Profissionais presentes e acompanhamento periódico',
+                'Estrutura moderna, tecnologia e modalidades variadas',
+                'Foco em consistência: não é só começar, é manter',
+              ].map(item => (
+                <li key={item} className="group flex items-start gap-3">
+                  <span className="mt-1 h-2 w-2 rounded-sm bg-yellow-400 shadow-[0_0_0_3px_rgba(255,204,0,0.25)] group-hover:scale-110 transition" />
+                  <p className="text-sm sm:text-base text-white/75 group-hover:text-white/90 transition leading-relaxed">{item}</p>
+                </li>
+              ))}
+            </motion.ul>
           </div>
+          {/* Coluna lateral: imagem + highlight card */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, ease: easing }}
+            viewport={{ once: true }}
+            className="relative flex flex-col gap-6"
+          >
+            <div className="relative h-[360px] sm:h-[440px] lg:h-[500px] w-full overflow-hidden rounded-3xl ring-1 ring-white/10 bg-gradient-to-br from-zinc-900 via-zinc-800 to-black">
+              <Image
+                src="/images/academia-1.webp"
+                alt="Estrutura Live Academia"
+                fill
+                className="object-cover object-center opacity-[0.9]"
+                sizes="(min-width:1024px) 40vw, 90vw"
+                priority={false}
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.7),rgba(0,0,0,0.15))]" />
+              <div className="absolute inset-0 mix-blend-overlay opacity-20 bg-[radial-gradient(circle_at_70%_30%,rgba(255,203,0,0.4),transparent_60%)]" />
+            </div>
+            <div className="relative rounded-2xl p-6 bg-gradient-to-br from-zinc-900/90 to-black/90 ring-1 ring-white/10 border border-white/5 overflow-hidden">
+              <div className="absolute -top-14 -right-10 h-40 w-40 rounded-full bg-yellow-400/10 blur-3xl" />
+              <h3 className="text-white text-lg font-medium mb-2 tracking-tight">Nosso foco é consistência</h3>
+              <p className="text-sm text-white/65 leading-relaxed">Não existe transformação sem continuidade. Por isso criamos um ambiente em que você quer voltar: acolhimento + evolução mensurável.</p>
+            </div>
+          </motion.div>
+        </div>
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: easing }}
+          viewport={{ once: true }}
+          className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-6"
+        >
+          {stats.map(({ number, label }) => (
+            <div key={label} className="group relative rounded-2xl px-6 py-7 bg-gradient-to-b from-zinc-900/80 to-black/80 ring-1 ring-white/10 border border-white/5 overflow-hidden">
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-[radial-gradient(circle_at_70%_30%,rgba(255,203,0,0.22),transparent_65%)]" />
+              <span className="relative text-3xl font-semibold text-white tracking-tight leading-none mb-1 flex">{number}</span>
+              <p className="relative text-xs sm:text-sm text-white/55 group-hover:text-white/75 transition leading-snug">{label}</p>
+            </div>
+          ))}
         </motion.div>
       </div>
     </section>

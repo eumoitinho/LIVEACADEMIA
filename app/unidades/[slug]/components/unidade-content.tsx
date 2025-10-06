@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { MapPin, Clock, CheckCircle, Star, Phone, ExternalLink } from "lucide-react"
+import { MapPin, Clock, Check, Phone, Dumbbell, Users } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-// PlanosCards agora consumido por wrapper de carregamento dinâmico
 import UnitPlanos from "@/components/unit-planos"
 import CheckoutModal from "@/components/checkout-modal"
 import { useUnit } from "@/contexts/unit-context"
@@ -63,256 +62,251 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-live-bg via-live-bg to-live-accent/5 text-live-textPrimary pt-20">
+    <main className="min-h-screen bg-black text-white">
       {/* Hero Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="max-w-6xl mx-auto">
-              {/* Logo da Unidade */}
-              {unidade.logo && (
-                <div className="flex justify-center mb-8">
-                  <div className="w-32 h-32 bg-live-border/10 rounded-2xl p-4 border border-live-border/30">
-                    <img 
-                      src={unidade.logo} 
-                      alt={`Logo ${unidade.name}`}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
+      <section className="relative overflow-hidden h-[60vh] md:h-[70vh] bg-live-bg border-b border-live-border">
+        {unidade.photo && (
+          <img
+            src={unidade.photo}
+            alt={`Live Academia ${unidade.name}`}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
+
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="absolute left-8 top-8 max-w-2xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-16 h-16 bg-live-yellow backdrop-blur-md rounded-xl p-3 border border-live-yellow shadow-lg">
+                  <Image
+                    src="/images/logo-live-premium.svg"
+                    alt="Live Academia"
+                    width={48}
+                    height={48}
+                    className="object-contain"
+                  />
                 </div>
-              )}
-              
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <span className={`px-4 py-2 rounded-full text-sm font-bold ${
-                  unidade.type === 'diamante' ? 'bg-live-gray text-live-bg' :
-                  unidade.type === 'premium' ? 'bg-live-accent text-live-bg' :
-                  'bg-green-500 text-white'
+                <span className={`px-4 py-2 rounded-full text-xs font-bold backdrop-blur-md ${
+                  unidade.type === 'diamante' ? 'bg-black/80 text-live-yellow border border-live-yellow/30' :
+                  unidade.type === 'premium' ? 'bg-live-yellow/90 text-black' :
+                  'bg-white/90 text-black'
                 }`}>
-                  LIVE {unidade.type.toUpperCase()}
+                  {unidade.type === 'diamante' ? 'DIAMANTE' : unidade.type === 'premium' ? 'PREMIUM' : 'TRADICIONAL'}
                 </span>
               </div>
-              
-              <h1 className="text-5xl lg:text-6xl font-bold mb-6 text-center">
-                Live Academia <span className="text-live-accent">{unidade.name}</span>
+
+              <h1 className="text-7xl sm:text-8xl font-semibold text-white tracking-tight leading-none mb-4">
+                {unidade.name}
               </h1>
-              
-              <div className="grid md:grid-cols-2 gap-8 mb-12">
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <MapPin className="h-5 w-5 text-live-accent mt-1 flex-shrink-0" />
-                    <p className="text-lg text-live-textSecondary">{unidade.address}</p>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <Clock className="h-5 w-5 text-live-accent mt-1 flex-shrink-0" />
-                    <p className="text-lg text-live-textSecondary">{unidade.hours}</p>
-                  </div>
-                </div>
-                
-                <div className="flex flex-col gap-4">
-                  {unidade.tourUrl && (
-                    <Link
-                      href={unidade.tourUrl}
-                      target="_blank"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-live-border/20 hover:bg-live-border/30 border border-live-border/30 hover:border-live-accent/50 text-live-textPrimary hover:text-live-accent transition-all duration-300"
-                    >
-                      <ExternalLink className="h-5 w-5" />
-                      Tour Virtual 360°
-                    </Link>
-                  )}
-                  
-                  <Link
-                    href="https://wa.me/5592999999999"
-                    target="_blank"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-green-600 hover:bg-green-700 text-white transition-all duration-300"
-                  >
-                    <Phone className="h-5 w-5" />
-                    Fale Conosco
-                  </Link>
-                </div>
-              </div>
+              <p className="text-2xl font-normal text-white/90 tracking-tight max-w-xl">
+                Sua jornada de transformação começa aqui. Equipamentos de ponta, ambiente motivador e resultados reais.
+              </p>
+            </motion.div>
+          </div>
+
+          <button className="group inline-flex items-center gap-4 px-6 py-4 rounded-full bg-live-yellow backdrop-blur-md hover:bg-live-yellowLight transition border border-live-yellow shadow-md">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-black text-live-yellow">
+              <Dumbbell className="h-6 w-6" />
+            </span>
+            <div className="text-left">
+              <p className="text-xl leading-tight font-semibold tracking-tight text-black">Faça um Tour</p>
+              <p className="text-xs text-black/70">Conheça nossa estrutura</p>
             </div>
-          </motion.div>
+          </button>
+        </div>
+
+        <div className="absolute right-6 top-6 flex items-center gap-2 text-xs text-white/90 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full">
+          <MapPin className="h-4 w-4" />
+          <span className="font-medium">{unidade.address}</span>
         </div>
       </section>
 
-      {/* Planos Dinâmicos da API Pacto (com fallback estático existente em locations) */}
-      <UnitPlanos
-        slug={unidade.id}
-        unidadeName={unidade.name}
-        fallbackPlanos={unidade.planos}
-        onMatricular={handleMatricular}
-      />
+      {/* Info Cards */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 -mt-16 relative z-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          {/* Card 1 - Horário */}
+          <article className="relative overflow-hidden p-5 h-52 bg-live-yellow border border-live-yellow rounded-2xl shadow-lg">
+            <div className="relative z-10 h-full flex flex-col">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-black"></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-black/40"></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-black/40"></span>
+                </div>
+                <span className="text-[11px] text-black/60 font-medium">01</span>
+              </div>
+              <div className="flex items-center gap-3 mb-auto">
+                <div className="p-3 bg-black/10 rounded-xl">
+                  <Clock className="h-6 w-6 text-black" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-black/70 uppercase tracking-wide">Funcionamento</h3>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <p className="text-sm text-black leading-relaxed font-semibold">{unidade.hours}</p>
+              </div>
+            </div>
+          </article>
 
-      {/* Galeria de Fotos */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="mb-12"
-          >
-            <h2 className="text-4xl font-bold text-center mb-6">
-              Conheça Nossa <span className="text-live-accent">Estrutura</span>
+          {/* Card 2 - Modalidades */}
+          <article className="relative overflow-hidden p-5 h-52 bg-live-bg border border-live-border rounded-2xl shadow-lg">
+            <div className="relative z-10 h-full flex flex-col">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-live-yellow"></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-live-yellow"></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-live-yellow/40"></span>
+                </div>
+                <span className="text-[11px] text-live-yellow/70 font-medium">02</span>
+              </div>
+              <div className="flex items-center gap-3 mb-auto">
+                <div className="p-3 bg-live-yellow/10 rounded-xl">
+                  <Users className="h-6 w-6 text-live-yellow" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-live-yellow/70 uppercase tracking-wide">Modalidades</h3>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <p className="text-4xl font-semibold text-live-yellow tracking-tight">{data.modalidades.length}+</p>
+                <p className="text-sm text-white/70 mt-1">Opções de treino disponíveis</p>
+              </div>
+            </div>
+          </article>
+
+          {/* Card 3 - Benefícios */}
+          <article className="relative overflow-hidden p-5 h-52 bg-white border border-white/20 rounded-2xl shadow-lg">
+            <div className="relative z-10 h-full flex flex-col">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-black"></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-black"></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-black"></span>
+                </div>
+                <span className="text-[11px] text-black/60 font-medium">03</span>
+              </div>
+              <div className="flex items-center gap-3 mb-auto">
+                <div className="p-3 bg-live-yellow/20 rounded-xl">
+                  <Check className="h-6 w-6 text-black" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-black/70 uppercase tracking-wide">Benefícios</h3>
+                </div>
+              </div>
+              <div className="mt-auto">
+                <p className="text-4xl font-semibold text-black tracking-tight">{data.beneficios.length}</p>
+                <p className="text-sm text-black/70 mt-1">Vantagens exclusivas</p>
+              </div>
+            </div>
+          </article>
+
+          {/* Card 4 - Contato */}
+          <article className="relative overflow-hidden p-5 h-52 bg-live-yellow border border-live-yellowLight rounded-2xl shadow-lg">
+            <div className="relative z-10 h-full flex flex-col">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-black"></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-black"></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-black"></span>
+                  <span className="h-1.5 w-1.5 rounded-full bg-black"></span>
+                </div>
+                <span className="text-[11px] text-black/70 font-medium">04</span>
+              </div>
+              <div className="mt-auto">
+                <h3 className="text-base font-semibold text-black leading-snug tracking-tight mb-3">
+                  Entre em contato agora
+                </h3>
+                <Link
+                  href="https://wa.me/5592999999999"
+                  target="_blank"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-black text-live-yellow rounded-full text-sm font-semibold hover:bg-black/90 transition"
+                >
+                  <Phone className="h-4 w-4" />
+                  WhatsApp
+                </Link>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {/* Modalidades Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+        <div className="bg-live-bg border border-live-border rounded-3xl p-8 sm:p-12">
+          <div className="mb-12">
+            <span className="text-sm text-live-yellow font-medium uppercase tracking-wider">Modalidades</span>
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-semibold text-white tracking-tight leading-[0.9] mt-2">
+              Treinos que<br />se adaptam a você
             </h2>
-          </motion.div>
-          
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-            {data.fotos.map((foto, index) => (
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {data.modalidades.map((modalidade, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="relative aspect-square rounded-2xl overflow-hidden group"
+                className="group p-5 bg-white/5 hover:bg-live-yellow border border-live-border hover:border-live-yellow rounded-2xl transition-all duration-300"
               >
-                <Image
-                  src={foto}
-                  alt={`Estrutura da unidade ${unidade.name}`}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="h-8 w-8 rounded-full bg-live-yellow/10 group-hover:bg-black flex items-center justify-center transition-colors">
+                    <Check className="h-4 w-4 text-live-yellow group-hover:text-live-yellow transition-colors" />
+                  </div>
+                </div>
+                <h3 className="text-sm font-semibold text-white group-hover:text-black transition-colors">
+                  {modalidade}
+                </h3>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Modalidades */}
-      <section className="py-16 bg-live-border/5">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-4xl font-bold mb-6">
-                <span className="text-live-accent">Modalidades</span> Disponíveis
-              </h2>
-              <p className="text-xl text-live-textSecondary">
-                Diversas opções para você alcançar seus objetivos
-              </p>
-            </motion.div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {data.modalidades.map((modalidade, index) => (
-                <motion.div
-                  key={modalidade}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-live-border/10 p-4 rounded-2xl text-center border border-live-border/30 hover:border-live-accent/50 hover:bg-live-accent/5 transition-all duration-300"
-                >
-                  <p className="font-semibold text-live-textPrimary">{modalidade}</p>
-                </motion.div>
-              ))}
+      {/* Benefícios Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+        <div className="bg-live-yellow border border-live-yellowLight rounded-3xl p-8 sm:p-12">
+          <div className="mb-12">
+            <div className="flex items-center gap-2 text-sm text-black/70 mb-3">
+              <Check className="h-4 w-4" />
+              <span className="font-medium uppercase tracking-wider">Vantagens</span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefícios */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-4xl font-bold mb-6">
-                <span className="text-live-accent">Benefícios</span> Exclusivos
-              </h2>
-              <p className="text-xl text-live-textSecondary">
-                Vantagens que só a Live Academia oferece
-              </p>
-            </motion.div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {data.beneficios.map((beneficio, index) => (
-                <motion.div
-                  key={beneficio}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="flex items-center gap-4 p-4 bg-live-border/10 rounded-2xl border border-live-border/30 hover:border-live-accent/50 hover:bg-live-accent/5 transition-all duration-300"
-                >
-                  <CheckCircle className="h-6 w-6 text-live-accent flex-shrink-0" />
-                  <p className="text-live-textPrimary font-medium">{beneficio}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Final */}
-      <section className="py-20 bg-gradient-to-r from-live-accent/10 to-live-yellow/10">
-        <div className="container mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto"
-          >
-            <div className="flex justify-center mb-6">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-8 w-8 fill-live-accent text-live-accent" />
-              ))}
-            </div>
-            
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              Pronto para começar sua <span className="text-live-accent">transformação</span>?
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-semibold text-black tracking-tight leading-[0.9]">
+              Benefícios exclusivos
             </h2>
-            
-            <p className="text-xl text-live-textSecondary mb-8">
-              Venha conhecer a unidade {unidade.name} e descubra por que somos a academia mais amada de Manaus!
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/planos"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-live-accent to-yellow-500 text-black font-bold shadow-lg hover:shadow-xl hover:shadow-live-accent/25 transition-all duration-300 transform hover:scale-105"
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data.beneficios.map((beneficio, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+                viewport={{ once: true }}
+                className="flex items-start gap-3 p-5 bg-black/10 border border-black/20 rounded-2xl hover:bg-black/5 transition-colors"
               >
-                VER PLANOS E PREÇOS
-              </Link>
-              
-              <Link
-                href="https://wa.me/5592999999999"
-                target="_blank"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-bold shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                <Phone className="h-5 w-5" />
-                FALE CONOSCO
-              </Link>
-            </div>
-          </motion.div>
+                <Check className="h-5 w-5 text-black flex-shrink-0 mt-0.5" />
+                <span className="text-sm text-black leading-relaxed font-medium">{beneficio}</span>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Modal de Checkout */}
+      {/* Checkout Modal */}
       <CheckoutModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         plano={selectedPlano}
-        unidadeName={unidade.name}
         unidadeId={unidade.id}
+        unidadeName={unidade.name}
       />
     </main>
   )

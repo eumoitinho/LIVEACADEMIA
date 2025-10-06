@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, CreditCard, QrCode, FileText, Loader2, Check, Copy, ExternalLink } from "lucide-react"
+import AnimatedPaymentCard from "./animated-payment-card"
 // Removido import direto de pacto-api (server-only). Usaremos rotas internas /api/pacto/venda
 
 interface SimulacaoResumo {
@@ -472,9 +473,19 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
 
                 {/* Dados do Cartão */}
                 {paymentMethod === 'cartao' && (
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-live-textPrimary">Dados do Cartão</h4>
-                    <div className="grid grid-cols-1 gap-4">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Card Preview */}
+                    <div className="flex items-center justify-center">
+                      <AnimatedPaymentCard
+                        cardNumber={formData.numeroCartao || '•••• •••• •••• ••••'}
+                        cardName={formData.nomeCartao || 'SEU NOME'}
+                        cardExpiry={formData.validadeCartao || 'MM/AA'}
+                      />
+                    </div>
+
+                    {/* Card Form */}
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-live-textPrimary">Dados do Cartão</h4>
                       <div>
                         <label className="block text-sm font-medium text-live-textPrimary mb-1">
                           Número do Cartão
@@ -483,12 +494,12 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                           type="text"
                           value={formData.numeroCartao}
                           onChange={(e) => handleInputChange('numeroCartao', formatCardNumber(e.target.value))}
-                          className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                          className="w-full px-4 py-3 bg-black border border-white/10 rounded-lg focus:border-live-yellow/50 focus:outline-none text-white transition-all"
                           placeholder="1234 5678 9012 3456"
                           maxLength={19}
                         />
                       </div>
-                      
+
                       <div>
                         <label className="block text-sm font-medium text-live-textPrimary mb-1">
                           Nome no Cartão
@@ -497,11 +508,11 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                           type="text"
                           value={formData.nomeCartao}
                           onChange={(e) => handleInputChange('nomeCartao', e.target.value.toUpperCase())}
-                          className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                          className="w-full px-4 py-3 bg-black border border-white/10 rounded-lg focus:border-live-yellow/50 focus:outline-none text-white transition-all"
                           placeholder="NOME COMO NO CARTÃO"
                         />
                       </div>
-                      
+
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-live-textPrimary mb-1">
@@ -517,12 +528,12 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                               }
                               handleInputChange('validadeCartao', value)
                             }}
-                            className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                            className="w-full px-4 py-3 bg-black border border-white/10 rounded-lg focus:border-live-yellow/50 focus:outline-none text-white transition-all"
                             placeholder="MM/AA"
                             maxLength={5}
                           />
                         </div>
-                        
+
                         <div>
                           <label className="block text-sm font-medium text-live-textPrimary mb-1">
                             CVV
@@ -531,7 +542,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                             type="text"
                             value={formData.cvvCartao}
                             onChange={(e) => handleInputChange('cvvCartao', e.target.value.replace(/\D/g, ''))}
-                            className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                            className="w-full px-4 py-3 bg-black border border-white/10 rounded-lg focus:border-live-yellow/50 focus:outline-none text-white transition-all"
                             placeholder="123"
                             maxLength={4}
                           />

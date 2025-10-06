@@ -1,11 +1,19 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { ChevronLeft, ChevronRight, MapPin, Navigation } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, useInView, useReducedMotion } from "framer-motion"
 import { cn } from "@/lib/utils"
+import Script from "next/script"
+
+// Declaramos o tipo para evitar erros de TS ao acessar window.UnicornStudio
+declare global {
+  interface Window {
+    UnicornStudio?: any
+  }
+}
 
 // Função para calcular distância entre dois pontos (Haversine)
 function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -93,71 +101,107 @@ const unidadeNameToId = {
 
 // Componente de Card melhorado
 function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
-  const unidadeId = unidadeNameToId[unidade.nome as keyof typeof unidadeNameToId] || 
-    unidade.nome.toLowerCase().replace('live academia - ', '').replace(/\s+/g, '-')
-  
+  const unidadeId =
+    unidadeNameToId[unidade.nome as keyof typeof unidadeNameToId] ||
+    unidade.nome
+      .toLowerCase()
+      .replace('live academia - ', '')
+      .replace(/\s+/g, '-')
+
+  // Distância formatada (se existir)
+  const distanciaFmt =
+    unidade.distancia !== undefined
+      ? unidade.distancia < 1
+        ? `${Math.round(unidade.distancia * 1000)}m de você`
+        : `${unidade.distancia.toFixed(1)}km de você`
+      : null
+
   return (
-    <Link href={`/unidades/${unidadeId}`} className="block group">
-      <div className="relative overflow-hidden rounded-3xl bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 shadow-lg transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-500/10 hover:border-zinc-700/50 hover:-translate-y-1">
-        {/* Imagem com maior qualidade */}
-        <div className="relative h-[380px] overflow-hidden">
-          <Image
-            src={unidade.imagem}
-            alt={unidade.nome}
-            fill
-            sizes="(max-width: 768px) 100vw, 400px"
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-            priority
-            quality={95}
-          />
-          {/* Gradiente melhorado */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80" />
-        </div>
+    <Link href={`/unidades/${unidadeId}`} className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400/70 rounded-3xl">
+      <div
+        className={cn(
+          "relative rounded-3xl bg-white/5 p-6 lg:p-7 ring-1 ring-white/10 backdrop-blur-sm overflow-hidden",
+          "transition-all duration-500",
+          "hover:shadow-[0_0_0_1px_rgba(250,204,21,0.25),0_8px_26px_-4px_rgba(0,0,0,0.45),0_4px_12px_-2px_rgba(0,0,0,0.3)]",
+          "hover:ring-yellow-300/40 hover:-translate-y-1",
+          "min-h-[360px]"
+        )}
+      >
+        {/* Shimmer overlay */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-10 -translate-x-full animate-[unidadeShimmer_3s_ease-in-out_infinite]"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent 0%, rgba(250,204,21,0.25) 50%, transparent 100%)'
+          }}
+        />
+        {/* Glow circle */}
+        <div className="pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full bg-yellow-300/20 blur-3xl" />
 
-        {/* Badge */}
-        <div className="absolute top-4 right-4">
-          <span className={cn(
-            "px-3 py-1.5 rounded-full text-xs font-semibold",
-            "bg-zinc-900/90 text-white backdrop-blur-md",
-            "border border-zinc-700/50 shadow-lg"
-          )}>
-            {unidade.badge.text}
-          </span>
-        </div>
-
-        {/* Conteúdo */}
-        <div className="absolute bottom-0 left-0 right-0 p-6">
-          <div className="space-y-3">
-            <h3 className="text-xl font-bold text-white leading-tight">
-              {unidade.nome}
+        <div className="relative z-10 flex flex-col h-full">
+          {/* Media */}
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-5 ring-1 ring-yellow-300/30">
+              <Image
+                src={unidade.imagem}
+                alt={unidade.nome}
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                quality={85}
+                className="object-cover transition-transform duration-[1600ms] group-hover:scale-110"
+                priority={false}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
+              {/* Badge sobre a imagem */}
+              <div className="absolute left-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white ring-1 ring-white/20 backdrop-blur-sm">
+                <span className="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_0_2px_rgba(0,0,0,0.4)]" />
+                {unidade.badge.text}
+              </div>
+            </div>
+          {/* Content */}
+          <div className="flex flex-col gap-3">
+            <h3 className="text-lg font-semibold text-white tracking-tight leading-snug">
+              {unidade.nome.replace('Live Academia - ', '')}
             </h3>
-            <p className="text-sm text-zinc-300 line-clamp-2">
+            <p className="text-sm text-zinc-300/90 line-clamp-2">
               {unidade.endereco}
             </p>
-            
-            {/* Componente de distância */}
-            {unidade.distancia !== undefined && (
-              <div className="flex items-center gap-2 pt-2">
-                <div className="p-2 rounded-full bg-yellow-500/20 backdrop-blur-sm">
-                  <Navigation className="w-4 h-4 text-yellow-400" />
-                </div>
-                <span className="text-sm font-medium text-yellow-400">
-                  {unidade.distancia < 1 
-                    ? `${Math.round(unidade.distancia * 1000)}m de você`
-                    : `${unidade.distancia.toFixed(1)}km de você`
-                  }
-                </span>
-              </div>
+          </div>
+
+          {/* Tags */}
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[11px] text-zinc-200 ring-1 ring-white/10">
+              <MapPin className="h-3.5 w-3.5 text-yellow-300" />
+              Ver detalhes
+            </span>
+            {distanciaFmt && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[11px] text-zinc-200 ring-1 ring-white/10">
+                <Navigation className="h-3.5 w-3.5 text-yellow-300" />
+                {distanciaFmt}
+              </span>
             )}
           </div>
 
-          {/* Ícone de navegação */}
-          <div className="absolute bottom-6 right-6">
-            <div className="p-3 rounded-full bg-yellow-500/20 backdrop-blur-sm group-hover:bg-yellow-500/30 transition-all duration-300">
-              <MapPin className="w-5 h-5 text-yellow-400 group-hover:scale-110 transition-transform" />
-            </div>
+          <div className="mt-auto pt-4 flex items-center justify-between">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-500 font-medium">
+              Live Academia
+            </span>
+            <span className="text-[11px] text-zinc-400">
+              Clique para conhecer
+            </span>
           </div>
         </div>
+
+        {/* Accessible focus ring overlay (optional) */}
+        <div className="pointer-events-none absolute inset-0 rounded-3xl ring-0 group-focus-visible:ring-2 ring-yellow-300/50" />
+
+        {/* Local keyframes */}
+        <style jsx>{`
+          @keyframes unidadeShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+          }
+        `}</style>
       </div>
     </Link>
   )
@@ -168,7 +212,41 @@ export default function UnidadesCarousel() {
   const [sortedUnidades, setSortedUnidades] = useState<UnidadeComDistancia[]>(unidades)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-  const carouselRef = useRef<HTMLDivElement>(null)
+  const carouselViewportRef = useRef<HTMLDivElement>(null)
+  const [mounted, setMounted] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
+  const [lowPerf, setLowPerf] = useState(false)
+  const visibleInView = useInView(carouselViewportRef, { amount: 0.25, once: false })
+
+  // Heurística simples para dispositivos de menor performance
+  useEffect(() => {
+    try {
+      const cores = (navigator as any).hardwareConcurrency || 8
+      const mem = (navigator as any).deviceMemory || 8
+      if (cores <= 4 || mem <= 4) setLowPerf(true)
+      if (window.innerWidth < 820 && window.devicePixelRatio > 2) setLowPerf(true)
+    } catch (_) {}
+  }, [])
+  // Segurança: caso o Script carregue mas não inicialize sozinho
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (window.UnicornStudio && !window.UnicornStudio.isInitialized && typeof window.UnicornStudio.init === 'function') {
+        try {
+          window.UnicornStudio.init()
+          window.UnicornStudio.isInitialized = true
+          console.info('[UnicornStudio] Inicializado via fallback useEffect')
+        } catch (e) {
+          console.warn('[UnicornStudio] Falha na init fallback', e)
+        }
+      }
+    }, 1200)
+    return () => clearTimeout(t)
+  }, [])
+
+  // Marca como montado para evitar diferenças SSR -> Cliente ao injetar canvas/DOM externo
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Calcula distâncias quando a localização é obtida
   useEffect(() => {
@@ -203,33 +281,84 @@ export default function UnidadesCarousel() {
   }, [])
 
   // Auto-play do carrossel
+  // Auto-play com requestAnimationFrame + visibilidade + reduced motion
   useEffect(() => {
-    if (!isAutoPlaying) return
-    
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % sortedUnidades.length)
-    }, 5000)
+    if (!isAutoPlaying || prefersReducedMotion || !visibleInView) return
+    let frame: number
+    let start: number | null = null
+    const interval = 5000
+    const loop = (ts: number) => {
+      if (start === null) start = ts
+      const elapsed = ts - start
+      if (elapsed >= interval) {
+        setCurrentIndex((p) => (p + 1) % sortedUnidades.length)
+        start = ts
+      }
+      frame = requestAnimationFrame(loop)
+    }
+    frame = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(frame)
+  }, [isAutoPlaying, prefersReducedMotion, visibleInView, sortedUnidades.length])
 
-    return () => clearInterval(interval)
-  }, [isAutoPlaying, sortedUnidades.length])
-
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setIsAutoPlaying(false)
     setCurrentIndex((prev) => (prev + 1) % sortedUnidades.length)
-  }
+  }, [sortedUnidades.length])
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setIsAutoPlaying(false)
     setCurrentIndex((prev) => (prev - 1 + sortedUnidades.length) % sortedUnidades.length)
-  }
+  }, [sortedUnidades.length])
 
-  const goToSlide = (index: number) => {
+  const goToSlide = useCallback((index: number) => {
     setIsAutoPlaying(false)
     setCurrentIndex(index)
-  }
+  }, [])
+
+  const slideWidth = 420 // width + gap approximation
+  const translateX = -(currentIndex * slideWidth)
 
   return (
-    <section className="section-padding relative overflow-hidden">
+    <section className={cn("section-padding py-24 relative z-10 overflow-hidden", lowPerf && "[&_*]:will-change-auto")}
+      data-low-perf={lowPerf || undefined}
+    >
+      <Script
+        src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          try {
+            if (window.UnicornStudio && !window.UnicornStudio.isInitialized) {
+              window.UnicornStudio.init()
+              window.UnicornStudio.isInitialized = true
+              console.info('[UnicornStudio] Inicializado via <Script> onLoad')
+            }
+          } catch (e) {
+            console.warn('[UnicornStudio] Erro ao inicializar no onLoad', e)
+          }
+        }}
+      />
+      {/* Background otimizado (menos camadas em lowPerf ou prefersReducedMotion) */}
+      <div className="absolute inset-0 -z-10">
+        {mounted && !prefersReducedMotion && (
+          <>
+            {!lowPerf && (
+              <div
+                data-us-project="x6cbPWi9roeeiZ8cuBu3"
+                id="unicorn-bg"
+                suppressHydrationWarning
+                className="absolute inset-0 w-full h-full will-change-transform"
+                style={{ contain: 'layout paint size', opacity: 0.6, filter: 'brightness(0.55) contrast(1.05) saturate(0.85)' }}
+              />
+            )}
+            <div className="absolute inset-0 bg-black/85 pointer-events-none" />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 45%, rgba(250,204,21,0.16), transparent 65%)' }} />
+            {!lowPerf && (
+              <div className="absolute inset-0 pointer-events-none opacity-25 mix-blend-screen" style={{ backgroundImage: 'repeating-linear-gradient(115deg, rgba(250,204,21,0.07) 0px, rgba(250,204,21,0.07) 2px, transparent 2px, transparent 16px)' }} />
+            )}
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.7), transparent 18%, transparent 82%, rgba(0,0,0,0.7))' }} />
+          </>
+        )}
+      </div>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -257,7 +386,7 @@ export default function UnidadesCarousel() {
         </motion.div>
 
         {/* Carrossel Container */}
-        <div className="relative" onMouseEnter={() => setIsAutoPlaying(false)} onMouseLeave={() => setIsAutoPlaying(true)}>
+  <div ref={carouselViewportRef} className="relative" onMouseEnter={() => setIsAutoPlaying(false)} onMouseLeave={() => setIsAutoPlaying(true)}>
           {/* Gradiente Esquerdo */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
           
@@ -265,11 +394,10 @@ export default function UnidadesCarousel() {
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
           {/* Carrossel */}
-          <div className="overflow-hidden mx-8" ref={carouselRef}>
-            <motion.div 
-              className="flex gap-6"
-              animate={{ x: `${-currentIndex * 420}px` }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          <div className="overflow-hidden mx-8">
+            <div
+              className="flex gap-6 will-change-transform select-none"
+              style={{ transform: `translate3d(${translateX}px,0,0)`, transition: 'transform 650ms cubic-bezier(.19,1,.22,1)' }}
             >
               {sortedUnidades.map((unidade, index) => (
                 <div
@@ -279,7 +407,7 @@ export default function UnidadesCarousel() {
                   <UnidadeCard unidade={unidade} />
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
 
           {/* Botões de navegação */}
@@ -339,6 +467,10 @@ export default function UnidadesCarousel() {
             </button>
           </div>
         )}
+      </div>
+      {/* Toggle de performance (debug) */}
+      <div className="pointer-events-none fixed bottom-2 right-2 text-[10px] font-mono text-zinc-600 select-none">
+        {lowPerf && <span>perf:LOW</span>}
       </div>
     </section>
   )

@@ -3,8 +3,9 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Dumbbell, ShieldCheck, Smartphone, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
+import { ShieldCheck, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
 import Image from "next/image"
+import { useState, useCallback } from "react"
 
 const beneficios = [
   {
@@ -39,165 +40,133 @@ const beneficios = [
 
 export default function BeneficiosSection() {
   const easing = [0.16, 1, 0.3, 1] as const
+  const [active, setActive] = useState(0)
+  const handleActivate = useCallback((idx: number) => {
+    setActive(idx)
+  }, [])
 
   return (
-    <section className="relative py-24 px-6 lg:px-12 overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-black">
-      {/* Enhanced Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/15 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-yellow-400/10 rounded-full blur-2xl animate-bounce" style={{ animationDuration: '4s' }} />
+    <section className="relative py-24 px-4 lg:px-10 overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">
+      {/* Ambient background accents */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-32 left-1/3 w-[540px] h-[540px] bg-yellow-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-[420px] h-[420px] bg-amber-600/10 rounded-full blur-3xl" />
       </div>
 
-      {/* Floating Elements */}
-      <motion.div
-        animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-        transition={{ duration: 6, repeat: Infinity }}
-        className="absolute top-20 right-20 w-16 h-16 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full opacity-20 blur-sm"
-      />
-      <motion.div
-        animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-        transition={{ duration: 8, repeat: Infinity, delay: 1 }}
-        className="absolute bottom-32 left-16 w-12 h-12 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-full opacity-15 blur-sm"
-      />
-
       <div className="max-w-7xl mx-auto relative z-10">
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: easing }}
           viewport={{ once: true, amount: 0.3 }}
-          className="text-center mb-20"
+          className="text-center mb-14"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: easing }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/30 backdrop-blur-xl mb-6"
-          >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-yellow-500/15 to-amber-500/15 border border-yellow-500/25 backdrop-blur-lg mb-5">
             <Star className="h-4 w-4 text-yellow-400" />
             <span className="text-yellow-300 text-sm font-medium">Por que escolher a Live Academia?</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: easing }}
-            viewport={{ once: true }}
-            className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight"
-          >
-            Benefícios <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-pulse">exclusivos</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: easing }}
-            viewport={{ once: true }}
-            className="text-lg text-zinc-300 max-w-3xl mx-auto"
-          >
+          </div>
+          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
+            Benefícios <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent">exclusivos</span>
+          </h2>
+          <p className="text-lg text-zinc-300 max-w-2xl mx-auto">
             Tudo o que você precisa para transformar seu corpo e sua vida, com liberdade e tecnologia.
-          </motion.p>
+          </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {beneficios.map((beneficio, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: idx * 0.15, ease: easing }}
-              viewport={{ once: true }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="group relative bg-gradient-to-br from-zinc-900/80 to-zinc-950/80 backdrop-blur-xl rounded-3xl border border-zinc-800/50 hover:border-yellow-500/30 transition-all duration-500 overflow-hidden h-[380px] shadow-lg hover:shadow-2xl hover:shadow-yellow-500/10"
-            >
-              {/* Animated Background Image */}
-              <motion.div
-                className="absolute inset-0 z-0"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.7 }}
+        {/* Expanding horizontal cards */}
+        <div
+          className="relative flex gap-1.5 w-full h-[460px] rounded-lg"
+          role="tablist"
+          aria-label="Benefícios da Live Academia"
+        >
+          {beneficios.map((beneficio, idx) => {
+            const isActive = active === idx
+            return (
+              <div
+                key={beneficio.title}
+                role="tab"
+                aria-selected={isActive}
+                tabIndex={0}
+                onMouseEnter={() => handleActivate(idx)}
+                onFocus={() => handleActivate(idx)}
+                onClick={() => handleActivate(idx)}
+                className={[
+                  'group relative overflow-hidden cursor-pointer flex flex-col justify-end rounded-md bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-md',
+                  'transition-[flex,background,filter] duration-500 ease-[cubic-bezier(.25,.4,.25,1)]',
+                  isActive ? 'flex-[4] shadow-[0_0_0_1px_rgba(250,204,21,0.25),0_8px_28px_-6px_rgba(0,0,0,.6)]' : 'flex-[1] hover:flex-[1.5]',
+                ].join(' ')}
+                style={{ minWidth: 0 }}
               >
-                <div className="absolute inset-4">
+                {/* Background Image */}
+                <div className="absolute inset-0">
                   <Image
                     src={beneficio.image}
                     alt={beneficio.title}
                     fill
-                    className="object-cover rounded-2xl opacity-15 group-hover:opacity-25 transition-opacity duration-700"
                     quality={85}
+                    className={[
+                      'object-cover transition-all duration-[900ms]',
+                      isActive ? 'scale-105 opacity-80' : 'scale-100 opacity-25 group-hover:opacity-40'
+                    ].join(' ')}
+                    sizes="(max-width:768px) 100vw, (max-width:1280px) 50vw, 600px"
+                    priority={idx === 0}
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/15 via-amber-500/10 to-transparent mix-blend-overlay" />
+                  )}
                 </div>
-              </motion.div>
 
-              {/* Enhanced Glow effect on hover */}
-              <motion.div
-                className={`absolute inset-0 bg-gradient-to-br ${beneficio.color} opacity-0 group-hover:opacity-15 rounded-3xl transition-opacity duration-500`}
-                whileHover={{ opacity: 0.2 }}
-              />
-
-              {/* Animated border glow */}
-              <motion.div
-                className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{
-                  background: `linear-gradient(45deg, transparent, ${idx % 2 === 0 ? 'rgba(251, 191, 36, 0.1)' : 'rgba(245, 158, 11, 0.1)'}, transparent)`,
-                  padding: '1px'
-                }}
-              >
-                <div className="w-full h-full bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 rounded-3xl" />
-              </motion.div>
-
-              <div className="relative z-10 p-8 h-full flex flex-col">
-                <motion.div
-                  className="mb-6"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className={`w-16 h-16 bg-gradient-to-br ${beneficio.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-2xl group-hover:shadow-yellow-500/30 transition-all duration-300`}>
-                    <beneficio.icon className="h-8 w-8 text-black" />
+                {/* Icon (floating) */}
+                <div className="absolute top-4 left-4 z-10">
+                  <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br ${beneficio.color} shadow-lg shadow-yellow-500/20`}> 
+                    <beneficio.icon className="w-6 h-6 text-black" />
                   </div>
-                </motion.div>
-                <motion.h3
-                  className="font-bold text-white text-xl mb-3 group-hover:text-yellow-400 transition-colors duration-300"
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {beneficio.title}
-                </motion.h3>
-                <motion.p
-                  className="text-zinc-400 leading-relaxed flex-grow group-hover:text-zinc-300 transition-colors duration-300"
-                  whileHover={{ x: 3 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {beneficio.description}
-                </motion.p>
+                </div>
 
-                {/* Animated checkmark */}
-                <motion.div
-                  className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  initial={{ scale: 0 }}
-                  whileHover={{ scale: 1 }}
-                >
-                  <div className="flex items-center gap-2 text-yellow-400">
-                    <CheckCircle className="h-4 w-4" />
-                    <span className="text-sm font-medium">Disponível agora</span>
+                {/* Content overlay */}
+                <div className="relative z-10 p-6 flex flex-col">
+                  <h3 className="text-white font-semibold tracking-tight text-lg md:text-xl mb-1">
+                    {beneficio.title}
+                  </h3>
+                  <p
+                    className={[
+                      'text-sm text-zinc-300 transition-opacity duration-300 max-w-md',
+                      isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                    ].join(' ')}
+                  >
+                    {beneficio.description}
+                  </p>
+                  <div
+                    className={[
+                      'mt-3 flex items-center gap-2 text-yellow-400 text-xs font-medium tracking-wide uppercase',
+                      isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
+                    ].join(' ')}
+                  >
+                    <CheckCircle className="w-4 h-4" /> Disponível agora
                   </div>
-                </motion.div>
+                </div>
+
+                {/* Subtle border highlight when active */}
+                <div
+                  className={[
+                    'absolute inset-0 rounded-md ring-1 transition-opacity duration-500 pointer-events-none',
+                    isActive ? 'ring-yellow-400/40' : 'ring-transparent group-hover:ring-zinc-700/40'
+                  ].join(' ')}
+                />
               </div>
-            </motion.div>
-          ))}
+            )
+          })}
         </div>
 
-        {/* Bottom CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8, ease: easing }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
+        {/* CTA */}
+        <div className="text-center mt-14">
           <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 backdrop-blur-xl">
             <Zap className="h-5 w-5 text-yellow-400" />
             <span className="text-yellow-300 text-sm font-medium">Experimente sem compromisso</span>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
