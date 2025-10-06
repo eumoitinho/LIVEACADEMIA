@@ -106,11 +106,13 @@ export async function upsertUnit(input: UpsertUnitInput) {
 }
 
 export async function getUnitBySlug(slug: string) {
+  console.log(`[getUnitBySlug] Querying slug: "${slug}" (type: ${typeof slug})`)
   const { data, error } = await supabaseAdmin
     .from('units')
-    .select('id,slug,nome,codigo_unidade,chave_api,chave_publica,cidade,estado,cep,endereco,complemento,latitude,longitude,telefone,email,locale,logo,imagens,moeda,usarSistemaInternacional,created_at,updated_at')
+    .select('id,slug,nome,codigo_unidade,chave_api,chave_publica,cidade,estado,cep,endereco,complemento,latitude,longitude,telefone,email,locale,logo,imagens,moeda,usarsistemainternacional,created_at,updated_at')
     .eq('slug', slug)
     .maybeSingle()
+  console.log(`[getUnitBySlug] Result: data=${!!data}, error=${error?.message || 'none'}`)
   if (error || !data) return null
   let apiKeyPlain: string | undefined
   if (data.chave_api) {

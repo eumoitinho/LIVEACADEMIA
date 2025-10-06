@@ -18,10 +18,12 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    console.log(`[Venda] Buscando unidade com slug: ${slug}`)
     const unit = await getUnitBySlug(slug)
+    console.log(`[Venda] Unit result:`, unit ? `Found: ${unit.nome}` : 'NULL')
 
     if (!unit) {
-      console.error(`[Venda ${slug}] Unidade não encontrada`)
+      console.error(`[Venda ${slug}] Unidade não encontrada no banco`)
       return NextResponse.json({ success: false, error: 'Unidade não encontrada' }, { status: 404 })
     }
 
