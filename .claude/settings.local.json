@@ -13,7 +13,10 @@
       "WebFetch(domain:centro.hotsite.in)",
       "WebFetch(domain:silves.hotsite.in)",
       "WebFetch(domain:liveplanalto.hotsite.in)",
-      "WebFetch(domain:app.pactosolucoes.com.br)"
+      "WebFetch(domain:app.pactosolucoes.com.br)",
+      "Bash(./scripts/fetch-logos-curl.sh:*)",
+      "Bash(wget:*)",
+      "Read(//home/moitinho/Downloads/**)"
     ],
     "deny": []
   }

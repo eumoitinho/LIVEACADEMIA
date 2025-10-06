@@ -71,4 +71,6 @@ export default function SobreNos() {
       </div>
     </main>
   )
-}
+}-e 
+
+export const dynamic = 'force-dynamic'

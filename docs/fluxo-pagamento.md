@@ -98,12 +98,200 @@ const response = await processPayment(paymentData)
 
 ## Integração com API Pacto Soluções
 
-### Base URL
+### Base URL Oficial
 ```
-https://api-docs.pactosolucoes.com.br/
+https://apigw.pactosolucoes.com.br
 ```
 
-### Endpoints Utilizados
+> Status: Migração para **V3 (/psec)** concluída. Endpoints `v2` removidos do código (mantidos aqui apenas como referência histórica). O módulo `lib/pacto-api.ts` usa exclusivamente endpoints `/psec`.
+
+### Chave de Rede / Unidade
+Cada rede ou unidade possui uma chave própria (ex.: `chaverede`) usada em diversos endpoints.
+
+Estratégia recomendada de variáveis de ambiente:
+```
+PACTO_REDE_KEY=<chave_da_rede_principal>
+PACTO_UNIDADE_KEY_TORRES=<chave_unidade>
+PACTO_UNIDADE_KEY_CENTRO=<chave_unidade>
+# ... uma por unidade conforme necessidade
+```
+Resolver em runtime via função utilitária, ex.: `resolveUnidadeKey(slug)`.
+
+### Autenticação
+| Versão | Endpoint | Status | Observações |
+|--------|----------|--------|-------------|
+| v2 (LEGADO) | `POST /v2/vendas/tkn/{secretKey}` | Desativado | Removido do código |
+| v3 (ATUAL) | `POST /psec/vendas/token` | Em uso | Token + expiração (cache em memória) |
+
+### Template CURL Genérico
+```
+curl -X 'GET' \
+  'https://apigw.pactosolucoes.com.br/{endpoint}' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer <TOKEN>'
+```
+
+---
+### Catálogo de Endpoints (Agrupado)
+Os endpoints fornecidos foram organizados por domínio. Aqueles já utilizados hoje no código estão marcados com ✅. Recomendações de migração para V3 marcadas com ▶.
+
+#### 1. Saúde / Configuração
+| Endpoint | Método | Descrição | Status |
+|----------|--------|-----------|--------|
+| `/psec/vendas/health` | GET | Health check V3 | Planejado |
+| `/psec/vendas/configs` | GET | Configs empresa V3 | Planejado |
+| `/v2/vendas/configs/{codigo}` | GET | Configs unidade | Planejado |
+| `/v2/vendas/configs/{codigo}/tela/{nometela}` | GET | Config especifica por tela | Planejado |
+
+#### 2. Unidades / Rede
+| Endpoint | Método | Descrição | Status |
+|----------|--------|-----------|--------|
+| `/psec/vendas/unidades` | GET | Unidades por chave (V3) | ✅ Em uso |
+| `/psec/vendas/{chaverede}/unidadesRede` | GET | Unidades por rede (V3) | Planejado |
+| `/v2/vendas/unidades` | GET | Unidades por chave | Removido |
+| `/v2/vendas/unidade/{codigo}` | GET | Unidade específica | Planejado |
+| `/psec/vendas/unidade` | GET | Unidade específica (V3) | ▶ Preferir |
+| `/v2/vendas/imagens/{codigo}` | GET | Imagens unidade | Planejado |
+
+#### 3. Planos / Produtos
+| Endpoint | Método | Descrição | Status |
+|----------|--------|-----------|--------|
+| `/psec/vendas/planos` | GET | Planos da empresa (V3) | ✅ Em uso (filtragem via query) |
+| `/v2/vendas/planos/{codigo}` | GET | Planos unidade | Removido |
+| `/v2/vendas/plano/{unidade}/{codigo}` | GET | Detalhe plano | Planejado |
+| `/v2/vendas/planosPactoFlow/{codigoUnidade}` | GET | Planos PactoFlow | Avaliar |
+| `/psec/vendas/produtos/{categoria}` | GET | Produtos por categoria (V3) | Planejado |
+| `/v2/vendas/produtos/{empresa}/{categoria}` | GET | Produtos (v2) | Planejado |
+| `/v2/vendas/produto/{empresa}/{produto}` | GET | Produto específico | Planejado |
+
+#### 4. Simulação / Pré-venda
+| Endpoint | Método | Descrição | Status |
+|----------|--------|-----------|--------|
+| `/v2/vendas/simular/{plano}/{unidade}` | POST | Simular contrato | Planejado |
+| `/v2/vendas/simularV2/{unidade}` | POST | Simular contrato v2 | ✅ Usado (função `simularVenda`) |
+| `/psec/vendas/simularVenda/{plano}` | POST | Simular venda (V3) | ✅ Em uso |
+
+#### 5. Venda / Checkout
+| Endpoint | Método | Descrição | Status |
+|----------|--------|-----------|--------|
+| `/psec/vendas/cadastrarVenda` | POST | Cadastrar venda (V3 fluxo unificado) | ✅ Em uso |
+| `/v2/vendas/alunovendaonline/{captcha}` | POST | Pagamento Cartão | Removido |
+| `/v2/vendas/alunovendaonlinepix/{captcha}` | POST | Pagamento PIX | Removido |
+| `/v2/vendas/alunovendaonlineboleto/{captcha}` | POST | Pagamento Boleto | Removido |
+| `/psec/vendas/validarCupomDesconto` | POST | Validar cupom (V3) | ✅ Em uso |
+| `/v2/vendas/adicionarCupomDescontoSite` | POST | Adicionar cupom | Avaliar |
+| `/v2/vendas/comprovanteTermoAceite` | POST | Registrar aceite termo | Planejado |
+
+#### 6. Anti-fraude / Segurança
+| Endpoint | Método | Descrição |
+|----------|--------|-----------|
+| `/v2/vendas/blacklist` (GET/POST/DELETE) | Gerenciar blacklist IP persistente |
+| `/v2/vendas/blacklist/memory` | Blacklist em memória |
+| `/v2/vendas/blacklist/memory/reload` | Recarregar blacklist memória |
+| `/v2/vendas/blacklistcartao` (GET/POST/DELETE) | Blacklist cartões |
+| `/v2/vendas/blacklistcartao/memory` | Blacklist cartões memória |
+| `/v2/vendas/blacklistcartao/memory/reload` | Recarregar cartões |
+| `/v2/vendas/cardEightDigitsMsgTries` | Registrar tentativas irreversíveis por cartão |
+| `/v2/vendas/ipstries` | Tentativas por IP |
+| `/v2/vendas/ipstries/reload` | Recarregar sistema antifraude |
+| `/v2/vendas/ipstries/unblock` | Desbloquear IP/cartão |
+| `/v2/vendas/ipstries/unblock/card` | Desbloquear cartão |
+| `/v2/vendas/ipstries/unblock/ip` | Desbloquear IP |
+| `/v2/vendas/whitelist` (GET/POST/DELETE) | Whitelist IP |
+| `/v2/vendas/whitelist/memory` | Whitelist memória |
+| `/v2/vendas/whitelist/memory/reload` | Recarregar whitelist |
+
+#### 7. Parcelas / Cobrança
+| Endpoint | Método | Descrição |
+|----------|--------|-----------|
+| `/v2/vendas/cobrarparcelasabertas/{matricula}` | POST | Cobrar parcelas abertas |
+| `/v2/vendas/cobrarParcelasAbertasBoleto/{matricula}` | POST | Cobrar via Boleto |
+| `/v2/vendas/cobrarParcelasAbertasPix/{matricula}` | POST | Cobrar via PIX |
+| `/v2/vendas/v2/cobrarParcelasAbertasPix/{matricula}` | POST | Cobrança PIX v2 |
+| `/v2/vendas/consultarParcelasPix/{codigo}` | POST | Consultar parcelas para PIX |
+
+#### 8. Contratos / Documentos
+| Endpoint | Método | Descrição |
+|----------|--------|-----------|
+| `/v2/vendas/contrato/{codigo}` | GET | Plano de um contrato |
+| `/v2/vendas/contratoImp/{codigo}` | GET | Imprimir contrato |
+| `/v2/vendas/plano/{unidade}/contrato/{plano}` | GET | Gerar contrato em branco |
+
+#### 9. Aulas / Modalidades
+| Endpoint | Método | Descrição |
+|----------|--------|-----------|
+| `/v2/vendas/aulas/{empresa}` | GET | Aulas disponíveis |
+| `/v2/vendas/aulasColetivas/{empresa}` | GET | Aulas coletivas |
+| `/v2/vendas/turmas/{modalidades}/{empresa}/{idade}` | GET | Turmas por modalidade/idade |
+
+#### 10. Consultores / Convenios / Diversos
+| Endpoint | Método | Descrição |
+|----------|--------|-----------|
+| `/v2/vendas/consultores/{empresa}` | GET | Consultores |
+| `/v2/vendas/convenios/{empresa}` | GET | Convênios |
+| `/v2/vendas/{empresa}/taxasparcelamento` | POST | Taxa de parcelamento Stone |
+| `/v2/vendas/aluno/{matricula}` | GET | Dados aluno |
+| `/v2/vendasonlineicv/registrarInicioAcessoPagina` | POST | Registrar início acesso página |
+| `/v2/vendasonlineicv/{codigo}` | GET | Consultar registro acesso |
+| `/v2/vendas/logoEmail/{crypt}` | GET | Logo para email |
+| `/v2/t/vendas/remTest` | DELETE | Remover aluno de teste |
+
+---
+### Resumo de Endpoints Ativos (Pós-Migração)
+| Domínio | Endpoint | Uso |
+|---------|----------|-----|
+| Autenticação | `POST /psec/vendas/token` | Gera token (cache in-memory) |
+| Unidades | `GET /psec/vendas/unidades` | Lista unidades |
+| Planos | `GET /psec/vendas/planos?unidade={codigo}` | Planos filtrados |
+| Simulação | `POST /psec/vendas/simularVenda/{plano}` | Simulação checkout |
+| Venda | `POST /psec/vendas/cadastrarVenda` | Criação unificada (cartão/pix/boleto) |
+| Cupom | `POST /psec/vendas/validarCupomDesconto` | Validação cupom |
+
+### Migração V3 - Status
+Concluída: (preencher data de deploy)
+
+Principais mudanças:
+1. Remoção total de chamadas v2 no código.
+2. Token com expiração e cache primitivo.
+3. Unificação de fluxo de pagamento em um endpoint único.
+4. Schemas Zod para validação de todas as respostas (`lib/pacto-schemas.ts`).
+5. Timeout + retry básico implementados nas requisições.
+6. Captcha retirado (não requerido no fluxo V3 atual).
+
+---
+### Política de Segurança / Anti-fraude (Planejada)
+Não implementado ainda, mas definido:
+1. Registrar tentativas de falha por IP/cartão → armazenar contador local + opção futura de consultar `/v2/vendas/ipstries`.
+2. Se exceder limite (ex. 5 em 10min) → bloquear nova tentativa e sugerir contato.
+3. Integrar endpoints de blacklist somente após validação de caso de uso (evitar uso prematuro):
+   - IP suspeitos → `/v2/vendas/blacklist`
+   - Cartão fraudulento → `/v2/vendas/blacklistcartao`
+4. Whitelist para IPs internos se necessário (suporte / operação).
+5. Logging estruturado: `categoria=checkout antifraude=tentativa_excedida ip=... cartão_final=1234`.
+
+---
+### Variáveis de Ambiente (Atual)
+```
+PACTO_API_URL=https://apigw.pactosolucoes.com.br
+```
+As chaves sensíveis da Pacto não ficam mais em variáveis de ambiente por unidade ou chave global. Cada unidade possui sua `chave_api` armazenada (criptografada) em `units.chave_api`. Os route handlers obtêm a unidade (`getUnitBySlug`), decriptam a chave e passam como `redeKey` para o wrapper `pacto-api.ts`.
+
+Benefícios:
+1. Rotação individual por unidade sem reiniciar processo.
+2. Menor superfície de erro (não depende de env global inconsistente).
+3. Logs associam falhas à unidade específica.
+
+Fallback: se unidade não existe ou não tem chave, rotas retornam 404 / 503 ou planos estáticos (somente `/planos`).
+
+---
+### Boas Práticas ao Consumir os Endpoints
+1. Sempre validar respostas com Zod (status, campos obrigatórios)
+2. Implementar retry somente para erros 5xx (ex. 2 tentativas)
+3. Timeout client (ex.: abort controller em 12s)
+4. Sanitizar CPF/telefone antes de enviar
+5. Obfuscar últimos dígitos de cartão em logs (`**** **** **** 1234`)
+6. Registrar evento analytics `payment_attempt` antes da chamada e `payment_result` após
+
 
 #### 1. Criação de Matrícula
 ```http
@@ -238,7 +426,7 @@ Content-Type: application/json
 
 ```env
 # .env.local
-PACTO_API_URL=https://api-docs.pactosolucoes.com.br
+PACTO_API_URL=https://apigw.pactosolucoes.com.br
 PACTO_API_KEY=sua_chave_api_aqui
 PACTO_CLIENT_ID=seu_client_id_aqui
 NEXT_PUBLIC_SITE_URL=http://localhost:3000

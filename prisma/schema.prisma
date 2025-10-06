@@ -1,0 +1,59 @@
+// Prisma schema for Live Academia secure storage
+// Models: Network (rede), Unit (unidade), ApiLog (registro de chamadas externas)
+// All sensitive keys encrypted at application layer (AES-256-GCM) before persisting
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Rede {
+  id                String   @id @default(cuid())
+  name              String   @unique                // Nome identificador da rede (ex: TORRES)
+  slug              String   @unique                // slug normalizado (lowercase)
+  encryptedApiKey   String                           // chave da REDE criptografada
+  unidades          Unidade[]
+  apiLogs           ApiLog[]                        // relação inversa para logs relacionados à rede
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Unidade {
+  id                String   @id @default(cuid())
+  name              String
+  slug              String   @unique
+  rede              Rede     @relation(fields: [redeId], references: [id], onDelete: Cascade)
+  redeId            String
+  encryptedUnitKey  String      // chave da UNIDADE criptografada
+  codigoExterno     String?     // código numérico ou alfanumérico da unidade na API (ex: 1)
+  unidadeChave      String?     // chave 'chave' retornada pelos endpoints de unidade (pode ser redundante)
+  ativo             Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  apiLogs           ApiLog[]
+}
+
+model ApiLog {
+  id          String   @id @default(cuid())
+  unidade     Unidade? @relation(fields: [unidadeId], references: [id], onDelete: SetNull)
+  unidadeId   String?
+  rede        Rede?    @relation(fields: [redeId], references: [id], onDelete: SetNull)
+  redeId      String?
+  direction   ApiDirection // OUTBOUND (para Pacto) ou INBOUND (nossas rotas)
+  method      String
+  endpoint    String
+  statusCode  Int?
+  latencyMs   Int?
+  error       String?
+  requestHash String?    // hash sha256 do corpo sanitized
+  createdAt   DateTime @default(now())
+}
+
+enum ApiDirection {
+  OUTBOUND
+  INBOUND
+}

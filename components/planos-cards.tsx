@@ -4,13 +4,16 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { Check, CreditCard } from "lucide-react"
 
+interface PlanoItem {
+  name: string
+  price: string
+  codigo?: string
+}
+
 interface PlanosCardsProps {
-  planos: Array<{
-    name: string
-    price: string
-  }>
+  planos: Array<PlanoItem>
   unidadeName: string
-  onMatricular: (plano: { name: string; price: string }) => void
+  onMatricular: (plano: PlanoItem) => void
 }
 
 export default function PlanosCards({ planos, unidadeName, onMatricular }: PlanosCardsProps) {

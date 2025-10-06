@@ -1,10 +1,35 @@
 /**
- * Integração com API Pacto Soluções
+ * Integração com API Pacto Soluções (V3 /psec)
  * Implementa o checkout transparente para Live Academia
+ *
+ * NOTA:
+ *  - Este módulo deve ser utilizado apenas em contexto server-side (Route Handler, Server Action ou API Route)
+ *  - Cada unidade possui `chave_api` (privada) e `chave_publica`; ambas são necessárias para autenticação/escopo.
+ *  - Caso seja necessário expor operações ao cliente, criar um endpoint interno que chama estas funções.
  */
 
-const PACTO_BASE_URL = process.env.NEXT_PUBLIC_PACTO_API_URL || 'https://api-docs.pactosolucoes.com.br'
-const PACTO_SECRET_KEY = process.env.NEXT_PUBLIC_PACTO_SECRET_KEY
+import {
+  TokenResponseSchema,
+  UnidadeSchema,
+  PlanoSchema,
+  SimulacaoSchema,
+  VendaResultadoSchema,
+  CupomSchema,
+  safeParse,
+  type Unidade,
+  type Plano,
+  type Simulacao,
+  type VendaResultado,
+  type TokenResponse,
+  type Cupom,
+} from './pacto-schemas'
+
+const PACTO_BASE_URL = process.env.PACTO_API_URL || 'https://apigw.pactosolucoes.com.br'
+
+if (typeof window !== 'undefined') {
+
+  console.warn('[PactoAPI] Atenção: pacto-api.ts foi importado no client. Use apenas no servidor.')
+}
 
 export interface CustomerData {
   nome: string
@@ -25,10 +50,11 @@ export interface SaleData {
   unidadeId: string
   planoId: string
   planoNome: string
-  valor: string
+  valor: string | number
   customer: CustomerData
   paymentMethod: 'cartao' | 'pix' | 'boleto'
   cardData?: CardData
+  cupom?: string
 }
 
 export interface PactoResponse {
@@ -41,64 +67,81 @@ export interface PactoResponse {
 }
 
 class PactoAPI {
-  private token: string | null = null
   private baseURL: string
+  /** cache de tokens por par (redeKey|publicKey) */
+  private tokenCache: Map<string, { token: string; expiresAt: number }> = new Map()
 
-  constructor() {
-    this.baseURL = PACTO_BASE_URL
+  constructor() { this.baseURL = PACTO_BASE_URL }
+
+  /**
+   * Requisição com timeout / retry básico
+   */
+  private async request(input: string, init: RequestInit & { timeoutMs?: number; retries?: number } = {}) {
+    const { timeoutMs = 15000, retries = 1, ...rest } = init
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      const controller = new AbortController()
+      const id = setTimeout(() => controller.abort(), timeoutMs)
+      try {
+        const resp = await fetch(input, { ...rest, signal: controller.signal })
+        clearTimeout(id)
+        return resp
+      } catch (err) {
+        clearTimeout(id)
+        const isLast = attempt === retries
+        if (isLast || (err instanceof Error && err.name !== 'AbortError')) {
+          throw err
+        }
+      }
+    }
+    throw new Error('Request falhou')
   }
 
   /**
-   * Autentica com a da API da Pacto 
+   * Autentica na API V3 (/psec/vendas/token)
    */
-  async authenticate(): Promise<boolean> {
-    try {
-      if (!PACTO_SECRET_KEY) {
-        throw new Error('Secret key não configurada')
-      }
-
-      const response = await fetch(`${this.baseURL}/v2/vendas/tkn/${PACTO_SECRET_KEY}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error(`Erro na autenticação: ${response.status}`)
-      }
-
-      const data = await response.json()
-      this.token = data.token
-      return true
-    } catch (error) {
-      console.error('Erro na autenticação:', error)
-      return false
+  private async authenticate(redeKey: string, publicKey: string): Promise<string> {
+    if (!redeKey) throw new Error('redeKey ausente (chave_api da unidade)')
+    if (!publicKey) throw new Error('publicKey ausente (chave_publica da unidade)')
+    const cacheKey = redeKey + '|' + publicKey
+    const cached = this.tokenCache.get(cacheKey)
+    if (cached && Date.now() < cached.expiresAt - 30_000) return cached.token
+    const url = `${this.baseURL}/psec/vendas/token`
+    const response = await this.request(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ redeKey, publicKey }),
+      timeoutMs: 10000,
+      retries: 1,
+    })
+    if (!response.ok) {
+      throw new Error(`Erro na autenticação V3: ${response.status}`)
     }
+    const json = await response.json()
+    const parsed: TokenResponse = safeParse(TokenResponseSchema, json, 'TokenResponse')
+    const expiresAt = (json as any).expiresIn
+      ? Date.now() + (json as any).expiresIn * 1000
+      : Date.now() + 15 * 60 * 1000
+    this.tokenCache.set(cacheKey, { token: parsed.token, expiresAt })
+    return parsed.token
   }
 
   /**
    * Busca as unidades disponíveis
    */
-  async getUnidades(): Promise<any[]> {
+  async getUnidades(redeKey: string, publicKey: string): Promise<Unidade[]> {
     try {
-      if (!this.token) {
-        await this.authenticate()
-      }
-
-      const response = await fetch(`${this.baseURL}/v2/vendas/unidades`, {
+      const token = await this.authenticate(redeKey, publicKey)
+      const response = await this.request(`${this.baseURL}/psec/vendas/unidades`, {
         headers: {
-          'Authorization': `Bearer ${this.token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
+        timeoutMs: 10000,
       })
-
-      if (!response.ok) {
-        throw new Error(`Erro ao buscar unidades: ${response.status}`)
-      }
-
+      if (!response.ok) throw new Error(`Erro ao buscar unidades: ${response.status}`)
       const data = await response.json()
-      return data
+      if (!Array.isArray(data)) return []
+      return data.map((u) => safeParse(UnidadeSchema, u, 'Unidade'))
     } catch (error) {
       console.error('Erro ao buscar unidades:', error)
       return []
@@ -108,25 +151,22 @@ class PactoAPI {
   /**
    * Busca os planos de uma unidade específica
    */
-  async getPlanosUnidade(codigoUnidade: string): Promise<any[]> {
+  async getPlanosUnidade(redeKey: string, publicKey: string, codigoUnidade: string): Promise<Plano[]> {
     try {
-      if (!this.token) {
-        await this.authenticate()
-      }
-
-      const response = await fetch(`${this.baseURL}/v2/vendas/planos/${codigoUnidade}`, {
+      const token = await this.authenticate(redeKey, publicKey)
+      // Supõe-se que V3 permita filtro por unidade via query (?unidade=)
+      const url = `${this.baseURL}/psec/vendas/planos?unidade=${encodeURIComponent(codigoUnidade)}`
+      const response = await this.request(url, {
         headers: {
-          'Authorization': `Bearer ${this.token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
+        timeoutMs: 10000,
       })
-
-      if (!response.ok) {
-        throw new Error(`Erro ao buscar planos: ${response.status}`)
-      }
-
+      if (!response.ok) throw new Error(`Erro ao buscar planos: ${response.status}`)
       const data = await response.json()
-      return data
+      if (!Array.isArray(data)) return []
+      return data.map((p) => safeParse(PlanoSchema, p, 'Plano'))
     } catch (error) {
       console.error('Erro ao buscar planos:', error)
       return []
@@ -136,27 +176,20 @@ class PactoAPI {
   /**
    * Simula uma venda para calcular valores
    */
-  async simularVenda(unidadeId: string, dadosVenda: any): Promise<any> {
+  async simularVenda(redeKey: string, publicKey: string, planoId: string, payload: { unidade: string; valor?: number; cupom?: string; paymentMethod?: string }): Promise<Simulacao | null> {
     try {
-      if (!this.token) {
-        await this.authenticate()
-      }
-
-      const response = await fetch(`${this.baseURL}/v2/vendas/simularV2/${unidadeId}`, {
+      const token = await this.authenticate(redeKey, publicKey)
+      const response = await this.request(`${this.baseURL}/psec/vendas/simularVenda/${planoId}`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dadosVenda),
+        body: JSON.stringify(payload),
       })
-
-      if (!response.ok) {
-        throw new Error(`Erro na simulação: ${response.status}`)
-      }
-
+      if (!response.ok) throw new Error(`Erro na simulação: ${response.status}`)
       const data = await response.json()
-      return data
+      return safeParse(SimulacaoSchema, data, 'Simulacao')
     } catch (error) {
       console.error('Erro na simulação:', error)
       return null
@@ -166,188 +199,108 @@ class PactoAPI {
   /**
    * Processa venda via cartão de crédito
    */
-  async vendaCartao(captcha: string, saleData: SaleData): Promise<PactoResponse> {
+  private buildVendaPayload(saleData: SaleData) {
+    const valorNumber = typeof saleData.valor === 'string' ? parseFloat(saleData.valor.replace(',', '.')) : saleData.valor
+    const base: any = {
+      unidade: saleData.unidadeId,
+      plano: saleData.planoId,
+      cliente: {
+        nome: saleData.customer.nome,
+        email: saleData.customer.email,
+        telefone: saleData.customer.telefone,
+        cpf: saleData.customer.cpf.replace(/\D/g, ''),
+        endereco: saleData.customer.endereco || '',
+      },
+      valor: valorNumber,
+      pagamento: {
+        tipo: saleData.paymentMethod,
+      },
+    }
+    if (saleData.cupom) base.cupom = saleData.cupom
+    if (saleData.paymentMethod === 'cartao' && saleData.cardData) {
+      base.pagamento.cartao = {
+        numero: saleData.cardData.numeroCartao.replace(/\D/g, ''),
+        nome: saleData.cardData.nomeCartao,
+        validade: saleData.cardData.validadeCartao,
+        cvv: saleData.cardData.cvvCartao,
+      }
+    }
+    return base
+  }
+
+  private async cadastrarVenda(redeKey: string, publicKey: string, payload: any): Promise<VendaResultado> {
+    const token = await this.authenticate(redeKey, publicKey)
+    const response = await this.request(`${this.baseURL}/psec/vendas/cadastrarVenda`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      timeoutMs: 20000,
+      retries: 1,
+    })
+    if (!response.ok) throw new Error(`Erro ao cadastrar venda: ${response.status}`)
+    const data = await response.json()
+    return safeParse(VendaResultadoSchema, data, 'VendaResultado')
+  }
+
+  async vendaCartao(redeKey: string, publicKey: string, _captcha: string, saleData: SaleData): Promise<PactoResponse> {
     try {
-      if (!this.token) {
-        await this.authenticate()
-      }
-
-      const payload = {
-        unidade: saleData.unidadeId,
-        plano: saleData.planoId,
-        cliente: {
-          nome: saleData.customer.nome,
-          email: saleData.customer.email,
-          telefone: saleData.customer.telefone,
-          cpf: saleData.customer.cpf.replace(/\D/g, ''),
-          endereco: saleData.customer.endereco || '',
-        },
-        cartao: {
-          numero: saleData.cardData?.numeroCartao?.replace(/\D/g, ''),
-          nome: saleData.cardData?.nomeCartao,
-          validade: saleData.cardData?.validadeCartao,
-          cvv: saleData.cardData?.cvvCartao,
-        },
-        valor: parseFloat(saleData.valor.replace(',', '.')),
-      }
-
-      const response = await fetch(`${this.baseURL}/v2/vendas/alunovendaonline/${captcha}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-
-      if (!response.ok) {
-        throw new Error(`Erro no pagamento: ${response.status}`)
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data,
-        transactionId: data.transactionId || data.id,
-      }
+      const payload = this.buildVendaPayload({ ...saleData, paymentMethod: 'cartao' })
+      const result = await this.cadastrarVenda(redeKey, publicKey, payload)
+      return { success: true, data: result, transactionId: result.transacao_id }
     } catch (error) {
       console.error('Erro no pagamento via cartão:', error)
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Erro desconhecido',
-      }
+      return { success: false, error: error instanceof Error ? error.message : 'Erro desconhecido' }
     }
   }
 
   /**
    * Processa venda via PIX
    */
-  async vendaPix(captcha: string, saleData: SaleData): Promise<PactoResponse> {
+  async vendaPix(redeKey: string, publicKey: string, _captcha: string, saleData: SaleData): Promise<PactoResponse> {
     try {
-      if (!this.token) {
-        await this.authenticate()
-      }
-
-      const payload = {
-        unidade: saleData.unidadeId,
-        plano: saleData.planoId,
-        cliente: {
-          nome: saleData.customer.nome,
-          email: saleData.customer.email,
-          telefone: saleData.customer.telefone,
-          cpf: saleData.customer.cpf.replace(/\D/g, ''),
-          endereco: saleData.customer.endereco || '',
-        },
-        valor: parseFloat(saleData.valor.replace(',', '.')),
-      }
-
-      const response = await fetch(`${this.baseURL}/v2/vendas/alunovendaonlinepix/${captcha}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-
-      if (!response.ok) {
-        throw new Error(`Erro no pagamento PIX: ${response.status}`)
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data,
-        pixCode: data.pixCode || data.codigoPix,
-        transactionId: data.transactionId || data.id,
-      }
+      const payload = this.buildVendaPayload({ ...saleData, paymentMethod: 'pix' })
+      const result = await this.cadastrarVenda(redeKey, publicKey, payload)
+      return { success: true, data: result, pixCode: result.pix?.codigo, transactionId: result.transacao_id }
     } catch (error) {
       console.error('Erro no pagamento via PIX:', error)
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Erro desconhecido',
-      }
+      return { success: false, error: error instanceof Error ? error.message : 'Erro desconhecido' }
     }
   }
 
   /**
    * Processa venda via Boleto
    */
-  async vendaBoleto(captcha: string, saleData: SaleData): Promise<PactoResponse> {
+  async vendaBoleto(redeKey: string, publicKey: string, _captcha: string, saleData: SaleData): Promise<PactoResponse> {
     try {
-      if (!this.token) {
-        await this.authenticate()
-      }
-
-      const payload = {
-        unidade: saleData.unidadeId,
-        plano: saleData.planoId,
-        cliente: {
-          nome: saleData.customer.nome,
-          email: saleData.customer.email,
-          telefone: saleData.customer.telefone,
-          cpf: saleData.customer.cpf.replace(/\D/g, ''),
-          endereco: saleData.customer.endereco || '',
-        },
-        valor: parseFloat(saleData.valor.replace(',', '.')),
-      }
-
-      const response = await fetch(`${this.baseURL}/v2/vendas/alunovendaonlineboleto/${captcha}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-
-      if (!response.ok) {
-        throw new Error(`Erro no pagamento boleto: ${response.status}`)
-      }
-
-      const data = await response.json()
-      return {
-        success: true,
-        data,
-        boletoUrl: data.boletoUrl || data.linkBoleto,
-        transactionId: data.transactionId || data.id,
-      }
+      const payload = this.buildVendaPayload({ ...saleData, paymentMethod: 'boleto' })
+      const result = await this.cadastrarVenda(redeKey, publicKey, payload)
+      return { success: true, data: result, boletoUrl: result.boleto?.pdf_url, transactionId: result.transacao_id }
     } catch (error) {
       console.error('Erro no pagamento via boleto:', error)
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Erro desconhecido',
-      }
+      return { success: false, error: error instanceof Error ? error.message : 'Erro desconhecido' }
     }
   }
 
   /**
    * Valida cupom de desconto
    */
-  async validarCupomDesconto(cupom: string, unidadeId: string): Promise<any> {
+  async validarCupomDesconto(redeKey: string, publicKey: string, cupom: string, unidadeId: string): Promise<Cupom | null> {
     try {
-      if (!this.token) {
-        await this.authenticate()
-      }
-
-      const response = await fetch(`${this.baseURL}/psec/vendas/validarCupomDesconto`, {
+      const token = await this.authenticate(redeKey, publicKey)
+      const response = await this.request(`${this.baseURL}/psec/vendas/validarCupomDesconto`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          cupom,
-          unidade: unidadeId,
-        }),
+        body: JSON.stringify({ cupom, unidade: unidadeId }),
       })
-
-      if (!response.ok) {
-        throw new Error(`Erro ao validar cupom: ${response.status}`)
-      }
-
+      if (!response.ok) throw new Error(`Erro ao validar cupom: ${response.status}`)
       const data = await response.json()
-      return data
+      return safeParse(CupomSchema, data, 'Cupom')
     } catch (error) {
       console.error('Erro ao validar cupom:', error)
       return null
@@ -394,21 +347,22 @@ export const getCodigoUnidade = (unidadeId: string): string => {
 }
 
 export const processCheckout = async (
+  redeKey: string,
+  publicKey: string,
   paymentMethod: 'cartao' | 'pix' | 'boleto',
   saleData: SaleData
 ): Promise<PactoResponse> => {
-  // Gerar captcha temporário (em produção, deve ser obtido de um serviço)
-  const captcha = 'temp_captcha_' + Date.now()
-  
   switch (paymentMethod) {
     case 'cartao':
-      return await pactoAPI.vendaCartao(captcha, saleData)
+      return await pactoAPI.vendaCartao(redeKey, publicKey, '', saleData)
     case 'pix':
-      return await pactoAPI.vendaPix(captcha, saleData)
+      return await pactoAPI.vendaPix(redeKey, publicKey, '', saleData)
     case 'boleto':
-      return await pactoAPI.vendaBoleto(captcha, saleData)
+      return await pactoAPI.vendaBoleto(redeKey, publicKey, '', saleData)
     default:
       return { success: false, error: 'Método de pagamento inválido' }
   }
 }
+
+export type { Unidade, Plano, Simulacao, VendaResultado, Cupom, TokenResponse }
 

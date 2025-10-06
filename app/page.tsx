@@ -13,7 +13,6 @@ import UnidadesCarousel from "@/components/unidades-carousel"
 import BeneficiosSection from "@/components/beneficios-section"
 import AppSection from "@/components/app-section"
 import ModalidadesSection from "@/components/modalidades-section"
-import ContatoSection from "@/components/contato-section"
 import WellhubSection from "@/components/wellhub-section"
 import BioimpedanciaSection from "@/components/bioimpedancia-section"
 import EstruturaSection from "@/components/estrutura-section"
@@ -41,8 +40,6 @@ export default function Home() {
       {/* INSERIR AS DUAS NOVAS SEÇÕES AQUI */}
    
 
-      <ContatoSection />
-
       {/* Testimonials */}
       <TestimonialSection />
 
@@ -50,3 +47,5 @@ export default function Home() {
     </main>
   )
 }
+
+export const dynamic = 'force-dynamic'

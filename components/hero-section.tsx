@@ -1,127 +1,121 @@
 "use client"
-import { motion } from "framer-motion"
+
+import { useEffect } from "react"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Star } from "lucide-react"
+
+declare global {
+  interface Window {
+    __inViewIO?: IntersectionObserver
+    initInViewAnimations?: (selector?: string) => void
+  }
+}
+
+const HERO_BG = "hero.jpg"
 
 export default function HeroSection() {
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    if (!window.__inViewIO) {
+      const style = document.createElement("style")
+      style.textContent = `
+        .animate-on-scroll { animation-play-state: paused !important; }
+        .animate-on-scroll.animate { animation-play-state: running !important; }
+      `
+      document.head.appendChild(style)
+
+      window.__inViewIO = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("animate")
+              window.__inViewIO?.unobserve(entry.target)
+            }
+          })
+        },
+        { threshold: 0.2, rootMargin: "0px 0px -10% 0px" }
+      )
+    }
+
+    window.initInViewAnimations = function (selector = ".animate-on-scroll") {
+      document.querySelectorAll(selector).forEach((el) => {
+        window.__inViewIO?.observe(el)
+      })
+    }
+
+    window.initInViewAnimations()
+
+    return () => {
+      window.__inViewIO?.disconnect()
+    }
+  }, [])
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-black text-white overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-yellow-500/10 to-amber-500/10 rounded-full blur-3xl" />
-      </div>
-      
-      {/* Background Image with Overlay */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+    <section className="relative z-0 flex min-h-[92vh] items-end overflow-hidden bg-neutral-950 text-white">
+      <style>{`@keyframes fadeInUp {from {opacity: 0;transform: translateY(30px);filter: blur(8px);}to {opacity: 1;transform: translateY(0);filter: blur(0px);}}@keyframes slideInBlur {from {opacity: 0;transform: translateX(-30px);filter: blur(8px);}to {opacity: 1;transform: translateX(0);filter: blur(0px);}}`}</style>
+
+      <div
+        className="fixed top-0 -z-20 h-screen w-full bg-cover bg-center"
         style={{
-          backgroundImage: "url('/hero.jpg')",
+          backgroundImage: `url(${HERO_BG})`,
         }}
       />
-      
-      {/* Overlay */}
-      <div className="absolute inset-0 z-0 bg-black/60" />
-      
-      {/* Animated Background Shapes */}
-      <div className="absolute inset-0 z-0">
-        <motion.div
-          className="absolute top-[-50%] left-[-20%] w-[80%] h-[150%] bg-gradient-to-br from-yellow-500/20 to-amber-500/20 rounded-full blur-[100px]"
-          animate={{
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 40,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-[-50%] right-[-20%] w-[80%] h-[150%] bg-gradient-to-br from-amber-500/20 to-yellow-500/20 rounded-full blur-[100px]"
-          animate={{
-            rotate: [360, 0],
-          }}
-          transition={{
-            duration: 50,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      </div>
 
-      {/* Content */}
-      <div className="container mx-auto px-4 relative z-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6"
-        >
-          <span className="text-zinc-400 text-sm font-medium">Academia sem fidelidade</span>
-        </motion.div>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-yellow-500/20 via-yellow-400/10 to-transparent" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/30 via-black/50 to-black/70" />
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-5xl sm:text-6xl md:text-7xl font-black mb-6 leading-tight"
-        >
-          SEU TREINO,
-          <br />
-          <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">SUAS REGRAS!</span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-xl text-zinc-300 mb-10 max-w-2xl mx-auto"
-        >
-          Sem fidelidade, sem anuidade, sem pegadinha. A academia que respeita seu bolso e seu tempo.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-        >
-          <Link href="/planos">
-            <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0px 0px 30px rgba(255, 193, 7, 0.5)" }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black px-10 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col justify-end px-6 pb-12 pt-16 sm:px-8">
+        <div className="grid grid-cols-1 items-end gap-6 lg:grid-cols-2 lg:gap-10">
+          <div className="order-1 space-y-3 opacity-0 animate-on-scroll" style={{ animation: "fadeInUp 1.2s ease-out 0.4s both" }}>
+            <h1
+              className="text-5xl font-bold leading-[1.2] tracking-tight sm:text-6xl lg:text-8xl"
             >
-              Comece agora
-              <ArrowRight size={22} />
-            </motion.button>
-          </Link>
-          
-          <Link href="/planos">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="border border-zinc-700 text-zinc-300 hover:text-white px-10 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:bg-zinc-800/50 backdrop-blur-sm"
-            >
-              Ver planos
-            </motion.button>
-          </Link>
-        </motion.div>
-      </div>
+              <span className="block lowercase">seu treino,</span>
+              <span className="block mt-1 lowercase text-live-yellow">suas regras!</span>
+            </h1>
+          </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
-        <div className="w-8 h-12 rounded-full border-2 border-zinc-700 flex justify-center p-2">
-          <motion.div
-            className="w-1 h-3 bg-zinc-400 rounded-full"
-            animate={{ y: [0, 16, 0] }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
+          <div className="order-2 space-y-4 lg:space-y-6">
+            <div
+              className="animate-on-scroll flex flex-col gap-3 opacity-0"
+              style={{ animation: "fadeInUp 0.8s ease-out 0.8s both" }}
+            >
+              <p
+                className="text-base leading-snug text-white/80 sm:text-lg"
+              >
+                Sem fidelidade, sem anuidade, sem pegadinha. A academia que respeita seu bolso e seu tempo.
+              </p>
+            </div>
+
+            <div
+              className="animate-on-scroll flex flex-wrap items-center gap-1 opacity-0"
+              style={{ animation: "fadeInUp 0.8s ease-out 1s both" }}
+            >
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="h-5 w-5 text-live-yellow" />
+              ))}
+            </div>
+
+            <div
+              className="animate-on-scroll flex flex-col gap-3 border-t border-white/15 pt-6 opacity-0 sm:flex-row sm:items-center"
+              style={{ animation: "fadeInUp 0.8s ease-out 1.2s both" }}
+            >
+              <Link
+                href="/planos"
+                className="inline-flex items-center gap-2 rounded-full bg-live-yellow px-7 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-black transition hover:bg-live-yellowLight"
+              >
+                Comece agora
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/planos"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-white/80 transition hover:border-white/40 hover:text-white"
+              >
+                Ver planos
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -153,4 +153,6 @@ export default function AulasColetivas() {
       </div>
     </main>
   )
-}
+}-e 
+
+export const dynamic = 'force-dynamic'

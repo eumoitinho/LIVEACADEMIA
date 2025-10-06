@@ -336,3 +336,6 @@ export default function TrabalheConoscoPage() {
     </main>
   )
 }
+-e 
+
+export const dynamic = 'force-dynamic'

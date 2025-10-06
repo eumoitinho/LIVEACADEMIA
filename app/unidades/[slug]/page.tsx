@@ -89,12 +89,11 @@ const unidadeData = {
   }
 }
 
-interface PageProps {
-  params: { slug: string }
-}
+interface PageProps { params: Promise<{ slug: string }> }
 
-export default function UnidadePage({ params }: PageProps) {
-  const unidade = locations.find(loc => loc.id === params.slug)
+export default async function UnidadePage(props: PageProps) {
+  const { slug } = await props.params
+  const unidade = locations.find(loc => loc.id === slug)
 
   if (!unidade || unidade.type === "inauguracao") {
     notFound()
@@ -104,6 +103,8 @@ export default function UnidadePage({ params }: PageProps) {
 
   return <UnidadeContent unidade={unidade} data={data} />
 }
+
+export const dynamic = 'force-dynamic'
 
 export async function generateStaticParams() {
   // Gerar apenas para unidades ativas (não em inauguração)

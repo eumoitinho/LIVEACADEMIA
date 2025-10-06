@@ -607,4 +607,115 @@
 "compare_link": "https://www.liveacademia.com.br/planos",
 "enrollment_link": "https://vitoriacoroado.hotsite.in"
 }
+	,
+	"V8": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "V8",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	},
+	"Franceses": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "Franceses",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	},
+	"Laranjeiras": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "Laranjeiras",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	},
+	"Jacira": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "Jacira",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	},
+	"Adrianópolis": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "Adrianópolis",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	},
+	"Parque 10": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "Parque 10",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	},
+	"Belém": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "Belém",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	},
+	"Ponta Negra": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "Ponta Negra",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	},
+	"Alphaville": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "Alphaville",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	},
+	"Petrópolis": {
+		"status": "coming_soon",
+		"image_src": null,
+		"alt": "Petrópolis",
+		"map_link": null,
+		"address": null,
+		"view_link": null,
+		"plans": [],
+		"compare_link": "https://www.liveacademia.com.br/planos",
+		"enrollment_link": null
+	}
 }

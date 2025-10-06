@@ -12,7 +12,6 @@ export const metadata: Metadata = {
   title: "Live Academia | Rede de Academias em Manaus",
   description:
     "Transforme seu corpo e sua vida na maior rede de academias de Manaus. Sem fidelidade, sem anuidade, sem pegadinha.",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({

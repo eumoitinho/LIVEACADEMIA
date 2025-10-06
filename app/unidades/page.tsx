@@ -249,4 +249,6 @@ export default function Unidades() {
       </section>
     </main>
   )
-}
+}-e 
+
+export const dynamic = 'force-dynamic'

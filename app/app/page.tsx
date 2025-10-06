@@ -329,3 +329,6 @@ export default function AppPage() {
     </main>
   )
 }
+
+
+export const dynamic = 'force-dynamic'

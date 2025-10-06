@@ -1,9 +1,43 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, CreditCard, QrCode, FileText, Loader2, Check, Copy, ExternalLink } from "lucide-react"
-import { processCheckout, getCodigoUnidade, type SaleData, type PactoResponse } from "@/lib/pacto-api"
+// Removido import direto de pacto-api (server-only). Usaremos rotas internas /api/pacto/venda
+
+interface SimulacaoResumo {
+  valorTotal?: number | string
+  parcelas?: Array<{
+    numero: number
+    valor: number
+    vencimento?: string
+  }>
+}
+
+const normalizeToNumber = (value?: number | string | null) => {
+  if (value === null || value === undefined) return NaN
+  if (typeof value === 'number') return value
+  let sanitized = value.replace(/[R$\s]/gi, '')
+  if (sanitized.includes(',')) {
+    sanitized = sanitized.replace(/\./g, '').replace(',', '.')
+  }
+  const parsed = Number(sanitized)
+  return Number.isNaN(parsed) ? NaN : parsed
+}
+
+const formatCurrency = (value?: number | string | null) => {
+  const numberValue = normalizeToNumber(value)
+  if (Number.isNaN(numberValue)) return 'R$ 0,00'
+  return numberValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+}
+interface PactoResponse {
+  success: boolean
+  error?: string
+  transactionId?: string
+  pixCode?: string
+  boletoUrl?: string
+  data?: any
+}
 
 interface CheckoutModalProps {
   isOpen: boolean
@@ -11,6 +45,7 @@ interface CheckoutModalProps {
   plano: {
     name: string
     price: string
+    codigo?: string
   } | null
   unidadeName: string
   unidadeId: string
@@ -21,6 +56,10 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
   const [paymentMethod, setPaymentMethod] = useState<'cartao' | 'pix' | 'boleto'>('cartao')
   const [loading, setLoading] = useState(false)
   const [paymentResult, setPaymentResult] = useState<PactoResponse | null>(null)
+  const [simulation, setSimulation] = useState<SimulacaoResumo | null>(null)
+  const [simulationLoading, setSimulationLoading] = useState(false)
+  const [simulationError, setSimulationError] = useState<string | null>(null)
+  const [simulationFallback, setSimulationFallback] = useState(false)
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -33,12 +72,24 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
     validadeCartao: '',
     cvvCartao: ''
   })
+  const isMountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
 
   useEffect(() => {
     if (isOpen) {
       setStep(1)
       setPaymentMethod('cartao')
       setLoading(false)
+      setPaymentResult(null)
+      setSimulation(null)
+      setSimulationError(null)
+      setSimulationFallback(false)
+      setSimulationLoading(false)
       setFormData({
         nome: '',
         email: '',
@@ -60,6 +111,68 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
     }))
   }
 
+  const runSimulation = useCallback(async () => {
+    if (!plano || !isMountedRef.current) return
+
+    setSimulationLoading(true)
+    setSimulationError(null)
+    setSimulationFallback(false)
+    setSimulation(null)
+
+    try {
+      const valorNumber = normalizeToNumber(plano.price)
+      const payload: Record<string, any> = {
+        slug: unidadeId,
+        planoId: plano.codigo || `PLANO_${unidadeId}`,
+        paymentMethod,
+      }
+      if (!Number.isNaN(valorNumber)) {
+        payload.valor = Number(valorNumber.toFixed(2))
+      }
+
+      const response = await fetch('/api/pacto/simular', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data?.error || 'Falha na simulação do plano')
+      }
+
+      if (!data?.simulacao) {
+        if (!isMountedRef.current) return
+        setSimulationError('Nenhum resultado de simulação recebido.')
+        return
+      }
+
+      if (!isMountedRef.current) return
+      setSimulation(data.simulacao as SimulacaoResumo)
+      setSimulationFallback(Boolean(data.fallback))
+    } catch (error) {
+      console.error('Erro na simulação:', error)
+      if (!isMountedRef.current) return
+      setSimulationError(error instanceof Error ? error.message : 'Falha na simulação')
+    } finally {
+      if (isMountedRef.current) {
+        setSimulationLoading(false)
+      }
+    }
+  }, [paymentMethod, plano, unidadeId])
+
+  useEffect(() => {
+    if (step === 2 && plano) {
+      runSimulation()
+    }
+  }, [step, plano, runSimulation])
+
+  const handleRetrySimulation = () => {
+    if (!simulationLoading) {
+      runSimulation()
+    }
+  }
+
   const handleNextStep = () => {
     if (step === 1) {
       // Validar dados pessoais
@@ -79,11 +192,12 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
     
     try {
       // Preparar dados para a API Pacto Soluções
-      const saleData: SaleData = {
-        unidadeId: getCodigoUnidade(unidadeId),
-        planoId: `PLANO_${paymentMethod.toUpperCase()}_${unidadeId}`,
+      const saleBody: any = {
+        slug: unidadeId,
+        planoId: plano?.codigo || `PLANO_${unidadeId}`,
         planoNome: plano!.name,
-        valor: plano!.price,
+        valor: parseFloat(plano!.price.replace(',', '.')),
+        paymentMethod,
         customer: {
           nome: formData.nome,
           email: formData.email,
@@ -91,21 +205,23 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
           cpf: formData.cpf,
           endereco: formData.endereco,
         },
-        paymentMethod,
-        ...(paymentMethod === 'cartao' && {
-          cardData: {
-            numeroCartao: formData.numeroCartao,
-            nomeCartao: formData.nomeCartao,
-            validadeCartao: formData.validadeCartao,
-            cvvCartao: formData.cvvCartao,
-          }
-        })
+      }
+      if (paymentMethod === 'cartao') {
+        saleBody.cardData = {
+          numeroCartao: formData.numeroCartao,
+          nomeCartao: formData.nomeCartao,
+          validadeCartao: formData.validadeCartao,
+          cvvCartao: formData.cvvCartao,
+        }
       }
 
-      console.log('Processando pagamento via Pacto API:', saleData)
-      
-      // Processar pagamento via API Pacto Soluções
-      const result = await processCheckout(paymentMethod, saleData)
+      console.log('Processando pagamento via rota interna /api/pacto/venda', saleBody)
+      const res = await fetch('/api/pacto/venda', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(saleBody),
+      })
+      const result: PactoResponse = await res.json()
       
       setPaymentResult(result)
       

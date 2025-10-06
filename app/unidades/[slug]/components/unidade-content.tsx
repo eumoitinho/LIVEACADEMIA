@@ -5,7 +5,8 @@ import { motion } from "framer-motion"
 import { MapPin, Clock, CheckCircle, Star, Phone, ExternalLink } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import PlanosCards from "@/components/planos-cards"
+// PlanosCards agora consumido por wrapper de carregamento dinâmico
+import UnitPlanos from "@/components/unit-planos"
 import CheckoutModal from "@/components/checkout-modal"
 import { useUnit } from "@/contexts/unit-context"
 
@@ -35,7 +36,7 @@ interface UnidadeContentProps {
 
 export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string} | null>(null)
+  const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string; codigo?: string} | null>(null)
   const { setCurrentUnit } = useUnit()
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
     }
   }, [unidade, setCurrentUnit])
 
-  const handleMatricular = (plano: {name: string; price: string}) => {
+  const handleMatricular = (plano: {name: string; price: string; codigo?: string}) => {
     setSelectedPlano(plano)
     setIsModalOpen(true)
   }
@@ -139,14 +140,13 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
         </div>
       </section>
 
-      {/* Cards de Planos */}
-      {unidade.planos && unidade.planos.length > 0 && (
-        <PlanosCards 
-          planos={unidade.planos}
-          unidadeName={unidade.name}
-          onMatricular={handleMatricular}
-        />
-      )}
+      {/* Planos Dinâmicos da API Pacto (com fallback estático existente em locations) */}
+      <UnitPlanos
+        slug={unidade.id}
+        unidadeName={unidade.name}
+        fallbackPlanos={unidade.planos}
+        onMatricular={handleMatricular}
+      />
 
       {/* Galeria de Fotos */}
       <section className="py-16">

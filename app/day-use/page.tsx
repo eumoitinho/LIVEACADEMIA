@@ -183,4 +183,6 @@ export default function DayUse() {
       </div>
     </main>
   )
-}
+}-e 
+
+export const dynamic = 'force-dynamic'
