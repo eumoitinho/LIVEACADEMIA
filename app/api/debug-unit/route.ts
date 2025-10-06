@@ -27,6 +27,7 @@ export async function GET(req: Request) {
     hasApiKeyPlain: !!unit.apiKeyPlain,
     apiKeyPlainPreview: unit.apiKeyPlain?.substring(0, 10),
     hasChavePublica: !!unit.chave_publica,
+    chavePublicaFull: unit.chave_publica, // FULL VALUE
     chavePublicaPreview: unit.chave_publica?.substring(0, 10),
     hasEncryptedKey: !!unit.chave_api,
     encryptedKeyPreview: unit.chave_api ? JSON.parse(unit.chave_api).data?.substring(0, 10) : null,
