@@ -11,6 +11,8 @@ import sectionEstrutura from './sections/estrutura'
 import sectionModalidades from './sections/modalidades'
 import sectionApp from './sections/app'
 import sectionTestimonials from './sections/testimonials'
+import sectionBioimpedancia from './sections/bioimpedancia'
+import sectionWellhub from './sections/wellhub'
 
 export default [
   globalSettings,
@@ -26,4 +28,6 @@ export default [
   sectionPlanos,
   sectionApp,
   sectionTestimonials,
+  sectionBioimpedancia,
+  sectionWellhub,
 ]

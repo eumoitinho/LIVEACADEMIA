@@ -1,9 +1,12 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Activity, BarChart3, Eye, Zap, ArrowRight, CheckCircle, Sparkles, Target, TrendingUp } from "lucide-react"
+import { Activity, BarChart3, Eye, Zap, ArrowRight, CheckCircle, Sparkles, Target, TrendingUp, Droplets } from "lucide-react"
+import type { BioimpedanciaSectionData } from "@/types/cms-sections"
 
-const dadosBioimpedancia = [
+interface Props { data?: BioimpedanciaSectionData }
+
+const fallbackDados = [
   {
     icon: Activity,
     titulo: "Peso e IMC",
@@ -23,21 +26,41 @@ const dadosBioimpedancia = [
     color: "from-yellow-500 to-amber-600"
   },
   {
-    icon: Activity,
+    icon: Droplets,
     titulo: "Água Corporal",
     descricao: "Quantidade de água no organismo para hidratação ideal",
     color: "from-amber-400 to-yellow-500"
   }
 ]
 
-const beneficiosBioimpedancia = [
+const fallbackBeneficios = [
   "É um exame fundamental para traçar metas realistas e acompanhar sua evolução de forma objetiva",
   "Disponível em diversas unidades Diamante",
   "Acompanhe sua evolução de forma objetiva e personalizada"
 ]
 
-export default function BioimpedanciaSection() {
+const iconMap: Record<string, any> = {
+  activity: Activity,
+  barchart: BarChart3,
+  zap: Zap,
+  agua: Droplets,
+}
+
+export default function BioimpedanciaSection({ data }: Props) {
   const easing = [0.16, 1, 0.3, 1] as const
+  const heading = data?.heading || 'Bioimpedância e análise 3D: monitore o progresso do seu corpo'
+  const subheading = data?.subheading || 'Com o exame de bioimpedância, disponível em diversas unidades Diamante, você tem acesso a dados completos sobre sua composição corporal.'
+  const beneficiosBioimpedancia = (data?.beneficiosIntro?.length ? data.beneficiosIntro : fallbackBeneficios)
+  const dadosBioimpedancia = (data?.dados?.length ? data.dados.map(d => ({
+    icon: iconMap[d.icon || 'activity'] || Activity,
+    titulo: d.titulo || 'Item',
+    descricao: d.descricao || '',
+    color: `from-yellow-400 to-amber-500`
+  })) : fallbackDados)
+  const cta3dLabel = data?.cta3dLabel || 'AGENDAR ANÁLISE 3D'
+  const highlightPrice = data?.highlightPrice || 'R$ 100'
+  const bottomPrimary = { label: data?.bottomPrimaryCtaLabel || 'SAIBA MAIS!', href: data?.bottomPrimaryCtaHref || '#' }
+  const bottomSecondary = { label: data?.bottomSecondaryCtaLabel || 'VER UNIDADES DIAMANTE', href: data?.bottomSecondaryCtaHref || '#' }
 
   return (
     <section className="relative py-24 px-6 lg:px-12 overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-black">
@@ -85,7 +108,7 @@ export default function BioimpedanciaSection() {
             viewport={{ once: true }}
             className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight"
           >
-            Bioimpedância e análise 3D: <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-pulse">monitore o progresso</span> do seu corpo
+            {heading}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -94,7 +117,7 @@ export default function BioimpedanciaSection() {
             viewport={{ once: true }}
             className="text-lg text-zinc-300 max-w-4xl mx-auto"
           >
-            Com o exame de bioimpedância, disponível em diversas unidades Diamante, você tem acesso a dados completos sobre sua composição corporal.
+            {subheading}
           </motion.p>
         </motion.div>
 
@@ -225,8 +248,7 @@ export default function BioimpedanciaSection() {
                 viewport={{ once: true }}
               >
                 Para uma experiência ainda mais inovadora, a unidade Flores Diamante conta com a exclusiva
-                Análise Corporal 3D da Bodygee. Esta tecnologia representa uma evolução da bioimpedância tradicional,
-                criando um modelo de avatar 3D fotorrealista do seu corpo.
+                Análise Corporal 3D da Bodygee. Esta tecnologia representa uma evolução da bioimpedância tradicional, criando um modelo de avatar 3D fotorrealista do seu corpo.
               </motion.p>
               <motion.p
                 className="text-zinc-400 mb-8"
@@ -236,12 +258,13 @@ export default function BioimpedanciaSection() {
                 viewport={{ once: true }}
               >
                 Com ela, você pode visualizar seu progresso de forma detalhada e tridimensional por apenas
-                <span className="text-yellow-400 font-bold animate-pulse"> R$ 100</span>.
+                <span className="text-yellow-400 font-bold animate-pulse"> {highlightPrice}</span>.
               </motion.p>
             </div>
 
             <div className="relative z-10 text-center">
-              <motion.button
+              <motion.a
+                href={data?.cta3dHref || '#'}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0, y: 20 }}
@@ -250,9 +273,9 @@ export default function BioimpedanciaSection() {
                 viewport={{ once: true }}
                 className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 inline-flex items-center gap-3 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
               >
-                AGENDAR ANÁLISE 3D
+                {cta3dLabel}
                 <ArrowRight className="w-5 h-5" />
-              </motion.button>
+              </motion.a>
             </div>
 
             {/* Sparkle effect */}
@@ -322,20 +345,22 @@ export default function BioimpedanciaSection() {
             transition={{ duration: 0.6, delay: 1.3, ease: easing }}
             viewport={{ once: true }}
           >
-            <motion.button
+            <motion.a
+              href={bottomPrimary.href}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
             >
-              SAIBA MAIS!
-            </motion.button>
-            <motion.button
+              {bottomPrimary.label}
+            </motion.a>
+            <motion.a
+              href={bottomSecondary.href}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="border border-zinc-700 text-zinc-300 hover:text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:bg-zinc-800/50 backdrop-blur-sm hover:border-yellow-500/30"
             >
-              VER UNIDADES DIAMANTE
-            </motion.button>
+              {bottomSecondary.label}
+            </motion.a>
           </motion.div>
         </motion.div>
       </div>

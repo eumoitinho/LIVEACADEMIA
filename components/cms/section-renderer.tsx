@@ -8,6 +8,8 @@ import ModalidadesSection from '@/components/modalidades-section'
 import PlanosSection from '@/components/planos-section'
 import AppSection from '@/components/app-section'
 import TestimonialSection from '@/components/testimonial-section'
+import BioimpedanciaSection from '@/components/bioimpedancia-section'
+import WellhubSection from '@/components/wellhub-section'
 
 // Enquanto os componentes ainda não aceitam props dinâmicos, renderizamos os existentes.
 // Depois faremos variantes CMS-friendly.
@@ -32,6 +34,10 @@ export function renderSection(section: any, index: number) {
       return <AppSection key={index} />
     case 'testimonialsSection':
       return <TestimonialSection key={index} data={section} />
+    case 'bioimpedanciaSection':
+      return <BioimpedanciaSection key={index} data={section} />
+    case 'wellhubSection':
+      return <WellhubSection key={index} data={section} />
     default:
       return null
   }

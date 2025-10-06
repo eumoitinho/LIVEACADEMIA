@@ -25,6 +25,8 @@ export async function getPageBySlug(slug: string) {
         , _type == 'planosSection' => { _type, heading, planos }
         , _type == 'appSection' => { _type, heading, description, ctaLabel, ctaHref, screenshot }
         , _type == 'testimonialsSection' => { _type, heading, items }
+        , _type == 'bioimpedanciaSection' => { _type, heading, subheading, beneficiosIntro, dados, cta3dLabel, cta3dHref, highlightPrice, bottomPrimaryCtaLabel, bottomPrimaryCtaHref, bottomSecondaryCtaLabel, bottomSecondaryCtaHref }
+        , _type == 'wellhubSection' => { _type, heading, subheading, parceriaLabel, cards, detalhes, primaryCtaLabel, primaryCtaHref, secondaryCtaLabel, secondaryCtaHref, bannerTitle, bannerText, bannerPrimaryCtaLabel, bannerPrimaryCtaHref, bannerSecondaryCtaLabel, bannerSecondaryCtaHref }
       }
     }`,
     { slug }
@@ -48,6 +50,8 @@ export async function getHomePage() {
         , _type == 'planosSection' => { _type, heading, planos }
         , _type == 'appSection' => { _type, heading, description, ctaLabel, ctaHref, screenshot }
         , _type == 'testimonialsSection' => { _type, heading, items }
+        , _type == 'bioimpedanciaSection' => { _type, heading, subheading, beneficiosIntro, dados, cta3dLabel, cta3dHref, highlightPrice, bottomPrimaryCtaLabel, bottomPrimaryCtaHref, bottomSecondaryCtaLabel, bottomSecondaryCtaHref }
+        , _type == 'wellhubSection' => { _type, heading, subheading, parceriaLabel, cards, detalhes, primaryCtaLabel, primaryCtaHref, secondaryCtaLabel, secondaryCtaHref, bannerTitle, bannerText, bannerPrimaryCtaLabel, bannerPrimaryCtaHref, bannerSecondaryCtaLabel, bannerSecondaryCtaHref }
       }
     }`
   )

@@ -26,6 +26,8 @@ export default defineType({
         { type: 'planosSection' },
         { type: 'appSection' },
         { type: 'testimonialsSection' },
+        { type: 'bioimpedanciaSection' },
+        { type: 'wellhubSection' },
       ],
     },
     {

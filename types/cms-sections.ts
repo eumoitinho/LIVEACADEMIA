@@ -64,10 +64,48 @@ export interface BeneficiosSectionData {
   items?: BeneficioItemData[]
 }
 
+export interface BioimpedanciaDataItem { icon?: string; titulo?: string; descricao?: string; colorFrom?: string; colorTo?: string; _key?: string }
+export interface BioimpedanciaSectionData {
+  _type: 'bioimpedanciaSection'
+  heading?: string
+  subheading?: string
+  beneficiosIntro?: string[]
+  dados?: BioimpedanciaDataItem[]
+  cta3dLabel?: string
+  cta3dHref?: string
+  highlightPrice?: string
+  bottomPrimaryCtaLabel?: string
+  bottomPrimaryCtaHref?: string
+  bottomSecondaryCtaLabel?: string
+  bottomSecondaryCtaHref?: string
+}
+
+export interface WellhubCard { icon?: string; titulo?: string; descricao?: string; _key?: string }
+export interface WellhubSectionData {
+  _type: 'wellhubSection'
+  heading?: string
+  subheading?: string
+  parceriaLabel?: string
+  cards?: WellhubCard[]
+  detalhes?: string[]
+  primaryCtaLabel?: string
+  primaryCtaHref?: string
+  secondaryCtaLabel?: string
+  secondaryCtaHref?: string
+  bannerTitle?: string
+  bannerText?: string
+  bannerPrimaryCtaLabel?: string
+  bannerPrimaryCtaHref?: string
+  bannerSecondaryCtaLabel?: string
+  bannerSecondaryCtaHref?: string
+}
+
 export type AnySection =
   | HeroSectionData
   | AboutSectionData
   | PlanosSectionData
   | TestimonialsSectionData
   | BeneficiosSectionData
+  | BioimpedanciaSectionData
+  | WellhubSectionData
   | Record<string, any>
