@@ -1,66 +1,58 @@
 "use client"
 
-import { Check, Star, Crown, Sparkles, Clock, ArrowUpRight, Zap, MessagesSquare } from "lucide-react"
+import { Check, Star, Crown, Clock, ArrowUpRight, Zap } from "lucide-react"
 import { motion } from "framer-motion"
-import Image from "next/image"
+import type { PlanosSectionData, PlanCardData } from "@/types/cms-sections"
 
-const planos = [
+interface Props { data?: PlanosSectionData }
+
+// Provide a rich fallback mirroring previous static content if CMS empty
+const fallbackPlans: PlanCardData[] = [
   {
-    nome: "TRADICIONAL",
-    preco: "119,90",
-    periodo: "mês",
-    descricao: "Treine em todas as unidades Tradicionais, incluindo as Tradicionais Climatizadas.",
-    beneficios: [
+    name: "TRADICIONAL",
+    price: "119,90",
+    features: [
       "Sem fidelidade",
       "Sem taxa de cancelamento",
       "Sem taxa de manutenção",
       "Sem taxa de anuidade",
       "Acesso ao app Live Academia",
-      "Aulas coletivas",
-      "Climatização (apenas unidades Torquato Bemol e Tiradentes)",
-      "Atendimento aos domingos (consultar unidade)"
+      "Aulas coletivas"
     ],
-    gradient: "from-zinc-700 to-zinc-900",
-    icone: Check,
-    popular: false,
-    numero: "01",
-    setup: "Setup em 24 horas",
-    dots: [true, true, false],
-    image: "/images/academia-1.webp"
+    ctaLabel: "Matricule-se",
+    ctaHref: "/planos",
+    highlight: false
   },
   {
-    nome: "DIAMANTE",
-    preco: "159,90",
-    periodo: "mês",
-    descricao: "Treine em todas as unidades da rede em Manaus, exceto Morada do Sol e Alphaville.",
-    beneficios: [
+    name: "DIAMANTE",
+    price: "159,90",
+    features: [
       "Sem fidelidade",
       "Sem taxa de cancelamento",
       "Sem taxa de manutenção",
       "Sem taxa de anuidade",
       "Acesso ao app Live Academia",
       "Espaço Relax",
-      "Espaço Yoga",
-      "Espaço Pose",
-      "Acesso ao Studio de Bike",
-      "Aulas coletivas",
-      "Climatização",
-      "Atendimento aos domingos"
+      "Aulas coletivas"
     ],
-    gradient: "from-amber-500 to-yellow-600",
-    icone: Crown,
-    popular: true,
-    destaque: true,
-    badge: "O mais vendido",
-    numero: "02",
-    setup: "Setup em 12 horas",
-    dots: [true, true, true],
-    image: "/images/academia-3.webp"
+    ctaLabel: "Matricule-se",
+    ctaHref: "/planos",
+    highlight: true
   }
 ]
 
-export default function PlanosSection() {
+export default function PlanosSection({ data }: Props) {
   const easing = [0.16, 1, 0.3, 1] as const
+  const heading = data?.heading || "Conheça nossos planos"
+  const planos = (data?.planos?.length ? data.planos : fallbackPlans).map((p, idx) => ({
+    ...p,
+    numero: (idx + 1).toString().padStart(2, '0'),
+    dots: [true, true, p.highlight],
+    setup: p.highlight ? 'Setup em 12 horas' : 'Setup em 24 horas',
+    badge: p.highlight ? 'O mais vendido' : undefined,
+    destaque: p.highlight,
+    beneficios: p.features || []
+  }))
 
   return (
     <section className="relative py-24 px-6 lg:px-12 overflow-hidden bg-black" id="planos">
@@ -83,7 +75,14 @@ export default function PlanosSection() {
             <span className="text-xs font-normal">Planos sem pegadinha</span>
           </div>
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">
-            Conheça nossos <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">planos</span>
+            {heading.split(/planos/i).length > 1 ? (
+              <>
+                {heading.replace(/planos.*/i, '').trim()} {" "}
+                <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">planos</span>
+              </>
+            ) : (
+              heading
+            )}
           </h2>
           <p className="text-lg text-zinc-400 max-w-3xl mx-auto">
             Escolha o plano que cresce com você e se adapta às suas necessidades de treino.
@@ -91,9 +90,9 @@ export default function PlanosSection() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {planos.map((plano, idx) => (
+          {planos.map((plano: any, idx: number) => (
             <motion.article
-              key={plano.nome}
+              key={plano.name || plano.nome}
               initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: idx * 0.1, ease: easing }}
@@ -104,11 +103,11 @@ export default function PlanosSection() {
                 }`}
             >
               {/* Popular Badge */}
-              {plano.popular && (
+              {plano.destaque && (
                 <div className="absolute right-4 top-4">
                   <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-500 text-black text-xs font-bold">
                     <Star className="h-3 w-3" />
-                    {plano.badge}
+                    {plano.badge || 'Destaque'}
                   </div>
                 </div>
               )}
@@ -141,12 +140,11 @@ export default function PlanosSection() {
               {/* Core */}
               <div className="mb-5 flex items-start justify-between">
                 <div>
-                  <h3 className="text-2xl sm:text-3xl text-white font-medium tracking-tight">{plano.nome}</h3>
-                  <p className="mt-1 text-sm text-zinc-400">{plano.descricao}</p>
+                  <h3 className="text-2xl sm:text-3xl text-white font-medium tracking-tight">{plano.name || plano.nome}</h3>
+                  {plano.descricao && <p className="mt-1 text-sm text-zinc-400">{plano.descricao}</p>}
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl sm:text-3xl text-white font-medium tracking-tight">R$ {plano.preco}</p>
-                  <p className="text-xs text-zinc-500">por {plano.periodo}</p>
+                  {plano.price && <p className="text-2xl sm:text-3xl text-white font-medium tracking-tight">R$ {plano.price}</p>}
                 </div>
               </div>
 
@@ -154,7 +152,7 @@ export default function PlanosSection() {
                   ? 'bg-white/90 text-zinc-900 hover:bg-white'
                   : 'bg-white/90 text-zinc-900 hover:bg-white'
                 }`}>
-                Matricule-se
+                {plano.ctaLabel || 'Matricule-se'}
                 {plano.destaque ? <Zap className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
               </button>
 
@@ -162,7 +160,7 @@ export default function PlanosSection() {
               <div>
                 <p className="text-xs text-zinc-400 mb-3">Tudo que você precisa:</p>
                 <ul className="space-y-3">
-                  {plano.beneficios.slice(0, 3).map((beneficio, i) => (
+                  {(plano.beneficios as string[]).slice(0, 3).map((beneficio: string, i: number) => (
                     <li key={i} className="flex items-start gap-3">
                       <span className={`mt-0.5 h-5 w-5 rounded-full flex items-center justify-center backdrop-blur ${plano.destaque ? 'bg-zinc-900/70 border border-yellow-500/20' : 'bg-zinc-900/70 border border-white/10'
                         }`}>
@@ -171,11 +169,11 @@ export default function PlanosSection() {
                       <span className="text-sm text-zinc-300">{beneficio}</span>
                     </li>
                   ))}
-                  {plano.beneficios.length > 3 && (
+                  {(plano.beneficios as string[]).length > 3 && (
                     <li className="flex items-start gap-3">
                       <span className={`mt-0.5 h-5 w-5 rounded-full flex items-center justify-center backdrop-blur ${plano.destaque ? 'bg-zinc-900/70 border border-yellow-500/20' : 'bg-zinc-900/70 border border-white/10'
                         }`}>
-                        <span className="text-xs text-zinc-400">+{plano.beneficios.length - 3}</span>
+                        <span className="text-xs text-zinc-400">+{(plano.beneficios as string[]).length - 3}</span>
                       </span>
                       <span className="text-sm text-zinc-300">mais benefícios inclusos</span>
                     </li>
@@ -196,9 +194,6 @@ export default function PlanosSection() {
         >
           <p className="text-xs text-zinc-500">
             Os preços, serviços e condições promocionais podem variar de acordo com a unidade escolhida.
-            <a href="#" className="underline decoration-zinc-700 underline-offset-4 text-zinc-300 hover:text-white ml-1">
-              Ver comparação detalhada
-            </a>.
           </p>
         </motion.div>
       </div>

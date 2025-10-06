@@ -15,9 +15,9 @@ import TestimonialSection from '@/components/testimonial-section'
 export function renderSection(section: any, index: number) {
   switch (section?._type) {
     case 'heroSection':
-      return <HeroSection key={index} />
+      return <HeroSection key={index} data={section} />
     case 'aboutSection':
-      return <AboutSection key={index} />
+      return <AboutSection key={index} data={section} />
     case 'unidadesSection':
       return <UnidadesCarousel key={index} />
     case 'beneficiosSection':
@@ -27,11 +27,11 @@ export function renderSection(section: any, index: number) {
     case 'modalidadesSection':
       return <ModalidadesSection key={index} />
     case 'planosSection':
-      return <PlanosSection key={index} />
+      return <PlanosSection key={index} data={section} />
     case 'appSection':
       return <AppSection key={index} />
     case 'testimonialsSection':
-      return <TestimonialSection key={index} />
+      return <TestimonialSection key={index} data={section} />
     default:
       return null
   }
