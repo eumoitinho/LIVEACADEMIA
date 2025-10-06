@@ -8,4 +8,5 @@ export default defineCliConfig({
     projectId: projectId || 'YOUR_PROJECT_ID',
     dataset: dataset || 'production',
   },
+  studioHost: 'liveacademia',
 })
