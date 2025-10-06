@@ -10,7 +10,8 @@
     "start": "next start",
     "fetch:unit-keys": "node scripts/fetch-unit-keys.js",
     "seed": "tsx scripts/seed-supabase.ts",
-    "seed:reset": "tsx scripts/reset-supabase.ts"
+    "seed:reset": "tsx scripts/reset-supabase.ts",
+    "seed:home": "tsx scripts/seed-sanity-home.ts"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
