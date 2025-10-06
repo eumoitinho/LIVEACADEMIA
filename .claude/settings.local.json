@@ -25,7 +25,8 @@
       "Bash(psql:*)",
       "Bash(pnpm build:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }
