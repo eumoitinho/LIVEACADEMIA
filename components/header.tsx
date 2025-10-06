@@ -57,22 +57,16 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/">
-              {currentUnit && currentUnit.logo ? (
-                <div className="flex items-center gap-2">
-                  <img 
-                    src={currentUnit.logo}
-                    alt={`Logo ${currentUnit.name}`}
-                    className="h-8 w-auto object-contain"
-                  />
-                  <span className={`text-sm font-semibold transition-all duration-500 ${
+              <div className="flex flex-col items-center gap-1">
+                <LiveLogo className={`h-8 w-auto transition-all duration-500 ${isScrolled ? "" : "brightness-0 invert"}`} />
+                {currentUnit && (
+                  <span className={`text-xs font-semibold transition-all duration-500 ${
                     isScrolled ? "text-white" : "text-white"
                   }`}>
                     {currentUnit.name}
                   </span>
-                </div>
-              ) : (
-                <LiveLogo className={`h-8 w-auto transition-all duration-500 ${isScrolled ? "" : "brightness-0 invert"}`} />
-              )}
+                )}
+              </div>
             </Link>
           </div>
 

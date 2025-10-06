@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { MapPin, Clock, Check, Phone, Dumbbell, Users } from "lucide-react"
-import Image from "next/image"
+import { MapPin, Clock, Check, Phone, Users, Dumbbell } from "lucide-react"
 import Link from "next/link"
 import UnitPlanos from "@/components/unit-planos"
 import CheckoutModal from "@/components/checkout-modal"
@@ -73,55 +72,30 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           />
         )}
 
-        <div className="relative z-10 h-full flex items-center justify-center">
-          <div className="absolute left-8 top-8 max-w-2xl">
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/60 z-[1]"></div>
+
+        <div className="relative z-10 h-full flex items-center">
+          <div className="w-full max-w-7xl mx-auto px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
+              className="max-w-2xl"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-16 h-16 bg-live-yellow backdrop-blur-md rounded-xl p-3 border border-live-yellow shadow-lg">
-                  <Image
-                    src="/images/logo-live-premium.svg"
-                    alt="Live Academia"
-                    width={48}
-                    height={48}
-                    className="object-contain"
-                  />
-                </div>
-                <span className={`px-4 py-2 rounded-full text-xs font-bold backdrop-blur-md ${
-                  unidade.type === 'diamante' ? 'bg-black/80 text-live-yellow border border-live-yellow/30' :
-                  unidade.type === 'premium' ? 'bg-live-yellow/90 text-black' :
-                  'bg-white/90 text-black'
-                }`}>
-                  {unidade.type === 'diamante' ? 'DIAMANTE' : unidade.type === 'premium' ? 'PREMIUM' : 'TRADICIONAL'}
-                </span>
-              </div>
-
               <h1 className="text-7xl sm:text-8xl font-semibold text-white tracking-tight leading-none mb-4">
                 {unidade.name}
               </h1>
-              <p className="text-2xl font-normal text-white/90 tracking-tight max-w-xl">
+              <p className="text-2xl font-normal text-white/90 tracking-tight bg-black/40 backdrop-blur-sm px-6 py-4 rounded-2xl inline-block">
                 Sua jornada de transformação começa aqui. Equipamentos de ponta, ambiente motivador e resultados reais.
               </p>
+
+              <div className="mt-6 flex items-center gap-2 text-sm text-white/90 bg-black/40 backdrop-blur-sm px-6 py-3 rounded-full inline-flex">
+                <MapPin className="h-4 w-4" />
+                <span className="font-medium">{unidade.address}</span>
+              </div>
             </motion.div>
           </div>
-
-          <button className="group inline-flex items-center gap-4 px-6 py-4 rounded-full bg-live-yellow backdrop-blur-md hover:bg-live-yellowLight transition border border-live-yellow shadow-md">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-black text-live-yellow">
-              <Dumbbell className="h-6 w-6" />
-            </span>
-            <div className="text-left">
-              <p className="text-xl leading-tight font-semibold tracking-tight text-black">Faça um Tour</p>
-              <p className="text-xs text-black/70">Conheça nossa estrutura</p>
-            </div>
-          </button>
-        </div>
-
-        <div className="absolute right-6 top-6 flex items-center gap-2 text-xs text-white/90 bg-black/40 backdrop-blur-md px-4 py-2 rounded-full">
-          <MapPin className="h-4 w-4" />
-          <span className="font-medium">{unidade.address}</span>
         </div>
       </section>
 
