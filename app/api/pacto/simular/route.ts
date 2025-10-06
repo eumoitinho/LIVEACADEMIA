@@ -18,16 +18,22 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    console.log(`[Simular] Buscando unidade com slug: ${slug}`)
     const unit = await getUnitBySlug(slug)
+    console.log(`[Simular] Unit result:`, unit ? `Found: ${unit.nome}` : 'NULL')
 
     if (!unit) {
+      console.error(`[Simular ${slug}] Unidade não encontrada no banco`)
       return NextResponse.json({ error: 'Unidade não encontrada' }, { status: 404 })
     }
 
     const redeKey = unit.apiKeyPlain
     const publicKey = unit.chave_publica
 
+    console.log(`[Simular ${slug}] Keys check - redeKey: ${!!redeKey} (${redeKey?.substring(0,10)}...), publicKey: ${!!publicKey} (${publicKey?.substring(0,10)}...)`)
+
     if (!redeKey || !publicKey) {
+      console.error(`[Simular ${slug}] Chaves ausentes - redeKey: ${!!redeKey}, publicKey: ${!!publicKey}`)
       return NextResponse.json({ error: 'Chaves da unidade ausentes' }, { status: 503 })
     }
 
