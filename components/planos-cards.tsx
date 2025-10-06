@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Check, CreditCard, ShieldCheck, Globe } from "lucide-react"
+import { Check, CreditCard, X, ChevronDown } from "lucide-react"
 
 interface PlanoItem {
   name: string
@@ -23,106 +23,139 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
 
   const isPremiumPlan = (name: string) => name.toLowerCase().includes('premium') || name.toLowerCase().includes('diamante')
 
+  // Separar planos
+  const premiumPlano = planos.find(p => isPremiumPlan(p.name))
+  const normalPlano = planos.find(p => !isPremiumPlan(p.name))
+
+  if (!premiumPlano || !normalPlano) {
+    return null
+  }
+
+  const features = [
+    {
+      section: 'Benefícios Principais',
+      items: [
+        { label: 'Sem taxa de matrícula', normal: true, premium: true },
+        { label: 'Sem fidelidade', normal: true, premium: true },
+        { label: 'Acesso via app Live', normal: true, premium: true },
+        { label: 'Todas as modalidades', normal: true, premium: true },
+      ]
+    },
+    {
+      section: 'Estrutura Premium',
+      items: [
+        { label: 'Ambiente climatizado', normal: false, premium: true },
+        { label: 'Espaços exclusivos', normal: false, premium: true },
+        { label: 'Equipamentos premium', normal: false, premium: true },
+        { label: 'Vestiários VIP', normal: false, premium: true },
+      ]
+    },
+    {
+      section: 'Serviços',
+      items: [
+        { label: 'Avaliação física', normal: true, premium: true },
+        { label: 'App de treinos', normal: true, premium: true },
+        { label: 'Suporte prioritário', normal: false, premium: true },
+        { label: 'Personal trainer', normal: false, premium: true },
+      ]
+    }
+  ]
+
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      {planos.map((plano, index) => {
-        const premium = isPremiumPlan(plano.name)
+    <div className="max-w-6xl mx-auto">
+      {/* Comparison Table */}
+      <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-live-bg/50 backdrop-blur-sm">
+        {/* Header */}
+        <div className="grid grid-cols-3 border-b border-white/10">
+          <div className="p-6 bg-black/20"></div>
 
-        return (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.15 }}
-            className={`relative rounded-3xl overflow-hidden ${
-              premium
-                ? 'bg-live-yellow border-2 border-live-yellowLight'
-                : 'bg-white/5 border border-white/10'
-            } hover:scale-105 transition-all duration-300 shadow-2xl`}
-          >
-            {/* Popular Badge */}
-            {premium && (
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <span className="bg-black text-live-yellow px-4 py-1 rounded-full text-xs font-bold uppercase">
-                  Mais Popular
-                </span>
-              </div>
-            )}
+          {/* Normal Plan Header */}
+          <div className="p-6 border-l border-white/10 text-center bg-black/20 hover:bg-black/30 transition-all">
+            <div className="text-lg font-medium text-white">{normalPlano.name}</div>
+            <div className="mt-2 text-4xl font-bold text-live-yellow">R$ {normalPlano.price}</div>
+            <div className="mt-1 text-gray-400 text-sm">/mês</div>
+          </div>
 
-            {/* Card Header */}
-            <div className={`p-8 text-center ${premium ? 'bg-black/5' : 'bg-white/5'}`}>
-              <h3 className={`text-2xl font-bold mb-2 ${premium ? 'text-black' : 'text-white'}`}>
-                {plano.name}
-              </h3>
-              <div className="flex items-baseline justify-center gap-1">
-                <span className={`text-5xl font-bold ${premium ? 'text-black' : 'text-live-yellow'}`}>
-                  R$ {plano.price}
-                </span>
-                <span className={`text-lg ${premium ? 'text-black/60' : 'text-gray-400'}`}>/mês</span>
+          {/* Premium Plan Header */}
+          <div className="p-6 border-l border-white/10 text-center bg-live-yellow/10 relative hover:bg-live-yellow/15 transition-all">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-live-yellow to-live-yellowLight"></div>
+            <div className="text-lg font-medium text-white">{premiumPlano.name}</div>
+            <div className="mt-2 text-4xl font-bold text-live-yellow">R$ {premiumPlano.price}</div>
+            <div className="mt-1 text-gray-400 text-sm">/mês</div>
+            <div className="mt-2 inline-block rounded-full bg-live-yellow/20 px-3 py-1 text-xs text-live-yellow ring-1 ring-live-yellow/30 font-bold">
+              MAIS POPULAR
+            </div>
+          </div>
+        </div>
+
+        {/* Features Sections */}
+        {features.map((section, sectionIndex) => (
+          <div key={sectionIndex}>
+            {/* Section Header */}
+            <div className="grid grid-cols-3 border-b border-white/10">
+              <div className="p-6 bg-black/30" colSpan={3}>
+                <span className="text-xs font-semibold uppercase tracking-wider text-live-yellow">{section.section}</span>
               </div>
+              <div className="p-6 border-l border-white/10 bg-black/30"></div>
+              <div className="p-6 border-l border-white/10 bg-black/30"></div>
             </div>
 
-            {/* Features */}
-            <div className="p-8 space-y-4">
-              <div className="flex items-start gap-3">
-                <Check className={`h-5 w-5 mt-0.5 flex-shrink-0 ${premium ? 'text-black' : 'text-live-yellow'}`} />
-                <span className={`text-sm ${premium ? 'text-black' : 'text-gray-300'}`}>
-                  Sem taxa de matrícula
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className={`h-5 w-5 mt-0.5 flex-shrink-0 ${premium ? 'text-black' : 'text-live-yellow'}`} />
-                <span className={`text-sm ${premium ? 'text-black' : 'text-gray-300'}`}>
-                  Sem fidelidade
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className={`h-5 w-5 mt-0.5 flex-shrink-0 ${premium ? 'text-black' : 'text-live-yellow'}`} />
-                <span className={`text-sm ${premium ? 'text-black' : 'text-gray-300'}`}>
-                  Acesso via app Live
-                </span>
-              </div>
-              <div className="flex items-start gap-3">
-                <Check className={`h-5 w-5 mt-0.5 flex-shrink-0 ${premium ? 'text-black' : 'text-live-yellow'}`} />
-                <span className={`text-sm ${premium ? 'text-black' : 'text-gray-300'}`}>
-                  Todas as modalidades
-                </span>
-              </div>
-              {premium && (
-                <>
-                  <div className="flex items-start gap-3">
-                    <Check className="h-5 w-5 mt-0.5 flex-shrink-0 text-black" />
-                    <span className="text-sm text-black">
-                      Ambiente climatizado
-                    </span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <Check className="h-5 w-5 mt-0.5 flex-shrink-0 text-black" />
-                    <span className="text-sm text-black">
-                      Espaços exclusivos
-                    </span>
-                  </div>
-                </>
-              )}
-            </div>
+            {/* Feature Rows */}
+            {section.items.map((feature, featureIndex) => (
+              <div key={featureIndex} className="grid grid-cols-3 border-b border-white/10 hover:bg-white/5 transition-colors">
+                <div className="p-5 flex items-center">
+                  <span className="text-sm text-white">{feature.label}</span>
+                </div>
 
-            {/* CTA Button */}
-            <div className="p-8 pt-0">
-              <button
-                onClick={() => onMatricular(plano)}
-                className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 ${
-                  premium
-                    ? 'bg-black text-live-yellow hover:bg-black/90 shadow-[0_8px_30px_rgb(0,0,0,0.4)]'
-                    : 'bg-live-yellow text-black hover:bg-live-yellowLight shadow-[0_8px_30px_rgba(255,203,0,0.3)]'
-                } hover:scale-105 flex items-center justify-center gap-2`}
-              >
-                <CreditCard className="h-5 w-5" />
-                COMEÇAR AGORA
-              </button>
-            </div>
-          </motion.div>
-        )
-      })}
+                <div className="p-5 border-l border-white/10 flex justify-center items-center">
+                  {feature.normal ? (
+                    <Check className="h-5 w-5 text-live-yellow" />
+                  ) : (
+                    <X className="h-5 w-5 text-gray-600" />
+                  )}
+                </div>
+
+                <div className="p-5 border-l border-white/10 flex justify-center items-center bg-live-yellow/5">
+                  {feature.premium ? (
+                    <Check className="h-5 w-5 text-live-yellow" />
+                  ) : (
+                    <X className="h-5 w-5 text-gray-600" />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+
+        {/* Footer - CTA Buttons */}
+        <div className="grid grid-cols-3">
+          <div className="p-6"></div>
+          <div className="p-6 border-l border-white/10 flex justify-center">
+            <button
+              onClick={() => onMatricular(normalPlano)}
+              className="w-full py-3 px-4 border border-live-yellow/30 rounded-xl text-sm font-bold text-live-yellow hover:bg-live-yellow/10 transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              <CreditCard className="h-4 w-4" />
+              MATRICULAR
+            </button>
+          </div>
+          <div className="p-6 border-l border-white/10 flex justify-center bg-live-yellow/5">
+            <button
+              onClick={() => onMatricular(premiumPlano)}
+              className="w-full py-3 px-4 bg-live-yellow rounded-xl text-sm font-bold text-black hover:bg-live-yellowLight transition-all duration-200 shadow-[0_8px_30px_rgba(255,203,0,0.3)] hover:scale-105 flex items-center justify-center gap-2"
+            >
+              <CreditCard className="h-4 w-4" />
+              COMEÇAR AGORA
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Note */}
+      <div className="mt-8 text-center text-gray-400 text-sm">
+        Todos os planos incluem acesso ilimitado e suporte via WhatsApp.
+        <span className="text-live-yellow ml-1 cursor-pointer hover:text-live-yellowLight transition-colors">Saiba mais</span>
+      </div>
     </div>
   )
 }

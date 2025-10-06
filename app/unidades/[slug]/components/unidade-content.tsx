@@ -126,7 +126,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
       </section>
 
       {/* Info Cards */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 -mt-16 relative z-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 -mt-16 relative z-20 mb-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {/* Card 1 - Horário */}
           <article className="relative overflow-hidden p-5 h-52 bg-live-yellow border border-live-yellow rounded-2xl shadow-lg">
@@ -235,6 +235,36 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
         </div>
       </section>
 
+      {/* Planos Section - Logo após os cards */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+        <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-live-yellow/10 border border-live-yellow/30 text-live-yellow text-sm font-bold mb-4">
+              <Dumbbell className="h-4 w-4" />
+              PLANOS EXCLUSIVOS
+            </span>
+            <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight mb-4">
+              Comece sua <span className="text-live-yellow">transformação</span> hoje
+            </h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Sem taxa de matrícula • Sem fidelidade • Cancele quando quiser
+            </p>
+          </motion.div>
+        </div>
+
+        <UnitPlanos
+          slug={unidade.id}
+          unidadeName={unidade.name}
+          fallbackPlanos={unidade.planos}
+          onMatricular={handleMatricular}
+        />
+      </section>
+
       {/* Modalidades Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
         <div className="bg-live-bg border border-live-border rounded-3xl p-8 sm:p-12">
@@ -245,7 +275,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {data.modalidades.map((modalidade, index) => (
               <motion.div
                 key={index}
@@ -253,16 +283,30 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="group p-5 bg-white/5 hover:bg-live-yellow border border-live-border hover:border-live-yellow rounded-2xl transition-all duration-300"
+                className="group relative overflow-hidden bg-white/5 hover:bg-live-yellow border border-live-border hover:border-live-yellow rounded-2xl transition-all duration-300 h-48"
               >
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="h-8 w-8 rounded-full bg-live-yellow/10 group-hover:bg-black flex items-center justify-center transition-colors">
-                    <Check className="h-4 w-4 text-live-yellow group-hover:text-live-yellow transition-colors" />
-                  </div>
+                {/* Background Image - Placeholder */}
+                <div className="absolute inset-0 bg-gradient-to-br from-live-yellow/20 to-black/80 group-hover:from-live-yellow/40 transition-all">
+                  {unidade.photo && (
+                    <img
+                      src={unidade.photo}
+                      alt={modalidade}
+                      className="w-full h-full object-cover opacity-30 group-hover:opacity-50 transition-opacity"
+                    />
+                  )}
                 </div>
-                <h3 className="text-sm font-semibold text-white group-hover:text-black transition-colors">
-                  {modalidade}
-                </h3>
+
+                {/* Content */}
+                <div className="relative z-10 p-5 h-full flex flex-col justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 rounded-full bg-live-yellow/20 group-hover:bg-black flex items-center justify-center transition-colors">
+                      <Check className="h-4 w-4 text-live-yellow group-hover:text-live-yellow transition-colors" />
+                    </div>
+                  </div>
+                  <h3 className="text-sm font-semibold text-white group-hover:text-black transition-colors">
+                    {modalidade}
+                  </h3>
+                </div>
               </motion.div>
             ))}
           </div>
