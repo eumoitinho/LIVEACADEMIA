@@ -1,6 +1,7 @@
 "use client"
 
 import { Check, Star, Crown, Clock, ArrowUpRight, Zap } from "lucide-react"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import type { PlanosSectionData, PlanCardData } from "@/types/cms-sections"
 
@@ -148,13 +149,16 @@ export default function PlanosSection({ data }: Props) {
                 </div>
               </div>
 
-              <button className={`inline-flex items-center justify-center gap-2 h-11 w-full rounded-full text-sm font-normal transition backdrop-blur mb-6 ${plano.destaque
+              <Link
+                href={plano.ctaHref || '/planos'}
+                className={`inline-flex items-center justify-center gap-2 h-11 w-full rounded-full text-sm font-normal transition backdrop-blur mb-6 ${plano.destaque
                   ? 'bg-white/90 text-zinc-900 hover:bg-white'
                   : 'bg-white/90 text-zinc-900 hover:bg-white'
-                }`}>
+                }`}
+              >
                 {plano.ctaLabel || 'Matricule-se'}
                 {plano.destaque ? <Zap className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
-              </button>
+              </Link>
 
               {/* Features */}
               <div>
