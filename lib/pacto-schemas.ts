@@ -49,6 +49,8 @@ export const VendaResultadoSchema = z.object({
   matricula_id: z.string().optional(),
   transacao_id: z.string().optional(),
   comprovante_url: z.string().optional(),
+  link_pagamento: z.string().optional(),
+  whatsapp_link: z.string().optional(),
   pix: z.object({
     qr_code: z.string().optional(),
     codigo: z.string().optional(),
