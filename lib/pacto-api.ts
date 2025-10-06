@@ -97,42 +97,19 @@ class PactoAPI {
   }
 
   /**
-   * Autentica na API V3 (/psec/vendas/token)
+   * Autentica na API Pacto
+   * Nota: A "redeKey" na verdade é a API_KEY que vai diretamente no header Authorization
+   * A "publicKey" é o empresaId que vai no header empresaId
    */
   private async authenticate(redeKey: string, publicKey: string): Promise<string> {
     if (!redeKey) throw new Error('redeKey ausente (chave_api da unidade)')
-    if (!publicKey) throw new Error('publicKey ausente (chave_publica da unidade)')
-    const cacheKey = redeKey + '|' + publicKey
-    const cached = this.tokenCache.get(cacheKey)
-    if (cached && Date.now() < cached.expiresAt - 30_000) return cached.token
-    const url = `${this.baseURL}/psec/vendas/token`
-    console.log(`[PactoAPI] Authenticating: URL=${url}, redeKey=${redeKey.substring(0,10)}..., publicKey=${publicKey.substring(0,10)}...`)
+    if (!publicKey) throw new Error('publicKey ausente (empresaId da unidade)')
 
-    // Tentar Bearer token com redeKey (similar à V2)
-    const response = await this.request(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${redeKey}`
-      },
-      body: JSON.stringify({ publicKey }),
-      timeoutMs: 10000,
-      retries: 1,
-    })
-    console.log(`[PactoAPI] Auth response: status=${response.status}, ok=${response.ok}`)
-    if (!response.ok) {
-      const errorBody = await response.text()
-      console.error(`[PactoAPI] Auth failed: ${response.status} - ${errorBody}`)
-      throw new Error(`Erro na autenticação V3: ${response.status}`)
-    }
-    const json = await response.json()
-    console.log(`[PactoAPI] Auth response body:`, JSON.stringify(json))
-    const parsed: TokenResponse = safeParse(TokenResponseSchema, json, 'TokenResponse')
-    const expiresAt = (json as any).expiresIn
-      ? Date.now() + (json as any).expiresIn * 1000
-      : Date.now() + 15 * 60 * 1000
-    this.tokenCache.set(cacheKey, { token: parsed.return, expiresAt })
-    return parsed.return
+    // A redeKey É o token Bearer direto (não precisa obter de /token)
+    // A API Pacto usa a chave diretamente como Bearer token
+    console.log(`[PactoAPI] Using direct auth: apiKey=${redeKey.substring(0,10)}..., empresaId=${publicKey.substring(0,10)}...`)
+
+    return redeKey // A chave já é o token!
   }
 
   /**
@@ -143,8 +120,9 @@ class PactoAPI {
       const token = await this.authenticate(redeKey, publicKey)
       const response = await this.request(`${this.baseURL}/psec/vendas/unidades`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
+          'empresaId': publicKey,
         },
         timeoutMs: 10000,
       })
@@ -168,8 +146,9 @@ class PactoAPI {
       const url = `${this.baseURL}/psec/vendas/planos?unidade=${encodeURIComponent(codigoUnidade)}`
       const response = await this.request(url, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
+          'empresaId': publicKey,
         },
         timeoutMs: 10000,
       })
@@ -191,12 +170,13 @@ class PactoAPI {
       const token = await this.authenticate(redeKey, publicKey)
       const url = `${this.baseURL}/psec/vendas/simularVenda/${planoId}`
       console.log(`[PactoAPI] simularVenda: URL=${url}, planoId=${planoId}, payload=`, JSON.stringify(payload))
-      console.log(`[PactoAPI] simularVenda: Using token=${token.substring(0,20)}...`)
+      console.log(`[PactoAPI] simularVenda: Using token=${token.substring(0,20)}..., empresaId=${publicKey.substring(0,10)}...`)
       const response = await this.request(url, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
+          'empresaId': publicKey,
         },
         body: JSON.stringify(payload),
       })
@@ -251,8 +231,9 @@ class PactoAPI {
     const response = await this.request(`${this.baseURL}/psec/vendas/cadastrarVenda`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
+        'empresaId': publicKey,
       },
       body: JSON.stringify(payload),
       timeoutMs: 20000,
@@ -311,8 +292,9 @@ class PactoAPI {
       const response = await this.request(`${this.baseURL}/psec/vendas/validarCupomDesconto`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
+          'empresaId': publicKey,
         },
         body: JSON.stringify({ cupom, unidade: unidadeId }),
       })
