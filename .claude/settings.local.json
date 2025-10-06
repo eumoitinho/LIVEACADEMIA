@@ -23,7 +23,9 @@
       "Bash(PGPASSWORD=\"m0Hi1EAhWZ0ON7C8\" psql -h aws-1-us-east-1.pooler.supabase.com -p 6543 -U postgres.sgntnwnngdskwyuywksk -d postgres -c \"SELECT slug, nome FROM public.units LIMIT 5;\")",
       "Bash(export PGPASSWORD=\"m0Hi1EAhWZ0ON7C8\")",
       "Bash(psql:*)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
