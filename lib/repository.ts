@@ -114,10 +114,23 @@ export async function getUnitBySlug(slug: string) {
     .maybeSingle()
   console.log(`[getUnitBySlug] Result: data=${!!data}, error=${error?.message || 'none'}`)
   if (error || !data) return null
+
+  // Priorizar env var PACTO_API_KEY_{SLUG} (descriptografada) sobre banco (criptografada)
   let apiKeyPlain: string | undefined
-  if (data.chave_api) {
-    try { apiKeyPlain = decrypt(data.chave_api) } catch { apiKeyPlain = undefined }
+  const envKeyName = `PACTO_API_KEY_${slug.toUpperCase().replace(/-/g, '_')}`
+  const envKey = process.env[envKeyName]
+
+  if (envKey) {
+    console.log(`[getUnitBySlug] Using API key from env var: ${envKeyName}`)
+    apiKeyPlain = envKey
+  } else if (data.chave_api) {
+    console.log(`[getUnitBySlug] Trying to decrypt API key from database`)
+    try { apiKeyPlain = decrypt(data.chave_api) } catch (err) {
+      console.error(`[getUnitBySlug] Decrypt failed:`, err)
+      apiKeyPlain = undefined
+    }
   }
+
   return { ...data, apiKeyPlain }
 }
 
