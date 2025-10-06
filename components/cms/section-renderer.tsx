@@ -21,7 +21,7 @@ export function renderSection(section: any, index: number) {
     case 'unidadesSection':
       return <UnidadesCarousel key={index} />
     case 'beneficiosSection':
-      return <BeneficiosSection key={index} />
+      return <BeneficiosSection key={index} data={section} />
     case 'estruturaSection':
       return <EstruturaSection key={index} />
     case 'modalidadesSection':

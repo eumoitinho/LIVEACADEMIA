@@ -52,9 +52,22 @@ export interface TestimonialsSectionData {
   items?: TestimonialItemData[]
 }
 
+export interface BeneficioItemData {
+  title?: string
+  text?: string
+  _key?: string
+}
+
+export interface BeneficiosSectionData {
+  _type: 'beneficiosSection'
+  heading?: string
+  items?: BeneficioItemData[]
+}
+
 export type AnySection =
   | HeroSectionData
   | AboutSectionData
   | PlanosSectionData
   | TestimonialsSectionData
+  | BeneficiosSectionData
   | Record<string, any>
