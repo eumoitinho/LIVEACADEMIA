@@ -5,7 +5,9 @@ import { ArrowRight, Music, Bike, Heart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
-const modalidadesHome = [
+import { ModalidadesSectionData } from '@/types/cms-sections'
+
+const fallbackModalidades = [
   {
     subtitle: "Ritmo e movimento",
     title: "Fitdance",
@@ -29,7 +31,16 @@ const modalidadesHome = [
   }
 ]
 
-export default function ModalidadesSection() {
+export default function ModalidadesSection({ data }: { data?: ModalidadesSectionData }) {
+  const modalidades = data?.modalidades?.length
+    ? data.modalidades.map(m => ({
+        subtitle: m.subtitle || '',
+        title: m.title || 'Modalidade',
+        description: m.description || '',
+        image: (m.image && (m.image.asset?.url || m.image.url)) || '/images/academia-1.webp',
+        style: m.style || 'col-span-12 sm:col-span-4'
+      }))
+    : fallbackModalidades
   return (
     <section id="servicos" className="py-20 relative overflow-hidden bg-black">
       {/* Background gradient effects */}
@@ -51,16 +62,16 @@ export default function ModalidadesSection() {
           </div>
           
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Energia e motivação em grupo para você ir além
+            {data?.heading || 'Energia e motivação em grupo para você ir além'}
           </h2>
           <p className="text-zinc-300 text-lg max-w-4xl mx-auto">
-            As aulas coletivas da Live Academia são a maneira perfeita de se exercitar, se divertir e fazer novas amizades! Com a energia contagiante do grupo, você se mantém motivado e alcança seus objetivos de forma mais prazerosa.
+            {data?.intro || 'As aulas coletivas da Live Academia são a maneira perfeita de se exercitar, se divertir e fazer novas amizades! Com a energia contagiante do grupo, você se mantém motivado e alcança seus objetivos de forma mais prazerosa.'}
           </p>
         </motion.div>
 
         {/* Grid estilo NextUI/HeroUI */}
         <div className="max-w-[1200px] gap-4 grid grid-cols-12 mx-auto mb-12">
-          {modalidadesHome.map((modalidade, index) => (
+          {modalidades.map((modalidade, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
@@ -112,10 +123,10 @@ export default function ModalidadesSection() {
           className="text-center"
         >
           <Link
-            href="/aulas-coletivas"
+            href={data?.ctaHref || '/aulas-coletivas'}
             className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-bold shadow-lg hover:shadow-xl hover:shadow-yellow-500/25 transition-all duration-300 transform hover:scale-105 group"
           >
-            <span>VEJA TODAS AS MODALIDADES</span>
+            <span>{(data?.ctaLabel || 'VEJA TODAS AS MODALIDADES').toUpperCase()}</span>
             <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
           </Link>
         </motion.div>

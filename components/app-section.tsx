@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { AppSectionData } from '@/types/cms-sections'
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Smartphone, Activity, Calendar, BarChart3, Bell, Users, CheckCircle, Star, Zap } from "lucide-react"
@@ -44,8 +45,9 @@ const beneficios = [
   "Faça check-in digital nas unidades"
 ]
 
-export default function AppSection() {
+export default function AppSection({ data }: { data?: AppSectionData }) {
   const [currentScreen, setCurrentScreen] = useState(0)
+  const benefits = data?.benefits && data.benefits.length ? data.benefits : beneficios
 
   return (
     <section className="relative py-20 px-6 lg:px-12 overflow-hidden bg-black" id="app">
@@ -84,8 +86,7 @@ export default function AppSection() {
               viewport={{ once: true }}
               className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight"
             >
-              Seu treino na
-              <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-pulse"> palma da mão</span>
+              {(data?.heading || 'Seu treino na palma da mão').split(/(palma da mão)/i).map((part, i) => part.toLowerCase() === 'palma da mão' ? <span key={i} className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-pulse"> {part}</span> : part)}
             </motion.h2>
 
             <motion.p
@@ -95,13 +96,12 @@ export default function AppSection() {
               viewport={{ once: true }}
               className="text-zinc-400 text-lg mb-8 leading-relaxed"
             >
-              Dois apps exclusivos para transformar sua experiência. Tecnologia que simplifica
-              sua jornada fitness e maximiza seus resultados.
+              {data?.description || 'Dois apps exclusivos para transformar sua experiência. Tecnologia que simplifica sua jornada fitness e maximiza seus resultados.'}
             </motion.p>
 
             {/* Benefícios */}
             <div className="space-y-4 mb-10">
-              {beneficios.map((beneficio, index) => (
+              {benefits.map((beneficio, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}

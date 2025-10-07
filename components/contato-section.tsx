@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion"
 import { Phone, Mail, MapPin, Clock, MessageCircle, Send, Instagram, Facebook, Youtube } from "lucide-react"
+import { ContatoSectionData } from '@/types/cms-sections'
 import { useState } from "react"
 
-const contactInfo = [
+const fallbackContactInfo = [
   {
     icon: Phone,
     title: "WhatsApp",
@@ -35,7 +36,7 @@ const contactInfo = [
   }
 ]
 
-const socialMedia = [
+const fallbackSocial = [
   {
     name: "Instagram",
     url: "https://www.instagram.com/liveacademiamanaus/",
@@ -56,12 +57,44 @@ const socialMedia = [
   }
 ]
 
-export default function ContatoSection() {
+function mapIcon(key?: string) {
+  switch (key) {
+    case 'phone': return Phone
+    case 'mail': return Mail
+    case 'map': return MapPin
+    case 'clock': return Clock
+    case 'instagram': return Instagram
+    case 'facebook': return Facebook
+    case 'youtube': return Youtube
+    default: return Phone
+  }
+}
+
+export default function ContatoSection({ data }: { data?: ContatoSectionData }) {
   const [formData, setFormData] = useState({
     nome: "",
     telefone: "",
     mensagem: ""
   })
+
+  const contactInfo = data?.contactItems?.length
+    ? data.contactItems.map(i => ({
+        icon: mapIcon(i.iconKey),
+        title: i.title || '',
+        info: i.info || '',
+        action: i.action || '',
+        highlight: !!i.highlight,
+      }))
+    : fallbackContactInfo
+
+  const socialMedia = data?.social?.length
+    ? data.social.map(s => ({
+        name: s.name || '',
+        url: s.url || '#',
+        icon: mapIcon(s.iconKey),
+        color: s.color || 'from-yellow-500 to-amber-500'
+      }))
+    : fallbackSocial
 
   return (
     <section id="contato" className="py-20 relative overflow-hidden bg-black">
@@ -84,10 +117,10 @@ export default function ContatoSection() {
           </div>
           
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Pronto para <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">começar</span>?
+            {(data?.heading || 'Pronto para ')}<span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">{data?.heading ? '' : 'começar'}</span>{data?.heading ? '' : '?'}
           </h2>
           <p className="text-zinc-400 text-lg max-w-3xl mx-auto">
-            Escolha a melhor forma de entrar em contato. Estamos aqui para ajudar.
+            {data?.subheading || 'Escolha a melhor forma de entrar em contato. Estamos aqui para ajudar.'}
           </p>
         </motion.div>
 

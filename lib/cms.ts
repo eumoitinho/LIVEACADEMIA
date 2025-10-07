@@ -20,13 +20,14 @@ export async function getPageBySlug(slug: string) {
         }
         , _type == 'unidadesSection' => { _type, heading, subheading, showSearch }
         , _type == 'beneficiosSection' => { _type, heading, items }
-        , _type == 'estruturaSection' => { _type, heading, gallery }
-        , _type == 'modalidadesSection' => { _type, heading, modalidades }
+        , _type == 'estruturaSection' => { _type, heading, gallery, items }
+        , _type == 'modalidadesSection' => { _type, heading, intro, ctaLabel, ctaHref, modalidades }
         , _type == 'planosSection' => { _type, heading, planos }
-        , _type == 'appSection' => { _type, heading, description, ctaLabel, ctaHref, screenshot }
+        , _type == 'appSection' => { _type, heading, description, ctaLabel, ctaHref, secondaryCtaLabel, secondaryCtaHref, screenshot, screens, features, benefits }
         , _type == 'testimonialsSection' => { _type, heading, items }
         , _type == 'bioimpedanciaSection' => { _type, heading, subheading, beneficiosIntro, dados, cta3dLabel, cta3dHref, highlightPrice, bottomPrimaryCtaLabel, bottomPrimaryCtaHref, bottomSecondaryCtaLabel, bottomSecondaryCtaHref }
         , _type == 'wellhubSection' => { _type, heading, subheading, parceriaLabel, cards, detalhes, primaryCtaLabel, primaryCtaHref, secondaryCtaLabel, secondaryCtaHref, bannerTitle, bannerText, bannerPrimaryCtaLabel, bannerPrimaryCtaHref, bannerSecondaryCtaLabel, bannerSecondaryCtaHref }
+        , _type == 'contatoSection' => { _type, heading, subheading, contactItems, social, whatsappLink, formDisclaimer }
       }
     }`,
     { slug }
@@ -45,13 +46,14 @@ export async function getHomePage() {
         }
         , _type == 'unidadesSection' => { _type, heading, subheading, showSearch }
         , _type == 'beneficiosSection' => { _type, heading, items }
-        , _type == 'estruturaSection' => { _type, heading, gallery }
-        , _type == 'modalidadesSection' => { _type, heading, modalidades }
+        , _type == 'estruturaSection' => { _type, heading, gallery, items }
+        , _type == 'modalidadesSection' => { _type, heading, intro, ctaLabel, ctaHref, modalidades }
         , _type == 'planosSection' => { _type, heading, planos }
-        , _type == 'appSection' => { _type, heading, description, ctaLabel, ctaHref, screenshot }
+        , _type == 'appSection' => { _type, heading, description, ctaLabel, ctaHref, secondaryCtaLabel, secondaryCtaHref, screenshot, screens, features, benefits }
         , _type == 'testimonialsSection' => { _type, heading, items }
         , _type == 'bioimpedanciaSection' => { _type, heading, subheading, beneficiosIntro, dados, cta3dLabel, cta3dHref, highlightPrice, bottomPrimaryCtaLabel, bottomPrimaryCtaHref, bottomSecondaryCtaLabel, bottomSecondaryCtaHref }
         , _type == 'wellhubSection' => { _type, heading, subheading, parceriaLabel, cards, detalhes, primaryCtaLabel, primaryCtaHref, secondaryCtaLabel, secondaryCtaHref, bannerTitle, bannerText, bannerPrimaryCtaLabel, bannerPrimaryCtaHref, bannerSecondaryCtaLabel, bannerSecondaryCtaHref }
+        , _type == 'contatoSection' => { _type, heading, subheading, contactItems, social, whatsappLink, formDisclaimer }
       }
     }`
   )

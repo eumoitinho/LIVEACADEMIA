@@ -100,6 +100,91 @@ export interface WellhubSectionData {
   bannerSecondaryCtaHref?: string
 }
 
+// --- New / Extended Sections ---
+
+export interface EstruturaItemData {
+  titulo?: string
+  descricao?: string
+  disponibilidade?: string
+  categoria?: string // 'basico' | 'exclusivo'
+  iconKey?: string
+  _key?: string
+}
+
+export interface EstruturaSectionData {
+  _type: 'estruturaSection'
+  heading?: string
+  gallery?: any[]
+  items?: EstruturaItemData[]
+}
+
+export interface ModalidadeItemData {
+  subtitle?: string
+  title?: string
+  description?: string
+  image?: any
+  span?: number // opcional - para layout
+  style?: string // fallback custom
+  _key?: string
+}
+
+export interface ModalidadesSectionData {
+  _type: 'modalidadesSection'
+  heading?: string
+  modalidades?: ModalidadeItemData[]
+  ctaLabel?: string
+  ctaHref?: string
+  intro?: string
+}
+
+export interface AppScreenData { image?: any; title?: string; description?: string; _key?: string }
+export interface AppFeatureData { iconKey?: string; title?: string; description?: string; _key?: string }
+
+export interface AppSectionData {
+  _type: 'appSection'
+  heading?: string
+  description?: string
+  ctaLabel?: string
+  ctaHref?: string
+  secondaryCtaLabel?: string
+  secondaryCtaHref?: string
+  screenshot?: any
+  screens?: AppScreenData[]
+  features?: AppFeatureData[]
+  benefits?: string[]
+}
+
+export interface UnidadeItemData {
+  nome?: string
+  endereco?: string
+  imagem?: any
+  badgeText?: string
+  badgeVariant?: string
+  link?: string
+  _key?: string
+}
+
+export interface UnidadesSectionData {
+  _type: 'unidadesSection'
+  heading?: string
+  subheading?: string
+  showSearch?: boolean
+  unidades?: UnidadeItemData[]
+}
+
+export interface ContatoItemData { iconKey?: string; title?: string; info?: string; action?: string; highlight?: boolean; _key?: string }
+export interface SocialItemData { name?: string; url?: string; iconKey?: string; color?: string; _key?: string }
+
+export interface ContatoSectionData {
+  _type: 'contatoSection'
+  heading?: string
+  subheading?: string
+  contactItems?: ContatoItemData[]
+  social?: SocialItemData[]
+  whatsappLink?: string
+  formDisclaimer?: string
+}
+
 export type AnySection =
   | HeroSectionData
   | AboutSectionData
@@ -108,4 +193,9 @@ export type AnySection =
   | BeneficiosSectionData
   | BioimpedanciaSectionData
   | WellhubSectionData
+  | EstruturaSectionData
+  | ModalidadesSectionData
+  | AppSectionData
+  | UnidadesSectionData
+  | ContatoSectionData
   | Record<string, any>

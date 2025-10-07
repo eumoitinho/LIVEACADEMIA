@@ -28,6 +28,7 @@ export default defineType({
         { type: 'testimonialsSection' },
         { type: 'bioimpedanciaSection' },
         { type: 'wellhubSection' },
+        { type: 'contatoSection' },
       ],
     },
     {

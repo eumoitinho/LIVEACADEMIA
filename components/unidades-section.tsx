@@ -1,8 +1,9 @@
 import { motion } from "framer-motion"
 
 import UnidadeCard from "./unidade-card"
+import { UnidadesSectionData } from '@/types/cms-sections'
 
-const unidades = [
+const fallbackUnidades = [
   {
     nome: "Live Academia - Centro",
     endereco: "Av. Getúlio Vargas, 1234 - Centro, Manaus/AM",
@@ -33,8 +34,17 @@ const unidades = [
   },
 ]
 
-export default function UnidadesSection() {
+export default function UnidadesSection({ data }: { data?: UnidadesSectionData }) {
   const easing = [0.16, 1, 0.3, 1] as const
+  const unidades = data?.unidades?.length
+    ? data.unidades.map(u => ({
+        nome: u.nome || 'Unidade',
+        endereco: u.endereco || '',
+        imagem: (u.imagem && (u.imagem.asset?.url || u.imagem.url)) || '/images/academia-1.webp',
+        badge: { text: u.badgeText || '', variant: (u.badgeVariant as any) || 'orange' },
+        link: u.link || '#'
+      }))
+    : fallbackUnidades
 
   return (
     <section className="relative py-24 px-6 lg:px-12 bg-black overflow-hidden">
@@ -66,7 +76,7 @@ export default function UnidadesSection() {
                 viewport={{ once: true }}
                 className="text-3xl lg:text-4xl font-semibold text-white leading-tight"
               >
-                Viva a experiência Live em diferentes bairros de Manaus
+                {data?.heading || 'Viva a experiência Live em diferentes bairros de Manaus'}
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, x: -20 }}
@@ -75,8 +85,7 @@ export default function UnidadesSection() {
                 viewport={{ once: true }}
                 className="text-base text-white/60 leading-relaxed"
               >
-                Cada unidade é pensada para entregar infraestrutura premium, aulas exclusivas e atendimento próximo. Escolha
-                a que mais combina com a sua rotina ou circule livremente entre elas sem fidelidade.
+                {data?.subheading || 'Cada unidade é pensada para entregar infraestrutura premium, aulas exclusivas e atendimento próximo. Escolha a que mais combina com a sua rotina ou circule livremente entre elas sem fidelidade.'}
               </motion.p>
             </div>
             <motion.div

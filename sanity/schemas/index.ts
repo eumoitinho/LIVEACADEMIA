@@ -13,6 +13,7 @@ import sectionApp from './sections/app'
 import sectionTestimonials from './sections/testimonials'
 import sectionBioimpedancia from './sections/bioimpedancia'
 import sectionWellhub from './sections/wellhub'
+import sectionContato from './sections/contato'
 
 export default [
   globalSettings,
@@ -30,4 +31,5 @@ export default [
   sectionTestimonials,
   sectionBioimpedancia,
   sectionWellhub,
+  sectionContato,
 ]
