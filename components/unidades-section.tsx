@@ -45,7 +45,7 @@ export default function UnidadesSection() {
     >
       <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
         <Image
-          src="/GewRZyFPrEAvawLIj3Eynw==.jpg"
+          src="/images/fachada.jpg"
           alt="Fachada da Live Premium"
           fill
           sizes="100vw"
