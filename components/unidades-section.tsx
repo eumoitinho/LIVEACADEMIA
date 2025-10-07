@@ -1,3 +1,4 @@
+"use client"
 import { motion } from "framer-motion"
 
 import UnidadeCard from "./unidade-card"
@@ -37,16 +38,24 @@ export default function UnidadesSection() {
   const easing = [0.16, 1, 0.3, 1] as const
 
   return (
-    <section className="relative py-24 px-6 lg:px-12 bg-black overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-tr from-black via-[#111] to-black" />
-      <div className="absolute inset-y-0 right-[-20%] w-[60%] bg-[radial-gradient(circle_at_center,_rgba(255,74,23,0.28),_transparent_65%)]" />
+    <section
+      className="relative -mt-32 pt-40 pb-24 px-6 lg:px-12 bg-black overflow-hidden"
+      /* -mt-* puxa a seção para cima para que o background comece atrás da barra de stats anterior */
+    >
+      {/* Camada base de background ocupando toda a área inclusive a parte sobreposta */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black via-[#0d0d0d] to-black" />
+      {/* Glow / radial accent deslocado à direita */}
+      <div className="pointer-events-none absolute -top-10 bottom-0 right-[-25%] w-[65%] bg-[radial-gradient(circle_at_center,_rgba(255,74,23,0.30),_transparent_70%)] opacity-70" />
+      {/* Grade sutil / texture opcional */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.08] [mask-image:radial-gradient(circle_at_center,black,transparent_75%)]" style={{backgroundImage:'repeating-linear-gradient(45deg,rgba(255,255,255,0.25)_0_2px,transparent_2px_10px)'}} />
+
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: easing }}
           viewport={{ once: true, amount: 0.3 }}
-          className="bg-neutral-950/70 backdrop-blur-md border border-white/5 rounded-3xl px-8 lg:px-14 py-12 shadow-[0_40px_120px_-60px_rgba(255,74,23,0.45)]"
+          className="bg-neutral-950/70 backdrop-blur-md border border-white/5 rounded-3xl px-8 lg:px-14 py-12 shadow-[0_40px_120px_-60px_rgba(255,74,23,0.45)] relative"
         >
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10 mb-12">
             <div className="max-w-xl space-y-4">
