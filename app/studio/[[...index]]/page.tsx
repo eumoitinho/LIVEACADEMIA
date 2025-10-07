@@ -1,5 +1,3 @@
-"use client"
-
 // Rota embutida do Sanity Studio (/studio)
 // Deploy: basta fazer o deploy normal do Next.js (Vercel, etc.) e acessar /studio
 // Esta página não deve ser indexada por motores de busca.
