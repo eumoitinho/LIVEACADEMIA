@@ -1,44 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
 import { Instagram, Facebook, Youtube, MapPin, Phone, Mail, BadgeCheck, Check, Send, Github, Twitter, Linkedin } from "lucide-react"
 import LiveLogo from "./live-logo"
 import ScrollToTopButton from './scroll-to-top-button'
-import { useToast } from "@/hooks/use-toast"
 
 export default function Footer() {
-  const { toast } = useToast()
-  const [submitting, setSubmitting] = useState(false)
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (submitting) return
-    const form = e.currentTarget
-    const formData = new FormData(form)
-    const payload = Object.fromEntries(formData.entries())
-    try {
-      setSubmitting(true)
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      const json = await res.json()
-      if (json.success) {
-        toast({ title: 'Mensagem enviada!', description: 'Entraremos em contato em breve.' })
-        form.reset()
-      } else {
-        toast({ title: 'Falha ao enviar', description: json.error || 'Tente novamente mais tarde.', variant: 'destructive' })
-      }
-    } catch (err) {
-      toast({ title: 'Erro inesperado', description: 'Não foi possível enviar sua mensagem.', variant: 'destructive' })
-      console.error('CONTACT_FORM_ERROR', err)
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
   return (
     <footer className="w-full sm:px-6 md:px-10 max-w-7xl mr-auto ml-auto pt-12 pr-4 pb-10 pl-4">
       <div className="relative overflow-hidden bg-neutral-900 rounded-3xl">
@@ -51,7 +18,7 @@ export default function Footer() {
               </div>
               <p className="text-white/70 max-w-3xl">Transforme seu corpo e sua vida na maior rede de academias de Manaus. Conte conosco para sua jornada fitness.</p>
 
-              <div id="contato" className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6 md:p-8">
+              <div id="contact" className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6 md:p-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div className="space-y-4">
                     <div className="inline-flex items-center gap-2 rounded-full bg-yellow-400/10 text-yellow-300 ring-1 ring-yellow-300/20 px-2.5 py-1 text-xs">
@@ -88,7 +55,7 @@ export default function Footer() {
                     </div>
                   </div>
 
-                  <form id="contact-form" onSubmit={handleSubmit} className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <form id="contact-form" className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="sm:col-span-1">
                       <label htmlFor="name" className="block text-xs font-medium text-white/80 mb-1">Seu nome</label>
                       <input id="name" name="name" type="text" required placeholder="João Silva" className="w-full placeholder-white/40 outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-300 transition text-sm text-white bg-white/10 border-white/10 border rounded-xl pt-2.5 pr-3 pb-2.5 pl-3" />
@@ -121,9 +88,9 @@ export default function Footer() {
                         <label htmlFor="newsletter">Quero receber novidades e promoções</label>
                       </div>
                       <div className="flex items-center gap-2">
-                        <button type="submit" disabled={submitting} className="inline-flex gap-2 ring-1 ring-yellow-300 hover:bg-yellow-300 disabled:opacity-60 disabled:cursor-not-allowed transition text-sm font-medium text-neutral-900 bg-yellow-400 rounded-xl pt-2.5 pr-4 pb-2.5 pl-4 shadow items-center">
+                        <button type="submit" className="inline-flex gap-2 ring-1 ring-yellow-300 hover:bg-yellow-300 transition text-sm font-medium text-neutral-900 bg-yellow-400 rounded-xl pt-2.5 pr-4 pb-2.5 pl-4 shadow items-center">
                           <Send className="w-4 h-4" />
-                          {submitting ? 'Enviando...' : 'Enviar mensagem'}
+                          Enviar mensagem
                         </button>
                       </div>
                     </div>

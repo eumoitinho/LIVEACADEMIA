@@ -4,31 +4,21 @@ import { motion } from "framer-motion"
 import { Star, Quote } from "lucide-react"
 import Image from "next/image"
 import { useState, useRef } from "react"
-import { urlFor } from "@/lib/sanity"
-import type { TestimonialsSectionData, TestimonialItemData } from "@/types/cms-sections"
 
-interface Props { data?: TestimonialsSectionData }
-
-const fallbackTestimonials: (TestimonialItemData & { role?: string })[] = [
-  { name: "Ana Silva", text: "A Live transformou minha rotina. Sem fidelidade, consigo treinar no meu ritmo e os resultados são incríveis. Melhor escolha!", rating: 5 },
-  { name: "Carlos Mendes", text: "App fantástico, profissionais qualificados e equipamentos modernos. Tudo que preciso para manter minha saúde em dia.", rating: 5 },
-  { name: "Juliana Costa", text: "As aulas coletivas são motivadoras! A transparência nos planos e o respeito ao cliente fazem toda a diferença.", rating: 5 },
-  { name: "Ricardo Almeida", text: "Estrutura impecável, espaços exclusivos no plano Diamante. Supera qualquer academia que já frequentei.", rating: 5 },
-  { name: "Patrícia Santos", text: "A liberdade de cancelar a qualquer momento me deu segurança para começar. Hoje não consigo mais viver sem!", rating: 5 },
-  { name: "Fernando Lima", text: "Preço justo, atendimento excelente e resultados garantidos. A Live Academia é simplesmente a melhor de Manaus.", rating: 5 },
+// Fonte de dados original
+const testimonials = [
+  { id: 1, name: "Ana Silva", role: "Aluna há 2 anos", content: "A Live transformou minha rotina. Sem fidelidade, consigo treinar no meu ritmo e os resultados são incríveis. Melhor escolha!", avatar: "/images/academia-1.webp", rating: 5 },
+  { id: 2, name: "Carlos Mendes", role: "Aluno há 1 ano", content: "App fantástico, profissionais qualificados e equipamentos modernos. Tudo que preciso para manter minha saúde em dia.", avatar: "/images/academia-2.webp", rating: 5 },
+  { id: 3, name: "Juliana Costa", role: "Aluna há 3 anos", content: "As aulas coletivas são motivadoras! A transparência nos planos e o respeito ao cliente fazem toda a diferença.", avatar: "/images/academia-3.webp", rating: 5 },
+  { id: 4, name: "Ricardo Almeida", role: "Aluno há 6 meses", content: "Estrutura impecável, espaços exclusivos no plano Diamante. Supera qualquer academia que já frequentei.", avatar: "/images/academia-4.webp", rating: 5 },
+  { id: 5, name: "Patrícia Santos", role: "Aluna há 4 anos", content: "A liberdade de cancelar a qualquer momento me deu segurança para começar. Hoje não consigo mais viver sem!", avatar: "/images/academia-1.webp", rating: 5 },
+  { id: 6, name: "Fernando Lima", role: "Aluno há 8 meses", content: "Preço justo, atendimento excelente e resultados garantidos. A Live Academia é simplesmente a melhor de Manaus.", avatar: "/images/academia-2.webp", rating: 5 },
 ]
 
-export default function TestimonialSection({ data }: Props) {
+export default function TestimonialSection() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [hover, setHover] = useState(false)
   const stackRef = useRef<HTMLDivElement | null>(null)
-
-  const testimonials = (data?.items?.length ? data.items : fallbackTestimonials).map((t, i) => ({
-    ...t,
-    id: i + 1,
-    rating: t.rating || 5,
-    avatarUrl: t.avatar ? urlFor(t.avatar).width(160).height(160).quality(80).url() : `/images/academia-${(i % 4) + 1}.webp`,
-  }))
 
   const next = () => setCurrentIndex(p => (p + 3) % testimonials.length)
   const prev = () => setCurrentIndex(p => (p - 3 + testimonials.length) % testimonials.length)
@@ -65,11 +55,9 @@ export default function TestimonialSection({ data }: Props) {
             <span className="text-sm font-medium tracking-wide text-zinc-400">Depoimentos reais</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
-            {data?.heading || (
-              <>O que dizem nossos <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">alunos</span></>
-            )}
+            O que dizem nossos <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">alunos</span>
           </h2>
-          <p className="text-lg text-zinc-400">{data?.heading ? '' : 'Histórias de evolução e motivação para você entrar agora.'}</p>
+          <p className="text-lg text-zinc-400">Histórias de evolução e motivação para você entrar agora.</p>
         </motion.div>
 
         {/* Stack Desktop */}
@@ -102,19 +90,20 @@ export default function TestimonialSection({ data }: Props) {
                     <div className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-gradient-to-r from-yellow-100 to-amber-300 ring-1 ring-black/5 mb-6">
                       <Quote className="w-4 h-4 text-black" />
                     </div>
-                    <p className="text-lg leading-relaxed text-white-900/90 mb-8 flex-1 italic">"{(t as any).text}"</p>
+                    <p className="text-lg leading-relaxed text-white-900/90 mb-8 flex-1 italic">"{t.content}"</p>
                     <div className="pt-4 border-t border-black flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="relative h-8 w-8 rounded-full overflow-hidden ring-1 ring-black/5">
-                          <Image src={(t as any).avatarUrl} alt={t.name || 'Aluno'} fill className="object-cover" />
+                          <Image src={t.avatar} alt={t.name} fill className="object-cover" />
                         </div>
                         <div>
                           <div className="text-lg font-semibold text-white tracking-wide leading-tight">{t.name}</div>
+                          <div className="text-sm text-neutral-500 leading-tight">{t.role}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-1 text-amber-400">
                         <Star className="w-4 h-4 fill-amber-400" />
-                        <span className="text-[11px] font-medium text-white">{t.rating?.toFixed(1)}</span>
+                        <span className="text-[11px] font-medium text-white">{t.rating.toFixed(1)}</span>
                       </div>
                     </div>
                   </div>
@@ -132,18 +121,19 @@ export default function TestimonialSection({ data }: Props) {
               <div className="inline-flex items-center justify-center h-9 w-9 rounded-lg bg-white/15 ring-1 ring-white/20 mb-4">
                 <Quote className="w-4 h-4 text-white/80" />
               </div>
-              <p className="text-sm leading-relaxed text-zinc-100/90 mb-6 italic">"{(t as any).text || (t as any).content}"</p>
+              <p className="text-sm leading-relaxed text-zinc-100/90 mb-6 italic">"{t.content}"</p>
               <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="relative h-10 w-10 rounded-full overflow-hidden ring-1 ring-white/20">
-                    <Image src={(t as any).avatarUrl} alt={t.name || 'Aluno'} fill className="object-cover" />
+                    <Image src={t.avatar} alt={t.name} fill className="object-cover" />
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-white leading-tight">{t.name}</div>
+                    <div className="text-xs text-zinc-400 leading-tight">{t.role}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 text-yellow-400">
-                  {Array.from({ length: Math.round(t.rating || 5) }).map((_, i) => (
+                  {[...Array(t.rating)].map((_, i) => (
                     <Star key={i} className="w-4 h-4 fill-yellow-400" />
                   ))}
                 </div>
@@ -182,26 +172,22 @@ export default function TestimonialSection({ data }: Props) {
           transition={{ duration: 0.65, delay: 0.15 }}
           className="mt-20 flex flex-wrap justify-center gap-8 text-center"
         >
-          {testimonials.length > 2 && (
-            <div className="flex items-center gap-8 bg-zinc-900/60 border border-zinc-800 rounded-full px-10 py-6 backdrop-blur">
-              <div>
-                <div className="text-2xl font-bold text-white">{(
-                  testimonials.reduce((a, b) => a + (b.rating || 5), 0) / testimonials.length
-                ).toFixed(1)}</div>
-                <div className="text-[10px] uppercase tracking-wide text-zinc-500">Avaliação média</div>
-              </div>
-              <div className="w-px h-10 bg-zinc-800" />
-              <div>
-                <div className="text-2xl font-bold text-white">{testimonials.length.toString().padStart(2, '0')}+</div>
-                <div className="text-[10px] uppercase tracking-wide text-zinc-500">Depoimentos</div>
-              </div>
-              <div className="w-px h-10 bg-zinc-800" />
-              <div>
-                <div className="text-2xl font-bold text-white">98%</div>
-                <div className="text-[10px] uppercase tracking-wide text-zinc-500">Recomendariam</div>
-              </div>
+          <div className="flex items-center gap-8 bg-zinc-900/60 border border-zinc-800 rounded-full px-10 py-6 backdrop-blur">
+            <div>
+              <div className="text-2xl font-bold text-white">4.9</div>
+              <div className="text-[10px] uppercase tracking-wide text-zinc-500">Avaliação média</div>
             </div>
-          )}
+            <div className="w-px h-10 bg-zinc-800" />
+            <div>
+              <div className="text-2xl font-bold text-white">10K+</div>
+              <div className="text-[10px] uppercase tracking-wide text-zinc-500">Alunos satisfeitos</div>
+            </div>
+            <div className="w-px h-10 bg-zinc-800" />
+            <div>
+              <div className="text-2xl font-bold text-white">98%</div>
+              <div className="text-[10px] uppercase tracking-wide text-zinc-500">Recomendariam</div>
+            </div>
+          </div>
         </motion.div>
       </div>
 

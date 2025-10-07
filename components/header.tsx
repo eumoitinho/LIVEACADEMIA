@@ -18,8 +18,7 @@ export default function Header() {
       setIsScrolled(window.scrollY > 20)
       
       // Detect active section for navigation highlighting
-  // Lista de seções para detecção de ativo. 'planos' incluído para highlight se usuário rolar até os planos.
-  const sections = ["sobre", "planos", "contato"]
+      const sections = ["sobre", "servicos", "contato"]
       const current = sections.find(section => {
         const element = document.getElementById(section)
         if (element) {

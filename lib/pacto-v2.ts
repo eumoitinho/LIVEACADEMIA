@@ -12,9 +12,8 @@ interface FetchV2Options {
 
 export async function fetchPactoV2<T>({ method = 'GET', body, signal, slug, endpoint }: FetchV2Options): Promise<T> {
   const unidade = await getUnidadeBySlug(slug)
-  // getUnitBySlug returns object with decrypted key in `apiKeyPlain`
-  if (!unidade || !unidade.apiKeyPlain) throw new Error('Unidade não encontrada')
-  const unidadeChave = unidade.apiKeyPlain
+  if (!unidade || !unidade.unitKey) throw new Error('Unidade não encontrada')
+  const unidadeChave = unidade.unitKey
   const resolvedEndpoint = endpoint.replace('{unidadeChave}', unidadeChave)
   const url = `${BASE_URL}${resolvedEndpoint}`
   const started = Date.now()

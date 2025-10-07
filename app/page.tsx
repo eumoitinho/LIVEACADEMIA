@@ -1,25 +1,51 @@
-import SectionsRenderer from '@/components/cms/section-renderer'
-import FloatingButton from '@/components/floating-button'
-import { getHomePage } from '@/lib/cms'
+"use client"
 
-export const revalidate = 60
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { ChevronRight, Shield, DollarSign, CheckCircle, Star, Users, Award } from "lucide-react"
+import HeroSection from "@/components/hero-section"
+import LocationCarousel from "@/components/location-carousel"
+import TestimonialSection from "@/components/testimonial-section"
+import FloatingButton from "@/components/floating-button"
+import PlanosSection from "@/components/planos-section"
+import AboutSection from "@/components/about-section"
+import UnidadesCarousel from "@/components/unidades-carousel"
+import BeneficiosSection from "@/components/beneficios-section"
+import AppSection from "@/components/app-section"
+import ModalidadesSection from "@/components/modalidades-section"
+import WellhubSection from "@/components/wellhub-section"
+import BioimpedanciaSection from "@/components/bioimpedancia-section"
+import EstruturaSection from "@/components/estrutura-section"
 
-export default async function Home() {
-  const page = await getHomePage()
-  const sections = page?.sections || []
-
+export default function Home() {
   return (
     <main className="min-h-screen relative">
-      {sections.length ? (
-        <SectionsRenderer sections={sections} />
-      ) : (
-        <div className="max-w-4xl mx-auto px-6 py-32 text-center">
-          <h1 className="text-4xl font-semibold text-white mb-4">Sem conteúdo ainda</h1>
-          <p className="text-white/60 mb-8">Crie um documento <code className="px-1.5 py-0.5 bg-white/10 rounded">page</code> com slug <strong>home</strong> no Sanity Studio (<code>/studio</code>) e adicione seções.</p>
-          <div className="text-xs text-white/40">(Este fallback desaparece assim que o CMS tiver dados.)</div>
-        </div>
-      )}
+      <HeroSection />
+
+      <AboutSection />
+
+      <UnidadesCarousel />
+
+      <BeneficiosSection />
+
+      <EstruturaSection />
+
+      <ModalidadesSection />
+
+      {/* Plans Section */}
+      <PlanosSection />
+
+      <AppSection />
+
+      {/* INSERIR AS DUAS NOVAS SEÇÕES AQUI */}
+   
+
+      {/* Testimonials */}
+      <TestimonialSection />
+
       <FloatingButton />
     </main>
   )
 }
+
+export const dynamic = 'force-dynamic'

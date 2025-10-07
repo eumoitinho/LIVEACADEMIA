@@ -5,73 +5,45 @@
 import { motion } from "framer-motion"
 import { ShieldCheck, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
 import Image from "next/image"
-import { useState, useCallback, useMemo } from "react"
-import type { BeneficiosSectionData } from "@/types/cms-sections"
+import { useState, useCallback } from "react"
 
-interface Props { data?: BeneficiosSectionData }
-
-const fallbackIcons = [ShieldCheck, Star, Users, Snowflake]
-const fallbackImages = [
-  "/images/academia-1.webp",
-  "/images/academia-2.webp",
-  "/images/academia-3.webp",
-  "/images/academia-4.webp"
+const beneficios = [
+  {
+    icon: ShieldCheck,
+    title: "Planos flexíveis",
+    description: "Em qualquer plano, você treina sem fidelidade, taxas de cancelamento, manutenção ou anuidade.",
+    color: "from-yellow-400 to-amber-500",
+    image: "/images/academia-1.webp",
+  },
+  {
+    icon: Star,
+    title: "Espaços exclusivos",
+    description: "Desfrute de áreas como Espaço Relax, Espaço Yoga e o maior Studio de Bike Indoor da região Norte com o plano Diamante.",
+    color: "from-amber-500 to-yellow-600",
+    image: "/images/academia-2.webp",
+  },
+  {
+    icon: Users,
+    title: "Aulas coletivas",
+    description: "Diversifique seu treino com uma grade variada de aulas e aproveite o ambiente coletivo para socializar e manter a disciplina.",
+    color: "from-yellow-500 to-amber-600",
+    image: "/images/academia-3.webp",
+  },
+  {
+    icon: Snowflake,
+    title: "Climatização",
+    description: "Treine com mais conforto nos ambientes climatizados disponíveis nas unidades Diamante, Premium e Tradicional Climatizada.",
+    color: "from-yellow-400 to-amber-500",
+    image: "/images/academia-4.webp",
+  },
 ]
 
-export default function BeneficiosSection({ data }: Props) {
+export default function BeneficiosSection() {
   const easing = [0.16, 1, 0.3, 1] as const
   const [active, setActive] = useState(0)
   const handleActivate = useCallback((idx: number) => {
     setActive(idx)
   }, [])
-
-  const beneficios = useMemo(() => {
-    if (data?.items?.length) {
-      return data.items.map((item, idx) => ({
-        icon: fallbackIcons[idx % fallbackIcons.length],
-        title: item.title || `Benefício ${idx + 1}`,
-        description: item.text || '—',
-        color: ['from-yellow-400 to-amber-500','from-amber-500 to-yellow-600','from-yellow-500 to-amber-600','from-yellow-400 to-amber-500'][idx % 4],
-        image: fallbackImages[idx % fallbackImages.length],
-        _key: item._key || `b${idx}`
-      }))
-    }
-    // fallback original
-    return [
-      {
-        icon: ShieldCheck,
-        title: "Planos flexíveis",
-        description: "Em qualquer plano, você treina sem fidelidade, taxas de cancelamento, manutenção ou anuidade.",
-        color: "from-yellow-400 to-amber-500",
-        image: "/images/academia-1.webp",
-        _key: 'f1'
-      },
-      {
-        icon: Star,
-        title: "Espaços exclusivos",
-        description: "Desfrute de áreas como Espaço Relax, Espaço Yoga e o maior Studio de Bike Indoor da região Norte com o plano Diamante.",
-        color: "from-amber-500 to-yellow-600",
-        image: "/images/academia-2.webp",
-        _key: 'f2'
-      },
-      {
-        icon: Users,
-        title: "Aulas coletivas",
-        description: "Diversifique seu treino com uma grade variada de aulas e aproveite o ambiente coletivo para socializar e manter a disciplina.",
-        color: "from-yellow-500 to-amber-600",
-        image: "/images/academia-3.webp",
-        _key: 'f3'
-      },
-      {
-        icon: Snowflake,
-        title: "Climatização",
-        description: "Treine com mais conforto nos ambientes climatizados disponíveis nas unidades Diamante, Premium e Tradicional Climatizada.",
-        color: "from-yellow-400 to-amber-500",
-        image: "/images/academia-4.webp",
-        _key: 'f4'
-      },
-    ]
-  }, [data])
 
   return (
     <section className="relative py-24 px-4 lg:px-10 overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">
@@ -95,9 +67,7 @@ export default function BeneficiosSection({ data }: Props) {
             <span className="text-yellow-300 text-sm font-medium">Por que escolher a Live Academia?</span>
           </div>
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
-            {data?.heading ? data.heading : (
-              <>Benefícios <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent">exclusivos</span></>
-            )}
+            Benefícios <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent">exclusivos</span>
           </h2>
           <p className="text-lg text-zinc-300 max-w-2xl mx-auto">
             Tudo o que você precisa para transformar seu corpo e sua vida, com liberdade e tecnologia.
@@ -110,11 +80,11 @@ export default function BeneficiosSection({ data }: Props) {
           role="tablist"
           aria-label="Benefícios da Live Academia"
         >
-          {beneficios.map((beneficio: any, idx: number) => {
+          {beneficios.map((beneficio, idx) => {
             const isActive = active === idx
             return (
               <div
-                key={beneficio._key || beneficio.title}
+                key={beneficio.title}
                 role="tab"
                 aria-selected={isActive}
                 tabIndex={0}

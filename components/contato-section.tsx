@@ -2,10 +2,9 @@
 
 import { motion } from "framer-motion"
 import { Phone, Mail, MapPin, Clock, MessageCircle, Send, Instagram, Facebook, Youtube } from "lucide-react"
-import { ContatoSectionData } from '@/types/cms-sections'
 import { useState } from "react"
 
-const fallbackContactInfo = [
+const contactInfo = [
   {
     icon: Phone,
     title: "WhatsApp",
@@ -36,7 +35,7 @@ const fallbackContactInfo = [
   }
 ]
 
-const fallbackSocial = [
+const socialMedia = [
   {
     name: "Instagram",
     url: "https://www.instagram.com/liveacademiamanaus/",
@@ -57,44 +56,12 @@ const fallbackSocial = [
   }
 ]
 
-function mapIcon(key?: string) {
-  switch (key) {
-    case 'phone': return Phone
-    case 'mail': return Mail
-    case 'map': return MapPin
-    case 'clock': return Clock
-    case 'instagram': return Instagram
-    case 'facebook': return Facebook
-    case 'youtube': return Youtube
-    default: return Phone
-  }
-}
-
-export default function ContatoSection({ data }: { data?: ContatoSectionData }) {
+export default function ContatoSection() {
   const [formData, setFormData] = useState({
     nome: "",
     telefone: "",
     mensagem: ""
   })
-
-  const contactInfo = data?.contactItems?.length
-    ? data.contactItems.map(i => ({
-        icon: mapIcon(i.iconKey),
-        title: i.title || '',
-        info: i.info || '',
-        action: i.action || '',
-        highlight: !!i.highlight,
-      }))
-    : fallbackContactInfo
-
-  const socialMedia = data?.social?.length
-    ? data.social.map(s => ({
-        name: s.name || '',
-        url: s.url || '#',
-        icon: mapIcon(s.iconKey),
-        color: s.color || 'from-yellow-500 to-amber-500'
-      }))
-    : fallbackSocial
 
   return (
     <section id="contato" className="py-20 relative overflow-hidden bg-black">
@@ -117,10 +84,10 @@ export default function ContatoSection({ data }: { data?: ContatoSectionData }) 
           </div>
           
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            {(data?.heading || 'Pronto para ')}<span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">{data?.heading ? '' : 'começar'}</span>{data?.heading ? '' : '?'}
+            Pronto para <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">começar</span>?
           </h2>
           <p className="text-zinc-400 text-lg max-w-3xl mx-auto">
-            {data?.subheading || 'Escolha a melhor forma de entrar em contato. Estamos aqui para ajudar.'}
+            Escolha a melhor forma de entrar em contato. Estamos aqui para ajudar.
           </p>
         </motion.div>
 

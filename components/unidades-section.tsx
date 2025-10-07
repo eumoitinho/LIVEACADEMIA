@@ -1,10 +1,8 @@
-"use client"
 import { motion } from "framer-motion"
 
 import UnidadeCard from "./unidade-card"
-import { UnidadesSectionData } from '@/types/cms-sections'
 
-const fallbackUnidades = [
+const unidades = [
   {
     nome: "Live Academia - Centro",
     endereco: "Av. Getúlio Vargas, 1234 - Centro, Manaus/AM",
@@ -35,17 +33,8 @@ const fallbackUnidades = [
   },
 ]
 
-export default function UnidadesSection({ data }: { data?: UnidadesSectionData }) {
+export default function UnidadesSection() {
   const easing = [0.16, 1, 0.3, 1] as const
-  const unidades = data?.unidades?.length
-    ? data.unidades.map(u => ({
-        nome: u.nome || 'Unidade',
-        endereco: u.endereco || '',
-        imagem: (u.imagem && (u.imagem.asset?.url || u.imagem.url)) || '/images/academia-1.webp',
-        badge: { text: u.badgeText || '', variant: (u.badgeVariant as any) || 'orange' },
-        link: u.link || '#'
-      }))
-    : fallbackUnidades
 
   return (
     <section className="relative py-24 px-6 lg:px-12 bg-black overflow-hidden">
@@ -77,7 +66,7 @@ export default function UnidadesSection({ data }: { data?: UnidadesSectionData }
                 viewport={{ once: true }}
                 className="text-3xl lg:text-4xl font-semibold text-white leading-tight"
               >
-                {data?.heading || 'Viva a experiência Live em diferentes bairros de Manaus'}
+                Viva a experiência Live em diferentes bairros de Manaus
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, x: -20 }}
@@ -86,7 +75,8 @@ export default function UnidadesSection({ data }: { data?: UnidadesSectionData }
                 viewport={{ once: true }}
                 className="text-base text-white/60 leading-relaxed"
               >
-                {data?.subheading || 'Cada unidade é pensada para entregar infraestrutura premium, aulas exclusivas e atendimento próximo. Escolha a que mais combina com a sua rotina ou circule livremente entre elas sem fidelidade.'}
+                Cada unidade é pensada para entregar infraestrutura premium, aulas exclusivas e atendimento próximo. Escolha
+                a que mais combina com a sua rotina ou circule livremente entre elas sem fidelidade.
               </motion.p>
             </div>
             <motion.div

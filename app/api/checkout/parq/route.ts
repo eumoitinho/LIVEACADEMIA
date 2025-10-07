@@ -10,8 +10,7 @@ export async function POST(req: NextRequest) {
     if (!slug || !parq) return NextResponse.json({ error: 'slug e parq obrigatórios' }, { status: 400 })
   const unidade = await getUnidadeBySlug(slug)
   if (!unidade) return NextResponse.json({ error: 'Unidade não encontrada' }, { status: 404 })
-  const chave = unidade.apiKeyPlain || unidade.chave_api || ''
-  const data = await fetchPactoV2<any>({ slug, method: 'POST', endpoint: `/TreinoWeb/prest/avaliacao/${chave}/parq?empresa=1`, body: parq })
+  const data = await fetchPactoV2<any>({ slug, method: 'POST', endpoint: `/TreinoWeb/prest/avaliacao/${unidade.unitKey}/parq?empresa=1`, body: parq })
     return NextResponse.json(data)
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 })

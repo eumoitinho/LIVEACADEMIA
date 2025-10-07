@@ -3,23 +3,7 @@
 import { motion } from "framer-motion"
 import { Dumbbell, Users, Heart, Camera, Target, Bike, CheckCircle, Sparkles, Crown, Zap } from "lucide-react"
 
-import { EstruturaSectionData } from '@/types/cms-sections'
-
-function mapIcon(key?: string) {
-  switch (key) {
-    case 'dumbbell': return Dumbbell
-    case 'users': return Users
-    case 'heart': return Heart
-    case 'camera': return Camera
-    case 'target': return Target
-    case 'bike': return Bike
-    case 'sparkles': return Sparkles
-    case 'zap': return Zap
-    default: return Dumbbell
-  }
-}
-
-const fallbackEstruturas = [
+const estruturas = [
   {
     titulo: "Áreas para musculação e cardio",
     descricao: "Equipamentos modernos para todos os tipos de treino",
@@ -85,18 +69,7 @@ const fallbackEstruturas = [
   }
 ]
 
-export default function EstruturaSection({ data }: { data?: EstruturaSectionData }) {
-  const estruturas = data?.items?.length
-    ? data.items.map(i => ({
-        titulo: i.titulo || 'Item',
-        descricao: i.descricao || '',
-        icon: mapIcon(i.iconKey),
-        disponibilidade: i.disponibilidade || '',
-        categoria: i.categoria === 'exclusivo' ? 'exclusivo' : 'básico',
-        color: i.categoria === 'exclusivo' ? 'from-amber-500 to-yellow-600' : 'from-zinc-700 to-zinc-800',
-        glowColor: i.categoria === 'exclusivo' ? 'group-hover:shadow-amber-500/30' : 'group-hover:shadow-zinc-500/20',
-      }))
-    : fallbackEstruturas
+export default function EstruturaSection() {
   const easing = [0.16, 1, 0.3, 1] as const
 
   return (
@@ -145,8 +118,7 @@ export default function EstruturaSection({ data }: { data?: EstruturaSectionData
             viewport={{ once: true }}
             className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight"
           >
-            {(data?.heading || 'Estrutura completa')}{' '}
-            <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-pulse">Live</span>
+            Estrutura completa <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-pulse">Live</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -155,7 +127,7 @@ export default function EstruturaSection({ data }: { data?: EstruturaSectionData
             viewport={{ once: true }}
             className="text-lg text-zinc-300 max-w-3xl mx-auto"
           >
-            {data?.gallery?.length ? 'Confira os destaques da nossa infraestrutura.' : 'Tudo o que você precisa para alcançar seus objetivos fitness com conforto e qualidade.'}
+            Tudo o que você precisa para alcançar seus objetivos fitness com conforto e qualidade.
           </motion.p>
         </motion.div>
 

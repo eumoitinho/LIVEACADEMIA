@@ -39,9 +39,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
       return NextResponse.json({ error: 'Chaves da unidade ausentes' }, { status: 503 })
     }
 
-  // Buscar planos via getPlanosUnidade (usa codigo_unidade como filtro)
-  const codigo = unit.codigo_unidade || unit.slug
-  const planos = await pactoAPI.getPlanosUnidade(redeKey, publicKey, codigo)
+    // Usar novo método getPlanosNegociacao
+    const empresaId = publicKey // empresaId é a chave pública
+    const planos = await pactoAPI.getPlanosNegociacao(redeKey, empresaId, 0)
 
     return NextResponse.json({ planos, fallback: false })
   } catch (error: any) {
