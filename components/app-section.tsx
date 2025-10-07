@@ -8,21 +8,9 @@ import { Smartphone, Activity, Calendar, BarChart3, Bell, Users, CheckCircle, St
 const appScreens = [
   {
     id: 1,
-    image: "/images/academia-1.webp",
-    title: "Dashboard",
-    description: "Acompanhe seu progresso"
-  },
-  {
-    id: 2,
-    image: "/images/academia-2.webp",
-    title: "Treinos",
-    description: "Fichas personalizadas"
-  },
-  {
-    id: 3,
-    image: "/images/academia-3.webp",
-    title: "Agendamento",
-    description: "Reserve suas aulas"
+    image: "/images/app.jpeg",
+    title: "",
+    description: ""
   }
 ]
 

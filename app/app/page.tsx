@@ -262,7 +262,7 @@ export default function AppPage() {
               <div key={item} className="min-w-[250px] snap-center">
                 <div className="bg-live-border/10 p-4 rounded-2xl border border-live-border/30">
                   <img
-                    src={`/placeholder.svg?height=500&width=250&text=Screenshot ${item}`}
+                    src="/app.jpeg"
                     alt={`Screenshot ${item}`}
                     className="rounded-2xl w-full"
                   />
