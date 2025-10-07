@@ -29,65 +29,34 @@ function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon
   return R * c
 }
 
-// Unidades com coordenadas reais
-const unidades = [
-  {
-    nome: "Live Academia - Centro",
-    endereco: "Av. Getúlio Vargas, 773, Centro",
-    imagem: "/images/academia-1.webp",
-    badge: { text: "Centro", variant: "orange" as const },
-    link: "https://maps.google.com/?q=Live+Academia+Centro",
-    lat: -3.131633,
-    lon: -60.023444,
-  },
-  {
-    nome: "Live Academia - Cachoeirinha",
-    endereco: "Av. Ajuricaba, 660, Cachoeirinha",
-    imagem: "/images/academia-2.webp",
-    badge: { text: "Cachoeirinha", variant: "indigo" as const },
-    link: "https://maps.google.com/?q=Live+Academia+Cachoeirinha",
-    lat: -3.110000,
-    lon: -60.010000,
-  },
-  {
-    nome: "Live Academia - Cidade Nova",
-    endereco: "Av. Noel Nutels, 890, Cidade Nova",
-    imagem: "/images/academia-3.webp",
-    badge: { text: "Cidade Nova", variant: "pink" as const },
-    link: "https://maps.google.com/?q=Live+Academia+Cidade+Nova",
-    lat: -2.990000,
-    lon: -59.980000,
-  },
-  {
-    nome: "Live Academia - Ponta Negra",
-    endereco: "Rua Raul Pompéia, 37, Ponta Negra",
-    imagem: "/images/academia-4.webp",
-    badge: { text: "Ponta Negra", variant: "orange" as const },
-    link: "https://maps.google.com/?q=Live+Academia+Ponta+Negra",
-    lat: -3.0962455,
-    lon: -60.0512277,
-  },
-  {
-    nome: "Live Academia - Adrianópolis",
-    endereco: "Rua Salvador, 567, Adrianópolis",
-    imagem: "/images/academia-1.webp",
-    badge: { text: "Adrianópolis", variant: "indigo" as const },
-    link: "https://maps.google.com/?q=Live+Academia+Adrianopolis",
-    lat: -3.092000,
-    lon: -60.015000,
-  },
-  {
-    nome: "Live Academia - Flores",
-    endereco: "Av. Torquato Tapajós, 1234, Flores",
-    imagem: "/images/academia-2.webp",
-    badge: { text: "Flores", variant: "pink" as const },
-    link: "https://maps.google.com/?q=Live+Academia+Flores",
-    lat: -3.076000,
-    lon: -60.008000,
-  },
-]
+// Util para checar suporte WebGL (evita tentativa e erro do script externo)
+function supportsWebGL() {
+  try {
+    if (typeof window === 'undefined') return false
+    const canvas = document.createElement('canvas')
+    return !!(
+      canvas.getContext('webgl') ||
+      canvas.getContext('webgl2') ||
+      (canvas.getContext('experimental-webgl') as WebGLRenderingContext | null)
+    )
+  } catch (_) {
+    return false
+  }
+}
 
-type UnidadeComDistancia = typeof unidades[0] & { distancia?: number }
+interface UnidadeBase {
+  id: string
+  slug: string
+  nome: string
+  endereco: string
+  imagem: string
+  latitude: number | null
+  longitude: number | null
+  badge?: { text: string; variant: 'pink' | 'indigo' | 'orange' }
+  link?: string
+}
+
+type UnidadeComDistancia = UnidadeBase & { distancia?: number }
 
 // Mapeamento de nomes para IDs das unidades
 const unidadeNameToId = {
@@ -155,7 +124,7 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
               {/* Badge sobre a imagem */}
               <div className="absolute left-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white ring-1 ring-white/20 backdrop-blur-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_0_2px_rgba(0,0,0,0.4)]" />
-                {unidade.badge.text}
+                {unidade.badge?.text || unidade.slug || 'Unidade'}
               </div>
             </div>
           {/* Content */}
@@ -209,26 +178,67 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
 
 export default function UnidadesCarousel() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null)
-  const [sortedUnidades, setSortedUnidades] = useState<UnidadeComDistancia[]>(unidades)
+  const [sortedUnidades, setSortedUnidades] = useState<UnidadeComDistancia[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const carouselViewportRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
   const prefersReducedMotion = useReducedMotion()
   const [lowPerf, setLowPerf] = useState(false)
+  const [webglOk, setWebglOk] = useState(false)
   const visibleInView = useInView(carouselViewportRef, { amount: 0.25, once: false })
 
-  // Heurística simples para dispositivos de menor performance
+  // Carrega unidades da API
+  useEffect(() => {
+    let cancelled = false
+    async function load() {
+      try {
+        const res = await fetch('/api/unidades', { cache: 'no-store' })
+        if (!res.ok) throw new Error('Falha ao buscar unidades')
+        const json = await res.json()
+        const units: UnidadeBase[] = (json.units || []).map((u: any) => ({
+            id: u.id,
+            slug: u.slug,
+            nome: u.nome,
+            endereco: u.endereco,
+            imagem: u.imagem,
+            latitude: u.latitude,
+            longitude: u.longitude,
+            badge: { text: (u.slug || 'Unidade').replace(/-/g,' ').slice(0,20), variant: 'orange' },
+            link: `/unidades/${u.slug}`
+        }))
+        if (!cancelled) {
+          setSortedUnidades(units)
+        }
+      } catch (e) {
+        console.warn('[UnidadesCarousel] fallback: nenhuma unidade carregada', e)
+      }
+    }
+    load()
+    return () => { cancelled = true }
+  }, [])
+
+  // Heurística simples + suporte WebGL
   useEffect(() => {
     try {
       const cores = (navigator as any).hardwareConcurrency || 8
       const mem = (navigator as any).deviceMemory || 8
-      if (cores <= 4 || mem <= 4) setLowPerf(true)
-      if (window.innerWidth < 820 && window.devicePixelRatio > 2) setLowPerf(true)
-    } catch (_) {}
+      let low = false
+      if (cores <= 4 || mem <= 4) low = true
+      if (window.innerWidth < 820 && window.devicePixelRatio > 2) low = true
+      setLowPerf(low)
+      if (!low) {
+        // Só marca webglOk se não for low perf E suporte existir
+        setWebglOk(supportsWebGL())
+      }
+    } catch (_) {
+      setWebglOk(false)
+    }
   }, [])
-  // Segurança: caso o Script carregue mas não inicialize sozinho
+
+  // Fallback init somente se script + webglOk
   useEffect(() => {
+    if (!webglOk || lowPerf) return
     const t = setTimeout(() => {
       if (window.UnicornStudio && !window.UnicornStudio.isInitialized && typeof window.UnicornStudio.init === 'function') {
         try {
@@ -236,12 +246,15 @@ export default function UnidadesCarousel() {
           window.UnicornStudio.isInitialized = true
           console.info('[UnicornStudio] Inicializado via fallback useEffect')
         } catch (e) {
-          console.warn('[UnicornStudio] Falha na init fallback', e)
+          // Silencia excesso no console, mas deixa 1 warn leve
+          if (process.env.NODE_ENV !== 'production') {
+            console.warn('[UnicornStudio] Falha na init fallback (ignorado em prod)')
+          }
         }
       }
-    }, 1200)
+    }, 1600)
     return () => clearTimeout(t)
-  }, [])
+  }, [webglOk, lowPerf])
 
   // Marca como montado para evitar diferenças SSR -> Cliente ao injetar canvas/DOM externo
   useEffect(() => {
@@ -250,17 +263,20 @@ export default function UnidadesCarousel() {
 
   // Calcula distâncias quando a localização é obtida
   useEffect(() => {
-    if (userLocation) {
-      const unidadesComDistancia = unidades.map((u) => ({
-        ...u,
-        distancia: getDistanceFromLatLonInKm(userLocation.lat, userLocation.lon, u.lat, u.lon),
-      }))
-      setSortedUnidades(
-        unidadesComDistancia.sort((a, b) => (a.distancia ?? 0) - (b.distancia ?? 0))
-      )
-    } else {
-      setSortedUnidades(unidades)
-    }
+    if (!userLocation || sortedUnidades.length === 0) return
+    setSortedUnidades((prev) => {
+      return [...prev]
+        .map((u) => {
+          if (u.latitude != null && u.longitude != null) {
+            return {
+              ...u,
+              distancia: getDistanceFromLatLonInKm(userLocation.lat, userLocation.lon, u.latitude!, u.longitude!)
+            }
+          }
+          return u
+        })
+        .sort((a, b) => (a.distancia ?? Infinity) - (b.distancia ?? Infinity))
+    })
   }, [userLocation])
 
   // Solicita localização automaticamente
@@ -316,32 +332,37 @@ export default function UnidadesCarousel() {
   }, [])
 
   const slideWidth = 420 // width + gap approximation
-  const translateX = -(currentIndex * slideWidth)
+  const translateX = sortedUnidades.length > 0 ? -(currentIndex * slideWidth) : 0
 
   return (
     <section className={cn("section-padding py-24 relative z-10 overflow-hidden", lowPerf && "[&_*]:will-change-auto")}
       data-low-perf={lowPerf || undefined}
     >
-      <Script
-        src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          try {
-            if (window.UnicornStudio && !window.UnicornStudio.isInitialized) {
-              window.UnicornStudio.init()
-              window.UnicornStudio.isInitialized = true
-              console.info('[UnicornStudio] Inicializado via <Script> onLoad')
+      {webglOk && !lowPerf && (
+        <Script
+          src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js"
+          strategy="lazyOnload"
+          onLoad={() => {
+            try {
+              if (window.UnicornStudio && !window.UnicornStudio.isInitialized) {
+                window.UnicornStudio.init()
+                window.UnicornStudio.isInitialized = true
+                console.info('[UnicornStudio] Inicializado via <Script> onLoad')
+              }
+            } catch (e) {
+              if (process.env.NODE_ENV !== 'production') {
+                console.warn('[UnicornStudio] Erro ao inicializar no onLoad (silenciado)')
+              }
             }
-          } catch (e) {
-            console.warn('[UnicornStudio] Erro ao inicializar no onLoad', e)
-          }
-        }}
-      />
+          }}
+        />
+      )}
       {/* Background otimizado (menos camadas em lowPerf ou prefersReducedMotion) */}
       <div className="absolute inset-0 -z-10">
         {mounted && !prefersReducedMotion && (
           <>
-            {!lowPerf && (
+            {/* Canvas animado só se webglOk */}
+            {!lowPerf && webglOk && (
               <div
                 data-us-project="x6cbPWi9roeeiZ8cuBu3"
                 id="unicorn-bg"
@@ -350,12 +371,13 @@ export default function UnidadesCarousel() {
                 style={{ contain: 'layout paint size', opacity: 0.6, filter: 'brightness(0.55) contrast(1.05) saturate(0.85)' }}
               />
             )}
-            <div className="absolute inset-0 bg-black/85 pointer-events-none" />
-            <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 45%, rgba(250,204,21,0.16), transparent 65%)' }} />
+            {/* Fallback static backgrounds */}
+            <div className="absolute inset-0 bg-black/88 pointer-events-none" />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 45%, rgba(250,204,21,0.10), transparent 65%)' }} />
             {!lowPerf && (
-              <div className="absolute inset-0 pointer-events-none opacity-25 mix-blend-screen" style={{ backgroundImage: 'repeating-linear-gradient(115deg, rgba(250,204,21,0.07) 0px, rgba(250,204,21,0.07) 2px, transparent 2px, transparent 16px)' }} />
+              <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-screen" style={{ backgroundImage: 'repeating-linear-gradient(115deg, rgba(250,204,21,0.05) 0px, rgba(250,204,21,0.05) 2px, transparent 2px, transparent 16px)' }} />
             )}
-            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.7), transparent 18%, transparent 82%, rgba(0,0,0,0.7))' }} />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.65), transparent 18%, transparent 82%, rgba(0,0,0,0.65))' }} />
           </>
         )}
       </div>
@@ -367,9 +389,7 @@ export default function UnidadesCarousel() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6">
-            <span className="text-zinc-400 text-sm font-medium">Unidades em Manaus</span>
-          </div>
+          
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
             Nossas <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">Unidades</span>
           </h2>
@@ -399,9 +419,12 @@ export default function UnidadesCarousel() {
               className="flex gap-6 will-change-transform select-none"
               style={{ transform: `translate3d(${translateX}px,0,0)`, transition: 'transform 650ms cubic-bezier(.19,1,.22,1)' }}
             >
-              {sortedUnidades.map((unidade, index) => (
+              {sortedUnidades.length === 0 && (
+                <div className="text-center py-20 text-zinc-500 w-full">Carregando unidades...</div>
+              )}
+              {sortedUnidades.map((unidade) => (
                 <div
-                  key={unidade.nome}
+                  key={unidade.id || unidade.slug}
                   className="flex-shrink-0 w-[400px]"
                 >
                   <UnidadeCard unidade={unidade} />
@@ -427,25 +450,27 @@ export default function UnidadesCarousel() {
           </button>
 
           {/* Indicadores */}
-          <div className="flex justify-center gap-2 mt-8">
-            {sortedUnidades.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={cn(
-                  "h-2 rounded-full transition-all duration-300",
-                  currentIndex === index 
-                    ? "w-8 bg-yellow-400" 
-                    : "w-2 bg-zinc-700 hover:bg-zinc-600"
-                )}
-                aria-label={`Ir para slide ${index + 1}`}
-              />
-            ))}
-          </div>
+          {sortedUnidades.length > 1 && (
+            <div className="flex justify-center gap-2 mt-8">
+              {sortedUnidades.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={cn(
+                    "h-2 rounded-full transition-all duration-300",
+                    currentIndex === index 
+                      ? "w-8 bg-yellow-400" 
+                      : "w-2 bg-zinc-700 hover:bg-zinc-600"
+                  )}
+                  aria-label={`Ir para slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Botão de localização */}
-        {!userLocation && (
+        {!userLocation && sortedUnidades.length > 0 && (
           <div className="text-center mt-8">
             <button
               onClick={() => {

@@ -9,8 +9,8 @@
     "lint": "next lint",
     "start": "next start",
     "fetch:unit-keys": "node scripts/fetch-unit-keys.js",
-  "seed": "tsx scripts/seed-supabase.ts",
-  "seed:reset": "tsx scripts/reset-supabase.ts"
+    "seed": "tsx scripts/seed-supabase.ts",
+    "seed:reset": "tsx scripts/reset-supabase.ts"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
@@ -71,6 +71,8 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "dotenv": "^17.2.2",
+    "eslint": "^9.37.0",
+    "eslint-config-next": "15.5.4",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.1",

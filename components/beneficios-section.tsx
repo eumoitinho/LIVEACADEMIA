@@ -62,10 +62,10 @@ export default function BeneficiosSection() {
           viewport={{ once: true, amount: 0.3 }}
           className="text-center mb-14"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-yellow-500/15 to-amber-500/15 border border-yellow-500/25 backdrop-blur-lg mb-5">
+          {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-yellow-500/15 to-amber-500/15 border border-yellow-500/25 backdrop-blur-lg mb-5">
             <Star className="h-4 w-4 text-yellow-400" />
             <span className="text-yellow-300 text-sm font-medium">Por que escolher a Live Academia?</span>
-          </div>
+          </div> */}
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
             Benefícios <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent">exclusivos</span>
           </h2>
@@ -161,12 +161,12 @@ export default function BeneficiosSection() {
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-14">
+        {/* <div className="text-center mt-14">
           <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 backdrop-blur-xl">
             <Zap className="h-5 w-5 text-yellow-400" />
             <span className="text-yellow-300 text-sm font-medium">Experimente sem compromisso</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   )
