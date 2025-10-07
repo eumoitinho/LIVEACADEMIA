@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image"
 import { motion } from "framer-motion"
 
 import UnidadeCard from "./unidade-card"
@@ -42,12 +43,23 @@ export default function UnidadesSection() {
       className="relative -mt-32 pt-40 pb-24 px-6 lg:px-12 bg-black overflow-hidden"
       /* -mt-* puxa a seção para cima para que o background comece atrás da barra de stats anterior */
     >
+      <div className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
+        <Image
+          src="/GewRZyFPrEAvawLIj3Eynw==.jpg"
+          alt="Fachada da Live Premium"
+          fill
+          sizes="100vw"
+          priority={false}
+          className="object-cover object-center scale-105 blur-md"
+        />
+        <div className="absolute inset-0 bg-black/70" />
+      </div>
       {/* Camada base de background ocupando toda a área inclusive a parte sobreposta */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black via-[#0d0d0d] to-black" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-tr from-black via-[#0d0d0d] to-black" />
       {/* Glow / radial accent deslocado à direita */}
-      <div className="pointer-events-none absolute -top-10 bottom-0 right-[-25%] w-[65%] bg-[radial-gradient(circle_at_center,_rgba(255,74,23,0.30),_transparent_70%)] opacity-70" />
+      <div className="pointer-events-none absolute -top-10 bottom-0 right-[-25%] w-[65%] -z-5 bg-[radial-gradient(circle_at_center,_rgba(255,74,23,0.30),_transparent_70%)] opacity-70" />
       {/* Grade sutil / texture opcional */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.08] [mask-image:radial-gradient(circle_at_center,black,transparent_75%)]" style={{backgroundImage:'repeating-linear-gradient(45deg,rgba(255,255,255,0.25)_0_2px,transparent_2px_10px)'}} />
+      <div className="pointer-events-none absolute inset-0 -z-5 opacity-[0.08] [mask-image:radial-gradient(circle_at_center,black,transparent_75%)]" style={{backgroundImage:'repeating-linear-gradient(45deg,rgba(255,255,255,0.25)_0_2px,transparent_2px_10px)'}} />
 
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div

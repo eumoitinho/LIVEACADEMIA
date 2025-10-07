@@ -78,10 +78,7 @@ export default function PlanosSection() {
           viewport={{ once: true, amount: 0.3 }}
           className="text-center mb-20"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/70 border border-zinc-800 text-zinc-300 backdrop-blur-xl mb-6">
-            <Crown className="h-4 w-4" />
-            <span className="text-xs font-normal">Planos sem pegadinha</span>
-          </div>
+          
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">
             Conheça nossos <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">planos</span>
           </h2>

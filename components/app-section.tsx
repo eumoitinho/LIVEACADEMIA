@@ -54,7 +54,7 @@ export default function AppSection() {
             viewport={{ once: true }}
             className="order-2 lg:order-1"
           >
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
@@ -63,7 +63,7 @@ export default function AppSection() {
             >
               <Zap className="w-4 h-4 text-yellow-400 mr-2" />
               <span className="text-yellow-300 text-sm font-medium">Tecnologia e fitness</span>
-            </motion.div>
+            </motion.div> */}
 
             <motion.h2
               initial={{ opacity: 0, y: 20 }}

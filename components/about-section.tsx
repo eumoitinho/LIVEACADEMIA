@@ -38,30 +38,20 @@ export default function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: easing }}
           viewport={{ once: true }}
-          className="grid gap-8 border-b border-white/10 pb-12 pt-4 lg:grid-cols-[1.1fr_0.9fr]"
+          className="space-y-6 border-b border-white/10 pb-12 pt-4"
         >
-          <div className="space-y-6">
-            <span className="block text-sm uppercase tracking-[0.35em] text-white/40">Live Academia</span>
-            <h1 className="text-[48px] md:text-[80px] lg:text-[96px] leading-[0.95] font-semibold tracking-tight text-white">
-              Sobre
-            </h1>
-            <p className="text-base text-white/75 leading-relaxed">
-              Transformamos treino em rotina sustentável e resultado real: liberdade multiunidade, atendimento humano que acompanha cada
-              fase e estrutura premium para garantir evolução de verdade.
-            </p>
-            <p className="text-base text-white/65 leading-relaxed">
-              Somos uma rede criada em Manaus focada em experiência premium acessível: liberdade para treinar em qualquer unidade,
-              avaliação constante e suporte humano de verdade — sem enrolação e sem barreiras.
-            </p>
-          </div>
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900/85 to-black/80 p-6">
-            <div className="absolute -top-12 -right-10 h-36 w-36 rounded-full bg-yellow-400/10 blur-3xl" />
-            <h2 className="text-lg font-medium tracking-tight text-white">Nosso foco é consistência</h2>
-            <p className="mt-3 text-sm leading-relaxed text-white/65">
-              Não existe transformação sem continuidade. Por isso criamos um ambiente em que você quer voltar: acolhimento + evolução
-              mensurável.
-            </p>
-          </div>
+          <span className="block text-sm uppercase tracking-[0.35em] text-white/40">Live Academia</span>
+          <h1 className="text-[48px] md:text-[80px] lg:text-[96px] leading-[0.95] font-semibold tracking-tight text-white">
+            Sobre
+          </h1>
+          <p className="text-base text-white/75 leading-relaxed">
+            Transformamos treino em rotina sustentável e resultado real: liberdade multiunidade, atendimento humano que acompanha cada
+            fase e estrutura premium para garantir evolução de verdade.
+          </p>
+          <p className="text-base text-white/65 leading-relaxed">
+            Somos uma rede criada em Manaus focada em experiência premium acessível: liberdade para treinar em qualquer unidade,
+            avaliação constante e suporte humano de verdade — sem enrolação e sem barreiras.
+          </p>
         </motion.header>
 
         <div className="grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
