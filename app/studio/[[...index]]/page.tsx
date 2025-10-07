@@ -7,8 +7,7 @@
 import StudioClient from './StudioClient'
 
 export const revalidate = 0
-// avoid naming conflict with `next/dynamic` import
-export const forceDynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: 'Studio | LIVE Academia',
