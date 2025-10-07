@@ -2,7 +2,9 @@
 // Deploy: basta fazer o deploy normal do Next.js (Vercel, etc.) e acessar /studio
 // Esta página não deve ser indexada por motores de busca.
 
-import dynamic from 'next/dynamic'
+// Import the client component directly. Next will automatically treat it as a client
+// component because `StudioClient.tsx` contains `"use client"`.
+import StudioClient from './StudioClient'
 
 export const revalidate = 0
 // avoid naming conflict with `next/dynamic` import
@@ -13,8 +15,8 @@ export const metadata = {
   robots: { index: false, follow: false },
 }
 
-// Dynamically load the client-only Studio wrapper with SSR disabled.
-const StudioClient = dynamic(() => import('./StudioClient'), { ssr: false })
+// StudioClient is a client component that renders NextStudio; imported directly
+// so Next will render it on the client.
 
 export default function StudioPage() {
   return (
