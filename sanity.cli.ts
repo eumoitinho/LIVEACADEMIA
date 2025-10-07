@@ -5,6 +5,6 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
 export default defineCliConfig({
   api: { projectId, dataset },
-  // hosted studio hostname (must match deployed studio host)
-  studioHost: 'liveacademia.sanity.studio',
+  // hosted studio short hostname (Sanity will append .sanity.studio)
+  studioHost: 'liveacademia',
 })
