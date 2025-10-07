@@ -1,3 +1,5 @@
+// Legacy compatibility shim: explicitly re-export from the TSX module to avoid
+// extension resolution selecting this file itself.
 import React from 'react'
 import { createClient } from 'next-sanity'
 import imageUrlBuilder from '@sanity/image-url'
@@ -12,20 +14,20 @@ export const client = createClient({ projectId, dataset, apiVersion, useCdn: tru
 const builder = imageUrlBuilder({ projectId, dataset })
 export const urlFor = (src: any) => builder.image(src)
 
+// Build portable text components without JSX so file can remain .ts
 export const portableComponents: PortableTextComponents = {
-  marks: {
-    link: ({ value, children }: { value?: any; children?: React.ReactNode }) => {
-      const target = value?.blank || (value?.href && value.href.startsWith('http')) ? '_blank' : undefined
-      return (
-        <a
-          href={value?.href}
-          target={target}
-          rel={target === '_blank' ? 'noopener noreferrer' : undefined}
-          className="underline decoration-dotted underline-offset-4 hover:text-live-yellow transition-colors"
-        >
-          {children}
-        </a>
-      )
-    },
-  },
+	marks: {
+		link: ({ value, children }: { value?: any; children?: React.ReactNode }) => {
+			const target = value?.blank || (value?.href && value.href.startsWith('http')) ? '_blank' : undefined
+			const props: any = {
+				href: value?.href,
+				target,
+				rel: target === '_blank' ? 'noopener noreferrer' : undefined,
+				className: 'underline decoration-dotted underline-offset-4 hover:text-live-yellow transition-colors',
+			}
+			return React.createElement('a', props, children)
+		},
+	},
 }
+
+export default client
