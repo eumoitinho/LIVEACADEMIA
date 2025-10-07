@@ -212,11 +212,9 @@ function ComparisonTable({ normalPlano, premiumPlano, onMatricular }: {
           <div key={sectionIndex}>
             {/* Section Header */}
             <div className="grid grid-cols-3 border-b border-white/10">
-              <div className="p-6 bg-black/30" colSpan={3}>
+              <div className="col-span-3 p-6 bg-black/30">
                 <span className="text-xs font-semibold uppercase tracking-wider text-live-yellow">{section.section}</span>
               </div>
-              <div className="p-6 border-l border-white/10 bg-black/30"></div>
-              <div className="p-6 border-l border-white/10 bg-black/30"></div>
             </div>
 
             {/* Feature Rows */}

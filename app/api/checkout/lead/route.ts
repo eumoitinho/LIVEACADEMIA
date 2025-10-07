@@ -10,7 +10,8 @@ export async function POST(req: NextRequest) {
     if (!slug || !lead) return NextResponse.json({ error: 'slug e lead obrigatórios' }, { status: 400 })
   const unidade = await getUnidadeBySlug(slug)
   if (!unidade) return NextResponse.json({ error: 'Unidade não encontrada' }, { status: 404 })
-  const data = await fetchPactoV2<any>({ slug, method: 'POST', endpoint: `/lead/${unidade.unitKey}/1/v2/addLead`, body: lead })
+  const chave = unidade.apiKeyPlain || unidade.chave_api || ''
+  const data = await fetchPactoV2<any>({ slug, method: 'POST', endpoint: `/lead/${chave}/1/v2/addLead`, body: lead })
     return NextResponse.json(data)
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 })
