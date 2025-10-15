@@ -1,16 +1,17 @@
-// API Logo Information
-// ===================
-// Logos obtidas da API do Pacto Soluções: https://app.pactosolucoes.com.br/api/prest/v2/vendas/{chave}/unidade/1
-//
-// Chaves API conhecidas:
-// - Margarita: fcceacc50b1db2fc4e8872b06099c142
-// - Vieiralves: 7724bf6109e5370177c8129aa431b922
-//
-// Para descobrir mais chaves:
-// 1. Inspecione o código-fonte dos hotsites
-// 2. Use o devtools do browser na aba Network
-// 3. Procure por strings de 32 caracteres hexadecimais
-// 4. Teste com: node scripts/manual-key-tester.js <chave>
+/**
+ * Dados estáticos das unidades Live Academia
+ * 
+ * NOTA: Este arquivo serve como fallback quando:
+ * - Banco de dados está indisponível
+ * - API Pacto não responde
+ * - Em ambiente de desenvolvimento sem credenciais
+ * 
+ * Para dados dinâmicos (planos, preços atualizados), use:
+ * - lib/services/planos-service.ts (recomendado)
+ * - API routes: /api/pacto/planos/[slug]
+ * 
+ * ⚠️ SEGURANÇA: Não adicionar chaves de API ou dados sensíveis neste arquivo!
+ */
 
 export const locations = [
   // Unidades Tradicionais

@@ -1,11 +1,35 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Preferir NEXT_PUBLIC_SUPABASE_URL para consistência com frontend, mas aceitar SUPABASE_URL como fallback para scripts
-const supabaseUrl = "https://sgntnwnngdskwyuywksk.supabase.co";
-const serviceKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNnbnRud25uZ2Rza3d5dXl3a3NrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1ODM5MzU2MSwiZXhwIjoyMDczOTY5NTYxfQ.LTNaSFG2p1QaXGhF66TUzBZFS0G8IcimY5U0dkBqgpM"
+/**
+ * Cliente Supabase com Service Role Key
+ * ATENÇÃO: Use apenas em contexto server-side!
+ * 
+ * Variáveis de ambiente necessárias:
+ * - NEXT_PUBLIC_SUPABASE_URL: URL do projeto Supabase
+ * - SUPABASE_SERVICE_ROLE_KEY: Service role key (privilégios admin)
+ * 
+ * ⚠️ NUNCA expor SUPABASE_SERVICE_ROLE_KEY no client-side!
+ */
 
-if (!supabaseUrl || !serviceKey) {
-  throw new Error('Supabase env vars missing: defina NEXT_PUBLIC_SUPABASE_URL (ou SUPABASE_URL) e SUPABASE_SERVICE_ROLE_KEY')
+// Suporta NEXT_PUBLIC_SUPABASE_URL (preferido) ou SUPABASE_URL (fallback para scripts)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+if (!supabaseUrl) {
+  throw new Error(
+    '❌ NEXT_PUBLIC_SUPABASE_URL não definida!\n' +
+    'Defina no arquivo .env.local:\n' +
+    'NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co'
+  )
+}
+
+if (!serviceKey) {
+  throw new Error(
+    '❌ SUPABASE_SERVICE_ROLE_KEY não definida!\n' +
+    'Defina no arquivo .env.local:\n' +
+    'SUPABASE_SERVICE_ROLE_KEY=sua-service-role-key\n' +
+    'Obtenha em: Supabase Dashboard > Settings > API > service_role'
+  )
 }
 
 export const supabaseAdmin = createClient(supabaseUrl, serviceKey, {

@@ -1,15 +1,48 @@
 import crypto from 'crypto'
 
-// AES-256-GCM encryption helper.
-// Requires ENCRYPTION_SECRET (32 bytes base64 or hex). If shorter, we derive via SHA-256.
+/**
+ * Módulo de criptografia AES-256-GCM
+ * 
+ * Usado para criptografar dados sensíveis em repouso (chaves de API no banco).
+ * 
+ * Variável de ambiente necessária:
+ * - ENCRYPTION_SECRET: Chave forte de 32+ caracteres
+ * 
+ * Gerar nova chave:
+ * ```bash
+ * openssl rand -base64 32
+ * ```
+ * 
+ * ⚠️ ATENÇÃO: Se perder esta chave, todos os dados criptografados serão irrecuperáveis!
+ * ⚠️ Nunca commitar esta chave no Git!
+ * ⚠️ Usar chaves diferentes entre dev/staging/prod!
+ */
 
-// Allow hardcoded local dev fallback ONLY if env not provided
-const RAW_SECRET = process.env.ENCRYPTION_SECRET || 'a+oZvP9a2ob1vl54zwT9BlSCxHgI4o+lfMXPyjnDc2g='
-if (!process.env.ENCRYPTION_SECRET) {
-  console.warn('[crypto] Usando fallback hardcoded local ENCRYPTION_SECRET (não usar em produção).')
+const RAW_SECRET = process.env.ENCRYPTION_SECRET
+
+if (!RAW_SECRET) {
+  throw new Error(
+    '❌ ENCRYPTION_SECRET não definida!\n\n' +
+    'Esta variável é CRÍTICA para a segurança do sistema.\n' +
+    'Defina no arquivo .env.local:\n\n' +
+    'ENCRYPTION_SECRET=sua-chave-forte-aqui\n\n' +
+    'Gerar nova chave:\n' +
+    'openssl rand -base64 32\n\n' +
+    '⚠️ IMPORTANTE:\n' +
+    '- Se perder esta chave, dados criptografados serão irrecuperáveis\n' +
+    '- Usar chaves diferentes entre dev/staging/prod\n' +
+    '- NUNCA commitar no Git'
+  )
 }
 
-// Derive 32-byte key
+if (RAW_SECRET.length < 32) {
+  console.warn(
+    '⚠️ [crypto] ENCRYPTION_SECRET tem menos de 32 caracteres.\n' +
+    'Recomendado: usar chave de 32+ caracteres para máxima segurança.'
+  )
+}
+
+// Derive 32-byte key usando SHA-256 para garantir tamanho correto
 const KEY = crypto.createHash('sha256').update(RAW_SECRET).digest()
 
 export interface EncryptedPayload {
