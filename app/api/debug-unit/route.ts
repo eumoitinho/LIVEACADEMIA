@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getUnitBySlug } from '@/lib/repository'
+import { getUnitBySlug } from '@/lib/api/supabase-repository'
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)

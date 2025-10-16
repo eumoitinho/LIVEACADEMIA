@@ -4,8 +4,8 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { MapPin, Clock, Check, Phone, Users, Dumbbell } from "lucide-react"
 import Link from "next/link"
-import UnitPlanos from "@/components/unit-planos"
-import CheckoutModal from "@/components/checkout-modal"
+import UnitPlanos from '@/features/units/unit-planos'
+import CheckoutModal from '@/components/checkout/checkout-modal'
 import { useUnit } from "@/contexts/unit-context"
 
 interface UnidadeContentProps {

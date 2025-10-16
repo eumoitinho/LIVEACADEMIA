@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { locations } from "@/lib/locations"
+import { locations } from '@/lib/config/locations'
 import UnidadeContent from "./components/unidade-content"
 
 // Dados específicos por unidade (modalidades, benefícios, fotos)

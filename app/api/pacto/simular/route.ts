@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { pactoAPI, getCodigoUnidade } from '@/lib/pacto-api'
-import { getUnitBySlug } from '@/lib/repository'
+import { pactoV2API, formatVendaData } from '@/src/lib/api/pacto-v2'
+import { getUnitBySlug } from '@/src/lib/api/supabase-repository'
 
 // POST /api/pacto/simular
-// Body: { slug: string; planoId: string; valor?: number; cupom?: string; paymentMethod?: string }
+// Body: { slug: string; planoId: string; cliente: PactoCliente; paymentMethod: string; cartao?: PactoCartao }
 export async function POST(req: NextRequest) {
   let body: any
   try {
@@ -12,41 +12,49 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'JSON inválido' }, { status: 400 })
   }
 
-  const { slug, planoId, valor, cupom, paymentMethod } = body || {}
-  if (!slug || !planoId) {
-    return NextResponse.json({ error: 'slug e planoId são obrigatórios' }, { status: 400 })
+  const { slug, planoId, cliente, paymentMethod, cartao } = body || {}
+  if (!slug || !planoId || !cliente || !paymentMethod) {
+    return NextResponse.json({
+      error: 'slug, planoId, cliente e paymentMethod são obrigatórios'
+    }, { status: 400 })
   }
 
   try {
-    console.log(`[Simular] Buscando unidade com slug: ${slug}`)
+    console.log(`[Simular V2] Buscando unidade com slug: ${slug}`)
     const unit = await getUnitBySlug(slug)
-    console.log(`[Simular] Unit result:`, unit ? `Found: ${unit.nome}` : 'NULL')
 
     if (!unit) {
-      console.error(`[Simular ${slug}] Unidade não encontrada no banco`)
+      console.error(`[Simular V2 ${slug}] Unidade não encontrada no banco`)
       return NextResponse.json({ error: 'Unidade não encontrada' }, { status: 404 })
     }
 
-    const redeKey = unit.apiKeyPlain
-    const publicKey = unit.chave_publica
+    // Registrar acesso para anti-fraude
+    const clientIP = pactoV2API.getClientIP(req)
+    await pactoV2API.registrarInicioAcesso(slug, unit.codigo_unidade, parseInt(planoId), clientIP)
 
-    console.log(`[Simular ${slug}] Keys check - redeKey: ${!!redeKey} (${redeKey?.substring(0,10)}...), publicKey: ${!!publicKey} (${publicKey?.substring(0,10)}...)`)
+    // Preparar dados para simulação V2
+    const dadosVenda = formatVendaData(
+      slug, // Usar slug como codigo_rede
+      cliente,
+      cartao || null,
+      unit.codigo_unidade,
+      parseInt(planoId),
+      paymentMethod,
+      clientIP
+    )
 
-    if (!redeKey || !publicKey) {
-      console.error(`[Simular ${slug}] Chaves ausentes - redeKey: ${!!redeKey}, publicKey: ${!!publicKey}`)
-      return NextResponse.json({ error: 'Chaves da unidade ausentes' }, { status: 503 })
-    }
+    // Simular venda usando API V2
+    const simulacao = await pactoV2API.simularVenda(slug, unit.codigo_unidade, dadosVenda)
 
-    const codigo = getCodigoUnidade(slug)
-    const simulacao = await pactoAPI.simularVenda(redeKey, publicKey, planoId, { unidade: codigo, valor, cupom, paymentMethod })
-
-    if (!simulacao) {
-      return NextResponse.json({ error: 'Não foi possível simular a venda' }, { status: 502 })
-    }
-
-    return NextResponse.json({ simulacao, fallback: false })
+    return NextResponse.json({
+      success: true,
+      data: simulacao
+    })
   } catch (error: any) {
-    console.error('[POST /api/pacto/simular]', error)
-    return NextResponse.json({ error: 'Falha na simulação' }, { status: 500 })
+    console.error('[POST /api/pacto/simular V2]', error)
+    return NextResponse.json({
+      success: false,
+      error: error.message || 'Falha na simulação'
+    }, { status: 500 })
   }
 }

@@ -1,57 +1,144 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { processCheckout, getCodigoUnidade } from '@/lib/pacto-api'
-import { getUnitBySlug } from '@/lib/repository'
+import { pactoV2API, formatVendaData, TokenizedVendaData } from '@/src/lib/api/pacto-v2'
+import { getUnitBySlug } from '@/src/lib/api/supabase-repository'
 
 // POST /api/pacto/venda
-// Body: { slug, planoId, planoNome, valor, paymentMethod, customer: {...}, cardData?, cupom? }
+// Body: { slug, planoId, paymentMethod, cliente: PactoCliente, cartaoToken?: string, captchaToken }
 export async function POST(req: NextRequest) {
   let body: any
-  try { body = await req.json() } catch { return NextResponse.json({ error: 'JSON inválido' }, { status: 400 }) }
-
-  const { slug, planoId, planoNome, valor, paymentMethod, customer, cardData, cupom } = body || {}
-
-  if (!slug || !planoId || !planoNome || (valor === undefined || valor === null) || !paymentMethod || !customer) {
-    return NextResponse.json({ error: 'Campos obrigatórios: slug, planoId, planoNome, valor, paymentMethod, customer' }, { status: 400 })
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'JSON inválido' }, { status: 400 })
   }
+
+  const { slug, planoId, paymentMethod, cliente, cartaoToken, captchaToken } = body || {}
+
+  if (!slug || !planoId || !paymentMethod || !cliente || !captchaToken) {
+    return NextResponse.json({
+      error: 'Campos obrigatórios: slug, planoId, paymentMethod, cliente, captchaToken'
+    }, { status: 400 })
+  }
+
   if (!['cartao','pix','boleto'].includes(paymentMethod)) {
     return NextResponse.json({ error: 'paymentMethod inválido' }, { status: 400 })
   }
 
+  // Validar dados do cliente
+  if (!cliente.nome || !cliente.cpf || !cliente.email) {
+    return NextResponse.json({
+      error: 'Nome, CPF e email do cliente são obrigatórios'
+    }, { status: 400 })
+  }
+
+  // Se for cartão, validar token do cartão
+  if (paymentMethod === 'cartao' && !cartaoToken) {
+    return NextResponse.json({
+      error: 'Token do cartão é obrigatório para pagamento com cartão'
+    }, { status: 400 })
+  }
+
   try {
-    console.log(`[Venda] Buscando unidade com slug: ${slug}`)
+    console.log(`[Venda V2] Buscando unidade com slug: ${slug}`)
     const unit = await getUnitBySlug(slug)
-    console.log(`[Venda] Unit result:`, unit ? `Found: ${unit.nome}` : 'NULL')
 
     if (!unit) {
-      console.error(`[Venda ${slug}] Unidade não encontrada no banco`)
+      console.error(`[Venda V2 ${slug}] Unidade não encontrada no banco`)
       return NextResponse.json({ success: false, error: 'Unidade não encontrada' }, { status: 404 })
     }
 
-    const redeKey = unit.apiKeyPlain
-    const publicKey = unit.chave_publica
+    // Verificar anti-fraude
+    const clientIP = pactoV2API.getClientIP(req)
+    const isBlacklisted = await pactoV2API.verificarBlacklist(clientIP)
 
-    if (!redeKey || !publicKey) {
-      console.error(`[Venda ${slug}] Chaves ausentes - redeKey: ${!!redeKey}, publicKey: ${!!publicKey}`)
-      return NextResponse.json({ success: false, error: 'Chaves da unidade ausentes' }, { status: 503 })
+    if (isBlacklisted) {
+      return NextResponse.json({
+        success: false,
+        error: 'Operação bloqueada por segurança'
+      }, { status: 403 })
     }
 
-    const codigo = getCodigoUnidade(slug)
+    // Verificar reCAPTCHA
+    const recaptchaValid = await pactoV2API.verifyRecaptcha(captchaToken)
+    if (!recaptchaValid) {
+      return NextResponse.json({
+        success: false,
+        error: 'Validação de segurança falhou'
+      }, { status: 403 })
+    }
 
-    const response = await processCheckout(redeKey, publicKey, paymentMethod, {
-      unidadeId: codigo,
-      planoId,
-      planoNome,
-      valor,
-      paymentMethod,
-      customer,
-      cardData,
-      cupom,
+    let venda
+
+    // Processar pagamento baseado no método
+    switch (paymentMethod) {
+      case 'cartao':
+        // Usar dados tokenizados para cartão
+        const tokenizedVendaData: TokenizedVendaData = {
+          unidade: unit.codigo_unidade,
+          plano: parseInt(planoId),
+          cliente: {
+            nome: cliente.nome,
+            cpf: cliente.cpf,
+            email: cliente.email,
+            telefone: cliente.telefone,
+            endereco: cliente.endereco || '',
+            cidade: cliente.cidade || '',
+            estado: cliente.estado || '',
+            cep: cliente.cep || '',
+          },
+          cartaoToken: cartaoToken,
+          termoDeUsoAceito: true,
+          origemSistema: 9,
+          dataUtilizacao: new Date().toLocaleDateString('pt-BR'),
+          ipPublico: pactoV2API.getClientIP(req),
+        }
+        
+        venda = await pactoV2API.processarPagamentoCartaoComToken(slug, captchaToken, tokenizedVendaData)
+        break
+
+           case 'pix':
+             // Para PIX e Boleto, usar método tradicional
+             const dadosVendaPIX = formatVendaData(
+               slug, // Usar slug como codigo_rede
+               cliente,
+               null,
+               unit.codigo_unidade,
+               parseInt(planoId),
+               paymentMethod,
+               clientIP
+             )
+             venda = await pactoV2API.processarPagamentoPIX(slug, captchaToken, dadosVendaPIX)
+             break
+
+           case 'boleto':
+             const dadosVendaBoleto = formatVendaData(
+               slug, // Usar slug como codigo_rede
+               cliente,
+               null,
+               unit.codigo_unidade,
+               parseInt(planoId),
+               paymentMethod,
+               clientIP
+             )
+             venda = await pactoV2API.processarPagamentoBoleto(slug, captchaToken, dadosVendaBoleto)
+             break
+
+      default:
+        return NextResponse.json({
+          success: false,
+          error: 'Método de pagamento inválido'
+        }, { status: 400 })
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: venda
     })
-
-    if (!response.success) return NextResponse.json({ ...response, fallback: false }, { status: 400 })
-    return NextResponse.json({ ...response, fallback: false })
   } catch (error: any) {
-    console.error('[POST /api/pacto/venda]', error)
-    return NextResponse.json({ success: false, error: 'Falha ao processar venda' }, { status: 500 })
+    console.error('[POST /api/pacto/venda V2]', error)
+    return NextResponse.json({
+      success: false,
+      error: error.message || 'Falha ao processar venda'
+    }, { status: 500 })
   }
 }

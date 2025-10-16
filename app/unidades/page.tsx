@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { MapPin, Filter } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { locations } from "@/lib/locations"
+import { locations } from '@/lib/config/locations'
 
 export default function Unidades() {
   const [filterType, setFilterType] = useState("todos")

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { pactoAPI, getCodigoUnidade } from '@/lib/pacto-api'
-import { locations } from '@/lib/locations'
-import { getUnitBySlug } from '@/lib/repository'
+import { pactoV2API } from '@/src/lib/api/pacto-v2'
+import { locations } from '@/lib/config/locations'
+import { getUnitBySlug } from '@/src/lib/api/supabase-repository'
 
 // GET /api/pacto/planos/:slug
-// Busca TUDO do Supabase: chave_api (rede key) + chave_publica (public key)
+// Busca planos usando API V2 da Pacto
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
@@ -22,30 +22,12 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
       return NextResponse.json({ error: 'Unidade não encontrada' }, { status: 404 })
     }
 
-    // Decripta chave_api e pega chave_publica
-    const redeKey = unit.apiKeyPlain
-    const publicKey = unit.chave_publica
-
-    if (!redeKey || !publicKey) {
-      console.error(`[Planos ${slug}] Chaves ausentes - redeKey: ${!!redeKey}, publicKey: ${!!publicKey}`)
-
-      // Fallback estático
-      const loc = locations.find(l => l.id === slug)
-      if (loc?.planos?.length) {
-        const staticPlanos = (loc.planos || []).map(p => ({ codigo: undefined, nome: p.name, valor: p.price }))
-        return NextResponse.json({ planos: staticPlanos, fallback: true, source: 'static' })
-      }
-
-      return NextResponse.json({ error: 'Chaves da unidade ausentes' }, { status: 503 })
-    }
-
-    // Usar novo método getPlanosNegociacao
-    const empresaId = publicKey // empresaId é a chave pública
-    const planos = await pactoAPI.getPlanosNegociacao(redeKey, empresaId, 0)
+         // Buscar planos usando API V2
+         const planos = await pactoV2API.getPlanosUnidade(slug, unit.codigo_unidade)
 
     return NextResponse.json({ planos, fallback: false })
   } catch (error: any) {
-    console.error('[GET /api/pacto/planos]', error)
+    console.error('[GET /api/pacto/planos V2]', error)
 
     // Fallback estático em caso de erro
     const loc = locations.find(l => l.id === slug)
