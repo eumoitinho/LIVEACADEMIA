@@ -10,9 +10,9 @@ import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
-  // Rate limiting: 15 requisições por 15 minutos
+  // Rate limiting: 50 requisições por 15 minutos
   const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '127.0.0.1'
-  if (!rateLimiter.check(clientIP, 15, 15 * 60 * 1000)) {
+  if (!rateLimiter.check(clientIP, 50, 15 * 60 * 1000)) {
     const info = rateLimiter.getInfo(clientIP)
     return NextResponse.json(
       { 

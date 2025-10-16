@@ -4,44 +4,78 @@ import { useEffect, useState, useCallback } from 'react'
 import PlanosCards from '@/features/plans/planos-cards'
 
 interface DynamicPlano {
-  codigo: string | undefined
+  codigo: number | undefined
   nome: string
   valor: string | number
+  mensalidade?: number
+  adesao?: number
+  fidelidade?: number
   categoria?: string
   recorrencia?: string
+  regimeRecorrencia?: string
 }
 
 interface UnitPlanosProps {
   slug: string
   unidadeName: string
-  onMatricular: (plano: { name: string; price: string; codigo?: string }) => void
+  onMatricular: (plano: { name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number }) => void
   fallbackPlanos?: Array<{ name: string; price: string; codigo?: string }>
 }
 
 export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPlanos }: UnitPlanosProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string }>>([])
+  const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number }>>([])
 
   const load = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
+      console.log(`[UnitPlanos] Carregando planos para unidade: ${slug}`)
       const res = await fetch(`/api/pacto/planos/${slug}`, { cache: 'no-store' })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      
+      if (!res.ok) {
+        const errorData = await res.json()
+        console.error('[UnitPlanos] Erro na API:', errorData)
+        throw new Error(errorData.error || `HTTP ${res.status}`)
+      }
+      
       const json = await res.json()
+      console.log(`[UnitPlanos] Resposta da API:`, json)
+      
       const fetched: DynamicPlano[] = json.planos || []
+      
+      if (fetched.length === 0 && json.fallback) {
+        console.log('[UnitPlanos] Usando dados de fallback')
+        if (fallbackPlanos && fallbackPlanos.length) {
+          setPlanos(fallbackPlanos)
+          return
+        }
+      }
+      
       const mapped = fetched.map(p => ({
         name: p.nome,
-        price: typeof p.valor === 'number' ? p.valor.toFixed(2) : p.valor,
-        codigo: p.codigo,
+        price: p.mensalidade ? p.mensalidade.toFixed(2) : (typeof p.valor === 'number' ? p.valor.toFixed(2) : p.valor),
+        codigo: p.codigo?.toString(),
+        adesao: p.adesao,
+        fidelidade: p.fidelidade,
       }))
+      
+      console.log(`[UnitPlanos] Planos mapeados:`, mapped)
       setPlanos(mapped)
+      
+      if (json.source === 'static') {
+        console.log('[UnitPlanos] Dados obtidos do fallback estático')
+      }
     } catch (e: any) {
       console.error('[UnitPlanos] Falha ao carregar planos', e)
-      setError('Não foi possível carregar planos agora.')
+      setError(`Não foi possível carregar planos: ${e.message}`)
+      
+      // Usar fallback se disponível
       if (fallbackPlanos && fallbackPlanos.length) {
+        console.log('[UnitPlanos] Usando fallback após erro')
         setPlanos(fallbackPlanos)
+        setError(null) // Limpar erro se temos fallback
       }
     } finally {
       setLoading(false)

@@ -8,6 +8,8 @@ interface PlanoItem {
   name: string
   price: string
   codigo?: string
+  adesao?: number
+  fidelidade?: number
 }
 
 interface PlanosCardsProps {
@@ -47,6 +49,16 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
             <div className="mb-6">
               <span className="text-4xl font-bold text-slate-800">R$ {normalPlano.price}</span>
               <span className="text-slate-500">/mês</span>
+              {normalPlano.adesao && normalPlano.adesao > 0 && (
+                <div className="mt-2 text-sm text-slate-600">
+                  + Taxa de adesão: R$ {normalPlano.adesao.toFixed(2)}
+                </div>
+              )}
+              {normalPlano.fidelidade && normalPlano.fidelidade > 0 && (
+                <div className="mt-1 text-sm text-slate-600">
+                  Fidelidade: {normalPlano.fidelidade} meses
+                </div>
+              )}
             </div>
             <p className="text-slate-500 text-sm mb-6">Perfeito para quem está começando sua jornada fitness.</p>
 
@@ -83,6 +95,16 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
             <div className="mb-6">
               <span className="text-4xl font-bold text-black">R$ {premiumPlano.price}</span>
               <span className="text-black/70">/mês</span>
+              {premiumPlano.adesao && premiumPlano.adesao > 0 && (
+                <div className="mt-2 text-sm text-black/70">
+                  + Taxa de adesão: R$ {premiumPlano.adesao.toFixed(2)}
+                </div>
+              )}
+              {premiumPlano.fidelidade && premiumPlano.fidelidade > 0 && (
+                <div className="mt-1 text-sm text-black/70">
+                  Fidelidade: {premiumPlano.fidelidade} meses
+                </div>
+              )}
             </div>
             <p className="text-black/70 text-sm mb-6">Ideal para quem busca a melhor experiência fitness com máximo conforto.</p>
 
@@ -193,6 +215,16 @@ function ComparisonTable({ normalPlano, premiumPlano, onMatricular }: {
             <div className="text-lg font-medium text-white">{normalPlano.name}</div>
             <div className="mt-2 text-4xl font-bold text-live-yellow">R$ {normalPlano.price}</div>
             <div className="mt-1 text-gray-400 text-sm">/mês</div>
+            {normalPlano.adesao && normalPlano.adesao > 0 && (
+              <div className="mt-1 text-xs text-gray-400">
+                + Adesão: R$ {normalPlano.adesao.toFixed(2)}
+              </div>
+            )}
+            {normalPlano.fidelidade && normalPlano.fidelidade > 0 && (
+              <div className="mt-1 text-xs text-gray-400">
+                Fidelidade: {normalPlano.fidelidade}m
+              </div>
+            )}
           </div>
 
           {/* Premium Plan Header */}
@@ -201,6 +233,16 @@ function ComparisonTable({ normalPlano, premiumPlano, onMatricular }: {
             <div className="text-lg font-medium text-white">{premiumPlano.name}</div>
             <div className="mt-2 text-4xl font-bold text-live-yellow">R$ {premiumPlano.price}</div>
             <div className="mt-1 text-gray-400 text-sm">/mês</div>
+            {premiumPlano.adesao && premiumPlano.adesao > 0 && (
+              <div className="mt-1 text-xs text-gray-400">
+                + Adesão: R$ {premiumPlano.adesao.toFixed(2)}
+              </div>
+            )}
+            {premiumPlano.fidelidade && premiumPlano.fidelidade > 0 && (
+              <div className="mt-1 text-xs text-gray-400">
+                Fidelidade: {premiumPlano.fidelidade}m
+              </div>
+            )}
             <div className="mt-2 inline-block rounded-full bg-live-yellow/20 px-3 py-1 text-xs text-live-yellow ring-1 ring-live-yellow/30 font-bold">
               MAIS POPULAR
             </div>

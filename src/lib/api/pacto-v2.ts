@@ -399,7 +399,7 @@ class PactoV2API {
         await this.authenticate(slug)
       }
 
-      const response = await this.client.get(`/v2/vendas/${slug}/planos/${codigoUnidade}`, {
+      const response = await this.client.get(`/v2/vendas/${slug}/planos`, {
         headers: {
           'x-pacto-unidade': slug
         }
@@ -605,7 +605,128 @@ class PactoV2API {
   }
 
   /**
-   * 13. Registrar Aceite de Termos
+   * 13. Buscar Termos de Aceite Disponíveis
+   */
+  async getTermosAceite(slug: string): Promise<PactoTermoAceiteResponse> {
+    try {
+      // Garantir que temos um token válido
+      if (!this.isTokenValid(slug)) {
+        await this.authenticate(slug)
+      }
+
+      const response = await this.client.get('/psec/termo-aceite', {
+        headers: {
+          'x-pacto-unidade': slug
+        }
+      })
+      
+      console.log(`[PactoV2] Termos de aceite obtidos para unidade ${slug}`)
+      return response.data
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError
+      const errorMessage = axiosError.response?.data || axiosError.message || 'Unknown error'
+      console.error('[PactoV2] Erro ao buscar termos de aceite:', errorMessage)
+      throw new Error('Failed to get terms of acceptance')
+    }
+  }
+
+  /**
+   * 14. Buscar Termo de Aceite Específico
+   */
+  async getTermoAceitePorCodigo(slug: string, codigo: number): Promise<PactoTermoAceiteResponse> {
+    try {
+      // Garantir que temos um token válido
+      if (!this.isTokenValid(slug)) {
+        await this.authenticate(slug)
+      }
+
+      const response = await this.client.get(`/psec/termo-aceite/${codigo}`, {
+        headers: {
+          'x-pacto-unidade': slug
+        }
+      })
+      
+      console.log(`[PactoV2] Termo de aceite ${codigo} obtido para unidade ${slug}`)
+      return response.data
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError
+      const errorMessage = axiosError.response?.data || axiosError.message || 'Unknown error'
+      console.error('[PactoV2] Erro ao buscar termo de aceite específico:', errorMessage)
+      throw new Error('Failed to get specific term of acceptance')
+    }
+  }
+
+  /**
+   * 15. Salvar Assinatura de Termo de Aceite
+   */
+  async salvarAssinaturaTermo(
+    slug: string, 
+    codigoMatricula: number,
+    codigoTermo: number,
+    assinatura: string,
+    ip: string,
+    userAgent: string
+  ): Promise<PactoTermoAceiteResponse> {
+    try {
+      // Garantir que temos um token válido
+      if (!this.isTokenValid(slug)) {
+        await this.authenticate(slug)
+      }
+
+      const response = await this.client.post('/psec/termo-aceite/assinatura', {
+        codigoMatricula,
+        codigoTermo,
+        assinatura,
+        ip,
+        userAgent
+      }, {
+        headers: {
+          'x-pacto-unidade': slug
+        }
+      })
+      
+      console.log(`[PactoV2] Assinatura de termo salva para matrícula ${codigoMatricula}`)
+      return response.data
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError
+      const errorMessage = axiosError.response?.data || axiosError.message || 'Unknown error'
+      console.error('[PactoV2] Erro ao salvar assinatura de termo:', errorMessage)
+      throw new Error('Failed to save term signature')
+    }
+  }
+
+  /**
+   * 16. Buscar Assinaturas de Termos
+   */
+  async getAssinaturasTermos(slug: string, codigoMatricula?: number): Promise<PactoTermoAceiteResponse> {
+    try {
+      // Garantir que temos um token válido
+      if (!this.isTokenValid(slug)) {
+        await this.authenticate(slug)
+      }
+
+      const url = codigoMatricula 
+        ? `/psec/termo-aceite/assinaturas/${codigoMatricula}`
+        : '/psec/termo-aceite/assinaturas'
+
+      const response = await this.client.get(url, {
+        headers: {
+          'x-pacto-unidade': slug
+        }
+      })
+      
+      console.log(`[PactoV2] Assinaturas de termos obtidas para unidade ${slug}`)
+      return response.data
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError
+      const errorMessage = axiosError.response?.data || axiosError.message || 'Unknown error'
+      console.error('[PactoV2] Erro ao buscar assinaturas de termos:', errorMessage)
+      throw new Error('Failed to get term signatures')
+    }
+  }
+
+  /**
+   * 17. Registrar Aceite de Termos (V2 - Compatibilidade)
    */
   async registrarAceiteTermos(codigoVenda: number): Promise<void> {
     try {

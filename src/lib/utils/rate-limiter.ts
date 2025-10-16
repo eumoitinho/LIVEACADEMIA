@@ -88,11 +88,41 @@ class RateLimiter {
   }
 
   /**
-   * Limpa todos os limites (útil para testes)
+   * Limpar rate limit para um IP específico
    */
-  clear(): void {
-    this.limits.clear()
+  clear(ip: string): void {
+    this.limits.delete(ip)
+    console.log(`[RateLimiter] Rate limit limpo para IP: ${ip}`)
   }
+
+  /**
+   * Limpar todos os rate limits
+   */
+  clearAll(): void {
+    this.limits.clear()
+    console.log('[RateLimiter] Todos os rate limits foram limpos')
+  }
+
+  /**
+   * Obter informações de todos os rate limits ativos
+   */
+  getAllInfo(): Record<string, { count: number; limit: number; resetTime: number; remaining: number }> {
+    const allInfo: Record<string, { count: number; limit: number; resetTime: number; remaining: number }> = {}
+    
+    for (const [ip, entry] of this.limits.entries()) {
+      const limit = 10 // Limite padrão
+      const remaining = Math.max(0, limit - entry.count)
+      allInfo[ip] = { 
+        count: entry.count, 
+        limit, 
+        resetTime: entry.resetTime, 
+        remaining 
+      }
+    }
+    
+    return allInfo
+  }
+
 
   /**
    * Destroi o rate limiter e limpa recursos

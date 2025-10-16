@@ -39,9 +39,9 @@ export async function POST(req: NextRequest) {
     }, { status: 400 })
   }
 
-  // Rate limiting muito restritivo para vendas: 3 requisições por 15 minutos
+  // Rate limiting para vendas: 10 requisições por 15 minutos
   const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '127.0.0.1'
-  if (!rateLimiter.check(clientIP, 3, 15 * 60 * 1000)) {
+  if (!rateLimiter.check(clientIP, 10, 15 * 60 * 1000)) {
     const info = rateLimiter.getInfo(clientIP)
     return NextResponse.json(
       { 

@@ -78,6 +78,8 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
     dataNascimento: '',
     sexo: 'M',
     rg: '',
+    // Termos
+    aceiteTermos: false,
     // Dados do cartão
     numeroCartao: '',
     nomeCartao: '',
@@ -121,6 +123,8 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
         dataNascimento: '',
         sexo: 'M',
         rg: '',
+        // Termos
+        aceiteTermos: false,
         // Dados do cartão
         numeroCartao: '',
         nomeCartao: '',
@@ -218,7 +222,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
 
   const handleNextStep = () => {
     if (step === 1) {
-      // Validar dados pessoais e endereço
+      // Validar dados pessoais, endereço e termos
       const camposObrigatorios = [
         formData.nome,
         formData.email,
@@ -234,10 +238,14 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
         formData.sexo
       ]
       
-      if (camposObrigatorios.every(campo => campo.trim() !== '')) {
+      if (camposObrigatorios.every(campo => campo.trim() !== '') && formData.aceiteTermos) {
         setStep(2)
       } else {
-        alert('Por favor, preencha todos os campos obrigatórios (marcados com *)')
+        if (!formData.aceiteTermos) {
+          alert('Você deve aceitar os Termos de Uso e Política de Privacidade para continuar')
+        } else {
+          alert('Por favor, preencha todos os campos obrigatórios (marcados com *)')
+        }
       }
     } else if (step === 2) {
       processPayment()
@@ -668,6 +676,41 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                         maxLength={12}
                       />
                     </div>
+                  </div>
+                </div>
+                
+                {/* Aceite de Termos */}
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-live-textPrimary">Termos e Condições</h4>
+                  
+                  <div className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="aceiteTermos"
+                      checked={formData.aceiteTermos}
+                      onChange={(e) => setFormData(prev => ({ ...prev, aceiteTermos: e.target.checked }))}
+                      className="mt-1 h-4 w-4 text-live-accent border-live-border/30 rounded focus:ring-live-accent focus:ring-2"
+                      required
+                    />
+                    <label htmlFor="aceiteTermos" className="text-sm text-live-textPrimary leading-relaxed">
+                      Eu aceito os{' '}
+                      <a 
+                        href="/termos-de-uso" 
+                        target="_blank" 
+                        className="text-live-accent hover:underline font-medium"
+                      >
+                        Termos de Uso
+                      </a>{' '}
+                      e a{' '}
+                      <a 
+                        href="/politica-privacidade" 
+                        target="_blank" 
+                        className="text-live-accent hover:underline font-medium"
+                      >
+                        Política de Privacidade
+                      </a>{' '}
+                      da Live Academia, e autorizo o tratamento dos meus dados pessoais conforme descrito nos documentos. *
+                    </label>
                   </div>
                 </div>
               </motion.div>

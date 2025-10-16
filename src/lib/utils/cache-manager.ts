@@ -172,6 +172,10 @@ export const cacheKeys = {
   unidade: (slug: string) => `unidade:${slug}`,
   simulacao: (slug: string, planoId: string, hash: string) => `simulacao:${slug}:${planoId}:${hash}`,
   cupom: (codigo: string, planoData: string) => `cupom:${codigo}:${planoData}`,
+  termos: (slug: string) => `termos:${slug}`,
+  termoEspecifico: (slug: string, codigo: string) => `termo:${slug}:${codigo}`,
+  assinaturas: (slug: string) => `assinaturas:${slug}`,
+  assinaturasMatricula: (slug: string, codigoMatricula: string) => `assinaturas:${slug}:${codigoMatricula}`,
 }
 
 export default cacheManager
