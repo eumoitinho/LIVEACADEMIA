@@ -1,0 +1,124 @@
+{
+  "hero": {
+    "badge": "A MAIOR REDE DE MANAUS",
+    "title": "seu treino,",
+    "subtitle": "suas regras!",
+    "description": "Sem fidelidade, sem anuidade, sem pegadinha. A academia que respeita seu bolso e seu tempo.",
+    "primaryCta": {
+      "text": "Comece agora",
+      "link": "/planos"
+    },
+    "secondaryCta": {
+      "text": "Ver planos",
+      "link": "/planos"
+    },
+    "stats": [
+      { "value": "20+", "label": "Unidades" },
+      { "value": "10mil+", "label": "Alunos" },
+      { "value": "15 anos", "label": "de História" }
+    ]
+  },
+  "about": {
+    "badge": "Live Academia",
+    "title": "Sobre",
+    "description": "Transformamos treino em rotina sustentável e resultado real: liberdade multiunidade, atendimento humano que acompanha cada fase e estrutura premium para garantir evolução de verdade.",
+    "stats": [
+      { "value": "10K+", "label": "Alunos ativos", "icon": "👥" },
+      { "value": "35+", "label": "Unidades", "icon": "🏢" },
+      { "value": "4.9", "label": "Avaliação média", "icon": "⭐" },
+      { "value": "10+", "label": "Anos de experiência", "icon": "🎯" }
+    ],
+    "highlights": [
+      "Planos flexíveis sem fidelidade e acesso multiunidade",
+      "Profissionais presentes e acompanhamento periódico",
+      "Estrutura moderna, tecnologia e modalidades variadas",
+      "Foco em consistência: não é só começar, é manter"
+    ]
+  },
+  "beneficios": {
+    "badge": "Vantagens",
+    "title": "Benefícios",
+    "description": "Tudo o que você precisa para transformar seu corpo e sua vida, com liberdade e tecnologia.",
+    "items": [
+      {
+        "icon": "🛡️",
+        "title": "Planos flexíveis",
+        "description": "Em qualquer plano, você treina sem fidelidade, taxas de cancelamento, manutenção ou anuidade.",
+        "color": "from-yellow-400 to-amber-500",
+        "image": "/images/academia-1.webp"
+      },
+      {
+        "icon": "⭐",
+        "title": "Espaços exclusivos",
+        "description": "Desfrute de áreas como Espaço Relax, Espaço Yoga e o maior Studio de Bike Indoor da região Norte com o plano Diamante.",
+        "color": "from-amber-500 to-yellow-600",
+        "image": "/images/academia-2.webp"
+      },
+      {
+        "icon": "👥",
+        "title": "Aulas coletivas",
+        "description": "Diversifique seu treino com uma grade variada de aulas e aproveite o ambiente coletivo para socializar e manter a disciplina.",
+        "color": "from-yellow-500 to-amber-600",
+        "image": "/images/academia-3.webp"
+      },
+      {
+        "icon": "❄️",
+        "title": "Climatização",
+        "description": "Treine com mais conforto nos ambientes climatizados disponíveis nas unidades Diamante, Premium e Tradicional Climatizada.",
+        "color": "from-yellow-400 to-amber-500",
+        "image": "/images/academia-4.webp"
+      }
+    ]
+  },
+  "planos": {
+    "badge": "Nossos Planos",
+    "title": "Escolha o plano ideal para você",
+    "description": "Sem fidelidade, sem anuidade. Pague apenas enquanto treinar.",
+    "plans": [
+      {
+        "id": "tradicional",
+        "name": "TRADICIONAL",
+        "price": "119,90",
+        "period": "mês",
+        "description": "Treine em todas as unidades Tradicionais, incluindo as Tradicionais Climatizadas.",
+        "badge": "Mais Popular",
+        "features": [
+          "Sem fidelidade",
+          "Sem taxa de cancelamento",
+          "Sem taxa de manutenção",
+          "Sem taxa de anuidade",
+          "Acesso ao app Live Academia",
+          "Aulas coletivas",
+          "Climatização (apenas unidades Torquato Bemol e Tiradentes)",
+          "Atendimento aos domingos (consultar unidade)"
+        ],
+        "cta": "Matricular agora",
+        "highlight": true
+      },
+      {
+        "id": "diamante",
+        "name": "DIAMANTE",
+        "price": "159,90",
+        "period": "mês",
+        "description": "Treine em todas as unidades da rede em Manaus, exceto Morada do Sol e Alphaville.",
+        "badge": "Premium",
+        "features": [
+          "Tudo do Plano Tradicional",
+          "Acesso às unidades Diamante",
+          "Área de relaxamento exclusiva",
+          "Sauna seca e úmida",
+          "Espaço gourmet",
+          "Toalhas de cortesia",
+          "Estacionamento coberto"
+        ],
+        "cta": "Quero ser Diamante",
+        "highlight": false
+      }
+    ]
+  },
+  "seo": {
+    "title": "Live Academia | A Maior Rede de Academias de Manaus",
+    "description": "Transforme seu corpo e sua vida na maior rede de academias de Manaus. Sem fidelidade, sem anuidade, sem pegadinha. Mais de 20 unidades.",
+    "keywords": "academia manaus, academia sem fidelidade, live academia, treino manaus, musculação manaus, aulas coletivas"
+  }
+}
