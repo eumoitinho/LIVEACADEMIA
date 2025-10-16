@@ -36,17 +36,23 @@ export default function AulasColetivasPage() {
   }
 
   return (
-    <main className="min-h-screen relative">
-      {/* Background Image */}
+    <main className="min-h-screen relative bg-black">
+      {/* Background com overlay */}
       <div className="fixed inset-0 z-0">
+        {/* Background original (gradiente ou padrão) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black" />
+        
+        {/* Overlay com bg.jpeg */}
         <Image
           src="/bg.jpeg"
-          alt="Background"
+          alt="Background Overlay"
           fill
-          className="object-cover"
+          className="object-cover opacity-30"
           priority
         />
-        <div className="absolute inset-0 bg-black/60" />
+        
+        {/* Overlay escuro para contraste */}
+        <div className="absolute inset-0 bg-black/70" />
       </div>
 
       {/* Hero Section */}
@@ -71,7 +77,7 @@ export default function AulasColetivasPage() {
 
       {/* Modalidades Grid */}
       <section className="relative py-8 px-4 lg:px-12 z-10">
-        <div className="max-w-[1400px] gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-auto mb-12">
+        <div className="max-w-[1200px] gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mx-auto mb-12">
           {modalitiesData.map((modality, index) => (
             <motion.article
               key={modality._id}
