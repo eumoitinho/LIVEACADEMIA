@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import { NextRequest } from 'next/server'
 import { tokenizeCard, detokenizeCard, EncryptedCardData } from '@/src/lib/utils/card-tokenization'
+import { getUnidadeConfig } from '@/src/config/unidades-chaves'
 import {
   PactoVendaDTO,
   PactoVendaSimplificada,
@@ -394,16 +395,25 @@ class PactoV2API {
    */
   async getPlanosUnidade(slug: string, codigoUnidade: number): Promise<PactoPlano[]> {
     try {
+      // Buscar o ID público da unidade
+      const unidadeConfig = getUnidadeConfig(slug)
+      if (!unidadeConfig) {
+        throw new Error(`Unidade ${slug} não encontrada`)
+      }
+
+      // Buscar o valor da chave pública (ID da unidade)
+      const publicKey = process.env[unidadeConfig.chavePublic]
+      if (!publicKey) {
+        throw new Error(`Chave pública não encontrada para unidade ${slug}`)
+      }
+
       // Garantir que temos um token válido
       if (!this.isTokenValid(slug)) {
         await this.authenticate(slug)
       }
 
-      const response = await this.client.get(`/v2/vendas/${slug}/planos`, {
-        headers: {
-          'x-pacto-unidade': slug
-        }
-      })
+      // Usar o ID público da unidade na URL
+      const response = await this.client.get(`/v2/vendas/${publicKey}/unidade/${codigoUnidade}`)
       return response.data.retorno || []
     } catch (error: unknown) {
       const axiosError = error as AxiosError
