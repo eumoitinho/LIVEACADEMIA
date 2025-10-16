@@ -9,7 +9,7 @@ export interface UnidadeCardProps {
   imagem?: string
   badge?: {
     text: string
-    variant: "pink" | "indigo" | "orange"
+    variant: "pink" | "amber" | "orange"
   }
   link: string
 }

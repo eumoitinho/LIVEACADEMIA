@@ -29,7 +29,7 @@ interface UnidadeBase {
   imagem: string
   latitude: number | null
   longitude: number | null
-  badge?: { text: string; variant: 'pink' | 'indigo' | 'orange' }
+  badge?: { text: string; variant: 'pink' | 'amber' | 'orange' }
   link?: string
 }
 
@@ -175,7 +175,7 @@ export default function UnidadesCarousel() {
         imagem: '/images/academia-2.webp',
         latitude: -3.0876,
         longitude: -60.0156,
-        badge: { text: 'Vieiralves', variant: 'indigo' },
+        badge: { text: 'Vieiralves', variant: 'amber' },
         link: '/unidades/vieiralves'
       },
       {
@@ -344,40 +344,23 @@ export default function UnidadesCarousel() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          {/* Label */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="inline-block mb-4"
-          >
-            <span className="text-xs uppercase tracking-[0.3em] text-yellow-400/70 font-semibold">
-              Nossas Unidades
-            </span>
-          </motion.div>
-          
           {/* Título */}
-          <h2 className="text-4xl lg:text-6xl font-black text-white mb-6 leading-tight">
-            Encontre a unidade{" "}
-            <span className="bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-              mais próxima
-            </span>
+          <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            Encontre a Live mais perto de você
           </h2>
-          
+
           {/* Descrição */}
           <p className="text-lg lg:text-xl text-zinc-400 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Estamos presentes em mais de 20 pontos estratégicos de Manaus.<br className="hidden lg:block" />
-            Venha conhecer a estrutura que vai transformar seus treinos.
+            Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.
           </p>
-          
+
           {/* CTA */}
           <Link
             href="/unidades"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-bold rounded-full hover:shadow-[0_0_40px_rgba(250,204,21,0.6)] hover:scale-105 transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-amber-400 text-black font-bold rounded-full hover:bg-amber-300 transition-colors duration-200"
           >
-            Ver todas as unidades
-            <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            VER TODAS AS UNIDADES
+            <ChevronRight className="h-5 w-5" />
           </Link>
         </motion.div>
 

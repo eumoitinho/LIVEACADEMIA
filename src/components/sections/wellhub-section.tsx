@@ -34,12 +34,8 @@ const beneficiosDetalhados = [
 
 export default function WellhubSection() {
   return (
-    <section className="relative py-20 px-6 lg:px-12 overflow-hidden bg-zinc-900">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl" />
-      </div>
+    <section className="relative py-20 px-6 lg:px-12 overflow-hidden">
+      {/* Background transparente para usar o background fixo do layout */}
 
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
@@ -114,14 +110,10 @@ export default function WellhubSection() {
             </div>
             
             <div className="text-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 inline-flex items-center gap-3 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
-              >
+              <button className="bg-amber-400 text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-amber-300 transition-colors duration-200 inline-flex items-center gap-3">
                 SAIBA MAIS
                 <ArrowRight className="w-5 h-5" />
-              </motion.button>
+              </button>
             </div>
           </motion.div>
         </div>
@@ -141,22 +133,6 @@ export default function WellhubSection() {
             <p className="text-zinc-400 text-lg mb-8">
               Funcionários de empresas parceiras têm acesso facilitado às nossas unidades com benefícios exclusivos.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
-              >
-                ACESSAR WELLHUB
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="border border-zinc-700 text-zinc-300 hover:text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:bg-zinc-800/50 backdrop-blur-sm"
-              >
-                CONSULTE SUA EMPRESA
-              </motion.button>
-            </div>
           </div>
         </motion.div>
       </div>

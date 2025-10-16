@@ -40,13 +40,8 @@ export default function BioimpedanciaSection() {
   const easing = [0.16, 1, 0.3, 1] as const
 
   return (
-    <section className="relative py-24 px-6 lg:px-12 overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-black">
-      {/* Enhanced Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-yellow-400/15 rounded-full blur-2xl animate-bounce" style={{ animationDuration: '6s' }} />
-      </div>
+    <section className="relative py-24 px-6 lg:px-12 overflow-hidden">
+      {/* Background transparente para usar o background fixo do layout */}
 
       {/* Floating Elements */}
       <motion.div
@@ -241,18 +236,10 @@ export default function BioimpedanciaSection() {
             </div>
 
             <div className="relative z-10 text-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.7, ease: easing }}
-                viewport={{ once: true }}
-                className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 inline-flex items-center gap-3 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
-              >
-                AGENDAR ANÁLISE 3D
+              <button className="bg-amber-400 text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-amber-300 transition-colors duration-200 inline-flex items-center gap-3">
+                SAIBA MAIS!
                 <ArrowRight className="w-5 h-5" />
-              </motion.button>
+              </button>
             </div>
 
             {/* Sparkle effect */}
@@ -315,28 +302,6 @@ export default function BioimpedanciaSection() {
           >
             Disponível em diversas unidades Diamante para você acompanhar sua evolução de forma objetiva e personalizada.
           </motion.p>
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.3, ease: easing }}
-            viewport={{ once: true }}
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-yellow-400 to-amber-500 text-black px-8 py-4 rounded-2xl font-bold text-lg hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
-            >
-              SAIBA MAIS!
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="border border-zinc-700 text-zinc-300 hover:text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:bg-zinc-800/50 backdrop-blur-sm hover:border-yellow-500/30"
-            >
-              VER UNIDADES DIAMANTE
-            </motion.button>
-          </motion.div>
         </motion.div>
       </div>
     </section>

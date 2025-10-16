@@ -37,11 +37,8 @@ export default function TestimonialSection() {
   ]
 
   return (
-    <section id="contato" className="relative py-28 bg-black overflow-hidden">
-      {/* Glow ambiente */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,213,0,0.07),transparent_70%)]" />
-      </div>
+    <section id="contato" className="relative py-28 overflow-hidden">
+      {/* Background transparente para usar o background fixo do layout */}
 
       <div className="relative z-10 container mx-auto px-4">
         <motion.div

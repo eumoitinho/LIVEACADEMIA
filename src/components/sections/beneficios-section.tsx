@@ -67,11 +67,8 @@ export default function BeneficiosSection() {
             <span className="text-yellow-300 text-sm font-medium">Por que escolher a Live Academia?</span>
           </div> */}
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
-            Benefícios <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent">exclusivos</span>
+            Mais do que treino, uma experiência completa
           </h2>
-          <p className="text-lg text-zinc-300 max-w-2xl mx-auto">
-            Tudo o que você precisa para transformar seu corpo e sua vida, com liberdade e tecnologia.
-          </p>
         </motion.div>
 
         {/* Expanding horizontal cards */}

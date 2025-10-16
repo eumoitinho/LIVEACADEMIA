@@ -4,67 +4,79 @@
 
 @layer base {
   :root {
-    /* Tema Dark (padrão) - Duotone com amarelo */
+    /* Tema Forge - Dark Premium */
     --background: 10 10 10; /* #0a0a0a */
-    --foreground: 254 254 254; /* #fefefe */
+    --foreground: 255 255 255; /* #ffffff */
 
-    --card: 22 22 22; /* #161616 */
-    --card-foreground: 254 254 254; /* #fefefe */
- 
-    --popover: 22 22 22; /* #161616 */
-    --popover-foreground: 254 254 254; /* #fefefe */
- 
-    --primary: 255 203 0; /* #ffcb00 - amarelo principal */
+    --card: 23 23 23; /* #171717 */
+    --card-foreground: 255 255 255; /* #ffffff */
+
+    --popover: 23 23 23; /* #171717 */
+    --popover-foreground: 255 255 255; /* #ffffff */
+
+    --primary: 255 203 0; /* #ffcb00 - amarelo Live */
     --primary-foreground: 10 10 10; /* #0a0a0a */
- 
-    --secondary: 31 31 31; /* #1f1f1f */
-    --secondary-foreground: 254 254 254; /* #fefefe */
- 
-    --muted: 31 31 31; /* #1f1f1f */
-    --muted-foreground: 156 163 175; /* #9ca3af */
- 
-    --accent: 255 215 64; /* #ffd740 - amarelo accent */
-    --accent-foreground: 10 10 10; /* #0a0a0a */
- 
-    --destructive: 239 68 68; /* #ef4444 */
-    --destructive-foreground: 254 254 254; /* #fefefe */
 
-    --border: 55 65 81; /* #374151 */
-    --input: 55 65 81; /* #374151 */
+    --secondary: 38 38 38; /* #262626 */
+    --secondary-foreground: 255 255 255; /* #ffffff */
+
+    --muted: 38 38 38; /* #262626 */
+    --muted-foreground: 163 163 163; /* #a3a3a3 */
+
+    --accent: 255 215 64; /* #ffd740 - amarelo accent */
+    
+    /* Cores específicas da Live Academia */
+    --live-yellow: 255 203 0; /* #ffcb00 */
+    --live-yellow-light: 255 215 64; /* #ffd740 */
+    --live-yellow-dark: 230 180 0; /* #e6b400 */
+    --live-yellow-accent: 255 241 118; /* #fff176 */
+    --accent-foreground: 10 10 10; /* #0a0a0a */
+
+    --destructive: 239 68 68; /* #ef4444 */
+    --destructive-foreground: 255 255 255; /* #ffffff */
+
+    --border: 38 38 38; /* #262626 */
+    --input: 38 38 38; /* #262626 */
     --ring: 255 203 0; /* #ffcb00 */
- 
-    --radius: 0.5rem;
+
+    --radius: 0.75rem;
   }
 
-  /* Tema Light - será aplicado via JavaScript */
+  /* Tema Light - Forge inspired */
   .light {
     --background: 255 255 255; /* #ffffff */
-    --foreground: 26 26 26; /* #1a1a1a */
+    --foreground: 23 23 23; /* #171717 */
 
     --card: 250 250 250; /* #fafafa */
-    --card-foreground: 74 74 74; /* #4a4a4a */
- 
-    --popover: 255 255 255; /* #ffffff */
-    --popover-foreground: 26 26 26; /* #1a1a1a */
- 
-    --primary: 255 203 0; /* #ffcb00 - amarelo principal */
-    --primary-foreground: 26 26 26; /* #1a1a1a */
- 
-    --secondary: 245 245 245; /* #f5f5f5 */
-    --secondary-foreground: 74 74 74; /* #4a4a4a */
- 
-    --muted: 245 245 245; /* #f5f5f5 */
-    --muted-foreground: 107 114 128; /* #6b7280 */
- 
-    --accent: 255 215 64; /* #ffd740 - amarelo accent */
-    --accent-foreground: 26 26 26; /* #1a1a1a */
- 
-    --destructive: 239 68 68; /* #ef4444 */
-    --destructive-foreground: 250 250 250; /* #fafafa */
+    --card-foreground: 23 23 23; /* #171717 */
 
-    --border: 229 231 235; /* #e5e7eb */
-    --input: 229 231 235; /* #e5e7eb */
+    --popover: 255 255 255; /* #ffffff */
+    --popover-foreground: 23 23 23; /* #171717 */
+
+    --primary: 255 203 0; /* #ffcb00 - amarelo Live */
+    --primary-foreground: 23 23 23; /* #171717 */
+
+    --secondary: 245 245 245; /* #f5f5f5 */
+    --secondary-foreground: 64 64 64; /* #404040 */
+
+    --muted: 245 245 245; /* #f5f5f5 */
+    --muted-foreground: 115 115 115; /* #737373 */
+
+    --accent: 255 215 64; /* #ffd740 - amarelo accent */
+    --accent-foreground: 23 23 23; /* #171717 */
+
+    --destructive: 239 68 68; /* #ef4444 */
+    --destructive-foreground: 255 255 255; /* #ffffff */
+
+    --border: 229 229 229; /* #e5e5e5 */
+    --input: 229 229 229; /* #e5e5e5 */
     --ring: 255 203 0; /* #ffcb00 */
+    
+    /* Cores específicas da Live Academia - Light */
+    --live-yellow: 255 203 0; /* #ffcb00 */
+    --live-yellow-light: 255 215 64; /* #ffd740 */
+    --live-yellow-dark: 230 180 0; /* #e6b400 */
+    --live-yellow-accent: 255 241 118; /* #fff176 */
   }
 }
 
@@ -73,8 +85,120 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Tipografia Padronizada - Baseado em Benefícios Section */
+  h1, h2 {
+    @apply text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight;
+  }
+
+  /* Subtítulos / Descriptions */
+  .section-description, p.lead {
+    @apply text-lg text-slate-300 leading-relaxed;
+  }
+}
+
+/* Animações do Forge */
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+@keyframes slideInBlur {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0px);
+  }
+}
+
+@keyframes fadeInSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0px);
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+@keyframes scrollBlur {
+  from {
+    filter: blur(0px);
+  }
+  to {
+    filter: blur(60px);
+  }
+}
+
+/* Classes de animação */
+.animate-fade-slide-in {
+  animation: fadeSlideIn 1s ease-out 0.1s both;
+}
+
+.animate-slide-in-blur {
+  animation: slideInBlur 1.2s ease-out 0.4s both;
+}
+
+.animate-fade-in-slide {
+  animation: fadeInSlide 0.8s ease-out 0.6s both;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.8s ease-out 1s both;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.animate-scroll-blur {
+  animation: scrollBlur linear both;
+  animation-timeline: view();
+  animation-range: entry 100% entry 200%;
 }

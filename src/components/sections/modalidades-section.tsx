@@ -31,12 +31,8 @@ const modalidadesHome = [
 
 export default function ModalidadesSection() {
   return (
-    <section id="servicos" className="py-20 relative overflow-hidden bg-black">
-      {/* Background gradient effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-0 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
-      </div>
+    <section id="servicos" className="py-20 relative overflow-hidden">
+      {/* Background transparente para usar o background fixo do layout */}
       
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -46,9 +42,7 @@ export default function ModalidadesSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6">
-            <span className="text-zinc-400 text-sm font-medium">Aulas coletivas</span>
-          </div>
+          
           
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Energia e motivação em grupo para você ir além
@@ -113,10 +107,10 @@ export default function ModalidadesSection() {
         >
           <Link
             href="/aulas-coletivas"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-bold shadow-lg hover:shadow-xl hover:shadow-yellow-500/25 transition-all duration-300 transform hover:scale-105 group"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition-colors duration-200 group"
           >
             <span>VEJA TODAS AS MODALIDADES</span>
-            <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+            <ArrowRight className="h-5 w-5" />
           </Link>
         </motion.div>
       </div>

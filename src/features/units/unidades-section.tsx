@@ -16,7 +16,7 @@ const unidades = [
     nome: "Live Academia - Adrianópolis",
     endereco: "Rua Salvador, 567 - Adrianópolis, Manaus/AM",
     imagem: "/images/academia-2.webp",
-    badge: { text: "Adrianópolis", variant: "indigo" as const },
+    badge: { text: "Adrianópolis", variant: "amber" as const },
     link: "https://maps.google.com/?q=Live+Academia+Adrianopolis",
   },
   {

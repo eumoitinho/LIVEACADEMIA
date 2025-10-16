@@ -40,7 +40,7 @@ const socialMedia = [
     name: "Instagram",
     url: "https://www.instagram.com/liveacademiamanaus/",
     icon: Instagram,
-    color: "from-pink-500 to-purple-500"
+    color: "from-amber-500 to-yellow-600"
   },
   {
     name: "YouTube",

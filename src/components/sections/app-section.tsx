@@ -24,25 +24,19 @@ const features = [
 ]
 
 const beneficios = [
-  "Acompanhe seus treinos e monitore sua evolução",
-  "Agende aulas coletivas e receba lembretes",
-  "Acesse sua ficha de treino personalizada",
-  "Conecte-se com outros alunos da comunidade",
-  "Receba notificações sobre novidades e eventos",
-  "Faça check-in digital nas unidades"
+  "Visualize seus treinos, com vídeos explicativos sobre a execução correta dos exercícios",
+  "Consulte o vencimento do seu plano",
+  "Renove seu plano diretamente pelo app",
+  "Confira a grade de aulas coletivas, por unidade",
+  "Receba notificações e comunicados importantes sobre a sua unidade (função disponível somente no App Treino)"
 ]
 
 export default function AppSection() {
   const [currentScreen, setCurrentScreen] = useState(0)
 
   return (
-    <section className="relative py-20 px-6 lg:px-12 overflow-hidden bg-black" id="app">
-      {/* Enhanced Background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-0 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/4 right-1/3 w-64 h-64 bg-yellow-400/10 rounded-full blur-2xl animate-pulse" />
-      </div>
+    <section className="relative py-20 px-6 lg:px-12 overflow-hidden" id="app">
+      {/* Background transparente para usar o background fixo do layout */}
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -83,8 +77,17 @@ export default function AppSection() {
               viewport={{ once: true }}
               className="text-zinc-400 text-lg mb-8 leading-relaxed"
             >
-              Dois apps exclusivos para transformar sua experiência. Tecnologia que simplifica
-              sua jornada fitness e maximiza seus resultados.
+              A Live Academia conta com dois aplicativos exclusivos (App Live e App Treino) para facilitar sua jornada fitness e melhorar sua experiência de treino – dentro e fora da academia!
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true }}
+              className="text-zinc-500 text-sm mb-8 italic"
+            >
+              Disponíveis para Google Play e App Store.
             </motion.p>
 
             {/* Benefícios */}
@@ -167,10 +170,10 @@ export default function AppSection() {
               className="flex flex-wrap gap-4"
             >
               <motion.a
-                href="#"
-                className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-6 py-3 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-3 hover:shadow-lg hover:shadow-yellow-500/10"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                href="https://apps.apple.com/br/app/live-academia/id6745790187"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-6 py-3 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-3"
               >
                 <div className="w-8 h-8">
                   <svg viewBox="0 0 24 24" className="w-full h-full fill-zinc-400 group-hover:fill-white transition-colors">
@@ -178,16 +181,16 @@ export default function AppSection() {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <div className="text-xs text-zinc-500 group-hover:text-zinc-400">Baixar na</div>
+                  <div className="text-xs text-zinc-500 group-hover:text-zinc-400">App Live</div>
                   <div className="text-sm font-semibold text-white">App Store</div>
                 </div>
               </motion.a>
 
               <motion.a
-                href="#"
-                className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-6 py-3 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-3 hover:shadow-lg hover:shadow-yellow-500/10"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                href="https://play.google.com/store/apps/details?id=br.com.w12.liveacademia&hl=pt_BR"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-6 py-3 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-3"
               >
                 <div className="w-8 h-8">
                   <svg viewBox="0 0 24 24" className="w-full h-full fill-zinc-400 group-hover:fill-white transition-colors">
@@ -195,7 +198,41 @@ export default function AppSection() {
                   </svg>
                 </div>
                 <div className="text-left">
-                  <div className="text-xs text-zinc-500 group-hover:text-zinc-400">Disponível no</div>
+                  <div className="text-xs text-zinc-500 group-hover:text-zinc-400">App Live</div>
+                  <div className="text-sm font-semibold text-white">Google Play</div>
+                </div>
+              </motion.a>
+
+              <motion.a
+                href="https://apps.apple.com/br/app/treino/id862662527"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-6 py-3 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-3"
+              >
+                <div className="w-8 h-8">
+                  <svg viewBox="0 0 24 24" className="w-full h-full fill-zinc-400 group-hover:fill-white transition-colors">
+                    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <div className="text-xs text-zinc-500 group-hover:text-zinc-400">App Treino</div>
+                  <div className="text-sm font-semibold text-white">App Store</div>
+                </div>
+              </motion.a>
+
+              <motion.a
+                href="https://play.google.com/store/apps/details?id=com.pacto"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-6 py-3 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-3"
+              >
+                <div className="w-8 h-8">
+                  <svg viewBox="0 0 24 24" className="w-full h-full fill-zinc-400 group-hover:fill-white transition-colors">
+                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                  </svg>
+                </div>
+                <div className="text-left">
+                  <div className="text-xs text-zinc-500 group-hover:text-zinc-400">App Treino</div>
                   <div className="text-sm font-semibold text-white">Google Play</div>
                 </div>
               </motion.a>

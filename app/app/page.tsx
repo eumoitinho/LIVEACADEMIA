@@ -21,7 +21,7 @@ export default function AppPage() {
       title: "Agendamento de Aulas",
       description: "Reserve sua vaga nas aulas coletivas com antecedência.",
       icon: Calendar,
-      color: "from-purple-500 to-purple-600",
+      color: "from-amber-500 to-yellow-600",
     },
     {
       title: "Histórico de Treinos",

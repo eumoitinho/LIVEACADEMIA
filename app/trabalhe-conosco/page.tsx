@@ -94,7 +94,7 @@ export default function TrabalheConoscoPage() {
       description:
         "Valorizamos novas ideias e incentivamos nossos colaboradores a contribuírem para a evolução da empresa.",
       icon: Users,
-      color: "from-purple-500 to-purple-600",
+      color: "from-amber-500 to-yellow-600",
     },
   ]
 

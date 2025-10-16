@@ -5,7 +5,6 @@ import "./globals.css"
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import { UnitProvider } from "@/contexts/unit-context"
-import { ThemeProvider } from "@/src/components/layout/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,17 +23,63 @@ export default function RootLayout({
       <html lang="pt-BR">
         <head>
           <script src="https://api.tracking.ninetwo.com.br/script/live-academia" async></script>
+          <script dangerouslySetInnerHTML={{
+            __html: `
+              /* Animações on scroll quando visível */
+              (function () {
+                // Injeta CSS para estados paused/running
+                const style = document.createElement("style");
+                style.textContent = \`
+                  /* Default: paused */
+                  .animate-on-scroll { animation-play-state: paused !important; }
+                  /* Ativado por JS */
+                  .animate-on-scroll.animate { animation-play-state: running !important; }
+                \`;
+                document.head.appendChild(style);
+
+                const once = true;
+
+                if (!window.__inViewIO) {
+                  window.__inViewIO = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                      if (entry.isIntersecting) {
+                        entry.target.classList.add("animate");
+                        if (once) window.__inViewIO.unobserve(entry.target);
+                      }
+                    });
+                  }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
+                }
+
+                window.initInViewAnimations = function (selector = ".animate-on-scroll") {
+                  document.querySelectorAll(selector).forEach((el) => {
+                    window.__inViewIO.observe(el); // observar duas vezes é um no-op
+                  });
+                };
+
+                document.addEventListener("DOMContentLoaded", () => initInViewAnimations());
+              })();
+            `
+          }} />
         </head>
-        <body className={inter.className}>
-          <ThemeProvider>
-            <UnitProvider>
-              <div className="min-h-screen flex flex-col bg-background text-foreground">
-                <Header />
-                <div className="flex-grow">{children}</div>
-                <Footer />
-              </div>
-            </UnitProvider>
-          </ThemeProvider>
+        <body className={`${inter.className} min-h-screen antialiased overflow-x-hidden text-white bg-neutral-950`}>
+          <UnitProvider>
+                {/* Background parallax - hero.jpg com blur progressivo */}
+                <div 
+                  className="fixed top-0 w-full h-screen bg-cover bg-center -z-10" 
+                  style={{
+                    backgroundImage: "url('/hero.jpg')",
+                    animation: "scrollBlur linear both",
+                    animationTimeline: "view()",
+                    animationRange: "entry 100% exit 50%"
+                  }}
+                />
+            
+            <div className="relative z-20 min-h-screen flex flex-col">
+              <Header />
+              <div className="flex-grow">{children}</div>
+              <Footer />
+            </div>
+          </UnitProvider>
         </body>
       </html>
     )

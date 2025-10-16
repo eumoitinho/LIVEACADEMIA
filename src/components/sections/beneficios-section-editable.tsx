@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { ShieldCheck, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
 import Image from "next/image"
-import { useState, useCallback } from "react"
+import { useState, useEffect, useRef } from "react"
 
 interface BeneficiosSectionProps {
   data: {
@@ -21,11 +21,33 @@ interface BeneficiosSectionProps {
 }
 
 export default function BeneficiosSectionEditable({ data }: BeneficiosSectionProps) {
-  const easing = [0.16, 1, 0.3, 1] as const
-  const [active, setActive] = useState(0)
-  const handleActivate = useCallback((idx: number) => {
-    setActive(idx)
-  }, [])
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [hasAnimated, setHasAnimated] = useState(false)
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!sectionRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHoveredIndex(0)
+            setHasAnimated(true)
+            // Remove auto-hover after 3 seconds
+            setTimeout(() => {
+              setHoveredIndex(null)
+            }, 3000)
+          }
+        })
+      },
+      { threshold: 0.3 }
+    )
+
+    observer.observe(sectionRef.current)
+
+    return () => observer.disconnect()
+  }, [hasAnimated])
 
   if (!data) return null
 
@@ -45,108 +67,144 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
   }))
 
   return (
-    <section id="beneficios" className="relative py-24 px-4 lg:px-10 overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">
-      {/* Ambient background accents */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 left-1/3 w-[540px] h-[540px] bg-yellow-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-[420px] h-[420px] bg-amber-600/10 rounded-full blur-3xl" />
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+    <section ref={sectionRef} id="beneficios" className="relative py-24 px-4 lg:px-10 overflow-hidden">
+      <div className="max-w-[1200px] mx-auto relative z-10">
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: easing }}
+          transition={{ duration: 0.8 }}
           viewport={{ once: true, amount: 0.3 }}
           className="text-center mb-14"
         >
+          <div className="inline-flex items-center gap-2 rounded-full bg-live-accent/10 px-4 py-2 text-sm font-semibold text-live-accent border border-live-accent/20 mb-6">
+            <Star className="h-4 w-4" />
+            <span>{data.badge}</span>
+          </div>
+
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
-            {data.title} <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent">exclusivos</span>
+            {data.title}
           </h2>
-          <p className="text-lg text-zinc-300 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
             {data.description}
           </p>
         </motion.div>
 
-        {/* Expanding horizontal cards */}
-        <div
-          className="relative flex gap-1.5 w-full h-[460px] rounded-lg"
-          role="tablist"
-          aria-label="Benefícios da Live Academia"
+        {/* Expanding Cards Container */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="flex gap-1.5 bg-black w-full h-[600px] max-w-none rounded-3xl p-6 shadow-2xl"
         >
           {beneficios.map((beneficio, idx) => {
-            const isActive = active === idx
+            const isHovered = hoveredIndex === idx
+            const IconComponent = beneficio.icon
+
             return (
               <div
-                key={beneficio.title}
-                role="tab"
-                aria-selected={isActive}
-                tabIndex={0}
-                onMouseEnter={() => handleActivate(idx)}
-                onFocus={() => handleActivate(idx)}
-                onClick={() => handleActivate(idx)}
-                className={[
-                  'group relative overflow-hidden cursor-pointer flex flex-col justify-end rounded-md bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-md',
-                  'transition-[flex,background,filter] duration-500 ease-[cubic-bezier(.25,.4,.25,1)]',
-                  isActive ? 'flex-[4] shadow-[0_0_0_1px_rgba(250,204,21,0.25),0_8px_28px_-6px_rgba(0,0,0,.6)]' : 'flex-[1] hover:flex-[1.5]',
-                ].join(' ')}
-                style={{ minWidth: 0 }}
+                key={idx}
+                onMouseEnter={() => setHoveredIndex(idx)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className={`
+                  flex-1 overflow-hidden cursor-pointer transition-all duration-500
+                  group bg-gray-800 h-full rounded-3xl relative flex items-center justify-center
+                  ${isHovered ? 'flex-[4]' : 'flex-1'}
+                `}
+                style={{
+                  transitionProperty: 'flex',
+                  transitionTimingFunction: 'ease'
+                }}
               >
                 {/* Background Image */}
-                <div className="absolute inset-0">
-                  <Image
-                    src={beneficio.image}
-                    alt={beneficio.title}
-                    fill
-                    quality={85}
-                    className={[
-                      'object-cover transition-all duration-[900ms]',
-                      isActive ? 'scale-105 opacity-80' : 'scale-100 opacity-25 group-hover:opacity-40'
-                    ].join(' ')}
-                    sizes="(max-width:768px) 100vw, (max-width:1280px) 50vw, 600px"
-                    priority={idx === 0}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  {isActive && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/15 via-amber-500/10 to-transparent mix-blend-overlay" />
-                  )}
-                </div>
+                <Image
+                  src={beneficio.image}
+                  alt={beneficio.title}
+                  fill
+                  quality={90}
+                  className="w-full h-full object-cover rounded-3xl"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  priority={idx === 0}
+                />
 
-                {/* Icon (floating) */}
-                <div className="absolute top-4 left-4 z-10">
-                  <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br ${beneficio.color} shadow-lg shadow-yellow-500/20`}> 
-                    <beneficio.icon className="w-6 h-6 text-black" />
+                {/* Overlay with Content */}
+                <div
+                  className={`
+                    card-overlay transition-opacity duration-300 flex flex-col
+                    bg-gradient-to-t from-black/70 via-transparent to-transparent
+                    rounded-3xl p-6 absolute inset-0 justify-end
+                    ${isHovered ? 'opacity-100' : 'opacity-0'}
+                  `}
+                >
+                  {/* Icon Badge */}
+                  <div className="mb-auto pt-0">
+                    <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br ${beneficio.color} shadow-lg`}>
+                      <IconComponent className="w-6 h-6 text-black" />
+                    </div>
+                  </div>
+
+                  {/* Text Content */}
+                  <div>
+                    <h3 className="text-white text-xl font-medium mb-1 tracking-tight">
+                      {beneficio.title}
+                    </h3>
+                    <p className="text-gray-200 text-sm mb-2">
+                      {beneficio.description}
+                    </p>
+                    <p className="text-gray-400 text-xs flex items-center gap-1.5">
+                      <CheckCircle className="w-3.5 h-3.5" />
+                      Disponível em todas as unidades
+                    </p>
                   </div>
                 </div>
 
-                {/* Content overlay */}
-                <div className="relative z-10 p-6 flex flex-col">
-                  <h3 className="text-white font-semibold tracking-tight text-lg md:text-xl mb-1">
-                    {beneficio.title}
-                  </h3>
-                  <p
-                    className={[
-                      'text-sm text-zinc-300 transition-opacity duration-300 max-w-md',
-                      isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                    ].join(' ')}
-                  >
-                    {beneficio.description}
-                  </p>
-                  <div
-                    className={[
-                      'mt-3 flex items-center gap-2 text-yellow-400 text-xs font-medium tracking-wide uppercase',
-                      isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
-                    ].join(' ')}
-                  >
-                    <CheckCircle className="w-4 h-4" /> Disponível agora
+                {/* Vertical Title (when not hovered) */}
+                {!isHovered && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div
+                      className="text-white font-bold text-xl tracking-tight whitespace-nowrap drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+                      style={{
+                        writingMode: 'vertical-rl',
+                        textOrientation: 'mixed',
+                        transform: 'rotate(180deg)',
+                        textShadow: '0 2px 10px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.5)'
+                      }}
+                    >
+                      {beneficio.title}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             )
           })}
-        </div>
+        </motion.div>
+
+        {/* CTA Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <p className="text-slate-400 mb-4">
+            Descubra todos os benefícios exclusivos para você
+          </p>
+          <a
+            href="#planos"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-live-accent to-yellow-500 text-black font-bold hover:shadow-lg hover:shadow-live-accent/25 transition-all hover:scale-105"
+          >
+            Ver planos
+          </a>
+        </motion.div>
       </div>
+
+      <style jsx>{`
+        .card-overlay {
+          transition: opacity 0.3s ease;
+        }
+      `}</style>
     </section>
   )
 }

@@ -1,10 +1,10 @@
 "use client"
 
 import { useHomepageData, useUnitsData } from "../../hooks/use-sanity-data"
-import HeroSectionEditable from "@/components/sections/hero-section-editable"
+import HeroSection from "@/components/sections/hero-section"
 import AboutSectionEditable from "@/components/sections/about-section-editable"
 import BeneficiosSectionEditable from "@/components/sections/beneficios-section-editable"
-import PlanosSectionDynamic from "@/components/sections/planos-section-dynamic"
+import PlanosSectionEditable from "@/components/sections/planos-section-editable"
 import UnidadesCarouselEditable from "@/components/shared/unidades-carousel-editable"
 import FloatingButton from "@/components/layout/floating-button"
 import TestimonialSection from "@/components/sections/testimonial-section"
@@ -13,6 +13,9 @@ import ModalidadesSection from "@/components/sections/modalidades-section"
 import WellhubSection from "@/components/sections/wellhub-section"
 import BioimpedanciaSection from "@/components/sections/bioimpedancia-section"
 import EstruturaSection from "@/components/sections/estrutura-section"
+import UnidadesCarousel from "./shared/unidades-carousel"
+import AboutSection from "./sections/about-section"
+import BeneficiosSection from "./sections/beneficios-section"
 
 export default function HomepageEditable() {
   const { data: homepageData, loading: homepageLoading, error: homepageError } = useHomepageData()
@@ -45,23 +48,24 @@ export default function HomepageEditable() {
   return (
     <main className="min-h-screen relative">
       {/* Hero Section */}
-      {homepageData.hero && (
-        <HeroSectionEditable data={homepageData.hero} />
-      )}
+      <HeroSection />
 
       {/* About Section */}
       {homepageData.about && (
-        <AboutSectionEditable data={homepageData.about} />
+        <AboutSection />
       )}
 
       {/* Units Carousel */}
       {unitsData && unitsData.length > 0 && (
-        <UnidadesCarouselEditable data={unitsData} />
+        <UnidadesCarousel/>
       )}
+
+      {/* Plans Section */}
+      <PlanosSectionEditable />
 
       {/* Benefits Section */}
       {homepageData.beneficios && (
-        <BeneficiosSectionEditable data={homepageData.beneficios} />
+        <BeneficiosSection />
       )}
 
       {/* Structure Section */}
@@ -70,25 +74,13 @@ export default function HomepageEditable() {
       {/* Modalities Section */}
       <ModalidadesSection />
 
-      {/* Plans Section */}
-      {homepageData.planos && (
-          <PlanosSectionDynamic 
-            data={{
-              badge: homepageData.planos.badge,
-              title: homepageData.planos.title,
-              description: homepageData.planos.description
-            }}
-            unidadeSlug="centro"
-          />
-      )}
-
       {/* App Section */}
       <AppSection />
 
       {/* Wellhub Section */}
       <WellhubSection />
 
-      {/* Bioimpedance Section */}
+      {/* Bioimpedancia Section */}
       <BioimpedanciaSection />
 
       {/* Testimonials Section */}

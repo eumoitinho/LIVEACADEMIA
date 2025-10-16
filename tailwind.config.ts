@@ -11,7 +11,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Sistema de temas duotone com amarelo
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -45,44 +44,18 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Cores do tema Live Academia com duotone amarelo
         live: {
-          // Amarelo principal (cor de destaque)
-          yellow: "#ffcb00",
-          yellowLight: "#ffd740",
-          yellowDark: "#e6b700",
-          yellowAccent: "#fff176",
-          
-          // Tema Light (branco + amarelo)
-          light: {
-            bg: "#ffffff",
-            bgSecondary: "#fafafa",
-            bgTertiary: "#f5f5f5",
-            textPrimary: "#1a1a1a",
-            textSecondary: "#4a4a4a",
-            textTertiary: "#6b7280",
-            border: "#e5e7eb",
-            borderLight: "#f3f4f6",
-          },
-          
-          // Tema Dark (preto + amarelo)
-          dark: {
-            bg: "#0a0a0a",
-            bgSecondary: "#161616",
-            bgTertiary: "#1f1f1f",
-            textPrimary: "#fefefe",
-            textSecondary: "rgba(254, 254, 254, 0.8)",
-            textTertiary: "#9ca3af",
-            border: "#374151",
-            borderLight: "#4b5563",
-          },
-          
-          // Cores compartilhadas
-          accent: "#ffd740",
-          success: "#10b981",
-          warning: "#f59e0b",
-          error: "#ef4444",
-          info: "#3b82f6",
+          yellow: "rgb(var(--live-yellow))",
+          yellowLight: "rgb(var(--live-yellow-light))",
+          yellowDark: "rgb(var(--live-yellow-dark))",
+          yellowAccent: "rgb(var(--live-yellow-accent))",
+          gray: "#afafaf",
+          accent: "rgb(var(--live-yellow-light))",
+          border: "hsl(var(--border))",
+          bg: "hsl(var(--background))",
+          textPrimary: "hsl(var(--foreground))",
+          textSecondary: "hsl(var(--muted-foreground))",
+          textTernary: "#999696",
         },
       },
       borderRadius: {

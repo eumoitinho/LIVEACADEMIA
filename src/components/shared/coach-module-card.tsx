@@ -112,7 +112,7 @@ export default function CoachModuleCard({
           </div>
           <div className="mt-2 rounded-full h-1 bg-white/20 overflow-hidden">
             <div
-              className="h-1 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-[width] duration-500"
+              className="h-1 rounded-full bg-gradient-to-r from-amber-500 to-yellow-600 transition-[width] duration-500"
               style={{ width: `${pct * 100}%` }}
             />
           </div>

@@ -20,36 +20,10 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
   if (!data) return null
 
   return (
-    <section id="sobre" className="relative py-28 px-6 lg:px-12 overflow-hidden bg-black">
-      <div
-        className="absolute inset-0 -z-10 opacity-[0.12] [mask-image:radial-gradient(circle_at_center,black,transparent_70%)] pointer-events-none"
-        style={{ backgroundImage: "repeating-linear-gradient(45deg,rgba(255,255,255,0.15)_0_2px,transparent_2px_10px)" }}
-      />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_25%_20%,rgba(255,203,0,0.18),transparent_60%)]" />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,0.85))]" />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(0,0,0,0.9),rgba(0,0,0,0.65),rgba(0,0,0,0.9))]" />
+    <section id="sobre" className="relative py-28 px-6 lg:px-12 overflow-hidden">
+      {/* Background transparente para usar o background fixo do layout */}
 
       <div className="relative z-10 mx-auto max-w-6xl space-y-20">
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: easing }}
-          viewport={{ once: true }}
-          className="space-y-6 border-b border-white/10 pb-12 pt-4"
-        >
-          <span className="block text-sm uppercase tracking-[0.35em] text-white/40">{data.badge}</span>
-          <h1 className="text-[48px] md:text-[80px] lg:text-[96px] leading-[0.95] font-semibold tracking-tight text-white">
-            {data.title}
-          </h1>
-          <p className="text-base text-white/75 leading-relaxed">
-            {data.description}
-          </p>
-          <p className="text-base text-white/65 leading-relaxed">
-            Somos uma rede criada em Manaus focada em experiência premium acessível: liberdade para treinar em qualquer unidade,
-            avaliação constante e suporte humano de verdade — sem enrolação e sem barreiras.
-          </p>
-        </motion.header>
-
         <div className="grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -59,11 +33,10 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
             className="space-y-10"
           >
             <div className="space-y-6">
-              <div className="sr-only">Sobre a Live Academia</div>
-              <h3 className="text-4xl md:text-5xl font-semibold tracking-tight text-white leading-[1.05]">
+              <h2>
                 Transformamos treino em rotina sustentável e resultado real
-              </h3>
-              <p className="text-base leading-relaxed text-white/75">
+              </h2>
+              <p className="section-description">
                 Somos uma rede criada em Manaus focada em experiência premium acessível: liberdade para treinar em qualquer unidade,
                 avaliação constante e suporte humano de verdade — sem enrolação e sem barreiras.
               </p>

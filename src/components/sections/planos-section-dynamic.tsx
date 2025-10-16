@@ -341,13 +341,8 @@ export default function PlanosSectionDynamic({ data, unidadeSlug }: PlanosSectio
   }
 
   return (
-    <section id="planos" className="relative py-24 px-6 lg:px-12 overflow-hidden bg-black">
-      {/* Background Effects */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,203,0,0.08),transparent_70%)]" />
-        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-0 w-80 h-80 bg-amber-500/5 rounded-full blur-3xl" />
-      </div>
+    <section id="planos" className="relative py-24 px-6 lg:px-12 overflow-hidden">
+      {/* Background transparente para usar o background fixo do layout */}
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
@@ -421,7 +416,7 @@ export default function PlanosSectionDynamic({ data, unidadeSlug }: PlanosSectio
                   )}
                   
                   {plano.fidelidade > 0 && (
-                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1 rounded-full text-xs font-bold">
+                    <div className="bg-gradient-to-r from-amber-500 to-yellow-600 text-black px-4 py-1 rounded-full text-xs font-bold">
                       {plano.fidelidade}m Fidelidade
                     </div>
                   )}
