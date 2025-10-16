@@ -37,7 +37,7 @@ export default function AulasColetivasPage() {
   return (
     <main className="min-h-screen relative">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 lg:px-12">
+      <section className="relative pt-32 pb-20 px-4 lg:px-12">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

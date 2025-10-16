@@ -1,295 +1,465 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { MapPin, Phone, Clock, Star, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useUnitsData } from '../../../hooks/use-sanity-data'
-import { urlFor } from '../../../lib/sanity'
-import type { Unit } from '../../../types/sanity'
+import { useEffect, useState, useRef, useCallback } from "react"
+import { ChevronLeft, ChevronRight, MapPin, Navigation } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
+import { motion, useInView, useReducedMotion } from "framer-motion"
+import { cn } from '@/lib/utils/utils'
 
-const easing = [0.16, 1, 0.3, 1] as const
+// Função para calcular distância entre dois pontos (Haversine)
+function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371 // km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180
+  const dLon = ((lon2 - lon1) * Math.PI) / 180
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  return R * c
+}
 
-export default function UnidadesCarouselEditable() {
-  const { data: unitsData, loading } = useUnitsData()
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+interface UnidadeBase {
+  id: string
+  slug: string
+  nome: string
+  endereco: string
+  imagem: string
+  latitude: number | null
+  longitude: number | null
+  badge?: { text: string; variant: 'pink' | 'amber' | 'orange' }
+  link?: string
+}
 
-  useEffect(() => {
-    if (!isAutoPlaying || unitsData.length <= 1) return
+type UnidadeComDistancia = UnidadeBase & { distancia?: number }
 
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % unitsData.length)
-    }, 5000)
+// Mapeamento de nomes para IDs das unidades
+const unidadeNameToId = {
+  "Live Academia - Centro": "centro",
+  "Live Academia - Cachoeirinha": "cachoeirinha",
+  "Live Academia - Cidade Nova": "chapeu-goiano", // Assumindo que é Chapéu Goiano baseado no endereço
+  "Live Academia - Ponta Negra": "flores", // Assumindo baseado na localização
+  "Live Academia - Adrianópolis": "adrianopolis",
+  "Live Academia - Flores": "flores"
+}
 
-    return () => clearInterval(interval)
-  }, [isAutoPlaying, unitsData.length])
+// Componente de Card melhorado
+function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
+  const unidadeId =
+    unidadeNameToId[unidade.nome as keyof typeof unidadeNameToId] ||
+    unidade.nome
+      .toLowerCase()
+      .replace('live academia - ', '')
+      .replace(/\s+/g, '-')
 
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + unitsData.length) % unitsData.length)
-    setIsAutoPlaying(false)
-  }
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % unitsData.length)
-    setIsAutoPlaying(false)
-  }
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index)
-    setIsAutoPlaying(false)
-  }
-
-  if (loading) {
-    return (
-      <section className="relative py-28 px-6 lg:px-12">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-lg">Carregando unidades...</p>
-        </div>
-      </section>
-    )
-  }
-
-  if (!unitsData || unitsData.length === 0) {
-    return null
-  }
-
-  const currentUnit = unitsData[currentIndex]
+  // Distância formatada (se existir)
+  const distanciaFmt =
+    unidade.distancia !== undefined
+      ? unidade.distancia < 1
+        ? `${Math.round(unidade.distancia * 1000)}m de você`
+        : `${unidade.distancia.toFixed(1)}km de você`
+      : null
 
   return (
-    <section id="unidades" className="relative py-28 px-6 lg:px-12 overflow-hidden">
-      <div className="relative z-10 mx-auto max-w-6xl">
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: easing }}
-          viewport={{ once: true, amount: 0.3 }}
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
-          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary/70">
-            Nossas Unidades
-          </span>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mt-4 text-foreground">
-            Encontre a unidade mais próxima
-          </h2>
-          <p className="text-lg text-muted-foreground mt-3 leading-relaxed">
-            {unitsData.length} unidades espalhadas por Manaus para sua comodidade
-          </p>
-        </motion.header>
-
-        <div className="relative">
-          {/* Carousel Container */}
-          <div className="relative overflow-hidden rounded-3xl bg-card border border-border">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.5, ease: easing }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-0"
-            >
-              {/* Imagem */}
-              <div className="relative h-96 lg:h-auto">
-                {currentUnit.images && currentUnit.images.length > 0 ? (
-                  <img
-                    src={urlFor(currentUnit.images[0]).width(800).height(600).url()}
-                    alt={currentUnit.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                    <MapPin className="h-16 w-16 text-primary/50" />
-                  </div>
-                )}
-                
-                {/* Badge do tipo */}
-                <div className="absolute top-4 left-4">
-                  <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold">
-                    {currentUnit.type}
-                  </span>
-                </div>
-
-                {/* Badge de destaque */}
-                {currentUnit.featured && (
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-gradient-to-r from-amber-500 to-yellow-600 text-black px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                      <Star className="h-4 w-4" />
-                      Destaque
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Conteúdo */}
-              <div className="p-8 lg:p-12">
-                <div className="h-full flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-3xl font-bold text-foreground mb-4">
-                      {currentUnit.name}
-                    </h3>
-                    
-                    <div className="space-y-4 mb-6">
-                      <div className="flex items-start gap-3">
-                        <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                        <div>
-                          <p className="text-foreground font-medium">{currentUnit.address}</p>
-                          <p className="text-muted-foreground text-sm">
-                            {currentUnit.city}, {currentUnit.state}
-                            {currentUnit.zipCode && ` • ${currentUnit.zipCode}`}
-                          </p>
-                        </div>
-                      </div>
-
-                      {currentUnit.phone && (
-                        <div className="flex items-center gap-3">
-                          <Phone className="h-5 w-5 text-primary flex-shrink-0" />
-                          <a 
-                            href={`tel:${currentUnit.phone}`}
-                            className="text-foreground hover:text-primary transition-colors"
-                          >
-                            {currentUnit.phone}
-                          </a>
-                        </div>
-                      )}
-
-                      <div className="flex items-start gap-3">
-                        <Clock className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                        <p className="text-muted-foreground text-sm">
-                          {currentUnit.openingHours}
-                        </p>
-                      </div>
-                    </div>
-
-                    {currentUnit.description && (
-                      <p className="text-muted-foreground mb-6">
-                        {currentUnit.description}
-                      </p>
-                    )}
-
-                    {/* Serviços */}
-                    {currentUnit.services && currentUnit.services.length > 0 && (
-                      <div className="mb-6">
-                        <h4 className="text-foreground font-semibold mb-3">Serviços Disponíveis:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {currentUnit.services.map((service, index) => (
-                            <span
-                              key={index}
-                              className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm"
-                            >
-                              {service}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex gap-3">
-                    {currentUnit.whatsapp && (
-                      <a
-                        href={`https://wa.me/${currentUnit.whatsapp.replace(/\D/g, '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors text-center"
-                      >
-                        WhatsApp
-                      </a>
-                    )}
-                    <a
-                      href={`https://maps.google.com/?q=${encodeURIComponent(currentUnit.address)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-xl font-semibold transition-colors text-center"
-                    >
-                      Como Chegar
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Navegação */}
-          {unitsData.length > 1 && (
-            <>
-              <button
-                onClick={goToPrevious}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-3 transition-all"
-                aria-label="Unidade anterior"
-              >
-                <ChevronLeft className="h-6 w-6 text-white" />
-              </button>
-
-              <button
-                onClick={goToNext}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-3 transition-all"
-                aria-label="Próxima unidade"
-              >
-                <ChevronRight className="h-6 w-6 text-white" />
-              </button>
-
-              {/* Indicadores */}
-              <div className="flex justify-center gap-2 mt-8">
-                {unitsData.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToSlide(index)}
-                    className={`w-3 h-3 rounded-full transition-all ${
-                      index === currentIndex
-                        ? 'bg-primary scale-125'
-                        : 'bg-white/30 hover:bg-white/50'
-                    }`}
-                    aria-label={`Ir para unidade ${index + 1}`}
-                  />
-                ))}
-              </div>
-            </>
-          )}
+    <Link href={`/unidades/${unidadeId}`} className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400/70 rounded-2xl">
+      <div
+        className={cn(
+          "relative rounded-2xl bg-gradient-to-b from-neutral-900/90 to-neutral-950/90 p-5 lg:p-6",
+          "border border-white/10 backdrop-blur-sm overflow-hidden",
+          "transition-all duration-300",
+          "hover:border-yellow-400/40",
+          "hover:shadow-[0_0_30px_rgba(250,204,21,0.3),0_10px_30px_-5px_rgba(0,0,0,0.5)]",
+          "hover:-translate-y-2",
+          "min-h-[360px]"
+        )}
+      >
+        {/* Glow amarelo sutil no hover */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent" />
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-yellow-400/20 rounded-full blur-3xl" />
         </div>
 
-        {/* Lista de todas as unidades */}
+        <div className="relative z-10 flex flex-col h-full">
+          {/* Media */}
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-5 ring-1 ring-yellow-300/30">
+              <Image
+                src={unidade.imagem}
+                alt={unidade.nome}
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                quality={85}
+                className="object-cover transition-transform duration-[1600ms] group-hover:scale-110"
+                priority={false}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
+              {/* Badge sobre a imagem */}
+              <div className="absolute left-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white ring-1 ring-white/20 backdrop-blur-sm">
+                <span className="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_0_2px_rgba(0,0,0,0.4)]" />
+                {unidade.badge?.text || unidade.slug || 'Unidade'}
+              </div>
+            </div>
+          {/* Content */}
+          <div className="flex flex-col gap-3">
+            <h3 className="text-lg font-semibold text-white tracking-tight leading-snug">
+              {unidade.nome.replace('Live Academia - ', '')}
+            </h3>
+            <p className="text-sm text-zinc-300/90 line-clamp-2">
+              {unidade.endereco}
+            </p>
+          </div>
+
+          {/* Tags */}
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[11px] text-zinc-200 ring-1 ring-white/10">
+              <MapPin className="h-3.5 w-3.5 text-yellow-300" />
+              Ver detalhes
+            </span>
+            {distanciaFmt && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[11px] text-zinc-200 ring-1 ring-white/10">
+                <Navigation className="h-3.5 w-3.5 text-yellow-300" />
+                {distanciaFmt}
+              </span>
+            )}
+          </div>
+
+          <div className="mt-auto pt-4 flex items-center justify-between">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-500 font-medium">
+              Live Academia
+            </span>
+            <span className="text-[11px] text-zinc-400">
+              Clique para conhecer
+            </span>
+          </div>
+        </div>
+
+        {/* Accessible focus ring overlay */}
+        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-0 group-focus-visible:ring-2 ring-yellow-400/60" />
+      </div>
+    </Link>
+  )
+}
+
+export default function UnidadesCarousel() {
+  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null)
+  const [sortedUnidades, setSortedUnidades] = useState<UnidadeComDistancia[]>([])
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const carouselViewportRef = useRef<HTMLDivElement>(null)
+  const prefersReducedMotion = useReducedMotion()
+  const visibleInView = useInView(carouselViewportRef, { amount: 0.25, once: false })
+
+  // Carrega unidades da API com fallback estático
+  useEffect(() => {
+    let cancelled = false
+    
+    // Fallback estático imediato
+    const fallbackUnidades: UnidadeBase[] = [
+      {
+        id: 'torres',
+        slug: 'torres',
+        nome: 'Live Academia - Torres',
+        endereco: 'Rua Mitiko, 123 - Torres, Manaus/AM',
+        imagem: '/images/academia-1.webp',
+        latitude: -3.0654,
+        longitude: -60.0261,
+        badge: { text: 'Torres', variant: 'orange' },
+        link: '/unidades/torres'
+      },
+      {
+        id: 'vieiralves',
+        slug: 'vieiralves',
+        nome: 'Live Academia - Vieiralves',
+        endereco: 'Av. Djalma Batista - Vieiralves, Manaus/AM',
+        imagem: '/images/academia-2.webp',
+        latitude: -3.0876,
+        longitude: -60.0156,
+        badge: { text: 'Vieiralves', variant: 'amber' },
+        link: '/unidades/vieiralves'
+      },
+      {
+        id: 'cidade-nova',
+        slug: 'cidade-nova',
+        nome: 'Live Academia - Cidade Nova',
+        endereco: 'Av. Max Teixeira - Cidade Nova, Manaus/AM',
+        imagem: '/images/academia-3.webp',
+        latitude: -3.0449,
+        longitude: -59.9986,
+        badge: { text: 'Cidade Nova', variant: 'pink' },
+        link: '/unidades/cidade-nova'
+      },
+      {
+        id: 'centro',
+        slug: 'centro',
+        nome: 'Live Academia - Centro',
+        endereco: 'Av. Getúlio Vargas - Centro, Manaus/AM',
+        imagem: '/images/academia-4.webp',
+        latitude: -3.1319,
+        longitude: -60.0217,
+        badge: { text: 'Centro', variant: 'orange' },
+        link: '/unidades/centro'
+      }
+    ]
+    
+    // Setar fallback imediatamente para não ficar em "Carregando..."
+    setSortedUnidades(fallbackUnidades)
+    
+    // Tentar buscar dados dinâmicos da API
+    async function load() {
+      try {
+        const res = await fetch('/api/unidades', { 
+          cache: 'no-store',
+          signal: AbortSignal.timeout(3000) // Timeout de 3s
+        })
+        
+        if (!res.ok) throw new Error('API retornou erro')
+        
+        const json = await res.json()
+        const units: UnidadeBase[] = (json.units || []).map((u: any) => ({
+          id: u.id,
+          slug: u.slug,
+          nome: u.nome,
+          endereco: u.endereco,
+          imagem: u.imagem || '/images/academia-1.webp',
+          latitude: u.latitude,
+          longitude: u.longitude,
+          badge: { text: (u.slug || 'Unidade').replace(/-/g,' ').slice(0,20), variant: 'orange' },
+          link: `/unidades/${u.slug}`
+        }))
+        
+        if (!cancelled && units.length > 0) {
+          setSortedUnidades(units)
+        }
+      } catch (e) {
+        // Se API falhar, mantém o fallback
+        console.info('[UnidadesCarousel] Usando dados estáticos (API indisponível)')
+      }
+    }
+    
+    load()
+    return () => { cancelled = true }
+  }, [])
+
+  // Calcula distâncias quando a localização é obtida
+  useEffect(() => {
+    if (!userLocation || sortedUnidades.length === 0) return
+    setSortedUnidades((prev) => {
+      return [...prev]
+        .map((u) => {
+          if (u.latitude != null && u.longitude != null) {
+            return {
+              ...u,
+              distancia: getDistanceFromLatLonInKm(userLocation.lat, userLocation.lon, u.latitude!, u.longitude!)
+            }
+          }
+          return u
+        })
+        .sort((a, b) => (a.distancia ?? Infinity) - (b.distancia ?? Infinity))
+    })
+  }, [userLocation])
+
+  // Solicita localização automaticamente
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          })
+        },
+        (error) => {
+          console.log("Erro ao obter localização:", error)
+        }
+      )
+    }
+  }, [])
+
+  // Auto-play do carrossel
+  // Auto-play com requestAnimationFrame + visibilidade + reduced motion
+  useEffect(() => {
+    if (!isAutoPlaying || prefersReducedMotion || !visibleInView) return
+    let frame: number
+    let start: number | null = null
+    const interval = 5000
+    const loop = (ts: number) => {
+      if (start === null) start = ts
+      const elapsed = ts - start
+      if (elapsed >= interval) {
+        setCurrentIndex((p) => (p + 1) % sortedUnidades.length)
+        start = ts
+      }
+      frame = requestAnimationFrame(loop)
+    }
+    frame = requestAnimationFrame(loop)
+    return () => cancelAnimationFrame(frame)
+  }, [isAutoPlaying, prefersReducedMotion, visibleInView, sortedUnidades.length])
+
+  const nextSlide = useCallback(() => {
+    setIsAutoPlaying(false)
+    setCurrentIndex((prev) => (prev + 1) % sortedUnidades.length)
+  }, [sortedUnidades.length])
+
+  const prevSlide = useCallback(() => {
+    setIsAutoPlaying(false)
+    setCurrentIndex((prev) => (prev - 1 + sortedUnidades.length) % sortedUnidades.length)
+  }, [sortedUnidades.length])
+
+  const goToSlide = useCallback((index: number) => {
+    setIsAutoPlaying(false)
+    setCurrentIndex(index)
+  }, [])
+
+  const slideWidth = 420 // width + gap approximation
+  const translateX = sortedUnidades.length > 0 ? -(currentIndex * slideWidth) : 0
+
+  return (
+    <section className="py-24 relative overflow-hidden bg-black">
+      {/* Background simples e rápido - Igual ao resto do site */}
+      <div className="absolute inset-0 -z-10">
+        {/* Gradiente de fundo preto */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-neutral-950 to-black" />
+        
+        {/* Iluminação amarela radial no centro */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(250,204,21,0.15)_0%,_transparent_50%)]" />
+        
+        {/* Iluminação amarela adicional no topo */}
+        <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-yellow-500/10 via-yellow-500/5 to-transparent" />
+        
+        {/* Pattern sutil de grid */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)',
+            backgroundSize: '50px 50px'
+          }}
+        />
+      </div>
+      <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: easing, delay: 0.2 }}
-          viewport={{ once: true, amount: 0.3 }}
-          className="mt-16"
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
         >
-          <h3 className="text-2xl font-bold text-foreground text-center mb-8">
-            Todas as Unidades
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {unitsData.map((unit, index) => (
-              <motion.div
-                key={unit._id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: easing, delay: index * 0.1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                className="bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors cursor-pointer"
-                onClick={() => goToSlide(index)}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <h4 className="text-foreground font-semibold">{unit.name}</h4>
-                  <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-xs">
-                    {unit.type}
-                  </span>
-                </div>
-                <p className="text-muted-foreground text-sm mb-4">{unit.address}</p>
-                <div className="flex gap-2">
-                  <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs">
-                    {unit.services.length} serviços
-                  </span>
-                  {unit.featured && (
-                    <span className="bg-amber-500/20 text-amber-600 px-2 py-1 rounded-full text-xs">
-                      Destaque
-                    </span>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* Título */}
+          <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            Encontre a Live mais perto de você
+          </h2>
+
+          {/* Descrição */}
+          <p className="text-lg lg:text-xl text-zinc-400 max-w-3xl mx-auto mb-8 leading-relaxed">
+            Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.
+          </p>
+
+          {/* CTA */}
+          <Link
+            href="/unidades"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-amber-400 text-black font-bold rounded-full hover:bg-amber-300 transition-colors duration-200"
+          >
+            VER TODAS AS UNIDADES
+            <ChevronRight className="h-5 w-5" />
+          </Link>
         </motion.div>
+
+        {/* Carrossel Container */}
+  <div ref={carouselViewportRef} className="relative" onMouseEnter={() => setIsAutoPlaying(false)} onMouseLeave={() => setIsAutoPlaying(true)}>
+          {/* Gradiente Esquerdo */}
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+          
+          {/* Gradiente Direito */}
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+
+          {/* Carrossel */}
+          <div className="overflow-hidden mx-8">
+            <div
+              className="flex gap-6 will-change-transform select-none"
+              style={{ transform: `translate3d(${translateX}px,0,0)`, transition: 'transform 650ms cubic-bezier(.19,1,.22,1)' }}
+            >
+              {sortedUnidades.length === 0 && (
+                <div className="text-center py-20 text-zinc-500 w-full">Carregando unidades...</div>
+              )}
+              {sortedUnidades.map((unidade) => (
+                <div
+                  key={unidade.id || unidade.slug}
+                  className="flex-shrink-0 w-[400px]"
+                >
+                  <UnidadeCard unidade={unidade} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Botões de navegação - Modernizados */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full bg-black/80 backdrop-blur-md border border-yellow-400/20 hover:border-yellow-400/60 hover:bg-yellow-400/10 transition-all duration-300 group shadow-xl"
+            aria-label="Anterior"
+          >
+            <ChevronLeft className="w-5 h-5 text-white group-hover:text-yellow-400 transition-colors" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full bg-black/80 backdrop-blur-md border border-yellow-400/20 hover:border-yellow-400/60 hover:bg-yellow-400/10 transition-all duration-300 group shadow-xl"
+            aria-label="Próximo"
+          >
+            <ChevronRight className="w-5 h-5 text-white group-hover:text-yellow-400 transition-colors" />
+          </button>
+
+          {/* Indicadores - Melhorados */}
+          {sortedUnidades.length > 1 && (
+            <div className="flex justify-center gap-3 mt-10">
+              {sortedUnidades.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={cn(
+                    "h-1.5 rounded-full transition-all duration-300",
+                    currentIndex === index 
+                      ? "w-12 bg-gradient-to-r from-yellow-400 to-amber-500 shadow-[0_0_10px_rgba(250,204,21,0.5)]" 
+                      : "w-1.5 bg-zinc-700 hover:bg-zinc-600 hover:w-6"
+                  )}
+                  aria-label={`Ir para slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Botão de localização - Modernizado */}
+        {!userLocation && sortedUnidades.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
+          >
+            <button
+              onClick={() => {
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                      setUserLocation({
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude,
+                      })
+                    }
+                  )
+                }
+              }}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-yellow-400/10 to-amber-500/10 backdrop-blur-md border border-yellow-400/30 hover:border-yellow-400/60 hover:bg-yellow-400/20 transition-all duration-300 text-yellow-400 font-semibold group shadow-lg hover:shadow-[0_0_30px_rgba(250,204,21,0.3)]"
+            >
+              <Navigation className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+              Encontrar unidade mais próxima de você
+            </button>
+            <p className="mt-4 text-sm text-zinc-500">
+              Ative a localização para ver as academias ordenadas por distância
+            </p>
+          </motion.div>
+        )}
       </div>
     </section>
   )

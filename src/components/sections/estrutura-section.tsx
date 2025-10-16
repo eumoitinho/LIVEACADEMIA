@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { useStructureFeaturesData } from "../../../hooks/use-sanity-data"
 import { urlFor } from "../../../lib/sanity"
+import { Dumbbell } from "lucide-react"
 
 const easing = [0.16, 1, 0.3, 1] as const
 
@@ -70,7 +71,7 @@ export default function EstruturaSection() {
                     <div className="absolute inset-0 bg-black/20"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-16 h-16 bg-yellow-400/30 rounded-full flex items-center justify-center">
-                        <span className="text-2xl">🏗️</span>
+                        <Dumbbell className="w-8 h-8 text-yellow-400" />
                       </div>
                     </div>
                   </>
@@ -87,7 +88,7 @@ export default function EstruturaSection() {
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-yellow-400/20 rounded-lg flex items-center justify-center">
-                    <span className="text-yellow-400 text-lg">🏗️</span>
+                    <Dumbbell className="w-5 h-5 text-yellow-400" />
                   </div>
                   <h3 className="text-xl font-semibold text-white">
                     {item.title}

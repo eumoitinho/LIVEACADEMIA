@@ -1,133 +1,245 @@
 "use client"
 
+import { Check, Star, Crown, Clock, ArrowUpRight, Zap } from "lucide-react"
 import { motion } from "framer-motion"
-import { Check, Star } from "lucide-react"
-import { usePlansData } from '../../../hooks/use-sanity-data'
-import type { PlanosSection } from '../../../types/sanity'
 
-const easing = [0.16, 1, 0.3, 1] as const
-
-interface PlanosSectionEditableProps {
-  data: PlanosSection
+interface PlanosSectionProps {
+  data: {
+    badge: string
+    title: string
+    description: string
+    plans: Array<{
+      name: string
+      price: number
+      priceLabel: string
+      description: string
+      features: string[]
+      cta: string
+      highlight: boolean
+      badge: string
+    }>
+  }
 }
 
-export default function PlanosSectionEditable({ data }: PlanosSectionEditableProps) {
-  const { data: plansData, loading } = usePlansData()
+const planosDefault = [
+  {
+    nome: "TRADICIONAL",
+    preco: "119,90",
+    periodo: "mês",
+    descricao: "Treine em todas as unidades Tradicionais, incluindo as Tradicionais Climatizadas.",
+    beneficios: [
+      "Sem fidelidade",
+      "Sem taxa de cancelamento",
+      "Sem taxa de manutenção",
+      "Sem taxa de anuidade",
+      "Acesso ao app Live Academia",
+      "Aulas coletivas",
+      "Climatização (apenas unidades Torquato Bemol e Tiradentes)",
+      "Atendimento aos domingos (consultar unidade)"
+    ],
+    popular: false,
+    destaque: false,
+    numero: "01",
+    setup: "Setup em 24 horas",
+    dots: [true, true, false]
+  },
+  {
+    nome: "DIAMANTE",
+    preco: "159,90",
+    periodo: "mês",
+    descricao: "Treine em todas as unidades da rede em Manaus, exceto Morada do Sol e Alphaville.",
+    beneficios: [
+      "Sem fidelidade",
+      "Sem taxa de cancelamento",
+      "Sem taxa de manutenção",
+      "Sem taxa de anuidade",
+      "Acesso ao app Live Academia",
+      "Espaço Relax",
+      "Espaço Yoga",
+      "Espaço Pose",
+      "Acesso ao Studio de Bike",
+      "Aulas coletivas",
+      "Climatização",
+      "Atendimento aos domingos"
+    ],
+    popular: true,
+    destaque: true,
+    badge: "O mais vendido",
+    numero: "02",
+    setup: "Setup em 12 horas",
+    dots: [true, true, true]
+  }
+]
 
-  if (!data || loading) return null
+export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
+  if (!data) return null
 
-  const plans = plansData.length > 0 ? plansData : data.plans
+  const easing = [0.16, 1, 0.3, 1] as const
+
+  // Transform Sanity data to match original structure, or use defaults
+  const planos = data.plans && data.plans.length > 0
+    ? data.plans.map((plan, idx) => ({
+        nome: plan.name,
+        preco: (plan.price / 100).toFixed(2).replace('.', ','),
+        periodo: "mês",
+        descricao: plan.description,
+        beneficios: plan.features || [],
+        popular: plan.highlight,
+        destaque: plan.highlight,
+        badge: plan.badge === 'mais_vendido' ? 'O mais vendido' :
+               plan.badge === 'recomendado' ? 'Recomendado' :
+               plan.badge === 'novidade' ? 'Novidade' :
+               plan.badge === 'oferta' ? 'Oferta' : plan.badge,
+        numero: String(idx + 1).padStart(2, '0'),
+        setup: plan.highlight ? 'Setup em 12 horas' : 'Setup em 24 horas',
+        dots: plan.highlight ? [true, true, true] : [true, true, false]
+      }))
+    : planosDefault
 
   return (
-    <section id="planos" className="relative py-28 px-6 lg:px-12 overflow-hidden">
-      <div className="relative z-10 mx-auto max-w-6xl">
-        <motion.header
-          initial={{ opacity: 0, y: 20 }}
+    <section className="relative py-24 px-6 lg:px-12 overflow-hidden" id="planos">
+      {/* Background Effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: easing }}
           viewport={{ once: true, amount: 0.3 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center mb-20"
         >
-          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary/70">
-            {data.badge}
-          </span>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mt-4 text-foreground">
-            {data.title}
+          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">
+            {data.title ? (
+              data.title
+            ) : (
+              <>Conheça nossos <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">planos</span></>
+            )}
           </h2>
-          <p className="text-lg text-muted-foreground mt-3 leading-relaxed">
-            {data.description}
+          <p className="text-lg text-zinc-400 max-w-3xl mx-auto">
+            {data.description || "Escolha o plano que cresce com você e se adapta às suas necessidades de treino."}
           </p>
-        </motion.header>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan._id || index}
-              initial={{ opacity: 0, y: 30 }}
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          {planos.map((plano, idx) => (
+            <motion.article
+              key={plano.nome}
+              initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: easing, delay: index * 0.1 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className={`relative rounded-3xl p-8 ${
-                plan.highlight
-                  ? 'bg-gradient-to-br from-primary/5 to-primary/10 border-2 border-primary/20 shadow-2xl shadow-primary/10'
-                  : 'bg-card border border-border'
+              transition={{ duration: 0.6, delay: idx * 0.1, ease: easing }}
+              viewport={{ once: true }}
+              className={`relative overflow-hidden rounded-2xl pt-5 pr-5 pb-5 pl-5 backdrop-blur-xl border ${
+                plano.destaque
+                  ? 'bg-gradient-to-b from-zinc-900/80 to-zinc-950/90 border-white/20 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]'
+                  : 'bg-gradient-to-b from-zinc-900/70 to-zinc-950/80 border-white/10'
               }`}
             >
-              {plan.highlight && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-gradient-to-r from-amber-500 to-yellow-600 text-black px-6 py-2 rounded-full text-sm font-bold">
-                    {plan.badge === 'mais_vendido' ? 'O mais vendido' : 
-                     plan.badge === 'recomendado' ? 'Recomendado' :
-                     plan.badge === 'novidade' ? 'Novidade' :
-                     plan.badge === 'oferta' ? 'Oferta' : plan.badge}
+              {/* Popular Badge */}
+              {plano.popular && (
+                <div className="absolute right-4 top-4">
+                  <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-500 text-black text-xs font-bold">
+                    <Star className="h-3 w-3" />
+                    {plano.badge}
                   </div>
                 </div>
               )}
 
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-foreground mb-2">
-                  {plan.name}
-                </h3>
-                <p className="text-muted-foreground mb-6">
-                  {plan.description}
-                </p>
-                
-                <div className="mb-4">
-                  <div className="text-4xl font-bold text-foreground">
-                    R$ {(plan.price / 100).toFixed(2).replace('.', ',')}
+              {/* Top meta */}
+              <div className="flex items-center justify-between text-xs mb-5">
+                <div className="inline-flex items-center gap-2 text-zinc-400">
+                  <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full backdrop-blur ${
+                    plano.destaque ? 'bg-zinc-950/80 ring-1 ring-yellow-500/20 text-zinc-300' : 'bg-zinc-950/80 ring-1 ring-white/10 text-zinc-300'
+                  }`}>
+                    {plano.numero}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    {plano.dots.map((dot, i) => (
+                      <span
+                        key={i}
+                        className={`h-1.5 w-1.5 rounded-full ${
+                          plano.destaque
+                            ? dot ? 'bg-yellow-500/80' : 'bg-yellow-500/40'
+                            : dot ? 'bg-yellow-500/80' : 'bg-yellow-500/20'
+                        }`}
+                      />
+                    ))}
                   </div>
-                  {plan.priceLabel && (
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {plan.priceLabel}
-                    </p>
-                  )}
+                </div>
+                <div className="inline-flex items-center gap-1 text-zinc-400">
+                  <Clock className="h-3.5 w-3.5" />
+                  <span>{plano.setup}</span>
                 </div>
               </div>
 
-              <div className="space-y-4 mb-8">
-                {plan.features.map((feature, featureIndex) => (
-                  <div key={featureIndex} className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-foreground">{feature}</span>
-                  </div>
-                ))}
+              {/* Core */}
+              <div className="mb-5 flex items-start justify-between">
+                <div>
+                  <h3 className="text-2xl sm:text-3xl text-white font-medium tracking-tight">{plano.nome}</h3>
+                  <p className="mt-1 text-sm text-zinc-400">{plano.descricao}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl sm:text-3xl text-white font-medium tracking-tight">R$ {plano.preco}</p>
+                  <p className="text-xs text-zinc-500">por {plano.periodo}</p>
+                </div>
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`w-full py-4 px-6 rounded-xl font-semibold transition-all duration-200 ${
-                  plan.highlight
-                    ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/25'
-                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                }`}
-              >
-                {plan.cta}
-              </motion.button>
-            </motion.div>
+              <button className={`inline-flex items-center justify-center gap-2 h-11 w-full rounded-full text-sm font-normal transition backdrop-blur mb-6 ${
+                plano.destaque
+                  ? 'bg-white/90 text-zinc-900 hover:bg-white'
+                  : 'bg-white/90 text-zinc-900 hover:bg-white'
+              }`}>
+                Matricule-se
+                {plano.destaque ? <Zap className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
+              </button>
+
+              {/* Features */}
+              <div>
+                <p className="text-xs text-zinc-400 mb-3">Tudo que você precisa:</p>
+                <ul className="space-y-3">
+                  {plano.beneficios.slice(0, 3).map((beneficio, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <span className={`mt-0.5 h-5 w-5 rounded-full flex items-center justify-center backdrop-blur ${
+                        plano.destaque ? 'bg-zinc-900/70 border border-yellow-500/20' : 'bg-zinc-900/70 border border-white/10'
+                      }`}>
+                        <Check className="h-3.5 w-3.5 text-green-400" />
+                      </span>
+                      <span className="text-sm text-zinc-300">{beneficio}</span>
+                    </li>
+                  ))}
+                  {plano.beneficios.length > 3 && (
+                    <li className="flex items-start gap-3">
+                      <span className={`mt-0.5 h-5 w-5 rounded-full flex items-center justify-center backdrop-blur ${
+                        plano.destaque ? 'bg-zinc-900/70 border border-yellow-500/20' : 'bg-zinc-900/70 border border-white/10'
+                      }`}>
+                        <span className="text-xs text-zinc-400">+{plano.beneficios.length - 3}</span>
+                      </span>
+                      <span className="text-sm text-zinc-300">mais benefícios inclusos</span>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </motion.article>
           ))}
         </div>
 
-        {/* Informações adicionais */}
+        {/* Footnote */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: easing, delay: 0.4 }}
-          viewport={{ once: true, amount: 0.3 }}
-          className="text-center mt-12"
+          transition={{ duration: 0.8, delay: 0.4, ease: easing }}
+          viewport={{ once: true }}
+          className="flex flex-col text-center mt-12 items-center"
         >
-          <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-            <Check className="h-4 w-4 text-primary" />
-            <span>Sem taxa de cancelamento</span>
-          </div>
-          <div className="inline-flex items-center gap-2 text-sm text-muted-foreground ml-6">
-            <Check className="h-4 w-4 text-primary" />
-            <span>Sem fidelidade</span>
-          </div>
-          <div className="inline-flex items-center gap-2 text-sm text-muted-foreground ml-6">
-            <Check className="h-4 w-4 text-primary" />
-            <span>Sem taxa de anuidade</span>
-          </div>
+          <p className="text-xs text-zinc-500">
+            Os preços, serviços e condições promocionais podem variar de acordo com a unidade escolhida.
+            <a href="#" className="underline decoration-zinc-700 underline-offset-4 text-zinc-300 hover:text-white ml-1">
+              Ver comparação detalhada
+            </a>.
+          </p>
         </motion.div>
       </div>
     </section>

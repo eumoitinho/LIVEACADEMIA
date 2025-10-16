@@ -29,7 +29,7 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
   ]
 
   return (
-    <section id="sobre" className="relative py-28 px-6 lg:px-12 overflow-hidden bg-black">
+    <section id="sobre" className="relative py-28 px-6 lg:px-12 overflow-hidden">
       <div
         className="absolute inset-0 -z-10 opacity-[0.12] [mask-image:radial-gradient(circle_at_center,black,transparent_70%)] pointer-events-none"
         style={{ backgroundImage: "repeating-linear-gradient(45deg,rgba(255,255,255,0.15)_0_2px,transparent_2px_10px)" }}

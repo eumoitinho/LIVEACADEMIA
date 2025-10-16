@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { ShieldCheck, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
 import Image from "next/image"
-import { useState, useEffect, useRef } from "react"
+import { useState, useCallback } from "react"
 
 interface BeneficiosSectionProps {
   data: {
@@ -20,42 +20,45 @@ interface BeneficiosSectionProps {
   }
 }
 
+const defaultBeneficios = [
+  {
+    icon: '🛡️',
+    title: "Planos flexíveis",
+    description: "Em qualquer plano, você treina sem fidelidade, taxas de cancelamento, manutenção ou anuidade.",
+    color: "from-yellow-400 to-amber-500",
+    image: "/images/academia-1.webp",
+  },
+  {
+    icon: '⭐',
+    title: "Espaços exclusivos",
+    description: "Desfrute de áreas como Espaço Relax, Espaço Yoga e o maior Studio de Bike Indoor da região Norte com o plano Diamante.",
+    color: "from-amber-500 to-yellow-600",
+    image: "/images/academia-2.webp",
+  },
+  {
+    icon: '👥',
+    title: "Aulas coletivas",
+    description: "Diversifique seu treino com uma grade variada de aulas e aproveite o ambiente coletivo para socializar e manter a disciplina.",
+    color: "from-yellow-500 to-amber-600",
+    image: "/images/academia-3.webp",
+  },
+  {
+    icon: '❄️',
+    title: "Climatização",
+    description: "Treine com mais conforto nos ambientes climatizados disponíveis nas unidades Diamante, Premium e Tradicional Climatizada.",
+    color: "from-yellow-400 to-amber-500",
+    image: "/images/academia-4.webp",
+  },
+]
+
 export default function BeneficiosSectionEditable({ data }: BeneficiosSectionProps) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [hasAnimated, setHasAnimated] = useState(false)
-  const sectionRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!sectionRef.current) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimated) {
-            setHoveredIndex(0)
-            setHasAnimated(true)
-            // Remove auto-hover after 3 seconds
-            setTimeout(() => {
-              setHoveredIndex(null)
-            }, 3000)
-          }
-        })
-      },
-      { threshold: 0.3 }
-    )
-
-    observer.observe(sectionRef.current)
-
-    return () => observer.disconnect()
-  }, [hasAnimated])
-
   if (!data) return null
 
   // Provide defaults if data is incomplete
   const items = data.items || []
 
   // Mapear ícones string para componentes
-  const iconMap = {
+  const iconMap: Record<string, any> = {
     '🛡️': ShieldCheck,
     '⭐': Star,
     '👥': Users,
@@ -64,15 +67,24 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
     '✅': CheckCircle
   }
 
-  const beneficios = items.map(item => ({
-    ...item,
-    icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck
-  }))
+  const beneficios = items.length > 0
+    ? items.map(item => ({
+        ...item,
+        icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck
+      }))
+    : defaultBeneficios.map(item => ({
+        ...item,
+        icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck
+      }))
 
   const easing = [0.16, 1, 0.3, 1] as const
+  const [active, setActive] = useState(0)
+  const handleActivate = useCallback((idx: number) => {
+    setActive(idx)
+  }, [])
 
   return (
-    <section ref={sectionRef} id="beneficios" className="relative py-24 px-4 lg:px-10 overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">
+    <section id="beneficios" className="relative py-24 px-4 lg:px-10 overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">
       {/* Ambient background accents */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-32 left-1/3 w-[540px] h-[540px] bg-yellow-500/10 rounded-full blur-3xl" />
@@ -100,7 +112,7 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
           aria-label="Benefícios da Live Academia"
         >
           {beneficios.map((beneficio, idx) => {
-            const isActive = hoveredIndex === idx
+            const isActive = active === idx
             const IconComponent = beneficio.icon
             return (
               <div
@@ -108,9 +120,9 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
                 role="tab"
                 aria-selected={isActive}
                 tabIndex={0}
-                onMouseEnter={() => setHoveredIndex(idx)}
-                onFocus={() => setHoveredIndex(idx)}
-                onClick={() => setHoveredIndex(idx)}
+                onMouseEnter={() => handleActivate(idx)}
+                onFocus={() => handleActivate(idx)}
+                onClick={() => handleActivate(idx)}
                 className={[
                   'group relative overflow-hidden cursor-pointer flex flex-col justify-end rounded-md bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-md',
                   'transition-[flex,background,filter] duration-500 ease-[cubic-bezier(.25,.4,.25,1)]',
@@ -140,7 +152,7 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
 
                 {/* Icon (floating) */}
                 <div className="absolute top-4 left-4 z-10">
-                  <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br ${beneficio.color} shadow-lg shadow-yellow-500/20`}> 
+                  <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br ${beneficio.color} shadow-lg shadow-yellow-500/20`}>
                     <IconComponent className="w-6 h-6 text-black" />
                   </div>
                 </div>
