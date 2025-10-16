@@ -34,6 +34,14 @@ export const structureFeatureSchema = defineType({
       },
     }),
     defineField({
+      name: 'image',
+      title: 'Imagem',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
       name: 'order',
       title: 'Ordem de Exibição',
       type: 'number',

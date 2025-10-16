@@ -48,16 +48,21 @@ export async function getHomepageData() {
           title,
           description,
           image,
+          stats[] {
+            value,
+            label
+          },
           highlights
         },
         beneficios {
           badge,
           title,
           description,
-          benefits[] {
+          items[] {
             icon,
             title,
             description,
+            color,
             image
           }
         },
@@ -256,6 +261,7 @@ export async function getStructureFeatures() {
         title,
         description,
         icon,
+        image,
         order,
         active
       }

@@ -29,24 +29,16 @@ export default function HomepageEditable() {
       )}
 
       {/* About Section */}
-      {homepageData?.about && (
-        <AboutSectionEditable data={homepageData.about} />
-      )}
+      <AboutSectionEditable data={homepageData?.about || { badge: "Sobre a Live Academia", title: "Seu treino, suas regras", description: "A Live Academia está presente em Manaus há mais de 10 anos, oferecendo estrutura moderna, equipamentos de última geração e profissionais altamente qualificados para te ajudar a alcançar seus objetivos.", stats: [], highlights: [] }} />
 
       {/* Units Carousel */}
-      {unitsData && unitsData.length > 0 && (
-        <UnidadesCarouselEditable />
-      )}
+      <UnidadesCarouselEditable />
 
       {/* Plans Section */}
-      {homepageData?.planos && (
-        <PlanosSectionEditable data={homepageData.planos} />
-      )}
+      <PlanosSectionEditable data={homepageData?.planos || { badge: "Planos", title: "Escolha o plano ideal para você", description: "Planos flexíveis sem fidelidade. Cancele quando quiser, sem multas ou taxas.", plans: [] }} />
 
       {/* Benefits Section */}
-      {homepageData?.beneficios && (
-        <BeneficiosSectionEditable data={homepageData.beneficios} />
-      )}
+      <BeneficiosSectionEditable data={homepageData?.beneficios || { badge: "Benefícios", title: "Por que escolher a Live Academia?", description: "Descubra todos os benefícios que fazem da Live Academia a melhor escolha para sua jornada fitness.", items: [] }} />
 
       {/* Structure Section */}
       <EstruturaSection />
