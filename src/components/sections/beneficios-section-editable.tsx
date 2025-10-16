@@ -51,6 +51,9 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
 
   if (!data) return null
 
+  // Provide defaults if data is incomplete
+  const items = data.items || []
+
   // Mapear ícones string para componentes
   const iconMap = {
     '🛡️': ShieldCheck,
@@ -61,7 +64,7 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
     '✅': CheckCircle
   }
 
-  const beneficios = data.items.map(item => ({
+  const beneficios = items.map(item => ({
     ...item,
     icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck
   }))
