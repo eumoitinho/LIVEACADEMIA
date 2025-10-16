@@ -34,11 +34,10 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
           >
             <div className="space-y-6">
               <h2>
-                Transformamos treino em rotina sustentável e resultado real
+                Seu treino, suas regras
               </h2>
               <p className="section-description">
-                Somos uma rede criada em Manaus focada em experiência premium acessível: liberdade para treinar em qualquer unidade,
-                avaliação constante e suporte humano de verdade — sem enrolação e sem barreiras.
+                A Live Academia está presente em Manaus há mais de 10 anos, oferecendo estrutura moderna, equipamentos de última geração e profissionais altamente qualificados para te ajudar a alcançar seus objetivos.
               </p>
             </div>
 
