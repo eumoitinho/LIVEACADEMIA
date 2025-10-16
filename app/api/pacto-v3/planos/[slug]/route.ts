@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { pactoV2API } from '@/src/lib/api/pacto-v2'
-import { locations } from '@/src/lib/config/locations'
+import { pactoV3API } from '@/src/lib/api/pacto-v3'
 import { rateLimiter } from '@/src/lib/utils/rate-limiter'
 import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
 
-// GET /api/pacto/planos/:slug
-// Busca planos usando API V2 da Pacto com cache e rate limiting
+// GET /api/pacto-v3/planos/:slug
+// Busca planos usando API V3 da Pacto com cache e rate limiting
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
@@ -42,14 +41,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
   }
 
   try {
-    // Verificar se a unidade existe no arquivo de locations
-    const loc = locations.find(l => l.id === slug)
-    if (!loc) {
-      return NextResponse.json({ error: 'Unidade não encontrada' }, { status: 404 })
-    }
-
-          // Buscar planos usando API V2 (codigoUnidade é sempre 1)
-          const planos = await pactoV2API.getPlanosUnidade(slug)
+    // Buscar planos usando API V3
+    const planos = await pactoV3API.getPlanos(slug)
 
     // Armazenar no cache por 30 minutos
     cacheManager.set(cacheKey, planos, 30 * 60 * 1000)
@@ -57,15 +50,19 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 
     return NextResponse.json({ planos, fallback: false, source: 'api' })
   } catch (error: any) {
-    console.error('[GET /api/pacto/planos V2]', error)
+    console.error('[GET /api/pacto-v3/planos V3]', error)
 
     // Fallback estático em caso de erro
-    const loc = locations.find(l => l.id === slug)
-    if (loc?.planos?.length) {
-      const staticPlanos = (loc.planos || []).map(p => ({ codigo: undefined, nome: p.name, valor: p.price }))
-      return NextResponse.json({ planos: staticPlanos, fallback: true, source: 'static', error: error.message })
-    }
+    const fallbackPlanos = [
+      { codigo: 1, nome: "Plano Básico", mensalidade: 99.90, adesao: 0, fidelidade: 12 },
+      { codigo: 2, nome: "Plano Premium", mensalidade: 149.90, adesao: 0, fidelidade: 12 }
+    ]
 
-    return NextResponse.json({ error: 'Falha ao obter planos' }, { status: 500 })
+    return NextResponse.json({ 
+      planos: fallbackPlanos, 
+      fallback: true, 
+      source: 'static', 
+      error: error.message 
+    })
   }
 }

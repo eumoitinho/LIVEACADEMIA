@@ -33,7 +33,7 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
     setError(null)
     try {
       console.log(`[UnitPlanos] Carregando planos para unidade: ${slug}`)
-      const res = await fetch(`/api/pacto/planos/${slug}`, { cache: 'no-store' })
+      const res = await fetch(`/api/pacto-v3/planos/${slug}`, { cache: 'no-store' })
       
       if (!res.ok) {
         const errorData = await res.json()

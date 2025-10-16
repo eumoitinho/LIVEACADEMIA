@@ -230,7 +230,7 @@ class PactoV2API {
 
   constructor() {
     this.client = axios.create({
-      baseURL: 'https://app.pactosolucoes.com.br/api/prest',
+      baseURL: 'https://apigw.pactosolucoes.com.br',
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',
@@ -241,7 +241,7 @@ class PactoV2API {
   }
 
   /**
-   * Buscar chave de uma unidade específica
+   * Buscar chave privada de uma unidade específica
    * Prioridade: Vercel (produção) > .env.local (desenvolvimento)
    */
   private async getChaveUnidade(slug: string): Promise<string | null> {
@@ -249,22 +249,43 @@ class PactoV2API {
       // 1. Vercel Environment Variables (produção) - TEXTO PLANO
       const chaveVercel = process.env[`PACTO_SECRET_KEY_${slug.toUpperCase()}`]
       if (chaveVercel) {
-        console.log(`[PactoV2] Chave da unidade ${slug} carregada via Vercel`)
+        console.log(`[PactoV2] Chave privada da unidade ${slug} carregada via Vercel`)
         return chaveVercel
       }
 
       // 2. Desenvolvimento (.env.local) - TEXTO PLANO
       const chaveDev = process.env[`PACTO_SECRET_KEY_DEV_${slug.toUpperCase()}`]
       if (chaveDev) {
-        console.log(`[PactoV2] Chave da unidade ${slug} carregada via dev env`)
+        console.log(`[PactoV2] Chave privada da unidade ${slug} carregada via dev env`)
         return chaveDev
       }
 
-      console.error(`[PactoV2] Chave da unidade ${slug} não encontrada`)
+      console.error(`[PactoV2] Chave privada da unidade ${slug} não encontrada`)
       return null
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-      console.error(`[PactoV2] Erro ao buscar chave da unidade ${slug}:`, errorMessage)
+      console.error(`[PactoV2] Erro ao buscar chave privada da unidade ${slug}:`, errorMessage)
+      return null
+    }
+  }
+
+  /**
+   * Buscar chave pública de uma unidade específica
+   * Para uso no frontend (NEXT_PUBLIC_)
+   */
+  private getChavePublicaUnidade(slug: string): string | null {
+    try {
+      const chavePublica = process.env[`NEXT_PUBLIC_UNIDADE_${slug.toUpperCase()}`]
+      if (chavePublica) {
+        console.log(`[PactoV2] Chave pública da unidade ${slug} carregada`)
+        return chavePublica
+      }
+
+      console.error(`[PactoV2] Chave pública da unidade ${slug} não encontrada`)
+      return null
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      console.error(`[PactoV2] Erro ao buscar chave pública da unidade ${slug}:`, errorMessage)
       return null
     }
   }
@@ -332,29 +353,31 @@ class PactoV2API {
   /**
    * 1. Registrar Início de Acesso (Anti-fraude)
    */
-  async registrarInicioAcesso(slug: string, unidade: number, plano: number, ip: string): Promise<PactoRegistroAcessoResponse> {
+  async registrarInicioAcesso(ip: string, link?: string, tela?: string): Promise<PactoRegistroAcessoResponse> {
     try {
-      // Garantir que temos um token válido
-      if (!this.isTokenValid(slug)) {
-        await this.authenticate(slug)
+      // Buscar chave da unidade para autenticação
+      const chaveUnidade = await this.getChaveUnidade('torres') // Usar torres como padrão
+      if (!chaveUnidade) {
+        throw new Error('Chave da unidade não configurada')
       }
 
-      const dadosAcesso: PactoDadosAcesso = {
-        empresa: 1, // Será mapeado baseado na unidade
+      const dadosAcesso = {
+        empresa: 1,
         evento: 0, // Evento padrão
         ip: ip,
-        link: 'https://liveacademia.com.br',
-        tela: 'pagina-inicial',
+        link: link || 'https://liveacademia.com.br',
+        tela: tela || 'pagina-inicial',
         usuario: 0 // Usuário não logado
       }
 
-      const response = await this.client.post(`/v2/vendasonlineicv/${slug}/registrarInicioAcessoPagina/`, dadosAcesso, {
+      const response = await this.client.post('/v2/vendasonlineicv/registrarInicioAcessoPagina', dadosAcesso, {
         headers: {
-          'x-pacto-unidade': slug
+          'Authorization': `Bearer ${chaveUnidade}`,
+          'Content-Type': 'application/json'
         }
       })
       
-      console.log(`[PactoV2] Acesso registrado para unidade ${slug}, código ${unidade}, plano ${plano}, IP ${ip}`)
+      console.log(`[PactoV2] Acesso registrado - IP: ${ip}, Link: ${dadosAcesso.link}, Tela: ${dadosAcesso.tela}`)
       return response.data
     } catch (error: unknown) {
       const axiosError = error as AxiosError
@@ -392,29 +415,30 @@ class PactoV2API {
   /**
    * 3. Consultar Planos de uma Unidade
    */
-  async getPlanosUnidade(slug: string, codigoUnidade: number): Promise<PactoPlano[]> {
+  async getPlanosUnidade(slug: string): Promise<PactoPlano[]> {
     try {
-      // Buscar a chave privada da rede (chave do centro)
-      const redeKey = await this.getChaveRede()
-      if (!redeKey) {
-        throw new Error('Chave da rede não configurada')
+      // Buscar a chave privada da unidade específica
+      const chaveUnidade = await this.getChaveUnidade(slug)
+      if (!chaveUnidade) {
+        throw new Error(`Chave da unidade ${slug} não configurada`)
       }
 
-      // Usar a chave da rede diretamente na autenticação Bearer
-      const response = await this.client.get(`/v2/vendas/planos/${codigoUnidade}`, {
+      // Usar a chave da unidade diretamente na autenticação Bearer
+      // codigoUnidade é sempre 1 conforme especificado
+      const response = await this.client.get(`/v2/vendas/planos/1`, {
         headers: {
-          'Authorization': `Bearer ${redeKey}`,
+          'Authorization': `Bearer ${chaveUnidade}`,
           'Content-Type': 'application/json'
         }
       })
       
-      console.log(`[PactoV2] Planos encontrados para unidade ${codigoUnidade}:`, response.data.return?.length || 0)
+      console.log(`[PactoV2] Planos encontrados para unidade ${slug}:`, response.data.return?.length || 0)
       return response.data.return || []
     } catch (error: unknown) {
       const axiosError = error as AxiosError
       const errorMessage = axiosError.response?.data || axiosError.message || 'Unknown error'
-      console.error(`[PactoV2] Erro ao buscar planos da unidade ${codigoUnidade}:`, errorMessage)
-      throw new Error(`Failed to fetch plans for unit ${codigoUnidade}`)
+      console.error(`[PactoV2] Erro ao buscar planos da unidade ${slug}:`, errorMessage)
+      throw new Error(`Failed to fetch plans for unit ${slug}`)
     }
   }
 

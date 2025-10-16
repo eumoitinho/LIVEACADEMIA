@@ -59,7 +59,7 @@ interface CheckoutModalProps {
 
 export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, unidadeId }: CheckoutModalProps) {
   const [step, setStep] = useState(1) // 1: Dados, 2: Pagamento, 3: Processando, 4: Sucesso
-  const [paymentMethod, setPaymentMethod] = useState<'cartao' | 'pix' | 'boleto'>('cartao')
+  const [paymentMethod, setPaymentMethod] = useState<'cartao'>('cartao')
   const [loading, setLoading] = useState(false)
   const [paymentResult, setPaymentResult] = useState<PactoResponse | null>(null)
   const [simulation, setSimulation] = useState<SimulacaoResumo | null>(null)
@@ -180,7 +180,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
         paymentMethod,
       }
 
-      const response = await fetch('/api/pacto/simular', {
+      const response = await fetch(`/api/pacto-v3/simular/${unidadeId}/${plano.codigo}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -323,8 +323,8 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
         console.log('Cartão tokenizado:', tokenizeResult.maskedCard)
       }
 
-      console.log('Processando pagamento via API Pacto V2', saleBody)
-      const res = await fetch('/api/pacto/venda', {
+      console.log('Processando pagamento via API Pacto V3', saleBody)
+      const res = await fetch(`/api/pacto-v3/venda/${unidadeId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(saleBody),
@@ -744,49 +744,15 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                   </div>
                 </div>
                 
-                {/* Métodos de Pagamento */}
-                <div className="space-y-3">
-                  <div 
-                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                      paymentMethod === 'cartao' 
-                        ? 'border-live-accent bg-live-accent/5' 
-                        : 'border-live-border/30 hover:border-live-accent/50'
-                    }`}
-                    onClick={() => setPaymentMethod('cartao')}
-                  >
-                    <div className="flex items-center gap-3">
-                      <CreditCard className="h-5 w-5 text-live-accent" />
-                      <span className="font-medium text-live-textPrimary">Cartão de Crédito</span>
-                    </div>
+                {/* Método de Pagamento - Apenas Cartão */}
+                <div className="bg-live-accent/5 border border-live-accent rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <CreditCard className="h-5 w-5 text-live-accent" />
+                    <span className="font-medium text-live-textPrimary">Cartão de Crédito</span>
                   </div>
-                  
-                  <div 
-                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                      paymentMethod === 'pix' 
-                        ? 'border-live-accent bg-live-accent/5' 
-                        : 'border-live-border/30 hover:border-live-accent/50'
-                    }`}
-                    onClick={() => setPaymentMethod('pix')}
-                  >
-                    <div className="flex items-center gap-3">
-                      <QrCode className="h-5 w-5 text-live-accent" />
-                      <span className="font-medium text-live-textPrimary">PIX</span>
-                    </div>
-                  </div>
-                  
-                  <div 
-                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                      paymentMethod === 'boleto' 
-                        ? 'border-live-accent bg-live-accent/5' 
-                        : 'border-live-border/30 hover:border-live-accent/50'
-                    }`}
-                    onClick={() => setPaymentMethod('boleto')}
-                  >
-                    <div className="flex items-center gap-3">
-                      <FileText className="h-5 w-5 text-live-accent" />
-                      <span className="font-medium text-live-textPrimary">Boleto Bancário</span>
-                    </div>
-                  </div>
+                  <p className="text-sm text-live-textSecondary mt-2">
+                    Pagamento seguro processado pela nossa parceira de pagamentos
+                  </p>
                 </div>
 
                 {/* Dados do Cartão */}
@@ -900,60 +866,30 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                   <Check className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-semibold text-live-textPrimary mb-2">
-                  {paymentMethod === 'cartao' ? 'Matrícula Realizada!' : 
-                   paymentMethod === 'pix' ? 'PIX Gerado!' : 
-                   'Boleto Gerado!'}
+                  Matrícula Realizada!
                 </h3>
                 <p className="text-live-textSecondary mb-6">
-                  {paymentMethod === 'cartao' ? 
-                    `Parabéns! Sua matrícula na ${unidadeName} foi realizada com sucesso.` :
-                    paymentMethod === 'pix' ? 
-                    'Escaneie o código PIX abaixo ou copie o código para completar o pagamento.' :
-                    'Seu boleto foi gerado. Clique no link abaixo para acessá-lo.'}
+                  Parabéns! Sua matrícula na {unidadeName} foi realizada com sucesso.
                 </p>
 
-                {/* Informações específicas por tipo de pagamento */}
-                {paymentMethod === 'pix' && paymentResult?.pixCode && (
+                {/* Informações da transação */}
+                {paymentResult?.transactionId && (
                   <div className="bg-live-border/5 p-4 rounded-lg border border-live-border/30 mb-6">
-                    <h4 className="font-semibold text-live-textPrimary mb-3">Código PIX</h4>
-                    <div className="bg-white p-4 rounded-lg mb-4">
-                      {/* QR Code seria renderizado aqui */}
-                      <div className="w-32 h-32 bg-gray-200 mx-auto rounded-lg flex items-center justify-center">
-                        <QrCode className="h-12 w-12 text-gray-400" />
-                      </div>
-                    </div>
+                    <h4 className="font-semibold text-live-textPrimary mb-3">Pagamento Aprovado</h4>
                     <div className="flex items-center gap-2 bg-live-bg p-3 rounded-lg">
-                      <code className="flex-1 text-sm text-live-textPrimary break-all">
-                        {paymentResult.pixCode}
+                      <span className="text-sm text-live-textPrimary">ID da Transação:</span>
+                      <code className="flex-1 text-sm text-live-accent font-mono">
+                        {paymentResult.transactionId}
                       </code>
                       <button 
-                        onClick={() => navigator.clipboard.writeText(paymentResult.pixCode!)}
+                        onClick={() => navigator.clipboard.writeText(paymentResult.transactionId!)}
                         className="p-2 hover:bg-live-border/20 rounded transition-colors"
                       >
                         <Copy className="h-4 w-4 text-live-accent" />
                       </button>
                     </div>
                     <p className="text-sm text-live-textSecondary mt-2">
-                      Após o pagamento, sua matrícula será ativada automaticamente.
-                    </p>
-                  </div>
-                )}
-
-                {paymentMethod === 'boleto' && paymentResult?.boletoUrl && (
-                  <div className="bg-live-border/5 p-4 rounded-lg border border-live-border/30 mb-6">
-                    <h4 className="font-semibold text-live-textPrimary mb-3">Boleto Bancário</h4>
-                    <a
-                      href={paymentResult.boletoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-live-accent text-black font-semibold rounded-lg hover:shadow-lg transition-all duration-300"
-                    >
-                      <FileText className="h-5 w-5" />
-                      Abrir Boleto
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                    <p className="text-sm text-live-textSecondary mt-3">
-                      Após o pagamento, sua matrícula será ativada em até 2 dias úteis.
+                      Sua matrícula foi ativada instantaneamente!
                     </p>
                   </div>
                 )}
@@ -965,9 +901,6 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                     <p><strong>Plano:</strong> {plano?.name}</p>
                     <p><strong>Unidade:</strong> {unidadeName}</p>
                     <p><strong>Valor:</strong> R$ {plano?.price}/mês</p>
-                    {paymentResult?.transactionId && (
-                      <p><strong>ID da Transação:</strong> {paymentResult.transactionId}</p>
-                    )}
                   </div>
                 </div>
                 
