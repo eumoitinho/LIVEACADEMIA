@@ -131,7 +131,7 @@ class RateLimiter {
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval)
     }
-    this.clear()
+    this.clearAll()
   }
 }
 
