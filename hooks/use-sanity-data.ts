@@ -1,78 +1,28 @@
-import { useEffect, useState } from 'react'
-
-// Tipos simplificados para o JSON
-interface HomepageContent {
-  hero: {
-    badge: string
-    title: string
-    subtitle: string
-    description: string
-    primaryCta: { text: string; link: string }
-    secondaryCta: { text: string; link: string }
-    stats: Array<{ value: string; label: string }>
-  }
-  about: {
-    badge: string
-    title: string
-    description: string
-    stats: Array<{ value: string; label: string }>
-    highlights: string[]
-  }
-  beneficios: {
-    badge: string
-    title: string
-    description: string
-    items: Array<{
-      icon: string
-      title: string
-      description: string
-      color: string
-      image: string
-    }>
-  }
-  planos: {
-    badge: string
-    title: string
-    description: string
-    plans: Array<{
-      id: string
-      name: string
-      price: string
-      period: string
-      description: string
-      badge?: string
-      features: string[]
-      cta: string
-      highlight: boolean
-    }>
-  }
-  seo: {
-    title: string
-    description: string
-    keywords: string
-  }
-}
-
-interface Unit {
-  _id: string
-  name: string
-  slug: string
-  address: string
-  city: string
-  state: string
-  zipCode: string
-  phone: string
-  whatsapp: string
-  email: string
-  latitude: number
-  longitude: number
-  type: string
-  services: string[]
-  images?: any[]
-  description: string
-  openingHours: string
-  order: number
-}
+import { useState, useEffect } from 'react'
+import { 
+  getHomepageData, 
+  getUnits, 
+  getPlans, 
+  getBenefits, 
+  getTestimonials,
+  getAppFeatures,
+  getModalities,
+  getStructureFeatures,
+  getWellhubFeatures,
+  getBioimpedanciaFeatures
+} from '../lib/sanity'
+import type { 
+  HomepageContent, 
+  Unit, 
+  Plano, 
+  Benefit, 
+  Testimonial,
+  AppFeature,
+  Modality,
+  StructureFeature,
+  WellhubFeature,
+  BioimpedanciaFeature
+} from '../types/sanity'
 
 export function useHomepageData() {
   const [data, setData] = useState<HomepageContent | null>(null)
@@ -83,13 +33,12 @@ export function useHomepageData() {
     async function fetchData() {
       try {
         setLoading(true)
-        const response = await fetch('/content/homepage-content.json')
-        if (!response.ok) throw new Error('Failed to fetch content')
-        const result = await response.json()
-        setData(result as HomepageContent)
+        const homepageData = await getHomepageData()
+        setData(homepageData)
+        setError(null)
       } catch (err) {
-        console.error('Erro ao buscar dados da homepage:', err)
-        setError('Erro ao carregar dados')
+        console.error('Error fetching homepage data:', err)
+        setError('Erro ao carregar dados da homepage')
       } finally {
         setLoading(false)
       }
@@ -110,51 +59,220 @@ export function useUnitsData() {
     async function fetchData() {
       try {
         setLoading(true)
-        // Por enquanto, retorna dados estáticos das unidades
-        const units: Unit[] = [
-          {
-            _id: '1',
-            name: 'Live Academia Centro',
-            slug: 'centro',
-            address: 'Rua 10 de Julho, 123 - Centro',
-            city: 'Manaus',
-            state: 'AM',
-            zipCode: '69010-060',
-            phone: '(92) 3234-5678',
-            whatsapp: '(92) 99999-9999',
-            email: 'centro@liveacademia.com.br',
-            latitude: -3.1190275,
-            longitude: -60.0217314,
-            type: 'Diamante',
-            services: ['Climatização', 'Espaço Relax', 'Espaço Yoga', 'Studio de Bike', 'Sauna'],
-            description: 'Nossa unidade flagship no centro de Manaus, com estrutura completa e todos os serviços premium.',
-            openingHours: 'Segunda a Sexta: 5h às 23h | Sábado: 6h às 22h | Domingo: 6h às 20h',
-            order: 1
-          },
-          {
-            _id: '2',
-            name: 'Live Academia Cidade Nova',
-            slug: 'cidade-nova',
-            address: 'Av. Torquato Tapajós, 456 - Cidade Nova',
-            city: 'Manaus',
-            state: 'AM',
-            zipCode: '69065-000',
-            phone: '(92) 3234-5679',
-            whatsapp: '(92) 99999-9998',
-            email: 'cidadenova@liveacademia.com.br',
-            latitude: -3.0471193,
-            longitude: -59.9910556,
-            type: 'Premium',
-            services: ['Climatização', 'Espaço Relax', 'Atendimento Domingos'],
-            description: 'Unidade moderna na Cidade Nova com foco em funcional e aulas coletivas.',
-            openingHours: 'Segunda a Sexta: 5h às 23h | Sábado: 6h às 22h | Domingo: 6h às 20h',
-            order: 2
-          }
-        ]
-        setData(units)
+        const unitsData = await getUnits()
+        setData(unitsData)
+        setError(null)
       } catch (err) {
-        console.error('Erro ao buscar unidades:', err)
-        setError('Erro ao carregar unidades')
+        console.error('Error fetching units data:', err)
+        setError('Erro ao carregar dados das unidades')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function usePlansData() {
+  const [data, setData] = useState<Plano[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const plansData = await getPlans()
+        setData(plansData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching plans data:', err)
+        setError('Erro ao carregar dados dos planos')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useBenefitsData() {
+  const [data, setData] = useState<Benefit[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const benefitsData = await getBenefits()
+        setData(benefitsData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching benefits data:', err)
+        setError('Erro ao carregar dados dos benefícios')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useTestimonialsData() {
+  const [data, setData] = useState<Testimonial[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const testimonialsData = await getTestimonials()
+        setData(testimonialsData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching testimonials data:', err)
+        setError('Erro ao carregar dados dos depoimentos')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useAppFeaturesData() {
+  const [data, setData] = useState<AppFeature[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const appFeaturesData = await getAppFeatures()
+        setData(appFeaturesData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching app features data:', err)
+        setError('Erro ao carregar dados dos recursos do app')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useModalitiesData() {
+  const [data, setData] = useState<Modality[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const modalitiesData = await getModalities()
+        setData(modalitiesData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching modalities data:', err)
+        setError('Erro ao carregar dados das modalidades')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useStructureFeaturesData() {
+  const [data, setData] = useState<StructureFeature[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const structureFeaturesData = await getStructureFeatures()
+        setData(structureFeaturesData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching structure features data:', err)
+        setError('Erro ao carregar dados dos recursos da estrutura')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useWellhubFeaturesData() {
+  const [data, setData] = useState<WellhubFeature[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const wellhubFeaturesData = await getWellhubFeatures()
+        setData(wellhubFeaturesData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching wellhub features data:', err)
+        setError('Erro ao carregar dados dos recursos do Wellhub')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useBioimpedanciaFeaturesData() {
+  const [data, setData] = useState<BioimpedanciaFeature[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const bioimpedanciaFeaturesData = await getBioimpedanciaFeatures()
+        setData(bioimpedanciaFeaturesData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching bioimpedancia features data:', err)
+        setError('Erro ao carregar dados dos recursos da bioimpedância')
       } finally {
         setLoading(false)
       }

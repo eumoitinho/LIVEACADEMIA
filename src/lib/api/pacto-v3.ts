@@ -293,15 +293,14 @@ class PactoV3API {
    */
   private async getChaveSecretaUnidade(slug: string): Promise<string | null> {
     try {
-      // 1. Vercel Environment Variables (produção)
-      // Formato: PACTO_SECRET_KEY_TORRES, PACTO_SECRET_KEY_CENTRO, etc.
+      
       const chaveVercel = process.env[`PACTO_SECRET_KEY_${slug.toUpperCase()}`]
       if (chaveVercel) {
         console.log(`[PactoV3] Chave SECRETA da unidade ${slug} carregada via Vercel`)
         return chaveVercel
       }
 
-      // 2. Desenvolvimento (.env.local)
+     
       const chaveDev = process.env[`PACTO_SECRET_KEY_DEV_${slug.toUpperCase()}`]
       if (chaveDev) {
         console.log(`[PactoV3] Chave SECRETA da unidade ${slug} carregada via dev env`)

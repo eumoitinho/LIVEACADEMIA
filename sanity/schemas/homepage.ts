@@ -5,6 +5,36 @@ export const homepageSchema = defineType({
   title: 'Homepage',
   type: 'document',
   fields: [
+    // SEO
+    defineField({
+      name: 'seo',
+      title: 'SEO',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'title',
+          title: 'Título da Página',
+          type: 'string',
+          initialValue: 'Live Academia | Rede de Academias em Manaus',
+        }),
+        defineField({
+          name: 'description',
+          title: 'Descrição',
+          type: 'text',
+          rows: 3,
+          initialValue: 'Transforme seu corpo e sua vida na maior rede de academias de Manaus. Sem fidelidade, sem anuidade, sem pegadinha.',
+        }),
+        defineField({
+          name: 'keywords',
+          title: 'Palavras-chave',
+          type: 'array',
+          of: [{ type: 'string' }],
+          initialValue: ['academia', 'manaus', 'fitness', 'musculação', 'aulas coletivas'],
+        }),
+      ],
+    }),
+
+    // Hero Section
     defineField({
       name: 'hero',
       title: 'Seção Hero',
@@ -19,29 +49,54 @@ export const homepageSchema = defineType({
           },
         }),
         defineField({
-          name: 'badge',
-          title: 'Badge',
-          type: 'string',
-          initialValue: 'A MAIOR REDE DE MANAUS',
-        }),
-        defineField({
           name: 'title',
           title: 'Título Principal',
           type: 'string',
-          initialValue: 'Transforme seu corpo e sua vida',
+          initialValue: 'Transforme.',
         }),
         defineField({
           name: 'subtitle',
           title: 'Subtítulo',
           type: 'string',
-          initialValue: 'na maior rede de academias de Manaus',
+          initialValue: 'Evolua.',
+        }),
+        defineField({
+          name: 'thirdTitle',
+          title: 'Terceiro Título',
+          type: 'string',
+          initialValue: 'Viva.',
         }),
         defineField({
           name: 'description',
           title: 'Descrição',
           type: 'text',
           rows: 3,
-          initialValue: 'Sem fidelidade, sem anuidade, sem pegadinha. Treino ilimitado, aulas coletivas inclusas e estrutura completa para você alcançar seus objetivos.',
+          initialValue: 'Transforme seu corpo e sua vida na maior rede de academias de Manaus. Construído para atletas que exigem excelência em cada repetição.',
+        }),
+        defineField({
+          name: 'rating',
+          title: 'Avaliação',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'value',
+              title: 'Valor da Avaliação',
+              type: 'string',
+              initialValue: '4.9',
+            }),
+            defineField({
+              name: 'label',
+              title: 'Label da Avaliação',
+              type: 'string',
+              initialValue: 'Elite rating',
+            }),
+            defineField({
+              name: 'subscribers',
+              title: 'Número de Alunos',
+              type: 'string',
+              initialValue: '15k+ atletas',
+            }),
+          ],
         }),
         defineField({
           name: 'primaryCta',
@@ -52,7 +107,7 @@ export const homepageSchema = defineType({
               name: 'text',
               title: 'Texto',
               type: 'string',
-              initialValue: 'Quero me matricular',
+              initialValue: 'Comece Agora',
             }),
             defineField({
               name: 'link',
@@ -71,41 +126,26 @@ export const homepageSchema = defineType({
               name: 'text',
               title: 'Texto',
               type: 'string',
-              initialValue: 'Conhecer unidades',
+              initialValue: 'Ver as aulas',
             }),
             defineField({
               name: 'link',
               title: 'Link',
               type: 'string',
-              initialValue: '/unidades',
+              initialValue: '/aulas-coletivas',
             }),
           ],
         }),
         defineField({
-          name: 'stats',
-          title: 'Estatísticas',
-          type: 'array',
-          of: [
-            {
-              type: 'object',
-              fields: [
-                defineField({
-                  name: 'value',
-                  title: 'Valor',
-                  type: 'string',
-                }),
-                defineField({
-                  name: 'label',
-                  title: 'Label',
-                  type: 'string',
-                }),
-              ],
-            },
-          ],
+          name: 'footerText',
+          title: 'Texto do Rodapé',
+          type: 'string',
+          initialValue: 'Protocolos de treino de elite. Suporte premium. Todos os dispositivos suportados.',
         }),
       ],
     }),
-    
+
+    // About Section
     defineField({
       name: 'about',
       title: 'Seção Sobre',
@@ -115,20 +155,28 @@ export const homepageSchema = defineType({
           name: 'badge',
           title: 'Badge',
           type: 'string',
-          initialValue: 'Live Academia',
+          initialValue: 'Sobre a Live Academia',
         }),
         defineField({
           name: 'title',
           title: 'Título',
           type: 'string',
-          initialValue: 'Sobre',
+          initialValue: 'Seu treino, suas regras',
         }),
         defineField({
           name: 'description',
           title: 'Descrição',
           type: 'text',
-          rows: 3,
-          initialValue: 'Transformamos treino em rotina sustentável e resultado real: liberdade multiunidade, atendimento humano que acompanha cada fase e estrutura premium para garantir evolução de verdade.',
+          rows: 4,
+          initialValue: 'A Live Academia está presente em Manaus há mais de 10 anos, oferecendo estrutura moderna, equipamentos de última geração e profissionais altamente qualificados para te ajudar a alcançar seus objetivos.',
+        }),
+        defineField({
+          name: 'image',
+          title: 'Imagem',
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
         }),
         defineField({
           name: 'stats',
@@ -148,13 +196,12 @@ export const homepageSchema = defineType({
                   title: 'Label',
                   type: 'string',
                 }),
-                defineField({
-                  name: 'icon',
-                  title: 'Ícone (emoji)',
-                  type: 'string',
-                }),
               ],
             },
+          ],
+          initialValue: [
+            { value: '10+', label: 'Anos de Experiência' },
+            { value: '15k+', label: 'Alunos Ativos' },
           ],
         }),
         defineField({
@@ -162,10 +209,19 @@ export const homepageSchema = defineType({
           title: 'Destaques',
           type: 'array',
           of: [{ type: 'string' }],
+          initialValue: [
+            'Equipamentos de última geração',
+            'Profissionais qualificados',
+            'Aulas coletivas inclusas',
+            'Sem fidelidade',
+            'Horário flexível',
+            'Ambiente climatizado',
+          ],
         }),
       ],
     }),
 
+    // Benefícios Section
     defineField({
       name: 'beneficios',
       title: 'Seção Benefícios',
@@ -175,7 +231,7 @@ export const homepageSchema = defineType({
           name: 'badge',
           title: 'Badge',
           type: 'string',
-          initialValue: 'Vantagens',
+          initialValue: 'Benefícios',
         }),
         defineField({
           name: 'title',
@@ -187,12 +243,12 @@ export const homepageSchema = defineType({
           name: 'description',
           title: 'Descrição',
           type: 'text',
-          rows: 2,
-          initialValue: 'Oferecemos muito mais do que equipamentos. Nossa proposta é entregar uma experiência completa de transformação.',
+          rows: 3,
+          initialValue: 'Descubra todos os benefícios que fazem da Live Academia a melhor escolha para sua jornada fitness.',
         }),
         defineField({
           name: 'items',
-          title: 'Benefícios',
+          title: 'Lista de Benefícios',
           type: 'array',
           of: [
             {
@@ -200,8 +256,9 @@ export const homepageSchema = defineType({
               fields: [
                 defineField({
                   name: 'icon',
-                  title: 'Ícone (emoji)',
+                  title: 'Ícone',
                   type: 'string',
+                  initialValue: 'ShieldCheck',
                 }),
                 defineField({
                   name: 'title',
@@ -216,17 +273,15 @@ export const homepageSchema = defineType({
                 }),
                 defineField({
                   name: 'color',
-                  title: 'Cor (gradiente)',
+                  title: 'Cor do Gradiente',
                   type: 'string',
-                  initialValue: 'from-yellow-400 to-amber-500',
+                  initialValue: 'from-amber-500 to-yellow-600',
                 }),
                 defineField({
                   name: 'image',
                   title: 'Imagem',
-                  type: 'image',
-                  options: {
-                    hotspot: true,
-                  },
+                  type: 'string',
+                  initialValue: '/images/beneficios/placeholder.jpg',
                 }),
               ],
             },
@@ -235,6 +290,7 @@ export const homepageSchema = defineType({
       ],
     }),
 
+    // Planos Section
     defineField({
       name: 'planos',
       title: 'Seção Planos',
@@ -244,7 +300,7 @@ export const homepageSchema = defineType({
           name: 'badge',
           title: 'Badge',
           type: 'string',
-          initialValue: 'Nossos Planos',
+          initialValue: 'Planos',
         }),
         defineField({
           name: 'title',
@@ -255,105 +311,61 @@ export const homepageSchema = defineType({
         defineField({
           name: 'description',
           title: 'Descrição',
-          type: 'string',
-          initialValue: 'Sem fidelidade, sem anuidade. Pague apenas enquanto treinar.',
+          type: 'text',
+          rows: 3,
+          initialValue: 'Planos flexíveis sem fidelidade. Cancele quando quiser, sem multas ou taxas.',
         }),
         defineField({
           name: 'plans',
-          title: 'Planos',
+          title: 'Planos Disponíveis',
           type: 'array',
           of: [
             {
-              type: 'object',
-              fields: [
-                defineField({
-                  name: 'id',
-                  title: 'ID',
-                  type: 'string',
-                }),
-                defineField({
-                  name: 'name',
-                  title: 'Nome',
-                  type: 'string',
-                }),
-                defineField({
-                  name: 'price',
-                  title: 'Preço',
-                  type: 'string',
-                }),
-                defineField({
-                  name: 'period',
-                  title: 'Período',
-                  type: 'string',
-                  initialValue: 'mês',
-                }),
-                defineField({
-                  name: 'description',
-                  title: 'Descrição',
-                  type: 'text',
-                  rows: 2,
-                }),
-                defineField({
-                  name: 'badge',
-                  title: 'Badge',
-                  type: 'string',
-                }),
-                defineField({
-                  name: 'features',
-                  title: 'Benefícios',
-                  type: 'array',
-                  of: [{ type: 'string' }],
-                }),
-                defineField({
-                  name: 'cta',
-                  title: 'Texto do Botão',
-                  type: 'string',
-                  initialValue: 'Matricular agora',
-                }),
-                defineField({
-                  name: 'highlight',
-                  title: 'Destaque',
-                  type: 'boolean',
-                  initialValue: false,
-                }),
-              ],
+              type: 'reference',
+              to: [{ type: 'plano' }],
             },
           ],
         }),
       ],
     }),
 
+    // Testimonials Section
     defineField({
-      name: 'seo',
-      title: 'SEO',
+      name: 'testimonials',
+      title: 'Seção Depoimentos',
       type: 'object',
       fields: [
         defineField({
-          name: 'title',
-          title: 'Título da Página',
+          name: 'badge',
+          title: 'Badge',
           type: 'string',
-          initialValue: 'Live Academia | A Maior Rede de Academias de Manaus',
+          initialValue: 'Depoimentos',
+        }),
+        defineField({
+          name: 'title',
+          title: 'Título',
+          type: 'string',
+          initialValue: 'O que nossos alunos dizem',
         }),
         defineField({
           name: 'description',
           title: 'Descrição',
           type: 'text',
           rows: 3,
-          initialValue: 'Transforme seu corpo e sua vida na maior rede de academias de Manaus. Sem fidelidade, sem anuidade, sem pegadinha. Mais de 20 unidades.',
+          initialValue: 'Conheça histórias reais de transformação de nossos alunos.',
         }),
         defineField({
-          name: 'keywords',
-          title: 'Palavras-chave',
-          type: 'string',
-          initialValue: 'academia manaus, academia sem fidelidade, live academia, treino manaus, musculação manaus, aulas coletivas',
+          name: 'testimonials',
+          title: 'Lista de Depoimentos',
+          type: 'array',
+          of: [
+            {
+              type: 'reference',
+              to: [{ type: 'testimonial' }],
+            },
+          ],
         }),
       ],
     }),
   ],
-  preview: {
-    select: {
-      title: 'hero.title',
-      subtitle: 'hero.subtitle',
-    },
-  },
 })

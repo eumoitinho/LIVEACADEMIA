@@ -4,8 +4,18 @@ export interface SanityImage {
     _ref: string
     _type: 'reference'
   }
-  alt?: string
-  caption?: string
+  hotspot?: {
+    x: number
+    y: number
+    height: number
+    width: number
+  }
+  crop?: {
+    top: number
+    bottom: number
+    left: number
+    right: number
+  }
 }
 
 export interface CTALink {
@@ -13,100 +23,71 @@ export interface CTALink {
   link: string
 }
 
-export interface Stat {
+export interface Rating {
   value: string
   label: string
-  icon?: string
-}
-
-export interface BeneficioItem {
-  icon: string
-  title: string
-  description: string
-  color: string
-  image: SanityImage
-}
-
-export interface EstruturaItem {
-  icon: string
-  title: string
-  description: string
-  image: SanityImage
-}
-
-export interface ModalidadeItem {
-  name: string
-  description: string
-  icon: string
-  color: string
-}
-
-export interface Plano {
-  id: string
-  name: string
-  price: string
-  period: string
-  description: string
-  badge?: string
-  features: string[]
-  cta: string
-  highlight: boolean
-}
-
-export interface AppFeature {
-  icon: string
-  title: string
-  description: string
-}
-
-export interface Testimonial {
-  id: number
-  name: string
-  role: string
-  image: SanityImage
-  rating: number
-  text: string
-  unit: string
+  subscribers: string
 }
 
 export interface HeroSection {
-  backgroundImage: SanityImage
-  badge: string
+  backgroundImage?: SanityImage
   title: string
   subtitle: string
+  thirdTitle: string
   description: string
+  rating: Rating
   primaryCta: CTALink
   secondaryCta: CTALink
-  stats: Stat[]
+  footerText: string
 }
 
 export interface AboutSection {
   badge: string
   title: string
   description: string
-  stats: Stat[]
+  image?: SanityImage
+  stats: {
+    value: string
+    label: string
+  }[]
   highlights: string[]
+}
+
+export interface Benefit {
+  _id: string
+  title: string
+  description: string
+  icon: string
+  image?: SanityImage
+  order: number
+  active: boolean
 }
 
 export interface BeneficiosSection {
   badge: string
   title: string
   description: string
-  items: BeneficioItem[]
+  items: Array<{
+    icon: string
+    title: string
+    description: string
+    color: string
+    image: string
+  }>
 }
 
-export interface EstruturaSection {
-  badge: string
-  title: string
-  description: string
-  items: EstruturaItem[]
-}
-
-export interface ModalidadesSection {
-  badge: string
-  title: string
-  description: string
-  items: ModalidadeItem[]
+export interface Plano {
+  _id: string
+  name: string
+  description?: string
+  price: number
+  priceLabel?: string
+  features: string[]
+  cta: string
+  highlight: boolean
+  badge?: string
+  order: number
+  active: boolean
 }
 
 export interface PlanosSection {
@@ -116,82 +97,113 @@ export interface PlanosSection {
   plans: Plano[]
 }
 
-export interface AppSection {
-  badge: string
-  title: string
-  description: string
-  features: AppFeature[]
-  downloads: {
-    ios: string
-    android: string
-  }
-  appImage: SanityImage
+export interface Testimonial {
+  _id: string
+  name: string
+  role?: string
+  content: string
+  avatar?: SanityImage
+  rating: number
+  order: number
+  active: boolean
 }
 
 export interface TestimonialsSection {
   badge: string
   title: string
   description: string
-  items: Testimonial[]
-}
-
-export interface WellhubSection {
-  badge: string
-  title: string
-  description: string
-  benefits: string[]
-  logo: SanityImage
-  cta: string
-}
-
-export interface BioimpedanciaSection {
-  badge: string
-  title: string
-  description: string
-  features: string[]
-  cta: string
-  image: SanityImage
+  testimonials: Testimonial[]
 }
 
 export interface SEO {
   title: string
   description: string
-  keywords: string
+  keywords: string[]
 }
 
 export interface Unit {
   _id: string
   name: string
-  slug: string
+  slug: {
+    current: string
+  }
   address: string
   city: string
   state: string
-  zipCode: string
-  phone: string
-  whatsapp: string
-  email: string
+  zipCode?: string
+  phone?: string
+  whatsapp?: string
+  email?: string
   latitude: number
   longitude: number
   type: string
   services: string[]
-  images?: SanityImage[]
-  description: string
+  images: SanityImage[]
+  description?: string
   openingHours: string
   order: number
+  active: boolean
+  featured: boolean
 }
 
 export interface HomepageContent {
-  _id: string
-  _type: 'homepage'
+  seo: SEO
   hero: HeroSection
   about: AboutSection
   beneficios: BeneficiosSection
-  estrutura: EstruturaSection
-  modalidades: ModalidadesSection
   planos: PlanosSection
-  app: AppSection
   testimonials: TestimonialsSection
-  wellhub: WellhubSection
-  bioimpedancia: BioimpedanciaSection
-  seo: SEO
+}
+
+export interface AppFeature {
+  _id: string
+  title: string
+  description: string
+  icon: string
+  order: number
+  active: boolean
+}
+
+export interface Modality {
+  _id: string
+  name: string
+  description?: string
+  image?: SanityImage
+  duration: number
+  difficulty: string
+  instructor?: string
+  schedule: {
+    day: string
+    time: string
+  }[]
+  order: number
+  active: boolean
+}
+
+export interface StructureFeature {
+  _id: string
+  title: string
+  description?: string
+  icon: string
+  order: number
+  active: boolean
+}
+
+export interface WellhubFeature {
+  _id: string
+  title: string
+  description?: string
+  icon: string
+  order: number
+  active: boolean
+}
+
+export interface BioimpedanciaFeature {
+  _id: string
+  title: string
+  description?: string
+  benefits: string[]
+  image?: SanityImage
+  order: number
+  active: boolean
 }

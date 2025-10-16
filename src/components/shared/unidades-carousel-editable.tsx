@@ -1,321 +1,295 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
-import { motion, useInView, useReducedMotion } from "framer-motion"
-import { ChevronLeft, ChevronRight, MapPin, Navigation } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
-// import { urlFor } from "../../../lib/sanity"
-import type { Unit } from "../../../types/sanity"
+import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { MapPin, Phone, Clock, Star, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useUnitsData } from '../../../hooks/use-sanity-data'
+import { urlFor } from '../../../lib/sanity'
+import type { Unit } from '../../../types/sanity'
 
-interface UnidadeComDistancia extends Unit {
-  distancia?: number
-}
+const easing = [0.16, 1, 0.3, 1] as const
 
-interface UnidadesCarouselEditableProps {
-  data: Unit[]
-}
-
-export default function UnidadesCarouselEditable({ data }: UnidadesCarouselEditableProps) {
-  const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null)
-  const [sortedUnidades, setSortedUnidades] = useState<UnidadeComDistancia[]>([])
+export default function UnidadesCarouselEditable() {
+  const { data: unitsData, loading } = useUnitsData()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-  const carouselViewportRef = useRef<HTMLDivElement>(null)
-  const prefersReducedMotion = useReducedMotion()
-  const visibleInView = useInView(carouselViewportRef, { amount: 0.25, once: false })
 
-  // Função para calcular distância usando fórmula de Haversine
-  const calcularDistancia = useCallback((lat1: number, lon1: number, lat2: number, lon2: number): number => {
-    const R = 6371 // Raio da Terra em quilômetros
-    const dLat = (lat2 - lat1) * Math.PI / 180
-    const dLon = (lon2 - lon1) * Math.PI / 180
-    const a = 
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-      Math.sin(dLon/2) * Math.sin(dLon/2)
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
-    return R * c
-  }, [])
-
-  // Carrega localização do usuário
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          })
-        },
-        (error) => {
-          console.warn('Erro ao obter localização:', error)
-        }
-      )
-    }
-  }, [])
-
-  // Ordena unidades por distância
-  useEffect(() => {
-    if (!data || data.length === 0) return
-
-    const unidadesComDistancia = data.map(unidade => ({
-      ...unidade,
-      distancia: userLocation 
-        ? calcularDistancia(
-            userLocation.lat, 
-            userLocation.lon, 
-            unidade.latitude, 
-            unidade.longitude
-          )
-        : undefined
-    }))
-
-    // Ordena por distância se disponível, senão mantém ordem original
-    const sorted = userLocation 
-      ? unidadesComDistancia.sort((a, b) => (a.distancia || 0) - (b.distancia || 0))
-      : unidadesComDistancia
-
-    setSortedUnidades(sorted)
-  }, [data, userLocation, calcularDistancia])
-
-  // Auto-play do carousel
-  useEffect(() => {
-    if (!isAutoPlaying || sortedUnidades.length <= 1 || !visibleInView || prefersReducedMotion) return
+    if (!isAutoPlaying || unitsData.length <= 1) return
 
     const interval = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % sortedUnidades.length)
-    }, 4000)
+      setCurrentIndex((prev) => (prev + 1) % unitsData.length)
+    }, 5000)
 
     return () => clearInterval(interval)
-  }, [isAutoPlaying, sortedUnidades.length, visibleInView, prefersReducedMotion])
+  }, [isAutoPlaying, unitsData.length])
 
-  const nextSlide = useCallback(() => {
-    setCurrentIndex(prev => (prev + 1) % sortedUnidades.length)
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev - 1 + unitsData.length) % unitsData.length)
     setIsAutoPlaying(false)
-  }, [sortedUnidades.length])
+  }
 
-  const prevSlide = useCallback(() => {
-    setCurrentIndex(prev => (prev - 1 + sortedUnidades.length) % sortedUnidades.length)
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % unitsData.length)
     setIsAutoPlaying(false)
-  }, [sortedUnidades.length])
+  }
 
-  const goToSlide = useCallback((index: number) => {
+  const goToSlide = (index: number) => {
     setCurrentIndex(index)
     setIsAutoPlaying(false)
-  }, [])
+  }
 
-  if (!data || data.length === 0) return null
+  if (loading) {
+    return (
+      <section className="relative py-28 px-6 lg:px-12">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white text-lg">Carregando unidades...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (!unitsData || unitsData.length === 0) {
+    return null
+  }
+
+  const currentUnit = unitsData[currentIndex]
 
   return (
-    <section className="py-24 relative overflow-hidden bg-black">
-      {/* Simplified Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-neutral-950 to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(250,204,21,0.15)_0%,_transparent_50%)]" />
-        <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-yellow-500/10 via-yellow-500/5 to-transparent" />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)',
-            backgroundSize: '50px 50px'
-          }}
-        />
-      </div>
-
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <motion.div
+    <section id="unidades" className="relative py-28 px-6 lg:px-12 overflow-hidden">
+      <div className="relative z-10 mx-auto max-w-6xl">
+        <motion.header
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          transition={{ duration: 0.8, ease: easing }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="text-xs uppercase tracking-[0.3em] text-yellow-400/70 font-semibold mb-4 block">
+          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary/70">
             Nossas Unidades
           </span>
-          <h2 className="text-4xl lg:text-6xl font-black text-white mb-6 leading-tight">
-            Encontre a unidade{" "}
-            <span className="bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
-              mais próxima
-            </span>
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mt-4 text-foreground">
+            Encontre a unidade mais próxima
           </h2>
-          <p className="text-lg lg:text-xl text-zinc-400 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Estamos presentes em mais de 20 pontos estratégicos de Manaus.<br className="hidden lg:block" />
-            Venha conhecer a estrutura que vai transformar seus treinos.
+          <p className="text-lg text-muted-foreground mt-3 leading-relaxed">
+            {unitsData.length} unidades espalhadas por Manaus para sua comodidade
           </p>
-          <Link
-            href="/unidades"
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold text-lg rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl hover:shadow-yellow-500/25"
-          >
-            Ver todas as unidades
-            <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
+        </motion.header>
 
-        {/* Carousel */}
-        <div 
-          ref={carouselViewportRef} 
-          className="relative" 
-          onMouseEnter={() => setIsAutoPlaying(false)} 
-          onMouseLeave={() => setIsAutoPlaying(true)}
-        >
-          {/* Gradient overlays */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
-
-          {/* Carousel items */}
-          <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-            {sortedUnidades.map((unidade, index) => (
-              <div key={unidade._id} className="w-full flex-shrink-0 px-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="relative bg-gradient-to-br from-zinc-900/50 to-black/50 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden group hover:border-yellow-500/30 transition-all duration-300"
-                >
-                  {/* Image */}
-                  <div className="relative h-64 lg:h-80">
-                    <Image
-                      src="/images/academia-1.webp"
-                      alt={unidade.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                    
-                    {/* Type badge */}
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-yellow-500/20 backdrop-blur-sm rounded-full border border-yellow-500/30 text-yellow-400 text-xs font-semibold">
-                        {unidade.type}
-                      </span>
-                    </div>
-
-                    {/* Distance badge */}
-                    {unidade.distancia && (
-                      <div className="absolute top-4 right-4">
-                        <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full border border-white/30 text-white text-xs font-semibold">
-                          {unidade.distancia.toFixed(1)} km
-                        </span>
-                      </div>
-                    )}
+        <div className="relative">
+          {/* Carousel Container */}
+          <div className="relative overflow-hidden rounded-3xl bg-card border border-border">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.5, ease: easing }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-0"
+            >
+              {/* Imagem */}
+              <div className="relative h-96 lg:h-auto">
+                {currentUnit.images && currentUnit.images.length > 0 ? (
+                  <img
+                    src={urlFor(currentUnit.images[0]).width(800).height(600).url()}
+                    alt={currentUnit.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                    <MapPin className="h-16 w-16 text-primary/50" />
                   </div>
+                )}
+                
+                {/* Badge do tipo */}
+                <div className="absolute top-4 left-4">
+                  <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold">
+                    {currentUnit.type}
+                  </span>
+                </div>
 
-                  {/* Content */}
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
-                      {unidade.name}
+                {/* Badge de destaque */}
+                {currentUnit.featured && (
+                  <div className="absolute top-4 right-4">
+                    <span className="bg-gradient-to-r from-amber-500 to-yellow-600 text-black px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                      <Star className="h-4 w-4" />
+                      Destaque
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Conteúdo */}
+              <div className="p-8 lg:p-12">
+                <div className="h-full flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-3xl font-bold text-foreground mb-4">
+                      {currentUnit.name}
                     </h3>
-                    <p className="text-zinc-400 mb-4 leading-relaxed">
-                      {unidade.description}
-                    </p>
                     
-                    {/* Address */}
-                    <div className="flex items-start gap-3 mb-4">
-                      <MapPin className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
-                      <div className="text-zinc-300 text-sm">
-                        <p>{unidade.address}</p>
-                        <p>{unidade.city} - {unidade.state}</p>
+                    <div className="space-y-4 mb-6">
+                      <div className="flex items-start gap-3">
+                        <MapPin className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                        <div>
+                          <p className="text-foreground font-medium">{currentUnit.address}</p>
+                          <p className="text-muted-foreground text-sm">
+                            {currentUnit.city}, {currentUnit.state}
+                            {currentUnit.zipCode && ` • ${currentUnit.zipCode}`}
+                          </p>
+                        </div>
+                      </div>
+
+                      {currentUnit.phone && (
+                        <div className="flex items-center gap-3">
+                          <Phone className="h-5 w-5 text-primary flex-shrink-0" />
+                          <a 
+                            href={`tel:${currentUnit.phone}`}
+                            className="text-foreground hover:text-primary transition-colors"
+                          >
+                            {currentUnit.phone}
+                          </a>
+                        </div>
+                      )}
+
+                      <div className="flex items-start gap-3">
+                        <Clock className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
+                        <p className="text-muted-foreground text-sm">
+                          {currentUnit.openingHours}
+                        </p>
                       </div>
                     </div>
 
-                    {/* Services */}
-                    {unidade.services && unidade.services.length > 0 && (
+                    {currentUnit.description && (
+                      <p className="text-muted-foreground mb-6">
+                        {currentUnit.description}
+                      </p>
+                    )}
+
+                    {/* Serviços */}
+                    {currentUnit.services && currentUnit.services.length > 0 && (
                       <div className="mb-6">
+                        <h4 className="text-foreground font-semibold mb-3">Serviços Disponíveis:</h4>
                         <div className="flex flex-wrap gap-2">
-                          {unidade.services.slice(0, 3).map((service, serviceIndex) => (
-                            <span key={serviceIndex} className="px-2 py-1 bg-white/10 rounded-full text-white text-xs">
+                          {currentUnit.services.map((service, index) => (
+                            <span
+                              key={index}
+                              className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm"
+                            >
                               {service}
                             </span>
                           ))}
-                          {unidade.services.length > 3 && (
-                            <span className="px-2 py-1 bg-white/10 rounded-full text-white text-xs">
-                              +{unidade.services.length - 3}
-                            </span>
-                          )}
                         </div>
                       </div>
                     )}
-
-                    {/* CTA */}
-                    <Link
-                      href={`/unidades/${unidade.slug}`}
-                      className="group/btn inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400/20 to-amber-500/20 border border-yellow-500/30 text-yellow-400 font-semibold rounded-xl hover:from-yellow-400/30 hover:to-amber-500/30 hover:border-yellow-500/50 transition-all duration-300"
-                    >
-                      Conhecer unidade
-                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </Link>
                   </div>
-                </motion.div>
+
+                  <div className="flex gap-3">
+                    {currentUnit.whatsapp && (
+                      <a
+                        href={`https://wa.me/${currentUnit.whatsapp.replace(/\D/g, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors text-center"
+                      >
+                        WhatsApp
+                      </a>
+                    )}
+                    <a
+                      href={`https://maps.google.com/?q=${encodeURIComponent(currentUnit.address)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-xl font-semibold transition-colors text-center"
+                    >
+                      Como Chegar
+                    </a>
+                  </div>
+                </div>
               </div>
-            ))}
+            </motion.div>
           </div>
 
-          {/* Navigation buttons */}
-          {sortedUnidades.length > 1 && (
+          {/* Navegação */}
+          {unitsData.length > 1 && (
             <>
               <button
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 z-20"
+                onClick={goToPrevious}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-3 transition-all"
                 aria-label="Unidade anterior"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="h-6 w-6 text-white" />
               </button>
+
               <button
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 z-20"
+                onClick={goToNext}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-3 transition-all"
                 aria-label="Próxima unidade"
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="h-6 w-6 text-white" />
               </button>
+
+              {/* Indicadores */}
+              <div className="flex justify-center gap-2 mt-8">
+                {unitsData.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`w-3 h-3 rounded-full transition-all ${
+                      index === currentIndex
+                        ? 'bg-primary scale-125'
+                        : 'bg-white/30 hover:bg-white/50'
+                    }`}
+                    aria-label={`Ir para unidade ${index + 1}`}
+                  />
+                ))}
+              </div>
             </>
           )}
-
-          {/* Indicators */}
-          {sortedUnidades.length > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              {sortedUnidades.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentIndex
-                      ? 'bg-yellow-400 scale-125'
-                      : 'bg-white/30 hover:bg-white/50'
-                  }`}
-                  aria-label={`Ir para unidade ${index + 1}`}
-                />
-              ))}
-            </div>
-          )}
         </div>
 
-        {/* Location button */}
-        <div className="text-center mt-12">
-          <button
-            onClick={() => {
-              if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                    setUserLocation({
-                      lat: position.coords.latitude,
-                      lon: position.coords.longitude
-                    })
-                  },
-                  (error) => {
-                    console.warn('Erro ao obter localização:', error)
-                  }
-                )
-              }
-            }}
-            className="group inline-flex items-center gap-2 px-6 py-3 bg-white/10 border border-white/20 text-white font-semibold rounded-xl hover:bg-white/20 hover:border-white/30 transition-all duration-300"
-          >
-            <Navigation className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-            Usar minha localização
-          </button>
-        </div>
+        {/* Lista de todas as unidades */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: easing, delay: 0.2 }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="mt-16"
+        >
+          <h3 className="text-2xl font-bold text-foreground text-center mb-8">
+            Todas as Unidades
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {unitsData.map((unit, index) => (
+              <motion.div
+                key={unit._id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: easing, delay: index * 0.1 }}
+                viewport={{ once: true, amount: 0.3 }}
+                className="bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors cursor-pointer"
+                onClick={() => goToSlide(index)}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <h4 className="text-foreground font-semibold">{unit.name}</h4>
+                  <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-xs">
+                    {unit.type}
+                  </span>
+                </div>
+                <p className="text-muted-foreground text-sm mb-4">{unit.address}</p>
+                <div className="flex gap-2">
+                  <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs">
+                    {unit.services.length} serviços
+                  </span>
+                  {unit.featured && (
+                    <span className="bg-amber-500/20 text-amber-600 px-2 py-1 rounded-full text-xs">
+                      Destaque
+                    </span>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   )

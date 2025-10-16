@@ -1,7 +1,7 @@
 "use client"
 
 import { useHomepageData, useUnitsData } from "../../hooks/use-sanity-data"
-import HeroSection from "@/components/sections/hero-section"
+import HeroSectionEditable from "@/components/sections/hero-section-editable"
 import AboutSectionEditable from "@/components/sections/about-section-editable"
 import BeneficiosSectionEditable from "@/components/sections/beneficios-section-editable"
 import PlanosSectionEditable from "@/components/sections/planos-section-editable"
@@ -13,9 +13,6 @@ import ModalidadesSection from "@/components/sections/modalidades-section"
 import WellhubSection from "@/components/sections/wellhub-section"
 import BioimpedanciaSection from "@/components/sections/bioimpedancia-section"
 import EstruturaSection from "@/components/sections/estrutura-section"
-import UnidadesCarousel from "./shared/unidades-carousel"
-import AboutSection from "./sections/about-section"
-import BeneficiosSection from "./sections/beneficios-section"
 
 export default function HomepageEditable() {
   const { data: homepageData, loading: homepageLoading, error: homepageError } = useHomepageData()
@@ -48,24 +45,28 @@ export default function HomepageEditable() {
   return (
     <main className="min-h-screen relative">
       {/* Hero Section */}
-      <HeroSection />
+      {homepageData?.hero && (
+        <HeroSectionEditable data={homepageData.hero} />
+      )}
 
       {/* About Section */}
-      {homepageData.about && (
-        <AboutSection />
+      {homepageData?.about && (
+        <AboutSectionEditable data={homepageData.about} />
       )}
 
       {/* Units Carousel */}
       {unitsData && unitsData.length > 0 && (
-        <UnidadesCarousel/>
+        <UnidadesCarouselEditable />
       )}
 
       {/* Plans Section */}
-      <PlanosSectionEditable />
+      {homepageData?.planos && (
+        <PlanosSectionEditable data={homepageData.planos} />
+      )}
 
       {/* Benefits Section */}
-      {homepageData.beneficios && (
-        <BeneficiosSection />
+      {homepageData?.beneficios && (
+        <BeneficiosSectionEditable data={homepageData.beneficios} />
       )}
 
       {/* Structure Section */}
@@ -84,7 +85,9 @@ export default function HomepageEditable() {
       <BioimpedanciaSection />
 
       {/* Testimonials Section */}
-      <TestimonialSection />
+      {homepageData?.testimonials && (
+        <TestimonialSection />
+      )}
 
       {/* Floating Button */}
       <FloatingButton />

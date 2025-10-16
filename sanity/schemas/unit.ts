@@ -146,6 +146,18 @@ export const unitSchema = defineType({
       initialValue: 0,
       description: 'Ordem de exibição no carousel (menor número aparece primeiro)',
     }),
+    defineField({
+      name: 'active',
+      title: 'Ativa',
+      type: 'boolean',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'featured',
+      title: 'Destaque',
+      type: 'boolean',
+      initialValue: false,
+    }),
   ],
   preview: {
     select: {
