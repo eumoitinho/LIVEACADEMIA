@@ -6,7 +6,6 @@ import Image from "next/image"
 import { Menu, X, Phone } from "lucide-react"
 import LiveLogo from "@/components/shared/live-logo"
 import { useUnit } from "@/contexts/unit-context"
-import { ThemeToggle } from "@/src/components/shared/theme-toggle"
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -139,9 +138,6 @@ export default function Header() {
 
         {/* Right Side - Actions */}
         <div className="hidden lg:flex justify-start items-center gap-4">
-          {/* Theme Toggle */}
-          <ThemeToggle />
-
           {/* Phone */}
           <Link
             href="tel:+5592999999999"
@@ -250,10 +246,6 @@ export default function Header() {
               Contato
             </button>
             <div className={`pt-4 border-t space-y-3 ${isScrolled ? "border-zinc-800" : "border-zinc-800/30"}`}>
-              {/* Theme Toggle for Mobile */}
-              <div className="flex justify-center">
-                <ThemeToggle />
-              </div>
               
               <Link
                 href="tel:+5592999999999"
