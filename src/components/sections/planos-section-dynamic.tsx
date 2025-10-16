@@ -48,7 +48,23 @@ export default function PlanosSectionDynamic({ data, unidadeSlug }: PlanosSectio
         }
 
         if (result.planos && Array.isArray(result.planos)) {
-          setPlanos(result.planos)
+          // Validar e limpar dados dos planos para evitar valores undefined/null
+          const planosLimpos = result.planos.map((plano: any) => ({
+            ...plano,
+            mensalidade: typeof plano.mensalidade === 'number' ? plano.mensalidade : 0,
+            primeiraParcela: typeof plano.primeiraParcela === 'number' ? plano.primeiraParcela : 0,
+            adesao: typeof plano.adesao === 'number' ? plano.adesao : 0,
+            fidelidade: typeof plano.fidelidade === 'number' ? plano.fidelidade : 0,
+            valorTotalDoPlano: typeof plano.valorTotalDoPlano === 'number' ? plano.valorTotalDoPlano : 0,
+            codigo: typeof plano.codigo === 'number' ? plano.codigo : 0,
+            nome: typeof plano.nome === 'string' ? plano.nome : 'Plano sem nome',
+            modalidades: Array.isArray(plano.modalidades) ? plano.modalidades : [],
+            diasVencimento: Array.isArray(plano.diasVencimento) ? plano.diasVencimento : [],
+            parcelasAnuidade: Array.isArray(plano.parcelasAnuidade) ? plano.parcelasAnuidade : [],
+            categorias: Array.isArray(plano.categorias) ? plano.categorias : [],
+            modalidadesDTO: Array.isArray(plano.modalidadesDTO) ? plano.modalidadesDTO : []
+          }))
+          setPlanos(planosLimpos)
         } else {
           throw new Error('Formato de resposta inválido')
         }
@@ -207,7 +223,10 @@ export default function PlanosSectionDynamic({ data, unidadeSlug }: PlanosSectio
 
   if (!data) return null
 
-  const formatCurrency = (value: number) => {
+  const formatCurrency = (value: number | undefined | null) => {
+    if (value === undefined || value === null || Number.isNaN(value)) {
+      return 'R$ 0,00'
+    }
     return value.toLocaleString('pt-BR', { 
       style: 'currency', 
       currency: 'BRL',
