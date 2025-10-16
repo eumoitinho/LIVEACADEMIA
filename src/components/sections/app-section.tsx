@@ -113,53 +113,7 @@ export default function AppSection() {
               ))}
             </div>
 
-            {/* Enhanced Notification Card Demo */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="mb-10"
-            >
-              <div className="relative w-full max-w-md rounded-xl bg-gradient-to-br from-white/10 to-white/5 ring-1 ring-white/20 shadow-lg shadow-yellow-500/20 backdrop-blur-md overflow-hidden">
-                <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-white/20 to-transparent"></div>
-                <div className="relative p-6 bg-white/5">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Star className="w-4 h-4 text-yellow-400" />
-                    <h3 className="text-xl tracking-tight text-white font-semibold">Notificações inteligentes</h3>
-                  </div>
-                  <p className="text-sm text-white/70 leading-relaxed mb-4">Receba lembretes personalizados e sugestões de treinos no momento certo.</p>
-                  <div className="relative">
-                    <div className="pointer-events-none absolute -top-3 left-6 right-6 h-6 rounded-full bg-yellow-400/30 ring-1 ring-white/20 blur-[1px]"></div>
-                    <motion.div
-                      className="relative z-10 overflow-hidden rounded-lg bg-gradient-to-r from-yellow-500 to-amber-600 text-white ring-1 ring-white/20 shadow-xl shadow-yellow-500/30"
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <div className="flex items-start gap-3 p-4">
-                        <motion.div
-                          className="shrink-0 grid h-10 w-10 place-items-center rounded-xl bg-white/20 ring-1 ring-white/30"
-                          animate={{ rotate: [0, 5, 0] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                        >
-                          <Bell className="h-5 w-5 text-yellow-200" />
-                        </motion.div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-baseline justify-between gap-3">
-                            <p className="truncate font-semibold tracking-tight text-sm text-white">🏋️ Lembrete: Aula de Crossfit</p>
-                            <span className="shrink-0 text-xs text-white/80">agora</span>
-                          </div>
-                          <p className="mt-1 text-xs leading-relaxed text-white/95">
-                            Sua aula começa em 30 minutos! Não esqueça de se aquecer antes dos exercícios.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/10 to-transparent"></div>
-                    </motion.div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            
 
             {/* Download Buttons */}
             <motion.div
