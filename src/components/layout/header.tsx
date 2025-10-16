@@ -28,15 +28,9 @@ export default function Header() {
           
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
-            <button 
-              onClick={() => {
-                const element = document.getElementById("sobre")
-                if (element) element.scrollIntoView({ behavior: "smooth" })
-              }}
-              className="hover:text-white/90 transition text-sm font-normal text-white/80"
-            >
+            <Link href="/sobre-nos" className="hover:text-white/90 transition text-sm font-normal text-white/80">
               Sobre
-            </button>
+            </Link>
             <button 
               onClick={() => {
                 const element = document.getElementById("beneficios")
@@ -52,24 +46,15 @@ export default function Header() {
             <Link href="/aulas-coletivas" className="hover:text-white/90 transition text-sm font-normal text-white/80">
               Aulas Coletivas
             </Link>
-            <button 
-              onClick={() => {
-                const element = document.getElementById("planos")
-                if (element) element.scrollIntoView({ behavior: "smooth" })
-              }}
-              className="hover:text-white/90 transition text-sm font-normal text-white/80"
-            >
+            <Link href="/day-use" className="hover:text-white/90 transition text-sm font-normal text-white/80">
+              Day Use
+            </Link>
+            <Link href="/planos" className="hover:text-white/90 transition text-sm font-normal text-white/80">
               Planos
-            </button>
-            <button 
-              onClick={() => {
-                const element = document.getElementById("contato")
-                if (element) element.scrollIntoView({ behavior: "smooth" })
-              }}
-              className="hover:text-white/90 transition text-sm font-normal text-white/80"
-            >
+            </Link>
+            <Link href="/contato" className="hover:text-white/90 transition text-sm font-normal text-white/80">
               Contato
-            </button>
+            </Link>
             <Link
               href="/planos"
               className="inline-flex gap-2 transition hover:from-amber-200 hover:to-amber-300 hover:shadow-[0_8px_20px_rgba(251,191,36,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 text-sm font-bold text-black bg-gradient-to-b from-amber-300 to-amber-400 rounded-full pt-2.5 pr-5 pb-2.5 pl-5 shadow-[0_4px_12px_rgba(251,191,36,0.3)] items-center"
@@ -109,16 +94,13 @@ export default function Header() {
               
               <nav className="flex-1">
                 <div className="space-y-6">
-                  <button 
-                    onClick={() => {
-                      const element = document.getElementById("sobre")
-                      if (element) element.scrollIntoView({ behavior: "smooth" })
-                      setIsMenuOpen(false)
-                    }}
-                    className="block w-full text-left hover:text-white transition text-2xl font-normal text-white/80"
+                  <Link 
+                    href="/sobre-nos" 
+                    className="block hover:text-white transition text-2xl font-normal text-white/80"
+                    onClick={() => setIsMenuOpen(false)}
                   >
                     Sobre
-                  </button>
+                  </Link>
                   <button 
                     onClick={() => {
                       const element = document.getElementById("beneficios")
@@ -143,16 +125,20 @@ export default function Header() {
                   >
                     Aulas Coletivas
                   </Link>
-                  <button 
-                    onClick={() => {
-                      const element = document.getElementById("planos")
-                      if (element) element.scrollIntoView({ behavior: "smooth" })
-                      setIsMenuOpen(false)
-                    }}
-                    className="block w-full text-left hover:text-white transition text-2xl font-normal text-white/80"
+                  <Link 
+                    href="/day-use" 
+                    className="block hover:text-white transition text-2xl font-normal text-white/80"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Day Use
+                  </Link>
+                  <Link 
+                    href="/planos" 
+                    className="block hover:text-white transition text-2xl font-normal text-white/80"
+                    onClick={() => setIsMenuOpen(false)}
                   >
                     Planos
-                  </button>
+                  </Link>
                   <button 
                     onClick={() => {
                       const element = document.getElementById("contato")

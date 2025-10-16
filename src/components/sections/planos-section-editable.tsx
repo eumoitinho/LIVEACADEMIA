@@ -134,8 +134,8 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
               {/* Card Container */}
               <div className={`relative h-full rounded-3xl overflow-hidden border transition-all duration-500 ${
                 plano.destaque 
-                  ? 'border-yellow-500/50 shadow-2xl shadow-yellow-500/10' 
-                  : 'border-zinc-800/50 hover:border-zinc-700/50'
+                  ? 'border-yellow-500/50 shadow-2xl shadow-yellow-500/10 bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 backdrop-blur-sm' 
+                  : 'border-zinc-800/50 hover:border-zinc-700/50 bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 backdrop-blur-sm'
               }`}>
                 
                 {/* Popular Badge */}

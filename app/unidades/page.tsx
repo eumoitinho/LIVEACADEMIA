@@ -1,46 +1,152 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion } from "framer-motion"
-import { MapPin, Filter, Search } from "lucide-react"
+import { MapPin, Filter, Search, Navigation, X } from "lucide-react"
 import Link from "next/link"
 import { locations } from '@/src/lib/config/locations'
 import { UnidadeCard } from '@/src/components/unidade-card'
+import { UnidadeCardModern } from '@/src/components/unidade-card-modern'
+import type { Unit } from '../../types/sanity'
 
 export default function Unidades() {
+  const [sanityUnits, setSanityUnits] = useState<any[]>([])
+  const [loadingSanity, setLoadingSanity] = useState(true)
   const [filterType, setFilterType] = useState("todos")
   const [searchQuery, setSearchQuery] = useState("")
+  const [radiusFilter, setRadiusFilter] = useState<number | null>(null)
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [loadingLocation, setLoadingLocation] = useState(false)
+
+  // Fetch units from Sanity
+  useEffect(() => {
+    const fetchSanityUnits = async () => {
+      try {
+        setLoadingSanity(true)
+        const response = await fetch('/api/sanity/units')
+        const data = await response.json()
+        if (data.units) {
+          setSanityUnits(data.units)
+        }
+      } catch (error) {
+        console.error('Error fetching Sanity units:', error)
+      } finally {
+        setLoadingSanity(false)
+      }
+    }
+    fetchSanityUnits()
+  }, [])
+
+  // Merge Sanity units with static locations (Sanity takes precedence)
+  const allLocations = useMemo(() => {
+    if (loadingSanity || sanityUnits.length === 0) {
+      return locations
+    }
+
+    return locations.map(staticLoc => {
+      const sanityUnit = sanityUnits.find((unit: any) =>
+        unit.slug?.current === staticLoc.id
+      )
+
+      if (sanityUnit) {
+        const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
+        return {
+          ...staticLoc,
+          name: sanityUnit.name,
+          address: sanityUnit.address,
+          type: sanityUnit.type,
+          photo: sanityUnit.images?.[0]?.asset?.url || staticLoc.photo,
+          features: sanityUnit.services || staticLoc.features,
+          hours: sanityUnit.openingHours || staticLoc.hours,
+          coordinates: hasCoordinates ? {
+            lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
+            lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
+          } : undefined
+        }
+      }
+      return staticLoc
+    })
+  }, [sanityUnits, loadingSanity])
+
+  // Função para calcular distância em km usando fórmula de Haversine
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+    const R = 6371 // Raio da Terra em km
+    const dLat = (lat2 - lat1) * Math.PI / 180
+    const dLon = (lon2 - lon1) * Math.PI / 180
+    const a =
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+    return R * c
+  }
+
+  // Solicitar localização do usuário
+  const requestUserLocation = () => {
+    setLoadingLocation(true)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          })
+          setLoadingLocation(false)
+        },
+        (error) => {
+          console.error("Erro ao obter localização:", error)
+          setLoadingLocation(false)
+          alert("Não foi possível obter sua localização. Verifique as permissões do navegador.")
+        }
+      )
+    } else {
+      setLoadingLocation(false)
+      alert("Geolocalização não é suportada pelo seu navegador.")
+    }
+  }
 
   const filteredLocations = useMemo(() => {
-    return locations.filter((loc: any) => {
+    return allLocations.filter((loc: any) => {
       // Filter by type
       if (filterType !== "todos" && loc.type !== filterType) return false
 
       // Filter by search query
       if (searchQuery) {
         const query = searchQuery.toLowerCase()
-        return (
+        const matchesSearch =
           loc.name.toLowerCase().includes(query) ||
           loc.address.toLowerCase().includes(query)
+        if (!matchesSearch) return false
+      }
+
+      // Filter by radius
+      if (radiusFilter && userLocation && loc.coordinates) {
+        const distance = calculateDistance(
+          userLocation.lat,
+          userLocation.lng,
+          loc.coordinates.lat,
+          loc.coordinates.lng
         )
+        if (distance > radiusFilter) return false
       }
 
       return true
     })
-  }, [filterType, searchQuery])
+  }, [filterType, searchQuery, radiusFilter, userLocation, allLocations])
 
   const stats = useMemo(() => ({
-    total: locations.length,
-    diamante: locations.filter((l: any) => l.type === 'diamante').length,
-    premium: locations.filter((l: any) => l.type === 'premium').length,
-    tradicional: locations.filter((l: any) => l.type === 'tradicional').length,
-  }), [])
+    total: allLocations.length,
+    diamante: allLocations.filter((l: any) => l.type === 'diamante').length,
+    premium: allLocations.filter((l: any) => l.type === 'premium').length,
+    tradicional: allLocations.filter((l: any) => l.type === 'tradicional').length,
+  }), [allLocations])
 
   return (
     <main className="min-h-screen relative bg-black text-white">
       {/* Background gradient */}
-      <div className="fixed inset-0 bg-gradient-to-br from-black via-slate-900 to-black pointer-events-none" />
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.1),transparent_50%)] pointer-events-none" />
+      <div className="fixed inset-0 bg-gradient-to-br from-black via-amber-950/20 to-black pointer-events-none" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.15),transparent_50%)] pointer-events-none" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(245,158,11,0.1),transparent_50%)] pointer-events-none" />
 
       <div className="relative pt-32 pb-20">
         <div className="container mx-auto px-4 max-w-7xl">
@@ -103,8 +209,61 @@ export default function Unidades() {
                 ))}
               </div>
 
+              {/* Radius Filter */}
+              <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={requestUserLocation}
+                    disabled={loadingLocation}
+                    className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                      userLocation
+                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                        : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    <Navigation className={`w-4 h-4 ${loadingLocation ? 'animate-spin' : ''}`} />
+                    {loadingLocation ? 'Localizando...' : userLocation ? 'Localização ativa' : 'Usar minha localização'}
+                  </button>
+                  {userLocation && radiusFilter && (
+                    <button
+                      onClick={() => {
+                        setRadiusFilter(null)
+                        setUserLocation(null)
+                      }}
+                      className="px-3 py-3 rounded-xl text-sm font-medium bg-white/5 text-white/70 border border-white/10 hover:bg-red-500/20 hover:border-red-500/40 hover:text-red-300 transition-all duration-300"
+                      title="Limpar filtro de raio"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+
+                {userLocation && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="flex items-center gap-2 flex-wrap"
+                  >
+                    <span className="text-sm text-white/60">Raio:</span>
+                    {[2, 5, 10, 15].map((radius) => (
+                      <button
+                        key={radius}
+                        onClick={() => setRadiusFilter(radius)}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                          radiusFilter === radius
+                            ? 'bg-amber-500 text-black shadow-lg'
+                            : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'
+                        }`}
+                      >
+                        {radius} km
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </div>
+
               {/* Results count */}
-              {(filterType !== 'todos' || searchQuery) && (
+              {(filterType !== 'todos' || searchQuery || radiusFilter) && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -113,11 +272,14 @@ export default function Unidades() {
                   <p className="text-white/60">
                     <span className="text-white font-bold">{filteredLocations.length}</span> unidade
                     {filteredLocations.length !== 1 ? 's' : ''} encontrada{filteredLocations.length !== 1 ? 's' : ''}
+                    {radiusFilter && ` em ${radiusFilter}km`}
                   </p>
                   <button
                     onClick={() => {
                       setFilterType('todos')
                       setSearchQuery('')
+                      setRadiusFilter(null)
+                      setUserLocation(null)
                     }}
                     className="text-sm text-white/60 hover:text-white transition-colors"
                   >
@@ -128,43 +290,65 @@ export default function Unidades() {
             </div>
           </motion.div>
 
-          {/* Units Grid */}
-          {filteredLocations.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20"
-            >
-              <h3 className="text-2xl font-bold text-white mb-2">
-                Nenhuma unidade encontrada
-              </h3>
-              <p className="text-white/60 mb-6">
-                Tente ajustar os filtros ou fazer uma nova busca
-              </p>
-              <button
-                onClick={() => {
-                  setFilterType('todos')
-                  setSearchQuery('')
-                }}
-                className="px-6 py-3 rounded-xl bg-white text-black font-semibold hover:scale-105 transition-all"
-              >
-                Ver todas as unidades
-              </button>
-            </motion.div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredLocations.map((location: any, index: number) => (
-                <motion.div
-                  key={location.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
-                >
-                  <UnidadeCard location={location} />
-                </motion.div>
-              ))}
+          {/* Units Grid - Modern Container */}
+          <section className="max-w-7xl">
+            <div className="relative overflow-hidden shadow-[0px_0px_0px_1px_rgba(255,255,255,0.06),0px_1px_1px_-0.5px_rgba(0,0,0,0.3),0px_12px_24px_-12px_rgba(0,0,0,0.5)] bg-black/80 border-white/10 border rounded-[40px] backdrop-blur">
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/5 to-transparent"></div>
+              </div>
+              <div className="relative sm:p-8 pt-6 pr-6 pb-6 pl-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl sm:text-2xl text-neutral-100 font-geist tracking-tighter font-medium">
+                    {filterType === 'todos' ? 'Todas as unidades' :
+                     filterType === 'diamante' ? 'Unidades Diamante' :
+                     filterType === 'premium' ? 'Unidades Premium' :
+                     filterType === 'tradicional' ? 'Unidades Tradicionais' :
+                     'Inaugurações em breve'}
+                  </h2>
+                  {filteredLocations.length > 0 && (
+                    <div className="text-sm text-neutral-400 font-geist">
+                      {filteredLocations.length} unidade{filteredLocations.length !== 1 ? 's' : ''}
+                    </div>
+                  )}
+                </div>
+
+                {filteredLocations.length === 0 ? (
+                  <div className="text-center py-20">
+                    <h3 className="text-2xl font-bold text-neutral-100 mb-2 font-geist">
+                      Nenhuma unidade encontrada
+                    </h3>
+                    <p className="text-neutral-400 mb-6 font-geist">
+                      Tente ajustar os filtros ou fazer uma nova busca
+                    </p>
+                    <button
+                      onClick={() => {
+                        setFilterType('todos')
+                        setSearchQuery('')
+                        setRadiusFilter(null)
+                        setUserLocation(null)
+                      }}
+                      className="inline-flex items-center gap-2 text-sm text-neutral-200 bg-white/5 hover:bg-white/10 rounded-full px-4 py-2 border border-white/10 font-geist transition-colors"
+                    >
+                      <span>Ver todas as unidades</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    {filteredLocations.map((location: any, index: number) => (
+                      <motion.div
+                        key={location.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
+                      >
+                        <UnidadeCardModern location={location} />
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
+          </section>
 
           {/* CTA Section */}
           <motion.div

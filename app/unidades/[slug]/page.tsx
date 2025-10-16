@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation"
-import { locations } from '@/lib/config/locations'
+import { locations } from '@/src/lib/config/locations'
+import { getUnits } from '@/lib/sanity'
 import UnidadeContent from "./components/unidade-content"
+import type { Unit } from '../../../types/sanity'
 
 // Dados específicos por unidade (modalidades, benefícios, fotos)
 const unidadeData = {
@@ -93,13 +95,46 @@ interface PageProps { params: Promise<{ slug: string }> }
 
 export default async function UnidadePage(props: PageProps) {
   const { slug } = await props.params
-  const unidade = locations.find(loc => loc.id === slug)
 
-  if (!unidade || unidade.type === "inauguracao") {
+  // Fetch from Sanity first
+  const sanityUnits = await getUnits()
+  const sanityUnit = sanityUnits.find((unit: Unit) => unit.slug?.current === slug)
+
+  // Fallback to static locations
+  const staticUnidade = locations.find(loc => loc.id === slug)
+
+  if (!sanityUnit && (!staticUnidade || staticUnidade.type === "inauguracao")) {
     notFound()
   }
 
-  const data = unidadeData[unidade.type as keyof typeof unidadeData]
+  // Merge Sanity data with static data (Sanity takes precedence)
+  const unidade = sanityUnit ? {
+    ...staticUnidade,
+    id: sanityUnit.slug?.current || slug,
+    name: sanityUnit.name,
+    address: sanityUnit.address,
+    type: sanityUnit.type as 'tradicional' | 'premium' | 'diamante',
+    photo: sanityUnit.images?.[0]?.asset?.url || staticUnidade?.photo || null,
+    features: sanityUnit.services || staticUnidade?.features || [],
+    hours: sanityUnit.openingHours || staticUnidade?.hours || '',
+    phone: sanityUnit.phone,
+    whatsapp: sanityUnit.whatsapp,
+    email: sanityUnit.email,
+    latitude: sanityUnit.latitude,
+    longitude: sanityUnit.longitude,
+    images: sanityUnit.images?.map((img: any) => img.asset?.url).filter(Boolean) || [],
+    description: sanityUnit.description
+  } : staticUnidade
+
+  if (!unidade) {
+    notFound()
+  }
+
+  const data = {
+    ...unidadeData[unidade.type as keyof typeof unidadeData],
+    // Override static photos with Sanity images if available
+    fotos: sanityUnit?.images?.map((img: any) => img.asset?.url).filter(Boolean) || unidadeData[unidade.type as keyof typeof unidadeData]?.fotos || []
+  }
 
   return <UnidadeContent unidade={unidade} data={data} />
 }

@@ -1,27 +1,31 @@
 import { useState, useEffect } from 'react'
-import { 
-  getHomepageData, 
-  getUnits, 
-  getPlans, 
-  getBenefits, 
+import {
+  getHomepageData,
+  getUnits,
+  getPlans,
+  getBenefits,
   getTestimonials,
   getAppFeatures,
   getModalities,
   getStructureFeatures,
   getWellhubFeatures,
-  getBioimpedanciaFeatures
+  getBioimpedanciaFeatures,
+  getAppSectionData,
+  getBeneficiosSectionData
 } from '../lib/sanity'
-import type { 
-  HomepageContent, 
-  Unit, 
-  Plano, 
-  Benefit, 
+import type {
+  HomepageContent,
+  Unit,
+  Plano,
+  Benefit,
   Testimonial,
   AppFeature,
   Modality,
   StructureFeature,
   WellhubFeature,
-  BioimpedanciaFeature
+  BioimpedanciaFeature,
+  AppSectionData,
+  BeneficiosSection
 } from '../types/sanity'
 
 export function useHomepageData() {
@@ -273,6 +277,58 @@ export function useBioimpedanciaFeaturesData() {
       } catch (err) {
         console.error('Error fetching bioimpedancia features data:', err)
         setError('Erro ao carregar dados dos recursos da bioimpedância')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useAppSectionData() {
+  const [data, setData] = useState<AppSectionData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const appSectionData = await getAppSectionData()
+        setData(appSectionData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching app section data:', err)
+        setError('Erro ao carregar dados da seção do app')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useBeneficiosSectionData() {
+  const [data, setData] = useState<BeneficiosSection | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const beneficiosSectionData = await getBeneficiosSectionData()
+        setData(beneficiosSectionData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching beneficios section data:', err)
+        setError('Erro ao carregar dados da seção de benefícios')
       } finally {
         setLoading(false)
       }

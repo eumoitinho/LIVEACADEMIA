@@ -4,21 +4,7 @@ import { motion } from "framer-motion"
 import { ShieldCheck, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
 import Image from "next/image"
 import { useState, useCallback } from "react"
-
-interface BeneficiosSectionProps {
-  data: {
-    badge: string
-    title: string
-    description: string
-    items: Array<{
-      icon: string
-      title: string
-      description: string
-      color: string
-      image: string
-    }>
-  }
-}
+import { useBeneficiosSectionData } from "../../../hooks/use-sanity-data"
 
 const defaultBeneficios = [
   {
@@ -51,11 +37,8 @@ const defaultBeneficios = [
   },
 ]
 
-export default function BeneficiosSectionEditable({ data }: BeneficiosSectionProps) {
-  if (!data) return null
-
-  // Provide defaults if data is incomplete
-  const items = data.items || []
+export default function BeneficiosSectionEditable() {
+  const { data, loading } = useBeneficiosSectionData()
 
   // Mapear ícones string para componentes Lucide
   const iconMap: Record<string, any> = {
@@ -64,15 +47,21 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
     'Users': Users,
     'Snowflake': Snowflake,
     'Zap': Zap,
-    'CheckCircle': CheckCircle
+    'CheckCircle': CheckCircle,
   }
 
-  const beneficios = items.length > 0
-    ? items.map(item => ({
-        ...item,
-        icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck
+  // Usar dados do Sanity ou fallback
+  const beneficios = data?.items && data.items.length > 0
+    ? data.items.map(item => ({
+        icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck,
+        title: item.title,
+        description: item.description,
+        color: item.color,
+        image: item.image?.asset?.url || '/images/academia-1.webp'
       }))
     : defaultBeneficios
+
+  const sectionTitle = data?.title || "Mais do que treino, uma experiência completa"
 
   const easing = [0.16, 1, 0.3, 1] as const
   const [active, setActive] = useState(0)
@@ -98,7 +87,7 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
           className="text-center mb-14"
         >
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
-            {data.title || "Mais do que treino, uma experiência completa"}
+            {sectionTitle}
           </h2>
         </motion.div>
 

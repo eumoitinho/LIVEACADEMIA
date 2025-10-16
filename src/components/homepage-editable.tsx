@@ -8,7 +8,7 @@ import PlanosSectionEditable from "@/components/sections/planos-section-editable
 import UnidadesCarouselEditable from "@/components/shared/unidades-carousel-editable"
 import FloatingButton from "@/components/layout/floating-button"
 import TestimonialSection from "@/components/sections/testimonial-section"
-import AppSection from "@/components/sections/app-section"
+import AppSectionEditable from "@/components/sections/app-section-editable"
 import ModalidadesSection from "@/components/sections/modalidades-section"
 import WellhubSection from "@/components/sections/wellhub-section"
 import BioimpedanciaSection from "@/components/sections/bioimpedancia-section"
@@ -38,7 +38,7 @@ export default function HomepageEditable() {
       <PlanosSectionEditable data={homepageData?.planos || { badge: "Planos", title: "Escolha o plano ideal para você", description: "Planos flexíveis sem fidelidade. Cancele quando quiser, sem multas ou taxas.", plans: [] }} />
 
       {/* Benefits Section */}
-      <BeneficiosSectionEditable data={homepageData?.beneficios || { badge: "Benefícios", title: "Por que escolher a Live Academia?", description: "Descubra todos os benefícios que fazem da Live Academia a melhor escolha para sua jornada fitness.", items: [] }} />
+      <BeneficiosSectionEditable />
 
       {/* Structure Section */}
       <EstruturaSection />
@@ -47,7 +47,7 @@ export default function HomepageEditable() {
       <ModalidadesSection />
 
       {/* App Section */}
-      <AppSection />
+      <AppSectionEditable />
 
      
       {/* Bioimpedancia Section */}

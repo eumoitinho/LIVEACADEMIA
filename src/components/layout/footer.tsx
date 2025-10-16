@@ -114,7 +114,7 @@ export default function Footer() {
               <h4 className="text-white/80 text-xs uppercase tracking-[0.2em]">Sobre</h4>
               <ul className="mt-3 space-y-2 text-sm">
                 <li><Link href="/sobre-nos" className="text-neutral-300 hover:text-white transition">Sobre Nós</Link></li>
-                <li><Link href="/trabalhe-conosco" className="text-neutral-300 hover:text-white transition">Trabalhe Conosco</Link></li>
+                <li><Link href="/contatox`" className="text-neutral-300 hover:text-white transition">Trabalhe Conosco</Link></li>
                 <li><Link href="#contact" className="text-neutral-300 hover:text-white transition">Contato</Link></li>
                 <li><Link href="/unidades" className="text-neutral-300 hover:text-white transition">Localização</Link></li>
               </ul>

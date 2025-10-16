@@ -1,0 +1,20 @@
+{
+  "appSection": {
+    "badge": "Tecnologia e fitness",
+    "title": "Apps Live Academia",
+    "highlightedText": "palma da mão",
+    "description": "Disponíveis para Google Play e App Store.",
+    "subtitle": "Baixe nossos aplicativos e tenha a Live Academia sempre com você",
+    "benefits": [
+      "Acesso completo aos seus dados",
+      "Agendamento de aulas",
+      "Controle de treinos",
+      "Histórico de atividades",
+      "Notificações personalizadas"
+    ],
+    "appLiveUrl": "https://apps.apple.com/br/app/live-academia/id6745790187",
+    "appTreinoUrl": "https://apps.apple.com/br/app/treino/id862662527",
+    "appLivePlayStoreUrl": "https://play.google.com/store/apps/details?id=br.com.w12.liveacademia&hl=pt_BR",
+    "appTreinoPlayStoreUrl": "https://play.google.com/store/apps/details?id=com.pacto"
+  }
+}

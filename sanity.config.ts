@@ -13,6 +13,10 @@ import { modalitySchema } from './sanity/schemas/modality'
 import { structureFeatureSchema } from './sanity/schemas/structure-feature'
 import { wellhubFeatureSchema } from './sanity/schemas/wellhub-feature'
 import { bioimpedanciaFeatureSchema } from './sanity/schemas/bioimpedancia-feature'
+import { appSectionSchema } from './sanity/schemas/app-section'
+import { beneficiosSectionSchema } from './sanity/schemas/beneficios-section'
+import { dayUse } from './sanity/schemas/day-use'
+import { sobreNosSchema } from './sanity/schemas/sobre-nos'
 
 export default defineConfig({
   name: 'live-academia',
@@ -68,6 +72,36 @@ export default defineConfig({
             S.listItem()
               .title('Bioimpedância')
               .child(S.documentTypeList('bioimpedanciaFeature')),
+            S.divider(),
+            // Seções Singleton (documento único)
+            S.listItem()
+              .title('Seção do App')
+              .child(
+                S.document()
+                  .schemaType('appSection')
+                  .documentId('appSection')
+              ),
+            S.listItem()
+              .title('Seção de Benefícios')
+              .child(
+                S.document()
+                  .schemaType('beneficiosSection')
+                  .documentId('beneficiosSection')
+              ),
+            S.listItem()
+              .title('Day Use')
+              .child(
+                S.document()
+                  .schemaType('dayUse')
+                  .documentId('dayUse')
+              ),
+            S.listItem()
+              .title('Sobre Nós')
+              .child(
+                S.document()
+                  .schemaType('sobreNos')
+                  .documentId('sobreNos')
+              ),
           ])
     }),
     visionTool()
@@ -85,6 +119,10 @@ export default defineConfig({
       structureFeatureSchema,
       wellhubFeatureSchema,
       bioimpedanciaFeatureSchema,
+      appSectionSchema,
+      beneficiosSectionSchema,
+      dayUse,
+      sobreNosSchema,
     ],
   },
 })

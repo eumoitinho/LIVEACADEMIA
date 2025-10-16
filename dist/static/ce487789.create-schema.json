@@ -1390,5 +1390,785 @@
     "name": "bioimpedanciaFeature",
     "type": "document",
     "title": "Recurso Bioimpedância"
+  },
+  {
+    "fields": [
+      {
+        "description": "Texto pequeno acima do título (ex: \"Tecnologia e fitness\")",
+        "name": "badge",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Texto que aparece em gradiente amarelo (ex: \"palma da mão\")",
+        "name": "highlightedText",
+        "type": "string",
+        "title": "Texto em Destaque"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text",
+        "title": "Descrição Principal"
+      },
+      {
+        "description": "Texto secundário em itálico",
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "description": "Lista de benefícios do app",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "benefits",
+        "type": "array",
+        "title": "Benefícios"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "appImage",
+        "type": "image",
+        "title": "Imagem do App"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link para download do App Live na App Store",
+        "name": "appLiveUrl",
+        "type": "url",
+        "title": "URL App Live (App Store)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link para download do App Treino na App Store",
+        "name": "appTreinoUrl",
+        "type": "url",
+        "title": "URL App Treino (App Store)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link para download do App Live no Google Play",
+        "name": "appLivePlayStoreUrl",
+        "type": "url",
+        "title": "URL App Live (Google Play)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link para download do App Treino no Google Play",
+        "name": "appTreinoPlayStoreUrl",
+        "type": "url",
+        "title": "URL App Treino (Google Play)"
+      }
+    ],
+    "name": "appSection",
+    "type": "document",
+    "title": "Seção do App"
+  },
+  {
+    "fields": [
+      {
+        "description": "Texto pequeno acima do título",
+        "name": "badge",
+        "type": "string"
+      },
+      {
+        "initialValue": "Mais do que treino, uma experiência completa",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título"
+      },
+      {
+        "rows": 2,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 6
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Escudo (Proteção)",
+                      "value": "ShieldCheck"
+                    },
+                    {
+                      "title": "Estrela (Qualidade)",
+                      "value": "Star"
+                    },
+                    {
+                      "title": "Pessoas (Comunidade)",
+                      "value": "Users"
+                    },
+                    {
+                      "title": "Floco de Neve (Climatização)",
+                      "value": "Snowflake"
+                    },
+                    {
+                      "title": "Raio (Energia)",
+                      "value": "Zap"
+                    },
+                    {
+                      "title": "Check (Confirmação)",
+                      "value": "CheckCircle"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "ShieldCheck",
+                          "Star",
+                          "Users",
+                          "Snowflake",
+                          "Zap",
+                          "CheckCircle"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Nome do ícone (ShieldCheck, Star, Users, Snowflake, Zap, CheckCircle)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "rows": 3,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Amarelo para Âmbar",
+                      "value": "from-yellow-400 to-amber-500"
+                    },
+                    {
+                      "title": "Âmbar para Amarelo Escuro",
+                      "value": "from-amber-500 to-yellow-600"
+                    },
+                    {
+                      "title": "Amarelo Médio para Âmbar",
+                      "value": "from-yellow-500 to-amber-600"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "from-yellow-400 to-amber-500",
+                          "from-amber-500 to-yellow-600",
+                          "from-yellow-500 to-amber-600"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Classes Tailwind para o gradiente (ex: from-yellow-400 to-amber-500)",
+                "name": "color",
+                "type": "string",
+                "title": "Cor do Gradiente"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "image",
+                "type": "image",
+                "title": "Imagem de Fundo"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "items",
+        "type": "array",
+        "title": "Benefícios"
+      }
+    ],
+    "name": "beneficiosSection",
+    "type": "document",
+    "title": "Seção de Benefícios"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título Principal"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "fields": [
+          {
+            "name": "alt",
+            "type": "string",
+            "title": "Texto Alternativo"
+          }
+        ],
+        "name": "heroImage",
+        "type": "image",
+        "title": "Imagem do Hero"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 6
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "titulo",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "rows": 2,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "descricao",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "MapPin",
+                      "value": "MapPin"
+                    },
+                    {
+                      "title": "Check",
+                      "value": "Check"
+                    },
+                    {
+                      "title": "Clock",
+                      "value": "Clock"
+                    },
+                    {
+                      "title": "Zap",
+                      "value": "Zap"
+                    },
+                    {
+                      "title": "Users",
+                      "value": "Users"
+                    },
+                    {
+                      "title": "Dumbbell",
+                      "value": "Dumbbell"
+                    },
+                    {
+                      "title": "Star",
+                      "value": "Star"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "MapPin",
+                          "Check",
+                          "Clock",
+                          "Zap",
+                          "Users",
+                          "Dumbbell",
+                          "Star"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "beneficios",
+        "type": "array",
+        "title": "Benefícios"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 4
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "titulo",
+                "type": "string",
+                "title": "Título do Pacote"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "preco",
+                "type": "string",
+                "title": "Preço"
+              },
+              {
+                "rows": 2,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "descricao",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "initialValue": false,
+                "name": "popular",
+                "type": "boolean",
+                "title": "Mais Popular"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 1
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "name": "beneficios",
+                "type": "array",
+                "title": "Benefícios do Pacote"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "pacotes",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "pergunta",
+                "type": "string"
+              },
+              {
+                "rows": 3,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "resposta",
+                "type": "text"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "faqs",
+        "type": "array",
+        "title": "Perguntas Frequentes"
+      },
+      {
+        "initialValue": "Pronto para experimentar a Live Academia?",
+        "name": "ctaTitle",
+        "type": "string",
+        "title": "Título do CTA Final"
+      },
+      {
+        "rows": 2,
+        "initialValue": "Adquira seu Day Use agora e descubra por que somos a melhor academia de Manaus.",
+        "name": "ctaDescription",
+        "type": "text",
+        "title": "Descrição do CTA Final"
+      }
+    ],
+    "name": "dayUse",
+    "type": "document"
   }
 ]

@@ -75,11 +75,7 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
           {/* Right Column - Content */}
           <div className="order-2 lg:order-2">
             <div className="flex gap-3 animate-[fadeInSlide_0.8s_ease-out_0.6s_forwards] text-xs text-white/70 opacity-0 mb-6 gap-x-3 gap-y-3 items-center" style={{transform: "translateX(20px)"}}>
-              <div className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 backdrop-blur border border-primary/20">
-                <Star className="w-[14px] h-[14px] text-primary" />
-                <span className="font-normal">Planos a partir de</span>
-                <span className="font-medium text-primary">R$ 119,90</span>
-              </div>
+             
             </div>
 
             <p className="section-description animate-[fadeInUp_0.8s_ease-out_0.8s_forwards] opacity-0 mb-8" style={{transform: "translateY(20px)", filter: "blur(5px)"}}>

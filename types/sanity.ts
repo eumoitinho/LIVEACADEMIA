@@ -64,15 +64,20 @@ export interface Benefit {
 }
 
 export interface BeneficiosSection {
-  badge: string
+  badge?: string
   title: string
-  description: string
+  description?: string
   items: Array<{
     icon: string
     title: string
     description: string
     color: string
-    image: string
+    image?: {
+      asset?: {
+        _id: string
+        url: string
+      }
+    }
   }>
 }
 
@@ -138,7 +143,19 @@ export interface Unit {
   longitude: number
   type: string
   services: string[]
-  images: SanityImage[]
+  images?: Array<{
+    asset?: {
+      _id: string
+      url: string
+    }
+    alt?: string
+    hotspot?: {
+      x: number
+      y: number
+      height: number
+      width: number
+    }
+  }>
   description?: string
   openingHours: string
   order: number
@@ -207,4 +224,18 @@ export interface BioimpedanciaFeature {
   image?: SanityImage
   order: number
   active: boolean
+}
+
+export interface AppSectionData {
+  badge?: string
+  title: string
+  highlightedText: string
+  description: string
+  subtitle?: string
+  benefits?: string[]
+  appImage: SanityImage
+  appLiveUrl?: string
+  appTreinoUrl?: string
+  appLivePlayStoreUrl?: string
+  appTreinoPlayStoreUrl?: string
 }

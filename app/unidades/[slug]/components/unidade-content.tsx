@@ -80,20 +80,48 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16 items-center opacity-0 animate-[fadeInUp_1s_ease-out_0.2s_forwards]">
             {/* Left Column - Informações da Unidade */}
             <div className="order-1 lg:col-span-1 opacity-0 animate-[slideInBlur_1.2s_ease-out_0.4s_forwards]" style={{transform: "translateY(30px)", filter: "blur(10px)"}}>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-white mb-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-white mb-12">
                 {unidade.name}
               </h1>
               
-              <div className="flex gap-3 animate-[fadeInSlide_0.8s_ease-out_0.6s_forwards] text-xs text-white/70 opacity-0 mb-6 gap-x-3 gap-y-3 items-center" style={{transform: "translateX(20px)"}}>
-                <div className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 backdrop-blur border border-primary/20">
-                  <MapPin className="w-[14px] h-[14px] text-primary" />
-                  <span className="font-normal">{unidade.address}</span>
+              {/* Informações da Unidade - Melhoradas */}
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3 animate-[fadeInSlide_0.8s_ease-out_0.6s_forwards] opacity-0" style={{transform: "translateX(20px)"}}>
+                  <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 backdrop-blur border border-white/20">
+                    <MapPin className="w-5 h-5 text-yellow-400" />
+                    <span className="text-white text-sm font-medium">{unidade.address}</span>
+                  </div>
                 </div>
-                <div className="hidden md:block w-px h-4 bg-white/20"></div>
-                <span className="hidden md:inline font-normal">{unidade.hours}</span>
+                
+                <div className="animate-[fadeInSlide_0.8s_ease-out_0.7s_forwards] opacity-0" style={{transform: "translateX(20px)"}}>
+                  <div className="bg-white rounded-2xl p-4 shadow-lg border border-white/20">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Clock className="w-5 h-5 text-yellow-600" />
+                      <span className="text-black font-semibold text-sm">Horário de Funcionamento</span>
+                    </div>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Segunda - Sexta</span>
+                        <span className="text-gray-900 font-semibold">5h30 - 22h</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Sábado</span>
+                        <span className="text-gray-900 font-semibold">8h - 17h</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Domingo</span>
+                        <span className="text-gray-900 font-semibold">8h - 14h</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-700 font-medium">Feriados</span>
+                        <span className="text-gray-900 font-semibold">7h - 12h</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <p className="text-lg leading-relaxed animate-[fadeInUp_0.8s_ease-out_0.8s_forwards] text-white/80 opacity-0 mb-10" style={{transform: "translateY(20px)", filter: "blur(5px)"}}>
+              <p className="text-lg leading-relaxed animate-[fadeInUp_0.8s_ease-out_0.8s_forwards] text-white/80 opacity-0 mb-12" style={{transform: "translateY(20px)", filter: "blur(5px)"}}>
                 Sua jornada de transformação começa aqui. Equipamentos de ponta, ambiente motivador e resultados reais.
               </p>
 
@@ -114,7 +142,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
 
                   <Link
                     href="#beneficios"
-                    className="inline-flex gap-2 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 animate-[fadeInSlide_0.8s_ease-out_1.4s_forwards] text-base font-normal text-white/90 opacity-0 border-white/10 border rounded-full pt-2.5 pr-5 pb-2.5 pl-5 backdrop-blur gap-x-2 gap-y-2 items-center cursor-pointer"
+                    className="inline-flex gap-2 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 animate-[fadeInSlide_0.8s_ease-out_1.4s_forwards] text-base font-medium text-white opacity-0 border-white/30 border rounded-full pt-2.5 pr-5 pb-2.5 pl-5 backdrop-blur gap-x-2 gap-y-2 items-center cursor-pointer bg-white/10"
                     style={{transform: "translateX(20px)", filter: "blur(4px)"}}
                   >
                     Ver Benefícios
@@ -145,16 +173,30 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
       </section>
 
       {/* Modalidades Section */}
-      <section id="modalidades" className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-        <div className="bg-white/5 border border-amber-400/20 rounded-3xl p-8 sm:p-12">
-          <div className="mb-12">
-            <span className="text-sm text-amber-300 font-bold uppercase tracking-wider">Modalidades</span>
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[0.9] mt-2">
-              Treinos que<br />se adaptam a <span className="text-amber-300">você</span>
+      <section id="modalidades" className="py-16 px-4 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+              <span className="text-yellow-400 text-sm font-semibold uppercase tracking-wider">
+                Modalidades
+              </span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              Treinos que se adaptam a <span className="text-yellow-400">você</span>
             </h2>
-          </div>
+            <p className="text-white/70 text-lg">
+              Descubra todas as modalidades disponíveis nesta unidade e encontre o treino perfeito para sua rotina.
+            </p>
+          </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {data.modalidades.map((modalidade, index) => (
               <motion.div
                 key={index}
@@ -162,29 +204,36 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="group relative overflow-hidden bg-white/5 hover:bg-amber-400/20 border border-white/10 hover:border-amber-400/50 rounded-2xl transition-all duration-200 h-48"
+                className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-yellow-400/30 transition-all duration-300"
               >
-                {/* Background Image - Placeholder */}
-                <div className="absolute inset-0 bg-black/80 group-hover:bg-black/60 transition-colors">
-                  {unidade.photo && (
-                    <img
-                      src={unidade.photo}
-                      alt={modalidade}
-                      className="w-full h-full object-cover opacity-30 group-hover:opacity-50 transition-opacity"
-                    />
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="relative z-10 p-5 h-full flex flex-col justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-full bg-amber-400/20 group-hover:bg-amber-400 flex items-center justify-center transition-colors">
-                      <Check className="h-4 w-4 text-amber-400 group-hover:text-black transition-colors" />
+                <div className="relative h-48">
+                  {/* Background Image */}
+                  <img
+                    src={unidade.photo || '/images/fachada.jpg'}
+                    alt={modalidade}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  
+                  {/* Content */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mb-3 group-hover:bg-yellow-400/30 transition-colors">
+                        <Dumbbell className="w-8 h-8 text-yellow-400 group-hover:scale-110 transition-transform" />
+                      </div>
+                      <h3 className="text-lg font-bold text-white group-hover:text-yellow-300 transition-colors">
+                        {modalidade}
+                      </h3>
                     </div>
                   </div>
-                  <h3 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
-                    {modalidade}
-                  </h3>
+                  
+                  {/* Badge */}
+                  <div className="absolute top-3 right-3">
+                    <div className="w-8 h-8 bg-yellow-400/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                      <Check className="w-4 h-4 text-yellow-400" />
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -193,19 +242,30 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
       </section>
 
       {/* Benefícios Section */}
-      <section id="beneficios" className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
-        <div className="bg-amber-400/15 border border-amber-400/40 rounded-3xl p-8 sm:p-12">
-          <div className="mb-12">
-            <div className="flex items-center gap-2 text-sm text-amber-300 mb-3">
-              <Check className="h-4 w-4" />
-              <span className="font-bold uppercase tracking-wider">Vantagens</span>
+      <section id="beneficios" className="py-16 px-4 lg:px-8 bg-gradient-to-br from-zinc-900/50 to-black/50">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-3 h-3 bg-amber-400 rounded-full"></div>
+              <span className="text-amber-400 text-sm font-semibold uppercase tracking-wider">
+                Benefícios
+              </span>
             </div>
-            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[0.9]">
-              Benefícios <span className="text-amber-300">exclusivos</span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              Vantagens <span className="text-amber-400">exclusivas</span>
             </h2>
-          </div>
+            <p className="text-white/70 text-lg">
+              Descubra todos os benefícios que fazem da Live Academia a melhor escolha para sua jornada fitness.
+            </p>
+          </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.beneficios.map((beneficio, index) => (
               <motion.div
                 key={index}
@@ -213,13 +273,297 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
                 viewport={{ once: true }}
-                className="flex items-start gap-3 p-5 bg-white/10 border border-white/20 rounded-2xl hover:bg-white/15 hover:border-amber-400/50 transition-colors duration-200"
+                className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-amber-400/30 transition-all duration-300"
               >
-                <Check className="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-white leading-relaxed font-medium">{beneficio}</span>
+                <div className="relative h-48">
+                  {/* Background Image */}
+                  <img
+                    src={unidade.photo || '/images/fachada.jpg'}
+                    alt={beneficio}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                  
+                  {/* Content */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-colors flex-shrink-0">
+                        <Check className="w-5 h-5 text-amber-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-300 transition-colors">
+                          Benefício
+                        </h3>
+                        <p className="text-white/90 leading-relaxed text-sm">
+                          {beneficio}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Badge */}
+                  <div className="absolute top-3 left-3">
+                    <div className="w-8 h-8 bg-amber-400/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                      <Star className="w-4 h-4 text-amber-400" />
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Mapa Section */}
+      <section className="py-16 px-4 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+              <span className="text-yellow-400 text-sm font-semibold uppercase tracking-wider">
+                Localização
+              </span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              Como chegar na <span className="text-yellow-400">Live Academia</span>
+            </h2>
+            <p className="text-white/70 text-lg">
+              Encontre a unidade {unidade.name} e comece sua jornada fitness hoje mesmo.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10"
+          >
+            <div className="relative h-96 lg:h-[500px]">
+              {/* Google Maps Embed */}
+              <iframe
+                src={`https://www.google.com/maps/embed/v1/search?q=${encodeURIComponent(unidade.address)}`}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="rounded-3xl"
+                title={`Localização da ${unidade.name}`}
+              />
+              
+              {/* Overlay com botão para abrir no Google Maps */}
+              <div className="absolute top-4 right-4">
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(unidade.address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-black font-semibold px-4 py-2 rounded-full transition-colors shadow-lg"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Abrir no Maps
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+            
+            {/* Informações adicionais */}
+            <div className="p-6 bg-black/20 backdrop-blur-sm">
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-yellow-400/20 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-yellow-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold">Endereço</h4>
+                    <p className="text-white/70 text-sm">{unidade.address}</p>
+                  </div>
+                </div>
+                
+                <div className="bg-white rounded-xl p-4 shadow-lg">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-yellow-600" />
+                    </div>
+                    <h4 className="text-black font-semibold text-sm">Horários</h4>
+                  </div>
+                  <div className="space-y-1 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Seg-Sex:</span>
+                      <span className="text-black font-medium">5h30-22h</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Sáb:</span>
+                      <span className="text-black font-medium">8h-17h</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Dom:</span>
+                      <span className="text-black font-medium">8h-14h</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Feriado:</span>
+                      <span className="text-black font-medium">7h-12h</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-yellow-400/20 flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-yellow-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold">Contato</h4>
+                    <p className="text-white/70 text-sm">(92) 3345-6789</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Unidades Próximas Section */}
+      <section className="py-16 px-4 lg:px-8 bg-gradient-to-br from-zinc-900/50 to-black/50">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+              <span className="text-yellow-400 text-sm font-semibold uppercase tracking-wider">
+                Outras Unidades
+              </span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              Outras unidades da <span className="text-yellow-400">Live Academia</span>
+            </h2>
+            <p className="text-white/70 text-lg">
+              Conheça outras unidades próximas e escolha a que melhor se adapta à sua rotina.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Aqui você pode importar e usar as outras unidades, excluindo a atual */}
+              {[
+                {
+                  id: 'unidade-exemplo-1',
+                  name: 'Live Academia Centro',
+                  address: 'Rua do Centro, 123 - Centro',
+                  type: 'diamante',
+                  hours: 'Seg-Sex: 5h30-22h | Sáb: 8h-17h | Dom: 8h-14h',
+                  photo: '/images/fachada.jpg'
+                },
+                {
+                  id: 'unidade-exemplo-2', 
+                  name: 'Live Academia Zona Sul',
+                  address: 'Av. Zona Sul, 456 - Zona Sul',
+                  type: 'premium',
+                  hours: 'Seg-Sex: 5h30-22h | Sáb: 8h-17h | Dom: 8h-14h',
+                  photo: '/images/fachada.jpg'
+                },
+                {
+                  id: 'unidade-exemplo-3',
+                  name: 'Live Academia Zona Norte', 
+                  address: 'Rua Zona Norte, 789 - Zona Norte',
+                  type: 'tradicional',
+                  hours: 'Seg-Sex: 5h30-22h | Sáb: 8h-17h | Dom: 8h-14h',
+                  photo: '/images/fachada.jpg'
+                }
+              ].filter(unit => unit.id !== unidade.id).slice(0, 3).map((unit, index) => (
+                <motion.div
+                  key={unit.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-yellow-400/30 transition-all duration-300"
+                >
+                  <div className="relative h-48">
+                    {unit.photo ? (
+                      <img
+                        src={unit.photo}
+                        alt={unit.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-amber-500/10"></div>
+                    )}
+                    
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    
+                    {/* Badge do tipo */}
+                    <div className="absolute top-3 left-3">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        unit.type === 'diamante' ? 'bg-yellow-500 text-black' :
+                        unit.type === 'premium' ? 'bg-amber-500 text-black' :
+                        'bg-zinc-600 text-white'
+                      }`}>
+                        {unit.type === 'diamante' ? 'Diamante' :
+                         unit.type === 'premium' ? 'Premium' : 'Tradicional'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-yellow-300 transition-colors">
+                      {unit.name}
+                    </h3>
+                    
+                    <div className="flex items-start gap-3 mb-4">
+                      <MapPin className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
+                      <p className="text-white/70 text-sm leading-relaxed">
+                        {unit.address}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-start gap-3 mb-6">
+                      <Clock className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
+                      <p className="text-white/70 text-sm leading-relaxed">
+                        {unit.hours}
+                      </p>
+                    </div>
+                    
+                    <Link
+                      href={`/unidades/${unit.id}`}
+                      className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-full transition-colors text-sm"
+                    >
+                      Ver Unidade
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+            
+            {/* Botão para ver todas as unidades */}
+            <div className="text-center mt-12">
+              <Link
+                href="/unidades"
+                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-full transition-colors border border-white/20"
+              >
+                Ver todas as unidades
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
 

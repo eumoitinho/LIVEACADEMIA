@@ -125,14 +125,7 @@ export async function getUnits() {
         longitude,
         type,
         services,
-        images[] {
-          asset-> {
-            _id,
-            url
-          },
-          alt,
-          hotspot
-        },
+        images,
         description,
         openingHours,
         order,
@@ -342,34 +335,6 @@ export async function getAppSectionData() {
     return data
   } catch (error) {
     console.error('Error fetching app section data:', error)
-    return null
-  }
-}
-
-export async function getBeneficiosSectionData() {
-  try {
-    const data = await client.fetch(`
-      *[_type == "beneficiosSection"][0] {
-        badge,
-        title,
-        description,
-        items[] {
-          icon,
-          title,
-          description,
-          color,
-          image {
-            asset-> {
-              _id,
-              url
-            }
-          }
-        }
-      }
-    `)
-    return data
-  } catch (error) {
-    console.error('Error fetching beneficios section data:', error)
     return null
   }
 }
