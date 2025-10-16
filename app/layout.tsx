@@ -5,6 +5,7 @@ import "./globals.css"
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import { UnitProvider } from "@/contexts/unit-context"
+import { ThemeProvider } from "@/src/components/layout/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -25,13 +26,15 @@ export default function RootLayout({
           <script src="https://api.tracking.ninetwo.com.br/script/live-academia" async></script>
         </head>
         <body className={inter.className}>
-          <UnitProvider>
-            <div className="min-h-screen flex flex-col bg-live-bg text-live-textPrimary">
-              <Header />
-              <div className="flex-grow">{children}</div>
-              <Footer />
-            </div>
-          </UnitProvider>
+          <ThemeProvider>
+            <UnitProvider>
+              <div className="min-h-screen flex flex-col bg-background text-foreground">
+                <Header />
+                <div className="flex-grow">{children}</div>
+                <Footer />
+              </div>
+            </UnitProvider>
+          </ThemeProvider>
         </body>
       </html>
     )
