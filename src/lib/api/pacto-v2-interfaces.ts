@@ -264,6 +264,9 @@ export interface PactoClienteSimplificado {
   email: string
   telefone: string
   endereco: string
+  numero: string
+  complemento: string
+  bairro: string
   cidade: string
   estado: string
   cep: string
@@ -306,7 +309,7 @@ export function convertToPactoVendaDTO(
     apiCredential,
     assinaturaDigital: null,
     aulasMarcadas: [],
-    bairro: vendaSimplificada.cliente.cidade || '',
+    bairro: vendaSimplificada.cliente.bairro || '',
     cep: vendaSimplificada.cliente.cep || '',
     cidade: 0, // Será mapeado baseado na cidade
     clientesCadastradosComoDependentesPlanoCompartilhado: [],
@@ -317,7 +320,7 @@ export function convertToPactoVendaDTO(
     codigoColaborador: 1,
     codigoEvento: 0,
     codigoRegistroAcessoPagina: 0,
-    complemento: '',
+    complemento: vendaSimplificada.cliente.complemento || '',
     convenioCobranca: 1,
     cpf: vendaSimplificada.cliente.cpf,
     cpfMae: null,
@@ -346,7 +349,7 @@ export function convertToPactoVendaDTO(
     nowLocationIp: null,
     nrVezesDividir: 1,
     nrVezesDividirMatricula: 1,
-    numero: '',
+    numero: vendaSimplificada.cliente.numero || '',
     numeroCartao: vendaSimplificada.cartao?.numero || '',
     numeroCupomDesconto: vendaSimplificada.numeroCupomDesconto,
     observacaoCliente: vendaSimplificada.observacaoCliente || 'Venda online',

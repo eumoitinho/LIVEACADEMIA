@@ -57,31 +57,25 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    console.log(`[Simular V2] Buscando unidade com slug: ${slug}`)
-    const unit = await getUnitBySlug(slug)
-
-    if (!unit) {
-      console.error(`[Simular V2 ${slug}] Unidade não encontrada no banco`)
-      return NextResponse.json({ error: 'Unidade não encontrada' }, { status: 404 })
-    }
-
+    console.log(`[Simular V2] Processando simulação para unidade: ${slug}`)
+    
     // Registrar acesso para anti-fraude
     const clientIP = pactoV2API.getClientIP(req)
-    await pactoV2API.registrarInicioAcesso(slug, unit.codigo_unidade, parseInt(planoId), clientIP)
+    await pactoV2API.registrarInicioAcesso(slug, 1, parseInt(planoId), clientIP) // codigo_unidade padrão
 
     // Preparar dados para simulação V2
     const dadosVenda = formatVendaData(
       slug, // Usar slug como codigo_rede
       cliente,
       cartao || null,
-      unit.codigo_unidade,
+      1, // codigo_unidade padrão
       parseInt(planoId),
       paymentMethod,
       clientIP
     )
 
     // Simular venda usando API V2
-    const simulacao = await pactoV2API.simularVenda(slug, unit.codigo_unidade, dadosVenda)
+    const simulacao = await pactoV2API.simularVenda(slug, 1, dadosVenda) // codigo_unidade padrão
 
     // Armazenar no cache por 5 minutos
     cacheManager.set(cacheKey, simulacao, 5 * 60 * 1000)

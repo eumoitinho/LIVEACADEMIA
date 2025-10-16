@@ -67,7 +67,17 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
     email: '',
     telefone: '',
     cpf: '',
+    // Endereço separado
     endereco: '',
+    numero: '',
+    complemento: '',
+    bairro: '',
+    cidade: '',
+    estado: '',
+    cep: '',
+    dataNascimento: '',
+    sexo: 'M',
+    rg: '',
     // Dados do cartão
     numeroCartao: '',
     nomeCartao: '',
@@ -100,7 +110,18 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
         email: '',
         telefone: '',
         cpf: '',
+        // Endereço separado
         endereco: '',
+        numero: '',
+        complemento: '',
+        bairro: '',
+        cidade: '',
+        estado: '',
+        cep: '',
+        dataNascimento: '',
+        sexo: 'M',
+        rg: '',
+        // Dados do cartão
         numeroCartao: '',
         nomeCartao: '',
         validadeCartao: '',
@@ -133,6 +154,15 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
         email: formData.email || 'teste@email.com',
         telefone: formData.telefone || '11999999999',
         endereco: formData.endereco || '',
+        numero: formData.numero || '',
+        complemento: formData.complemento || '',
+        bairro: formData.bairro || '',
+        cidade: formData.cidade || '',
+        estado: formData.estado || '',
+        cep: formData.cep || '',
+        dataNascimento: formData.dataNascimento || '01/01/1990',
+        sexo: formData.sexo || 'M',
+        rg: formData.rg || '',
       }
 
       const payload = {
@@ -188,11 +218,26 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
 
   const handleNextStep = () => {
     if (step === 1) {
-      // Validar dados pessoais
-      if (formData.nome && formData.email && formData.telefone && formData.cpf) {
+      // Validar dados pessoais e endereço
+      const camposObrigatorios = [
+        formData.nome,
+        formData.email,
+        formData.telefone,
+        formData.cpf,
+        formData.endereco,
+        formData.numero,
+        formData.bairro,
+        formData.cidade,
+        formData.estado,
+        formData.cep,
+        formData.dataNascimento,
+        formData.sexo
+      ]
+      
+      if (camposObrigatorios.every(campo => campo.trim() !== '')) {
         setStep(2)
       } else {
-        alert('Por favor, preencha todos os campos obrigatórios')
+        alert('Por favor, preencha todos os campos obrigatórios (marcados com *)')
       }
     } else if (step === 2) {
       processPayment()
@@ -221,6 +266,15 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
         telefone: formData.telefone,
         cpf: formData.cpf,
         endereco: formData.endereco,
+        numero: formData.numero,
+        complemento: formData.complemento,
+        bairro: formData.bairro,
+        cidade: formData.cidade,
+        estado: formData.estado,
+        cep: formData.cep,
+        dataNascimento: formData.dataNascimento,
+        sexo: formData.sexo,
+        rg: formData.rg,
       }
 
       const saleBody: any = {
@@ -302,6 +356,22 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
       .replace(/(\d{2})(\d)/, '($1) $2')
       .replace(/(\d{5})(\d)/, '$1-$2')
       .replace(/(-\d{4})\d+?$/, '$1')
+  }
+
+  const formatCEP = (value: string) => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/(-\d{3})\d+?$/, '$1')
+  }
+
+  const formatRG = (value: string) => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1')
   }
 
   const formatCardNumber = (value: string) => {
@@ -432,17 +502,173 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                   </div>
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-live-textPrimary mb-1">
-                    Endereço
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.endereco}
-                    onChange={(e) => handleInputChange('endereco', e.target.value)}
-                    className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
-                    placeholder="Rua, número, bairro, cidade"
-                  />
+                {/* Endereço separado */}
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-live-textPrimary">Endereço</h4>
+                  
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        Rua/Logradouro *
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.endereco}
+                        onChange={(e) => handleInputChange('endereco', e.target.value)}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        placeholder="Rua das Flores"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        Número *
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.numero}
+                        onChange={(e) => handleInputChange('numero', e.target.value)}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        placeholder="123"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        Complemento
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.complemento}
+                        onChange={(e) => handleInputChange('complemento', e.target.value)}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        placeholder="Apto 101, Bloco A"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        Bairro *
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.bairro}
+                        onChange={(e) => handleInputChange('bairro', e.target.value)}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        placeholder="Centro"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        Cidade *
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.cidade}
+                        onChange={(e) => handleInputChange('cidade', e.target.value)}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        placeholder="São Paulo"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        Estado *
+                      </label>
+                      <select
+                        value={formData.estado}
+                        onChange={(e) => handleInputChange('estado', e.target.value)}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        required
+                      >
+                        <option value="">Selecione</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="PR">Paraná</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="BA">Bahia</option>
+                        <option value="GO">Goiás</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="CE">Ceará</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        CEP *
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.cep}
+                        onChange={(e) => handleInputChange('cep', formatCEP(e.target.value))}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        placeholder="01234-567"
+                        maxLength={9}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Dados pessoais adicionais */}
+                <div className="space-y-4">
+                  <h4 className="text-lg font-semibold text-live-textPrimary">Dados Pessoais</h4>
+                  
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        Data de Nascimento *
+                      </label>
+                      <input
+                        type="date"
+                        value={formData.dataNascimento}
+                        onChange={(e) => handleInputChange('dataNascimento', e.target.value)}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        Sexo *
+                      </label>
+                      <select
+                        value={formData.sexo}
+                        onChange={(e) => handleInputChange('sexo', e.target.value)}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        required
+                      >
+                        <option value="M">Masculino</option>
+                        <option value="F">Feminino</option>
+                        <option value="O">Outro</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        RG
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.rg}
+                        onChange={(e) => handleInputChange('rg', formatRG(e.target.value))}
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        placeholder="12.345.678-9"
+                        maxLength={12}
+                      />
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}

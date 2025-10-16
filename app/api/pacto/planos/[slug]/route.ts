@@ -43,21 +43,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
   }
 
   try {
-    // Busca unidade do Supabase
-    const unit = await getUnitBySlug(slug)
-
-    if (!unit) {
-      // Fallback estático se não encontrar no banco
-      const loc = locations.find(l => l.id === slug)
-      if (loc?.planos?.length) {
-        const staticPlanos = (loc.planos || []).map(p => ({ codigo: undefined, nome: p.name, valor: p.price }))
-        return NextResponse.json({ planos: staticPlanos, fallback: true, source: 'static' })
-      }
+    // Verificar se a unidade existe no arquivo de locations
+    const loc = locations.find(l => l.id === slug)
+    if (!loc) {
       return NextResponse.json({ error: 'Unidade não encontrada' }, { status: 404 })
     }
 
-    // Buscar planos usando API V2
-    const planos = await pactoV2API.getPlanosUnidade(slug, unit.codigo_unidade)
+    // Buscar planos usando API V2 (usa slug diretamente)
+    const planos = await pactoV2API.getPlanosUnidade(slug, 1) // codigo_unidade padrão
 
     // Armazenar no cache por 30 minutos
     cacheManager.set(cacheKey, planos, 30 * 60 * 1000)

@@ -123,9 +123,15 @@ export interface PactoCliente {
   email: string
   telefone: string
   endereco?: string
+  numero?: string
+  complemento?: string
+  bairro?: string
   cidade?: string
   estado?: string
   cep?: string
+  dataNascimento?: string
+  sexo?: string
+  rg?: string
 }
 
 export interface PactoCartao {
@@ -177,9 +183,15 @@ export interface TokenizedVendaData {
     email: string
     telefone: string
     endereco: string
+    numero: string
+    complemento: string
+    bairro: string
     cidade: string
     estado: string
     cep: string
+    dataNascimento: string
+    sexo: string
+    rg: string
   }
   cartaoToken?: string // Token do cartão em vez dos dados diretos
   termoDeUsoAceito: boolean
@@ -729,9 +741,15 @@ export function formatVendaData(
       email: cliente.email,
       telefone: cliente.telefone,
       endereco: cliente.endereco || '',
+      numero: cliente.numero || '',
+      complemento: cliente.complemento || '',
+      bairro: cliente.bairro || '',
       cidade: cliente.cidade || '',
       estado: cliente.estado || '',
       cep: cliente.cep || '',
+      dataNascimento: cliente.dataNascimento || '01/01/1990',
+      sexo: cliente.sexo || 'M',
+      rg: cliente.rg || '',
     },
     termoDeUsoAceito: true,
     origemSistema: 9, // Vendas online

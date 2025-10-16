@@ -64,13 +64,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    console.log(`[Venda V2] Buscando unidade com slug: ${slug}`)
-    const unit = await getUnitBySlug(slug)
-
-    if (!unit) {
-      console.error(`[Venda V2 ${slug}] Unidade não encontrada no banco`)
-      return NextResponse.json({ success: false, error: 'Unidade não encontrada' }, { status: 404 })
-    }
+    console.log(`[Venda V2] Processando venda para unidade: ${slug}`)
 
     // Verificar anti-fraude
     const clientIP = pactoV2API.getClientIP(req)
@@ -99,7 +93,7 @@ export async function POST(req: NextRequest) {
       case 'cartao':
         // Usar dados tokenizados para cartão
         const tokenizedVendaData: TokenizedVendaData = {
-          unidade: unit.codigo_unidade,
+          unidade: 1, // codigo_unidade padrão
           plano: parseInt(planoId),
           cliente: {
             nome: cliente.nome,
@@ -107,9 +101,15 @@ export async function POST(req: NextRequest) {
             email: cliente.email,
             telefone: cliente.telefone,
             endereco: cliente.endereco || '',
+            numero: cliente.numero || '',
+            complemento: cliente.complemento || '',
+            bairro: cliente.bairro || '',
             cidade: cliente.cidade || '',
             estado: cliente.estado || '',
             cep: cliente.cep || '',
+            dataNascimento: cliente.dataNascimento || '01/01/1990',
+            sexo: cliente.sexo || 'M',
+            rg: cliente.rg || '',
           },
           cartaoToken: cartaoToken,
           termoDeUsoAceito: true,
@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
                slug, // Usar slug como codigo_rede
                cliente,
                null,
-               unit.codigo_unidade,
+               1, // codigo_unidade padrão
                parseInt(planoId),
                paymentMethod,
                clientIP
@@ -140,7 +140,7 @@ export async function POST(req: NextRequest) {
                slug, // Usar slug como codigo_rede
                cliente,
                null,
-               unit.codigo_unidade,
+               1, // codigo_unidade padrão
                parseInt(planoId),
                paymentMethod,
                clientIP
