@@ -2,6 +2,32 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.3.0] - 2025-01-16
+
+### 🚀 Adicionado
+- **Fluxo completo de venda** com payload correto da API V3
+- **Endpoint de validação de cupons** (`POST /api/pacto-v3/cupom/[slug]`)
+- **Endpoint de busca de produtos** (`GET /api/pacto-v3/produtos/[slug]/[categoria]`)
+- **Endpoint de consulta de cliente** (`GET /api/pacto-v3/cliente/[slug]`)
+- **Suporte completo a cartão tokenizado** com validação robusta
+- **Rate limiting ajustado** para evitar erro 429
+
+### 🔧 Modificado
+- **Endpoint de venda** completamente reescrito para API V3
+- **Validação de dados** aprimorada em todos os endpoints
+- **Tratamento de erros** melhorado com logging detalhado
+- **Documentação atualizada** com novos endpoints
+
+### 🐛 Corrigido
+- **Rate limiting muito restritivo** que causava erro 429
+- **Payload de venda** corrigido conforme especificação API V3
+- **Validação de campos obrigatórios** para cartão de crédito
+
+### 📊 Performance
+- **Build funcionando** perfeitamente sem erros
+- **TypeScript** sem erros de compilação
+- **Todos os endpoints** testados e funcionais
+
 ## [1.2.0] - 2025-01-16
 
 ### 🚀 Adicionado

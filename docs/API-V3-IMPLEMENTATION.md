@@ -318,7 +318,59 @@ GET /api/pacto-v3/planos/torres
 4. **Tokenização** para segurança sem overhead
 5. **Parallel requests** quando possível
 
-## 🔧 Troubleshooting
+## 🆕 Atualizações Recentes (2025-01-16)
+
+### ✅ Fluxo de Venda Completo
+
+**Implementações concluídas:**
+
+1. **Endpoint de Venda Aprimorado** (`POST /api/pacto-v3/venda/[slug]`)
+   - Payload completo conforme API V3
+   - Suporte a cartão tokenizado
+   - Rate limiting ajustado (menos restritivo)
+   - Validação completa de dados
+
+2. **Validação de Cupons** (`POST /api/pacto-v3/cupom/[slug]`)
+   - Validação de cupons de desconto
+   - Integração com planos e valores
+
+3. **Busca de Produtos** (`GET /api/pacto-v3/produtos/[slug]/[categoria]`)
+   - Produtos por categoria
+   - Cache inteligente
+
+4. **Consulta de Cliente** (`GET /api/pacto-v3/cliente/[slug]`)
+   - Busca por múltiplos critérios
+   - Suporte a email, CPF, ID cliente e empresa
+
+### 🎯 Payload de Venda V3
+
+```json
+{
+  "slug": "cachoeirinha",
+  "planoId": "934",
+  "paymentMethod": "cartao",
+  "cliente": {
+    "nome": "João Vitor Moitinho",
+    "email": "moitinhoeu@icloud.com",
+    "telefone": "(18) 99636-2519",
+    "cpf": "489.597.368-99",
+    "endereco": "R Amazonas",
+    "numero": "900",
+    "complemento": "Ap 72",
+    "bairro": "Agua Verde",
+    "cidade": "Curitiba",
+    "estado": "PR",
+    "cep": "80610-030",
+    "dataNascimento": "2000-12-11",
+    "sexo": "M",
+    "rg": ""
+  },
+  "cartaoToken": "card_ae0919193e944ffcb67effac91f8fdcc",
+  "captchaToken": "0cAFcWeA7DV0xB8QUwJfFKLnfVN_SX_SIvb7..."
+}
+```
+
+### 🔧 Troubleshooting
 
 ### Problemas Comuns
 
