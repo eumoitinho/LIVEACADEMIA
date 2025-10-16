@@ -32,7 +32,8 @@
       "Bash(pnpm tsc:*)",
       "Bash(pnpm dev)",
       "Bash(cat:*)",
-      "Read(//home/moitinho/.config/sanity/**)"
+      "Read(//home/moitinho/.config/sanity/**)",
+      "Bash(pnpm sanity:seed-units:*)"
     ],
     "deny": []
   }

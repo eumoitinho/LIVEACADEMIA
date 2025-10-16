@@ -12,6 +12,7 @@
     "seed": "tsx scripts/seed-supabase.ts",
     "seed:reset": "tsx scripts/reset-supabase.ts",
     "sanity:seed": "node scripts/seed-sanity.js",
+    "sanity:seed-units": "tsx scripts/seed-sanity-units.ts",
     "sanity:studio": "sanity dev",
     "sanity:deploy": "sanity deploy"
   },
