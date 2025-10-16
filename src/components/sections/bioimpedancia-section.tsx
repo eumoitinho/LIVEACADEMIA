@@ -25,134 +25,99 @@ export default function BioimpedanciaSection() {
   }
 
   const mainFeature = bioimpedanciaData[0] // Usa o primeiro item como principal
+  const secondFeature = bioimpedanciaData[1] // Usa o segundo item
 
   return (
     <section className="relative py-24 px-6 lg:px-12 overflow-hidden">
       {/* Background transparente para usar o background fixo do layout */}
       
-      <div className="relative z-10 mx-auto max-w-6xl">
+      <div className="relative z-10 mx-auto max-w-6xl space-y-16">
         <motion.header
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: easing }}
           viewport={{ once: true, amount: 0.3 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto"
         >
           <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary/70">
             Bioimpedância
           </span>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mt-4 text-foreground">
-            {mainFeature.title}
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mt-4 text-white">
+            {mainFeature.title || "Avaliação Corporal Completa"}
           </h2>
-          <p className="text-lg text-muted-foreground mt-3 leading-relaxed">
-            {mainFeature.description}
+          <p className="text-lg text-white/75 mt-3 leading-relaxed">
+            {mainFeature.description || "Descubra todos os detalhes da sua composição corporal com nossa avaliação de bioimpedância de alta precisão."}
           </p>
         </motion.header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Imagem Principal */}
+        {/* Duas imagens lado a lado */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Primeira imagem */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: easing }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="relative"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: easing }}
+            viewport={{ once: true }}
+            className="space-y-4"
           >
             {mainFeature.image ? (
               <img
-                src={urlFor(mainFeature.image).width(800).height(600).url()}
+                src={urlFor(mainFeature.image).width(600).height(400).url()}
                 alt={mainFeature.title}
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />
             ) : (
-              <div className="w-full h-96 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-20 h-20 bg-primary/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-3xl">⚡</span>
-                  </div>
-                  <p className="text-muted-foreground">Imagem da Bioimpedância</p>
-                </div>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Conteúdo */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: easing, delay: 0.2 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="space-y-8"
-          >
-            {/* Benefícios */}
-            <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-foreground">
-                O que você vai descobrir:
-              </h3>
-              
-              <div className="space-y-4">
-                {mainFeature.benefits.map((benefit, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: easing, delay: index * 0.1 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    className="flex items-start gap-4"
-                  >
-                    <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-3 h-3 bg-primary rounded-full"></div>
-                    </div>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {benefit}
-                    </p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: easing, delay: 0.4 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className="pt-6"
-            >
-              <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:scale-105 shadow-lg shadow-primary/25">
-                Agendar Avaliação
-              </button>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Imagem Secundária */}
-        {bioimpedanciaData.length > 1 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: easing, delay: 0.6 }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="mt-16 text-center"
-          >
-            {bioimpedanciaData[1].image ? (
-              <img
-                src={urlFor(bioimpedanciaData[1].image).width(800).height(400).url()}
-                alt={bioimpedanciaData[1].title}
-                className="w-full max-w-4xl mx-auto h-auto rounded-2xl shadow-2xl"
-              />
-            ) : (
-              <div className="w-full max-w-4xl mx-auto h-64 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center">
+              <div className="w-full h-64 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-primary/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-2xl">📊</span>
+                    <span className="text-2xl">⚡</span>
                   </div>
-                  <p className="text-muted-foreground">Imagem Adicional</p>
+                  <p className="text-white/70">Imagem da Bioimpedância</p>
                 </div>
               </div>
             )}
+            <h3 className="text-2xl font-bold text-white text-center">
+              {mainFeature.title || "Avaliação Corporal"}
+            </h3>
+            <p className="text-white/75 text-center">
+              {mainFeature.description || "Descubra sua composição corporal completa"}
+            </p>
           </motion.div>
-        )}
+
+          {/* Segunda imagem */}
+          {secondFeature && (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: easing }}
+              viewport={{ once: true }}
+              className="space-y-4"
+            >
+              {secondFeature.image ? (
+                <img
+                  src={urlFor(secondFeature.image).width(600).height(400).url()}
+                  alt={secondFeature.title}
+                  className="w-full h-auto rounded-2xl shadow-2xl"
+                />
+              ) : (
+                <div className="w-full h-64 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-primary/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-2xl">📊</span>
+                    </div>
+                    <p className="text-white/70">Imagem Adicional</p>
+                  </div>
+                </div>
+              )}
+              <h3 className="text-2xl font-bold text-white text-center">
+                {secondFeature.title || "Acompanhamento"}
+              </h3>
+              <p className="text-white/75 text-center">
+                {secondFeature.description || "Acompanhe sua evolução"}
+              </p>
+            </motion.div>
+          )}
+        </div>
       </div>
     </section>
   )

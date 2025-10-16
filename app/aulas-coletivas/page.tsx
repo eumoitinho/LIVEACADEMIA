@@ -37,154 +37,91 @@ export default function AulasColetivasPage() {
   return (
     <main className="min-h-screen relative">
       {/* Hero Section */}
-      <section className="relative py-32 px-6 lg:px-12">
-        <div className="max-w-6xl mx-auto text-center">
+      <section className="relative py-20 px-4 lg:px-12">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: easing }}
-            className="space-y-6"
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
           >
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary/70">
-              Aulas Coletivas
-            </span>
-            <h1 className="text-4xl md:text-6xl font-bold text-white">
-              Modalidades para Todos os Gostos
-            </h1>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              Descubra nossas aulas coletivas e encontre a modalidade perfeita para seus objetivos
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Energia e motivação em grupo para você ir além
+            </h2>
+            <p className="text-zinc-300 text-lg max-w-4xl mx-auto">
+              As aulas coletivas da Live Academia são a maneira perfeita de se exercitar, se divertir e fazer novas amizades! Com a energia contagiante do grupo, você se mantém motivado e alcança seus objetivos de forma mais prazerosa.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Modalidades Grid */}
-      <section className="relative py-16 px-6 lg:px-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {modalitiesData.map((modality, index) => (
-              <motion.div
-                key={modality._id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: easing, delay: index * 0.1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                className="group bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:scale-105"
-              >
-                {/* Imagem da Modalidade */}
-                <div className="relative h-48 bg-gradient-to-br from-primary/20 to-primary/10">
-                  <div className="absolute inset-0 bg-black/20"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-primary/30 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">🎯</span>
-                    </div>
-                  </div>
-                  {/* Badge de dificuldade */}
-                  <div className="absolute top-4 right-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold backdrop-blur ${
-                      modality.difficulty === 'iniciante' ? 'bg-green-500/20 text-green-400' :
-                      modality.difficulty === 'intermediario' ? 'bg-yellow-500/20 text-yellow-400' :
-                      'bg-red-500/20 text-red-400'
-                    }`}>
-                      {modality.difficulty === 'iniciante' ? 'Iniciante' :
-                       modality.difficulty === 'intermediario' ? 'Intermediário' :
-                       'Avançado'}
-                    </span>
-                  </div>
+      <section className="relative py-8 px-4 lg:px-12">
+        <div className="max-w-[1200px] gap-4 grid grid-cols-12 mx-auto mb-12">
+          {modalitiesData.map((modality, index) => (
+            <motion.div
+              key={modality._id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="col-span-12 sm:col-span-4 h-[350px] group"
+            >
+              <div className="relative h-full overflow-hidden rounded-3xl border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500 hover:transform hover:scale-[1.02] hover:-translate-y-1">
+                {/* Header com informações */}
+                <div className="absolute z-10 top-4 left-4 right-4">
+                  <p className="text-xs text-white/80 uppercase font-bold tracking-wider mb-1">
+                    {modality.difficulty || 'Modalidade'}
+                  </p>
+                  <h4 className="text-white font-bold text-2xl leading-tight drop-shadow-lg">
+                    {modality.name}
+                  </h4>
                 </div>
 
-                {/* Conteúdo do Card */}
-                <div className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
-                      <span className="text-primary text-lg">🎯</span>
-                    </div>
-                    <h3 className="text-xl font-semibold text-white">
-                      {modality.name}
-                    </h3>
-                  </div>
+                {/* Imagem de fundo */}
+                {modality.image && (
+                  <img
+                    src={urlFor(modality.image).url()}
+                    alt={modality.name}
+                    className="z-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                )}
+                
+                {/* Gradiente overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 z-[1]" />
 
-                  {modality.description && (
-                    <p className="text-white/80 leading-relaxed mb-4 text-sm">
-                      {modality.description}
-                    </p>
-                  )}
-
-                  {/* Informações da Modalidade */}
-                  <div className="space-y-3 mb-6">
-                    {modality.duration && (
-                      <div className="flex items-center gap-2 text-white/70 text-sm">
-                        <span className="w-2 h-2 bg-primary rounded-full"></span>
-                        <span>Duração: {modality.duration} minutos</span>
-                      </div>
-                    )}
-                    
-                    {modality.instructor && (
-                      <div className="flex items-center gap-2 text-white/70 text-sm">
-                        <span className="w-2 h-2 bg-primary rounded-full"></span>
-                        <span>Instrutor: {modality.instructor}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Horários */}
-                  {modality.schedule && modality.schedule.length > 0 && (
-                    <div className="mb-6">
-                      <h4 className="text-white font-medium mb-2">Horários:</h4>
-                      <div className="space-y-1">
-                        {modality.schedule.slice(0, 3).map((schedule, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-white/70 text-sm">
-                            <span className="w-1.5 h-1.5 bg-primary rounded-full"></span>
-                            <span>{schedule.day} - {schedule.time}</span>
-                          </div>
-                        ))}
-                        {modality.schedule.length > 3 && (
-                          <div className="text-white/60 text-xs">
-                            +{modality.schedule.length - 3} outros horários
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Footer do Card */}
-                  <div className="flex items-center justify-between pt-4 border-t border-border/50">
-                    <span className="text-sm text-white/70">
-                      Disponível
-                    </span>
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  </div>
+                {/* Descrição no rodapé */}
+                <div className="absolute bottom-4 left-4 right-4 z-10">
+                  <p className="text-white/90 text-sm leading-relaxed">
+                    {modality.description || 'Descubra esta modalidade incrível na Live Academia!'}
+                  </p>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative py-16 px-6 lg:px-12">
-        <div className="max-w-4xl mx-auto text-center">
+      {/* CTA Button */}
+      <section className="relative py-8 px-4 lg:px-12">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: easing }}
-            viewport={{ once: true, amount: 0.3 }}
-            className="bg-card/50 border border-border rounded-2xl p-8 backdrop-blur-sm"
+            transition={{ duration: 0.8, delay: 0.5 }}
+            viewport={{ once: true }}
+            className="text-center"
           >
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Pronto para Começar?
-            </h2>
-            <p className="text-white/80 mb-8 leading-relaxed">
-              Escolha sua modalidade favorita e comece sua jornada fitness hoje mesmo!
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:scale-105 shadow-lg shadow-primary/25">
-                Ver Planos
-              </button>
-              <button className="border border-white/20 hover:border-primary/50 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:bg-white/5">
-                Agendar Aula Experimental
-              </button>
-            </div>
+            <a
+              href="/planos"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition-colors duration-200 group"
+            >
+              <span>MATRICULE-SE AGORA</span>
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
           </motion.div>
         </div>
       </section>
