@@ -66,10 +66,14 @@ Website moderno e responsivo para a Live Academia, a maior rede de academias de 
 - Lista de benefícios detalhada
 - Preços e call-to-action
 
-### Modalidades Section (`components/modalidades-section.tsx`)
-- Grid de modalidades/aulas coletivas com Next.js Image otimizado
-- Overlay amarelado nas imagens de fundo
-- Cards responsivos com hover effects aprimorados
+### Página de Aulas Coletivas (`app/aulas-coletivas/page.tsx`)
+- **Design Moderno**: Cards com estilo contemporâneo e cor amarela da marca
+- **Background Dinâmico**: Imagem de fundo fixa com overlay escuro
+- **Layout Responsivo**: Grid adaptável (1-4 colunas conforme tela)
+- **Interações Avançadas**: Hover effects com escala, rotação de ícones e transições suaves
+- **Numeração**: Cards numerados sequencialmente (01, 02, 03...)
+- **Ícones SVG**: Elementos visuais com animações no hover
+- **Next.js Image**: Otimização automática de imagens com lazy loading
 ### Footer (`components/footer.tsx`)
 - Links rápidos para navegação
 - Redes sociais
@@ -87,7 +91,7 @@ Website moderno e responsivo para a Live Academia, a maior rede de academias de 
 - **Home** - Página inicial com todas as seções
 - **Planos** - Detalhamento completo dos planos
 - **Unidades** - Localização das academias com filtros e carrossel
-- **Aulas Coletivas** - Modalidades disponíveis com cards otimizados e overlay amarelado
+- **Aulas Coletivas** - Modalidades disponíveis com design moderno, cards amarelos e background dinâmico
 - **Day Use** - Serviço de uso diário
 - **Trabalhe Conosco** - Formulário de candidatura
 
