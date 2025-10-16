@@ -22,28 +22,28 @@ interface BeneficiosSectionProps {
 
 const defaultBeneficios = [
   {
-    icon: '🛡️',
+    icon: ShieldCheck,
     title: "Planos flexíveis",
     description: "Em qualquer plano, você treina sem fidelidade, taxas de cancelamento, manutenção ou anuidade.",
     color: "from-yellow-400 to-amber-500",
     image: "/images/academia-1.webp",
   },
   {
-    icon: '⭐',
+    icon: Star,
     title: "Espaços exclusivos",
     description: "Desfrute de áreas como Espaço Relax, Espaço Yoga e o maior Studio de Bike Indoor da região Norte com o plano Diamante.",
     color: "from-amber-500 to-yellow-600",
     image: "/images/academia-2.webp",
   },
   {
-    icon: '👥',
+    icon: Users,
     title: "Aulas coletivas",
     description: "Diversifique seu treino com uma grade variada de aulas e aproveite o ambiente coletivo para socializar e manter a disciplina.",
     color: "from-yellow-500 to-amber-600",
     image: "/images/academia-3.webp",
   },
   {
-    icon: '❄️',
+    icon: Snowflake,
     title: "Climatização",
     description: "Treine com mais conforto nos ambientes climatizados disponíveis nas unidades Diamante, Premium e Tradicional Climatizada.",
     color: "from-yellow-400 to-amber-500",
@@ -57,14 +57,14 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
   // Provide defaults if data is incomplete
   const items = data.items || []
 
-  // Mapear ícones string para componentes
+  // Mapear ícones string para componentes Lucide
   const iconMap: Record<string, any> = {
-    '🛡️': ShieldCheck,
-    '⭐': Star,
-    '👥': Users,
-    '❄️': Snowflake,
-    '⚡': Zap,
-    '✅': CheckCircle
+    'ShieldCheck': ShieldCheck,
+    'Star': Star,
+    'Users': Users,
+    'Snowflake': Snowflake,
+    'Zap': Zap,
+    'CheckCircle': CheckCircle
   }
 
   const beneficios = items.length > 0
@@ -72,10 +72,7 @@ export default function BeneficiosSectionEditable({ data }: BeneficiosSectionPro
         ...item,
         icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck
       }))
-    : defaultBeneficios.map(item => ({
-        ...item,
-        icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck
-      }))
+    : defaultBeneficios
 
   const easing = [0.16, 1, 0.3, 1] as const
   const [active, setActive] = useState(0)

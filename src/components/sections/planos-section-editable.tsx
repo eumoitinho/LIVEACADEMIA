@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, Star, Crown, Clock, ArrowUpRight, Zap } from "lucide-react"
+import { Check, Star, Crown, Sparkles } from "lucide-react"
 import { motion } from "framer-motion"
 
 interface PlanosSectionProps {
@@ -37,11 +37,10 @@ const planosDefault = [
       "Climatização (apenas unidades Torquato Bemol e Tiradentes)",
       "Atendimento aos domingos (consultar unidade)"
     ],
+    gradient: "from-zinc-700 to-zinc-900",
+    icone: Check,
     popular: false,
-    destaque: false,
-    numero: "01",
-    setup: "Setup em 24 horas",
-    dots: [true, true, false]
+    destaque: false
   },
   {
     nome: "DIAMANTE",
@@ -62,12 +61,11 @@ const planosDefault = [
       "Climatização",
       "Atendimento aos domingos"
     ],
+    gradient: "from-amber-500 to-yellow-600",
+    icone: Crown,
     popular: true,
     destaque: true,
-    badge: "O mais vendido",
-    numero: "02",
-    setup: "Setup em 12 horas",
-    dots: [true, true, true]
+    badge: "O mais vendido"
   }
 ]
 
@@ -84,15 +82,14 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
         periodo: "mês",
         descricao: plan.description,
         beneficios: plan.features || [],
+        gradient: plan.highlight ? "from-amber-500 to-yellow-600" : "from-zinc-700 to-zinc-900",
+        icone: plan.highlight ? Crown : Check,
         popular: plan.highlight,
         destaque: plan.highlight,
         badge: plan.badge === 'mais_vendido' ? 'O mais vendido' :
                plan.badge === 'recomendado' ? 'Recomendado' :
                plan.badge === 'novidade' ? 'Novidade' :
-               plan.badge === 'oferta' ? 'Oferta' : plan.badge,
-        numero: String(idx + 1).padStart(2, '0'),
-        setup: plan.highlight ? 'Setup em 12 horas' : 'Setup em 24 horas',
-        dots: plan.highlight ? [true, true, true] : [true, true, false]
+               plan.badge === 'oferta' ? 'Oferta' : plan.badge
       }))
     : planosDefault
 
@@ -124,105 +121,89 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {planos.map((plano, idx) => (
-            <motion.article
+            <motion.div
               key={plano.nome}
-              initial={{ opacity: 0, y: 32 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: idx * 0.1, ease: easing }}
+              transition={{ duration: 0.6, delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className={`relative overflow-hidden rounded-2xl pt-5 pr-5 pb-5 pl-5 backdrop-blur-xl border ${
-                plano.destaque
-                  ? 'bg-gradient-to-b from-zinc-900/80 to-zinc-950/90 border-white/20 shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)]'
-                  : 'bg-gradient-to-b from-zinc-900/70 to-zinc-950/80 border-white/10'
-              }`}
+              className={`relative group ${plano.destaque ? 'md:-mt-4' : ''}`}
             >
-              {/* Popular Badge */}
-              {plano.popular && (
-                <div className="absolute right-4 top-4">
-                  <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-500 text-black text-xs font-bold">
-                    <Star className="h-3 w-3" />
-                    {plano.badge}
-                  </div>
-                </div>
-              )}
-
-              {/* Top meta */}
-              <div className="flex items-center justify-between text-xs mb-5">
-                <div className="inline-flex items-center gap-2 text-zinc-400">
-                  <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full backdrop-blur ${
-                    plano.destaque ? 'bg-zinc-950/80 ring-1 ring-yellow-500/20 text-zinc-300' : 'bg-zinc-950/80 ring-1 ring-white/10 text-zinc-300'
-                  }`}>
-                    {plano.numero}
-                  </span>
-                  <div className="flex items-center gap-1">
-                    {plano.dots.map((dot, i) => (
-                      <span
-                        key={i}
-                        className={`h-1.5 w-1.5 rounded-full ${
-                          plano.destaque
-                            ? dot ? 'bg-yellow-500/80' : 'bg-yellow-500/40'
-                            : dot ? 'bg-yellow-500/80' : 'bg-yellow-500/20'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className="inline-flex items-center gap-1 text-zinc-400">
-                  <Clock className="h-3.5 w-3.5" />
-                  <span>{plano.setup}</span>
-                </div>
-              </div>
-
-              {/* Core */}
-              <div className="mb-5 flex items-start justify-between">
-                <div>
-                  <h3 className="text-2xl sm:text-3xl text-white font-medium tracking-tight">{plano.nome}</h3>
-                  <p className="mt-1 text-sm text-zinc-400">{plano.descricao}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-2xl sm:text-3xl text-white font-medium tracking-tight">R$ {plano.preco}</p>
-                  <p className="text-xs text-zinc-500">por {plano.periodo}</p>
-                </div>
-              </div>
-
-              <button className={`inline-flex items-center justify-center gap-2 h-11 w-full rounded-full text-sm font-normal transition backdrop-blur mb-6 ${
-                plano.destaque
-                  ? 'bg-white/90 text-zinc-900 hover:bg-white'
-                  : 'bg-white/90 text-zinc-900 hover:bg-white'
+              {/* Card Container */}
+              <div className={`relative h-full rounded-3xl overflow-hidden border transition-all duration-500 ${
+                plano.destaque 
+                  ? 'border-yellow-500/50 shadow-2xl shadow-yellow-500/10' 
+                  : 'border-zinc-800/50 hover:border-zinc-700/50'
               }`}>
-                Matricule-se
-                {plano.destaque ? <Zap className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
-              </button>
+                
+                {/* Popular Badge */}
+                {plano.popular && (
+                  <div className="absolute top-6 right-6 z-20">
+                    <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" />
+                      {plano.badge}
+                    </div>
+                  </div>
+                )}
 
-              {/* Features */}
-              <div>
-                <p className="text-xs text-zinc-400 mb-3">Tudo que você precisa:</p>
-                <ul className="space-y-3">
-                  {plano.beneficios.slice(0, 3).map((beneficio, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className={`mt-0.5 h-5 w-5 rounded-full flex items-center justify-center backdrop-blur ${
-                        plano.destaque ? 'bg-zinc-900/70 border border-yellow-500/20' : 'bg-zinc-900/70 border border-white/10'
+                {/* Content */}
+                <div className="relative z-10 p-8">
+                  {/* Header */}
+                  <div className="mb-8">
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${plano.gradient} flex items-center justify-center mb-4`}>
+                      <plano.icone className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">{plano.nome}</h3>
+                    <p className="text-zinc-400 text-sm leading-relaxed">{plano.descricao}</p>
+                  </div>
+
+                  {/* Price */}
+                  <div className="mb-8">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-zinc-400 text-lg">R$</span>
+                      <span className={`text-5xl font-bold ${
+                        plano.destaque 
+                          ? 'bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent' 
+                          : 'text-white'
                       }`}>
-                        <Check className="h-3.5 w-3.5 text-green-400" />
+                        {plano.preco}
                       </span>
-                      <span className="text-sm text-zinc-300">{beneficio}</span>
-                    </li>
-                  ))}
-                  {plano.beneficios.length > 3 && (
-                    <li className="flex items-start gap-3">
-                      <span className={`mt-0.5 h-5 w-5 rounded-full flex items-center justify-center backdrop-blur ${
-                        plano.destaque ? 'bg-zinc-900/70 border border-yellow-500/20' : 'bg-zinc-900/70 border border-white/10'
-                      }`}>
-                        <span className="text-xs text-zinc-400">+{plano.beneficios.length - 3}</span>
-                      </span>
-                      <span className="text-sm text-zinc-300">mais benefícios inclusos</span>
-                    </li>
-                  )}
-                </ul>
+                      <span className="text-zinc-400 text-lg">/{plano.periodo}</span>
+                    </div>
+                    <p className="text-yellow-400 text-sm font-medium mt-2">Oferta por tempo limitado</p>
+                  </div>
+
+                  {/* Benefits */}
+                  <ul className="space-y-4 mb-8">
+                    {plano.beneficios.map((beneficio, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                          plano.destaque 
+                            ? 'bg-yellow-500/20' 
+                            : 'bg-zinc-800'
+                        }`}>
+                          <Check className={`w-3 h-3 ${
+                            plano.destaque ? 'text-yellow-500' : 'text-zinc-400'
+                          }`} />
+                        </div>
+                        <span className="text-zinc-300 text-sm leading-relaxed">{beneficio}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* CTA Button */}
+                  <button className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 ${
+                    plano.destaque
+                      ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
+                      : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
+                  }`}>
+                    MATRICULE-SE AGORA!
+                  </button>
+                </div>
               </div>
-            </motion.article>
+            </motion.div>
           ))}
         </div>
 
