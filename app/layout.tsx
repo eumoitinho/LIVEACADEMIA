@@ -5,6 +5,7 @@ import "./globals.css"
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import { UnitProvider } from "@/contexts/unit-context"
+import GTM from '@/src/components/analytics/gtm'
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -22,6 +23,9 @@ export default function RootLayout({
     return (
       <html lang="pt-BR">
         <head>
+          {/* Google Tag Manager */}
+          <GTM gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX'} />
+          
           <script src="https://api.tracking.ninetwo.com.br/script/live-academia" async></script>
           <script dangerouslySetInnerHTML={{
             __html: `
