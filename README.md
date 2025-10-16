@@ -45,6 +45,9 @@ Website moderno e responsivo para a Live Academia, a maior rede de academias de 
 ├── public/               # Arquivos estáticos
 │   └── images/           # Imagens da aplicação
 ├── lib/                  # Utilitários e configurações
+│   └── api/
+│       ├── pacto-v2.ts   # API V2 (legado)
+│       └── pacto-v3.ts   # API V3 (atual)
 ├── hooks/                # Custom hooks
 └── styles/               # Estilos adicionais
 ```
@@ -395,3 +398,67 @@ Há um fallback hardcoded local no código caso `ENCRYPTION_SECRET` não esteja 
 
 ### Legado / Histórico
 O conteúdo abaixo (modelo `rede` + `unidade`) era o desenho anterior e permanece apenas para referência histórica no controle de versão. Recomenda-se não utilizá-lo em novos desenvolvimentos.
+
+## 🔌 API V3 - Pacto Soluções
+
+### Integração Completa Implementada
+
+O projeto agora possui integração completa com a **API V3** da Pacto Soluções, sistema de pagamentos utilizado pela Live Academia.
+
+#### 🚀 Funcionalidades
+
+- ✅ **35 unidades** com chaves secretas individuais
+- ✅ **Busca de planos** em tempo real
+- ✅ **Simulação de vendas** com cálculos precisos
+- ✅ **Processamento de pagamentos** via cartão de crédito
+- ✅ **Validação de cupons** de desconto
+- ✅ **Rate limiting** e **cache inteligente**
+- ✅ **Tokenização PCI DSS** para segurança
+
+#### 📊 Endpoints Disponíveis
+
+```bash
+# Planos e Configurações
+GET  /api/pacto-v3/planos/[slug]        # Buscar planos da unidade
+GET  /api/pacto-v3/unidades             # Listar todas as unidades
+GET  /api/pacto-v3/configs/[slug]       # Configurações da unidade
+
+# Vendas e Pagamentos
+POST /api/pacto-v3/simular/[slug]/[plano]  # Simular venda
+POST /api/pacto-v3/cupom/[slug]            # Validar cupom
+POST /api/pacto-v3/venda/[slug]            # Processar pagamento
+```
+
+#### 🔑 Configuração de Chaves
+
+```bash
+# Variáveis de ambiente necessárias
+PACTO_SECRET_KEY_TORRES=chave_secreta_aqui
+PACTO_SECRET_KEY_CENTRO=outra_chave_aqui
+PACTO_SECRET_KEY_CACHOEIRINHA=mais_uma_chave
+# ... todas as 35 unidades
+```
+
+#### 🎯 Performance
+
+- **Cache**: 30-60 minutos para dados estáticos
+- **Rate Limiting**: Proteção contra abuso
+- **Tokenização**: Segurança PCI DSS compliant
+- **Fallback**: Dados estáticos em caso de falha
+
+#### 📚 Documentação Completa
+
+Para informações detalhadas sobre implementação, troubleshooting e configuração, consulte:
+**[docs/API-V3-IMPLEMENTATION.md](docs/API-V3-IMPLEMENTATION.md)**
+
+### Status da Integração
+
+| Funcionalidade | Status | Descrição |
+|----------------|--------|-----------|
+| Planos Dinâmicos | ✅ | Preços e informações em tempo real |
+| Checkout | ✅ | Apenas cartão de crédito |
+| Simulação | ✅ | Cálculos precisos com impostos |
+| Pagamentos | ✅ | Tokenização segura |
+| Cupons | ✅ | Validação automática |
+| Cache | ✅ | Performance otimizada |
+| Rate Limiting | ✅ | Proteção da API |
