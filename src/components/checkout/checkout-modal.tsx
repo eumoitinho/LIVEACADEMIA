@@ -410,8 +410,8 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-live-border/30">
             <div>
-              <h2 className="text-2xl font-bold text-live-textPrimary">Matrícula</h2>
-              <p className="text-live-textSecondary">
+              <h2 className="text-2xl font-bold text-white">Matrícula</h2>
+              <p className="text-white/80">
                 {plano.name} - {unidadeName}
               </p>
             </div>
@@ -419,7 +419,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
               onClick={onClose}
               className="p-2 hover:bg-live-border/20 rounded-lg transition-colors"
             >
-              <X className="h-6 w-6 text-live-textSecondary" />
+              <X className="h-6 w-6 text-white/80" />
             </button>
           </div>
 
@@ -431,7 +431,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                     s <= step 
                       ? 'bg-live-accent text-black' 
-                      : 'bg-live-border/20 text-live-textSecondary'
+                      : 'bg-live-border/20 text-white/80'
                   }`}>
                     {s < step || (s === step && step === 4) ? <Check className="h-4 w-4" /> : s}
                   </div>
@@ -454,60 +454,60 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 animate={{ opacity: 1, x: 0 }}
                 className="space-y-4"
               >
-                <h3 className="text-xl font-semibold text-live-textPrimary mb-4">
+                <h3 className="text-xl font-semibold text-white mb-4">
                   Dados Pessoais
                 </h3>
                 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                    <label className="block text-sm font-medium text-white mb-1">
                       Nome Completo *
                     </label>
                     <input
                       type="text"
                       value={formData.nome}
                       onChange={(e) => handleInputChange('nome', e.target.value)}
-                      className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                      className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                       placeholder="Digite seu nome completo"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                    <label className="block text-sm font-medium text-white mb-1">
                       E-mail *
                     </label>
                     <input
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                      className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                       placeholder="seu@email.com"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                    <label className="block text-sm font-medium text-white mb-1">
                       Telefone *
                     </label>
                     <input
                       type="text"
                       value={formData.telefone}
                       onChange={(e) => handleInputChange('telefone', formatPhone(e.target.value))}
-                      className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                      className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                       placeholder="(11) 99999-9999"
                       maxLength={15}
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                    <label className="block text-sm font-medium text-white mb-1">
                       CPF *
                     </label>
                     <input
                       type="text"
                       value={formData.cpf}
                       onChange={(e) => handleInputChange('cpf', formatCPF(e.target.value))}
-                      className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                      className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                       placeholder="000.000.000-00"
                       maxLength={14}
                     />
@@ -516,32 +516,32 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 
                 {/* Endereço separado */}
                 <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-live-textPrimary">Endereço</h4>
+                  <h4 className="text-lg font-semibold text-white">Endereço</h4>
                   
                   <div className="grid md:grid-cols-3 gap-4">
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         Rua/Logradouro *
                       </label>
                       <input
                         type="text"
                         value={formData.endereco}
                         onChange={(e) => handleInputChange('endereco', e.target.value)}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         placeholder="Rua das Flores"
                         required
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         Número *
                       </label>
                       <input
                         type="text"
                         value={formData.numero}
                         onChange={(e) => handleInputChange('numero', e.target.value)}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         placeholder="123"
                         required
                       />
@@ -550,27 +550,27 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                   
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         Complemento
                       </label>
                       <input
                         type="text"
                         value={formData.complemento}
                         onChange={(e) => handleInputChange('complemento', e.target.value)}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         placeholder="Apto 101, Bloco A"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         Bairro *
                       </label>
                       <input
                         type="text"
                         value={formData.bairro}
                         onChange={(e) => handleInputChange('bairro', e.target.value)}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         placeholder="Centro"
                         required
                       />
@@ -579,27 +579,27 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                   
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         Cidade *
                       </label>
                       <input
                         type="text"
                         value={formData.cidade}
                         onChange={(e) => handleInputChange('cidade', e.target.value)}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         placeholder="São Paulo"
                         required
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         Estado *
                       </label>
                       <select
                         value={formData.estado}
                         onChange={(e) => handleInputChange('estado', e.target.value)}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         required
                       >
                         <option value="">Selecione</option>
@@ -617,14 +617,14 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         CEP *
                       </label>
                       <input
                         type="text"
                         value={formData.cep}
                         onChange={(e) => handleInputChange('cep', formatCEP(e.target.value))}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         placeholder="01234-567"
                         maxLength={9}
                         required
@@ -635,30 +635,30 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 
                 {/* Dados pessoais adicionais */}
                 <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-live-textPrimary">Dados Pessoais</h4>
+                  <h4 className="text-lg font-semibold text-white">Dados Pessoais</h4>
                   
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         Data de Nascimento *
                       </label>
                       <input
                         type="date"
                         value={formData.dataNascimento}
                         onChange={(e) => handleInputChange('dataNascimento', e.target.value)}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         required
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         Sexo *
                       </label>
                       <select
                         value={formData.sexo}
                         onChange={(e) => handleInputChange('sexo', e.target.value)}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         required
                       >
                         <option value="M">Masculino</option>
@@ -668,14 +668,14 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                      <label className="block text-sm font-medium text-white mb-1">
                         RG
                       </label>
                       <input
                         type="text"
                         value={formData.rg}
                         onChange={(e) => handleInputChange('rg', formatRG(e.target.value))}
-                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-live-textPrimary"
+                        className="w-full px-4 py-3 bg-live-border/10 border border-live-border/30 rounded-lg focus:border-live-accent focus:outline-none text-white"
                         placeholder="12.345.678-9"
                         maxLength={12}
                       />
@@ -685,7 +685,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 
                 {/* Aceite de Termos */}
                 <div className="space-y-4">
-                  <h4 className="text-lg font-semibold text-live-textPrimary">Termos e Condições</h4>
+                  <h4 className="text-lg font-semibold text-white">Termos e Condições</h4>
                   
                   <div className="flex items-start gap-3">
                     <input
@@ -696,7 +696,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                       className="mt-1 h-4 w-4 text-live-accent border-live-border/30 rounded focus:ring-live-accent focus:ring-2"
                       required
                     />
-                    <label htmlFor="aceiteTermos" className="text-sm text-live-textPrimary leading-relaxed">
+                    <label htmlFor="aceiteTermos" className="text-sm text-white leading-relaxed">
                       Eu aceito os{' '}
                       <a 
                         href="/termos-de-uso" 
@@ -727,7 +727,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 animate={{ opacity: 1, x: 0 }}
                 className="space-y-6"
               >
-                <h3 className="text-xl font-semibold text-live-textPrimary mb-4">
+                <h3 className="text-xl font-semibold text-white mb-4">
                   Forma de Pagamento
                 </h3>
                 
@@ -735,8 +735,8 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 <div className="bg-live-border/5 p-4 rounded-lg border border-live-border/30">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h4 className="font-semibold text-live-textPrimary">{plano.name}</h4>
-                      <p className="text-live-textSecondary">{unidadeName}</p>
+                      <h4 className="font-semibold text-white">{plano.name}</h4>
+                      <p className="text-white/80">{unidadeName}</p>
                     </div>
                     <div className="text-2xl font-bold text-live-accent">
                       R$ {plano.price}/mês
@@ -748,9 +748,9 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 <div className="bg-live-accent/5 border border-live-accent rounded-lg p-4">
                   <div className="flex items-center gap-3">
                     <CreditCard className="h-5 w-5 text-live-accent" />
-                    <span className="font-medium text-live-textPrimary">Cartão de Crédito</span>
+                    <span className="font-medium text-white">Cartão de Crédito</span>
                   </div>
-                  <p className="text-sm text-live-textSecondary mt-2">
+                  <p className="text-sm text-white/80 mt-2">
                     Pagamento seguro processado pela nossa parceira de pagamentos
                   </p>
                 </div>
@@ -769,9 +769,9 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
 
                     {/* Card Form */}
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-live-textPrimary">Dados do Cartão</h4>
+                      <h4 className="font-semibold text-white">Dados do Cartão</h4>
                       <div>
-                        <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        <label className="block text-sm font-medium text-white mb-1">
                           Número do Cartão
                         </label>
                         <input
@@ -785,7 +785,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                        <label className="block text-sm font-medium text-white mb-1">
                           Nome no Cartão
                         </label>
                         <input
@@ -799,7 +799,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                          <label className="block text-sm font-medium text-white mb-1">
                             Validade
                           </label>
                           <input
@@ -819,7 +819,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium text-live-textPrimary mb-1">
+                          <label className="block text-sm font-medium text-white mb-1">
                             CVV
                           </label>
                           <input
@@ -846,10 +846,10 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 className="text-center py-12"
               >
                 <Loader2 className="h-12 w-12 animate-spin text-live-accent mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-live-textPrimary mb-2">
+                <h3 className="text-xl font-semibold text-white mb-2">
                   Processando Pagamento
                 </h3>
-                <p className="text-live-textSecondary">
+                <p className="text-white/80">
                   Aguarde enquanto processamos sua matrícula...
                 </p>
               </motion.div>
@@ -865,19 +865,19 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Check className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-semibold text-live-textPrimary mb-2">
+                <h3 className="text-2xl font-semibold text-white mb-2">
                   Matrícula Realizada!
                 </h3>
-                <p className="text-live-textSecondary mb-6">
+                <p className="text-white/80 mb-6">
                   Parabéns! Sua matrícula na {unidadeName} foi realizada com sucesso.
                 </p>
 
                 {/* Informações da transação */}
                 {paymentResult?.transactionId && (
                   <div className="bg-live-border/5 p-4 rounded-lg border border-live-border/30 mb-6">
-                    <h4 className="font-semibold text-live-textPrimary mb-3">Pagamento Aprovado</h4>
+                    <h4 className="font-semibold text-white mb-3">Pagamento Aprovado</h4>
                     <div className="flex items-center gap-2 bg-live-bg p-3 rounded-lg">
-                      <span className="text-sm text-live-textPrimary">ID da Transação:</span>
+                      <span className="text-sm text-white">ID da Transação:</span>
                       <code className="flex-1 text-sm text-live-accent font-mono">
                         {paymentResult.transactionId}
                       </code>
@@ -888,7 +888,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                         <Copy className="h-4 w-4 text-live-accent" />
                       </button>
                     </div>
-                    <p className="text-sm text-live-textSecondary mt-2">
+                    <p className="text-sm text-white/80 mt-2">
                       Sua matrícula foi ativada instantaneamente!
                     </p>
                   </div>
@@ -896,15 +896,15 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 
                 {/* Detalhes da matrícula */}
                 <div className="bg-live-border/5 p-4 rounded-lg border border-live-border/30 mb-6">
-                  <h4 className="font-semibold text-live-textPrimary mb-2">Detalhes da Matrícula</h4>
-                  <div className="text-live-textSecondary space-y-1">
+                  <h4 className="font-semibold text-white mb-2">Detalhes da Matrícula</h4>
+                  <div className="text-white/80 space-y-1">
                     <p><strong>Plano:</strong> {plano?.name}</p>
                     <p><strong>Unidade:</strong> {unidadeName}</p>
                     <p><strong>Valor:</strong> R$ {plano?.price}/mês</p>
                   </div>
                 </div>
                 
-                <p className="text-sm text-live-textSecondary">
+                <p className="text-sm text-white/80">
                   Em breve você receberá um e-mail com todos os detalhes e instruções para começar a treinar!
                 </p>
               </motion.div>
@@ -917,7 +917,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
               {step > 1 && (
                 <button
                   onClick={() => setStep(step - 1)}
-                  className="px-6 py-3 border border-live-border/30 rounded-lg text-live-textPrimary hover:bg-live-border/10 transition-colors"
+                  className="px-6 py-3 border border-live-border/30 rounded-lg text-white hover:bg-live-border/10 transition-colors"
                 >
                   Voltar
                 </button>

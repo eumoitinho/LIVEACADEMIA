@@ -78,9 +78,7 @@ export default function HomepageEditable() {
       {/* App Section */}
       <AppSection />
 
-      {/* Wellhub Section */}
-      <WellhubSection />
-
+     
       {/* Bioimpedancia Section */}
       <BioimpedanciaSection />
 

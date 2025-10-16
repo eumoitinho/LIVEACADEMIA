@@ -22,6 +22,13 @@ export const bioimpedanciaFeatureSchema = defineType({
       title: 'Benefícios',
       type: 'array',
       of: [{ type: 'string' }],
+      initialValue: [
+        'Percentual de gordura corporal',
+        'Massa muscular',
+        'Água corporal total',
+        'Metabolismo basal',
+        'Idade metabólica',
+      ],
     }),
     defineField({
       name: 'image',
