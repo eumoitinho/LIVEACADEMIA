@@ -22,7 +22,13 @@ export function useRecaptcha(): UseRecaptchaReturn {
   const [isExecuting, setIsExecuting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LfQVbIUAAAAAJkFWWnSKLo9ATaKt3axLDRvVkK9'
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+  
+  if (!siteKey) {
+    console.error('[reCAPTCHA] NEXT_PUBLIC_RECAPTCHA_SITE_KEY não configurada')
+    setError('reCAPTCHA não configurado')
+    return { isLoaded: false, isExecuting: false, executeRecaptcha: async () => '', error: 'reCAPTCHA não configurado' }
+  }
 
   useEffect(() => {
     // Carregar o script do reCAPTCHA se ainda não estiver carregado
