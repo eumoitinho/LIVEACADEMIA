@@ -30,7 +30,8 @@
       "Bash(PGPASSWORD=\"m0Hi1EAhWZ0ON7C8\" psql -h aws-1-us-east-1.pooler.supabase.com -p 6543 -U postgres.sgntnwnngdskwyuywksk -d postgres -c \"SELECT slug, nome, LENGTH(chave_api) as key_length, LEFT(chave_publica, 10) as pub_key_preview FROM public.units WHERE slug = ''cidade-de-deus'';\")",
       "Bash(PGPASSWORD=\"m0Hi1EAhWZ0ON7C8\" psql -h aws-1-us-east-1.pooler.supabase.com -p 6543 -U postgres.sgntnwnngdskwyuywksk -d postgres -c \"SELECT slug, nome, LENGTH(chave_api) as key_length, LEFT(chave_publica, 10) as pub_key_preview FROM public.units WHERE slug = ''centro'';\")",
       "Bash(pnpm tsc:*)",
-      "Bash(pnpm dev)"
+      "Bash(pnpm dev)",
+      "Bash(cat:*)"
     ],
     "deny": []
   }
