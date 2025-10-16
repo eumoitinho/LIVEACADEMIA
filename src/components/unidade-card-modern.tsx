@@ -39,7 +39,8 @@ export function UnidadeCardModern({ location }: UnidadeCardModernProps) {
     }
   }
 
-  const config = typeConfig[location.type]
+  // Ensure we have a valid config with fallback
+  const config = typeConfig[location.type as keyof typeof typeConfig] || typeConfig.tradicional
   const hasPlanos = location.planos && location.planos.length > 0
   const priceValue = hasPlanos && location.planos ? location.planos[0].price : null
   const featuresCount = location.features.length

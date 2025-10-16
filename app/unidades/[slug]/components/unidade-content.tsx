@@ -197,7 +197,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {data.modalidades.map((modalidade, index) => (
+            {(data?.modalidades || []).map((modalidade, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -265,8 +265,8 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.beneficios.map((beneficio, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(data?.beneficios || []).map((beneficio, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}

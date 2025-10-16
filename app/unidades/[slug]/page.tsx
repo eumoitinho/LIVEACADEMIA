@@ -131,9 +131,9 @@ export default async function UnidadePage(props: PageProps) {
   }
 
   const data = {
-    ...unidadeData[unidade.type as keyof typeof unidadeData],
+    ...unidadeData[unidade.type as keyof typeof unidadeData] || unidadeData.tradicional,
     // Override static photos with Sanity images if available
-    fotos: sanityUnit?.images?.map((img: any) => img.asset?.url).filter(Boolean) || unidadeData[unidade.type as keyof typeof unidadeData]?.fotos || []
+    fotos: sanityUnit?.images?.map((img: any) => img.asset?.url).filter(Boolean) || unidadeData[unidade.type as keyof typeof unidadeData]?.fotos || unidadeData.tradicional.fotos
   }
 
   return <UnidadeContent unidade={unidade} data={data} />
