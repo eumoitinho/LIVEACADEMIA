@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pactoV2API, formatVendaData, TokenizedVendaData } from '@/src/lib/api/pacto-v2'
 import { getUnitBySlug } from '@/src/lib/api/supabase-repository'
+import { rateLimiter } from '@/src/lib/utils/rate-limiter'
 
 // POST /api/pacto/venda
 // Body: { slug, planoId, paymentMethod, cliente: PactoCliente, cartaoToken?: string, captchaToken }
@@ -36,6 +37,30 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       error: 'Token do cartão é obrigatório para pagamento com cartão'
     }, { status: 400 })
+  }
+
+  // Rate limiting muito restritivo para vendas: 3 requisições por 15 minutos
+  const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '127.0.0.1'
+  if (!rateLimiter.check(clientIP, 3, 15 * 60 * 1000)) {
+    const info = rateLimiter.getInfo(clientIP)
+    return NextResponse.json(
+      { 
+        error: 'Rate limit exceeded. Too many payment attempts.', 
+        rateLimitInfo: {
+          limit: info.limit,
+          remaining: info.remaining,
+          resetTime: info.resetTime
+        }
+      }, 
+      { 
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': info.limit.toString(),
+          'X-RateLimit-Remaining': info.remaining.toString(),
+          'X-RateLimit-Reset': Math.ceil(info.resetTime / 1000).toString()
+        }
+      }
+    )
   }
 
   try {

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { X, CreditCard, QrCode, FileText, Loader2, Check, Copy, ExternalLink } from "lucide-react"
 import AnimatedPaymentCard from "@/components/checkout/animated-payment-card"
 import { useRecaptcha } from "@/src/hooks/use-recaptcha"
+import { useDebouncedCallback, useDebounceState } from "@/src/hooks/use-debounce"
 
 interface SimulacaoResumo {
   valorTotal?: number | string
@@ -115,8 +116,10 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
     }))
   }
 
+  const { isDebouncing, startDebounce } = useDebounceState()
+
   const runSimulation = useCallback(async () => {
-    if (!plano || !isMountedRef.current) return
+    if (!plano || !isMountedRef.current || isDebouncing) return
 
     setSimulationLoading(true)
     setSimulationError(null)
@@ -166,9 +169,10 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
     } finally {
       if (isMountedRef.current) {
         setSimulationLoading(false)
+        startDebounce(2000) // 2 segundos de debounce após simulação
       }
     }
-  }, [paymentMethod, plano, unidadeId, formData])
+  }, [paymentMethod, plano, unidadeId, formData, isDebouncing, startDebounce])
 
   useEffect(() => {
     if (step === 2 && plano) {
@@ -177,7 +181,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
   }, [step, plano, runSimulation])
 
   const handleRetrySimulation = () => {
-    if (!simulationLoading) {
+    if (!simulationLoading && !isDebouncing) {
       runSimulation()
     }
   }
