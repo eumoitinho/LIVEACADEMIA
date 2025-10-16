@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual do Sistema Sanity CMS - Live Academia | Rede de Academias em Manaus</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #FFCB00;
+            --primary-dark: #EAB308;
+            --secondary: #FF6B35;
+            --dark: #0A0A0A;
+            --dark-2: #1A1A1A;
+            --dark-3: #2A2A2A;
+            --text: #FAFAFA;
+            --text-muted: #A1A1AA;
+            --gradient-primary: linear-gradient(135deg, #FFCB00 0%, #FFD700 100%);
+            --gradient-dark: linear-gradient(180deg, #1A1A1A 0%, #000000 100%);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--gradient-dark);
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255, 203, 0, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .logo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 203, 0, 0.1);
+            border: 1px solid var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+        
+        .version-info {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+        
+        .version-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .version-item strong {
+            color: var(--primary);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Table of Contents */
+        .toc {
+            background: var(--dark-2);
+            border: 1px solid var(--dark-3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 800px;
+        }
+        
+        .toc-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .toc-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .toc-list {
+            list-style: none;
+        }
+        
+        .toc-item {
+            margin-bottom: 0.75rem;
+        }
+        
+        .toc-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .toc-link:hover {
+            background: var(--dark-3);
+            color: var(--primary);
+            transform: translateX(8px);
+        }
+        
+        .toc-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--dark-3);
+            border-radius: 50%;
+            font-size: 0.875rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        
+        /* Section */
+        .section {
+            margin: 4rem auto;
+            padding: 3rem 0;
+        }
+        
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--dark-3);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 16px;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            flex-shrink: 0;
+        }
+        
+        .section-description {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            max-width: 800px;
+        }
+        
+        /* Content */
+        .content {
+            max-width: 900px;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 3rem 0 1.5rem;
+            color: var(--primary);
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--text);
+        }
+        
+        h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text);
+        }
+        
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+            font-size: 1.0625rem;
+        }
+        
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+            color: var(--text-muted);
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        
+        /* Info Boxes */
+        .info-box {
+            background: var(--dark-2);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .info-box.warning {
+            border-left-color: #F59E0B;
+        }
+        
+        .info-box.danger {
+            border-left-color: var(--secondary);
+        }
+        
+        .info-box.success {
+            border-left-color: #10B981;
+        }
+        
+        .info-box-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-icon {
+            font-size: 1.25rem;
+        }
+        
+        /* Code Blocks */
+        .code-block {
+            background: #000;
+            border: 1px solid var(--dark-3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+        
+        .code-block code {
+            color: #22C55E;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--dark-2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        thead {
+            background: var(--dark-3);
+        }
+        
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid var(--dark);
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--dark-3);
+            color: var(--text-muted);
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .checklist li::before {
+            content: '✓';
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #10B981;
+            color: #000;
+            border-radius: 50%;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: var(--dark-2);
+            border: 1px solid var(--dark-3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        
+        .feature-description {
+            font-size: 0.9375rem;
+            color: var(--text-muted);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--gradient-dark);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 3px solid var(--primary);
+            margin-top: 6rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--dark-2);
+            border: 1px solid var(--dark-3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .section-title {
+                font-size: 1.75rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .toc {
+                padding: 1.5rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .header, .footer {
+                background: none;
+            }
+            
+            h1, .section-title, .toc-title, h2 {
+                color: #EAB308;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-badge">
+                <span class="logo-dot"></span>
+                LIVE ACADEMIA
+            </div>
+            <h1>Manual do Sistema Sanity CMS</h1>
+            <p class="subtitle">Guia Completo de Utilização</p>
+            <div class="version-info">
+                <div class="version-item">
+                    <strong>Versão:</strong> 1.0
+                </div>
+                <div class="version-item">
+                    <strong>Data:</strong> Dezembro de 2024
+                </div>
+                <div class="version-item">
+                    <strong>Desenvolvido por:</strong> M2Z Digital
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Table of Contents -->
+    <div class="container">
+        <nav class="toc">
+            <h2 class="toc-title">
+                <span class="toc-icon">📋</span>
+                Índice
+            </h2>
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <a href="#introducao" class="toc-link">
+                        <span class="toc-number">1</span>
+                        Introdução
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#acessar" class="toc-link">
+                        <span class="toc-number">2</span>
+                        Acessando o Sanity Studio
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#estrutura" class="toc-link">
+                        <span class="toc-number">3</span>
+                        Estrutura do CMS
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#homepage" class="toc-link">
+                        <span class="toc-number">4</span>
+                        Editando a Homepage
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#unidades" class="toc-link">
+                        <span class="toc-number">5</span>
+                        Gerenciando Unidades
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#planos" class="toc-link">
+                        <span class="toc-number">6</span>
+                        Gerenciando Planos
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#aulas" class="toc-link">
+                        <span class="toc-number">7</span>
+                        Gerenciando Aulas Coletivas
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#beneficios" class="toc-link">
+                        <span class="toc-number">8</span>
+                        Gerenciando Benefícios
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#depoimentos" class="toc-link">
+                        <span class="toc-number">9</span>
+                        Gerenciando Depoimentos
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#praticas" class="toc-link">
+                        <span class="toc-number">10</span>
+                        Boas Práticas
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#suporte" class="toc-link">
+                        <span class="toc-number">11</span>
+                        Suporte
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Section 1: Introdução -->
+        <section id="introducao" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">1</span>
+                    Introdução
+                </h2>
+                <p class="section-description">
+                    Bem-vindo ao manual completo do Sanity CMS da Live Academia. Este guia foi desenvolvido para capacitá-lo a gerenciar todo o conteúdo do site de forma autônoma e profissional.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>🎯 O que é o Sanity CMS?</h3>
+                <p>
+                    O <strong>Sanity CMS</strong> é o sistema de gerenciamento de conteúdo que permite você <strong>editar todo o conteúdo do seu site</strong> sem precisar mexer em código. É como ter um painel de controle completo da Live Academia na palma da sua mão.
+                </p>
+
+                <h3>💪 O que você pode fazer?</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏠</div>
+                        <div class="feature-title">Editar Homepage</div>
+                        <div class="feature-description">Altere títulos, descrições, CTAs e imagens da página principal</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏢</div>
+                        <div class="feature-title">Gerenciar Unidades</div>
+                        <div class="feature-description">Adicione novas unidades, edite informações e serviços</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💳</div>
+                        <div class="feature-title">Planos e Preços</div>
+                        <div class="feature-description">Atualize preços, benefícios e informações dos planos</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">Aulas Coletivas</div>
+                        <div class="feature-description">Gerencie modalidades, horários e instrutores</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✨</div>
+                        <div class="feature-title">Benefícios</div>
+                        <div class="feature-description">Edite e adicione novos benefícios da academia</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <div class="feature-title">Depoimentos</div>
+                        <div class="feature-description">Adicione novos depoimentos de alunos satisfeitos</div>
+                    </div>
+                </div>
+
+                <h3>📚 Conceitos Importantes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Termo</th>
+                            <th>Significado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Documento</strong></td>
+                            <td>Cada página, unidade ou plano é um "documento" no Sanity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Campo</strong></td>
+                            <td>Cada informação editável (título, descrição, preço, etc)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Publicar</strong></td>
+                            <td>Suas alterações só aparecem no site após clicar em "Publish"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rascunho</strong></td>
+                            <td>Você pode salvar alterações sem publicar</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 2: Acessando -->
+        <section id="acessar" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">2</span>
+                    Acessando o Sanity Studio
+                </h2>
+                <p class="section-description">
+                    Aprenda como fazer login e acessar o painel de controle do Sanity CMS.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>🌐 Como Acessar</h3>
+                <p>Para acessar o Sanity Studio, você pode usar uma das URLs abaixo:</p>
+
+                <div class="code-block">
+                    <code>https://liveacademia.com.br/studio</code><br>
+                    ou<br>
+                    <code>http://localhost:3000/studio</code> (para desenvolvimento local)
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-title">
+                        <span class="info-icon">💡</span>
+                        Dica
+                    </div>
+                    <p>Salve a URL do Studio nos favoritos do seu navegador para acesso rápido!</p>
+                </div>
+
+                <h3>🔐 Fazendo Login</h3>
+                <ol>
+                    <li>Acesse a URL do Sanity Studio</li>
+                    <li>Faça login com suas credenciais Google ou GitHub</li>
+                    <li>Aguarde o carregamento completo do painel</li>
+                    <li>Você será direcionado ao dashboard principal</li>
+                </ol>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">
+                        <span class="info-icon">⚠️</span>
+                        Importante
+                    </div>
+                    <p>Mantenha suas credenciais de acesso em segurança. Não compartilhe com pessoas não autorizadas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Estrutura -->
+        <section id="estrutura" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">3</span>
+                    Estrutura do CMS
+                </h2>
+                <p class="section-description">
+                    Entenda como o conteúdo está organizado no Sanity Studio.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>📁 Menu Lateral</h3>
+                <p>Ao entrar no Sanity Studio, você verá o menu lateral com as seguintes opções:</p>
+
+                <div class="code-block">
+                    <code>
+🏠 Homepage<br>
+├── Página Principal (Hero, Sobre, Benefícios, etc.)<br>
+├── SEO e Configurações<br>
+└── Seções Visíveis/Ocultas<br>
+<br>
+🏢 Unidades<br>
+├── Lista de todas as unidades<br>
+├── Informações de contato<br>
+├── Serviços disponíveis<br>
+└── Imagens e galeria<br>
+<br>
+💳 Planos<br>
+├── Tradicional<br>
+├── Diamante<br>
+└── Outros planos futuros<br>
+<br>
+🎯 Modalidades<br>
+├── Spinning<br>
+├── Funcional<br>
+├── Dança<br>
+└── Outras aulas<br>
+<br>
+✨ Benefícios<br>
+├── Lista de benefícios<br>
+├── Ícones e descrições<br>
+└── Imagens ilustrativas<br>
+<br>
+💬 Depoimentos<br>
+├── Depoimentos de alunos<br>
+├── Fotos e avaliações<br>
+└── Histórias de transformação
+                    </code>
+                </div>
+
+                <h3>🖥️ Interface do Editor</h3>
+                <p>Quando você abre um documento para editar, a interface é dividida em:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Área</th>
+                            <th>Função</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Lado Esquerdo</strong></td>
+                            <td>Campos editáveis (textos, imagens, links)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lado Direito</strong></td>
+                            <td>Preview do conteúdo (quando disponível)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Topo</strong></td>
+                            <td>Botões "Save" (Salvar rascunho) e "Publish" (Publicar)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 4: Homepage -->
+        <section id="homepage" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">4</span>
+                    Editando a Homepage
+                </h2>
+                <p class="section-description">
+                    Aprenda a editar cada seção da página principal da Live Academia.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>🏠 Acessando a Homepage</h3>
+                <ol>
+                    <li>No menu lateral, clique em <strong>"Homepage"</strong></li>
+                    <li>Você verá o documento "Homepage Principal"</li>
+                    <li>Clique no documento para abrir o editor</li>
+                </ol>
+
+                <h3>🎯 Hero Section (Seção Principal)</h3>
+                <p>Esta é a primeira seção que os visitantes veem ao entrar no site.</p>
+
+                <h4>Campos Disponíveis:</h4>
+                <ul>
+                    <li><strong>Title:</strong> Título principal (ex: "Transforme.")</li>
+                    <li><strong>Subtitle:</strong> Subtítulo (ex: "Evolua.")</li>
+                    <li><strong>Third Title:</strong> Terceiro título (ex: "Viva.")</li>
+                    <li><strong>Description:</strong> Parágrafo explicativo sobre a academia</li>
+                    <li><strong>Rating Value:</strong> Nota da avaliação (ex: "4.9")</li>
+                    <li><strong>Rating Label:</strong> Label da avaliação (ex: "Elite rating")</li>
+                    <li><strong>Rating Subscribers:</strong> Número de alunos (ex: "15k+ atletas")</li>
+                    <li><strong>Primary CTA Text:</strong> Texto do botão principal (ex: "Comece Agora")</li>
+                    <li><strong>Primary CTA Link:</strong> Link do botão (ex: "/planos")</li>
+                    <li><strong>Secondary CTA Text:</strong> Texto do botão secundário</li>
+                    <li><strong>Secondary CTA Link:</strong> Link do botão secundário</li>
+                    <li><strong>Footer Text:</strong> Texto do rodapé da seção</li>
+                </ul>
+
+                <div class="info-box">
+                    <div class="info-box-title">
+                        <span class="info-icon">✏️</span>
+                        Como Editar
+                    </div>
+                    <ol>
+                        <li>Localize o campo que deseja alterar</li>
+                        <li>Clique no campo</li>
+                        <li>Digite o novo texto</li>
+                        <li>Clique em "Publish" no topo da página</li>
+                    </ol>
+                </div>
+
+                <h3>📖 About Section (Seção Sobre)</h3>
+                <p>Seção que conta a história e valores da Live Academia.</p>
+
+                <h4>Editando a Seção Sobre:</h4>
+                <ol>
+                    <li>Role até a seção "About"</li>
+                    <li>Edite os campos:
+                        <ul>
+                            <li>Badge (ex: "Sobre a Live Academia")</li>
+                            <li>Title (ex: "Seu treino, suas regras")</li>
+                            <li>Description (descrição da academia)</li>
+                            <li>Stats (estatísticas como anos de experiência)</li>
+                            <li>Highlights (lista de destaques)</li>
+                        </ul>
+                    </li>
+                    <li>Clique em "Publish"</li>
+                </ol>
+
+                <h3>✨ Benefícios Section</h3>
+                <p>Grid com os principais benefícios da academia.</p>
+
+                <h4>Adicionando um Novo Benefício:</h4>
+                <ol>
+                    <li>Role até "Benefícios"</li>
+                    <li>Clique em "+ Add item"</li>
+                    <li>Preencha os campos:
+                        <ul>
+                            <li>Icon (nome do ícone)</li>
+                            <li>Title (título do benefício)</li>
+                            <li>Description (descrição)</li>
+                            <li>Color (cor do gradiente)</li>
+                            <li>Image (URL da imagem)</li>
+                        </ul>
+                    </li>
+                    <li>Clique em "Publish"</li>
+                </ol>
+
+                <h3>🎛️ Section Controls</h3>
+                <p>Controla quais seções aparecem ou ficam ocultas no site:</p>
+
+                <ul class="checklist">
+                    <li>Mostrar seção sobre</li>
+                    <li>Mostrar seção benefícios</li>
+                    <li>Mostrar seção planos</li>
+                    <li>Mostrar seção depoimentos</li>
+                </ul>
+
+                <p>✅ Marcado = Seção aparece no site<br> ❌ Desmarcado = Seção fica oculta</p>
+
+                <h3>🔍 SEO</h3>
+                <p>Otimização para mecanismos de busca (Google, Bing, etc).</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Campo</th>
+                            <th>Descrição</th>
+                            <th>Limite</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Meta Title</strong></td>
+                            <td>Título que aparece no Google</td>
+                            <td>60 caracteres</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Meta Description</strong></td>
+                            <td>Descrição que aparece no Google</td>
+                            <td>160 caracteres</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Keywords</strong></td>
+                            <td>Palavras-chave separadas por vírgula</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 5: Unidades -->
+        <section id="unidades" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">5</span>
+                    Gerenciando Unidades
+                </h2>
+                <p class="section-description">
+                    Gerencie as unidades da Live Academia em Manaus.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>🏢 Unidades Cadastradas</h3>
+                <ul>
+                    <li>Live Academia - Centro</li>
+                    <li>Live Academia - Adrianópolis</li>
+                    <li>Live Academia - Vieiralves</li>
+                    <li>E outras unidades da rede</li>
+                </ul>
+
+                <h3>✏️ Editando uma Unidade</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Unidades"</strong></li>
+                    <li>Selecione a unidade desejada</li>
+                    <li>Edite as informações conforme necessário</li>
+                    <li>Clique em "Publish" para salvar</li>
+                </ol>
+
+                <h4>Campos Editáveis:</h4>
+                <ul>
+                    <li><strong>Nome:</strong> Nome da unidade</li>
+                    <li><strong>Endereço:</strong> Endereço completo</li>
+                    <li><strong>Cidade/Estado:</strong> Localização</li>
+                    <li><strong>CEP:</strong> Código postal</li>
+                    <li><strong>Telefone:</strong> Número de contato</li>
+                    <li><strong>WhatsApp:</strong> Número do WhatsApp</li>
+                    <li><strong>Email:</strong> Email de contato</li>
+                    <li><strong>Coordenadas:</strong> Latitude e longitude (para mapa)</li>
+                    <li><strong>Tipo:</strong> Tradicional, Premium, Diamante</li>
+                    <li><strong>Serviços:</strong> Lista de serviços disponíveis</li>
+                    <li><strong>Imagens:</strong> Fotos da unidade</li>
+                    <li><strong>Descrição:</strong> Descrição da unidade</li>
+                    <li><strong>Horário de Funcionamento:</strong> Dias e horários</li>
+                    <li><strong>Ordem:</strong> Ordem de exibição no carousel</li>
+                    <li><strong>Ativa:</strong> Se a unidade está ativa</li>
+                    <li><strong>Destaque:</strong> Se aparece como destaque</li>
+                </ul>
+
+                <div class="info-box">
+                    <div class="info-box-title">
+                        <span class="info-icon">📍</span>
+                        Coordenadas para Mapa
+                    </div>
+                    <p>Use o Google Maps para encontrar as coordenadas exatas da unidade. Clique com o botão direito no local e copie a latitude e longitude.</p>
+                </div>
+
+                <h3>🆕 Adicionando uma Nova Unidade</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Unidades"</strong></li>
+                    <li>Clique em <strong>"+ Create"</strong></li>
+                    <li>Preencha todos os campos obrigatórios</li>
+                    <li>Configure a ordem de exibição</li>
+                    <li>Adicione imagens da unidade</li>
+                    <li>Clique em "Publish"</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Section 6: Planos -->
+        <section id="planos" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">6</span>
+                    Gerenciando Planos
+                </h2>
+                <p class="section-description">
+                    Gerencie os planos de assinatura da Live Academia.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>💳 Planos Cadastrados</h3>
+                <ol>
+                    <li><strong>Tradicional</strong> - R$ 119,90</li>
+                    <li><strong>Diamante</strong> - R$ 159,90</li>
+                </ol>
+
+                <h3>✏️ Editando um Plano</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Planos"</strong></li>
+                    <li>Selecione o plano desejado</li>
+                    <li>Edite as informações conforme necessário</li>
+                    <li>Clique em "Publish" para salvar</li>
+                </ol>
+
+                <h4>Campos Editáveis:</h4>
+                <ul>
+                    <li><strong>Nome:</strong> Nome do plano (ex: "TRADICIONAL")</li>
+                    <li><strong>Descrição:</strong> Descrição do que está incluso</li>
+                    <li><strong>Preço:</strong> Preço em centavos (ex: 11990 = R$ 119,90)</li>
+                    <li><strong>Price Label:</strong> Label do preço (ex: "Oferta por tempo limitado")</li>
+                    <li><strong>Features:</strong> Lista de benefícios inclusos</li>
+                    <li><strong>CTA:</strong> Texto do botão de ação (ex: "MATRICULE-SE AGORA")</li>
+                    <li><strong>Highlight:</strong> Se é o plano em destaque</li>
+                    <li><strong>Badge:</strong> Badge de destaque (ex: "O mais vendido")</li>
+                    <li><strong>Ordem:</strong> Ordem de exibição</li>
+                    <li><strong>Ativo:</strong> Se o plano está ativo</li>
+                </ul>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">
+                        <span class="info-icon">💰</span>
+                        Preço em Centavos
+                    </div>
+                    <p>O preço deve ser inserido em centavos. Exemplo: R$ 119,90 = 11990</p>
+                </div>
+
+                <h3>🆕 Criando um Novo Plano</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Planos"</strong></li>
+                    <li>Clique em <strong>"+ Create"</strong></li>
+                    <li>Preencha todas as informações</li>
+                    <li>Configure os benefícios inclusos</li>
+                    <li>Defina se é destaque ou não</li>
+                    <li>Clique em "Publish"</li>
+                </ol>
+
+                <h3>📋 Lista de Benefícios Comuns</h3>
+                <ul class="checklist">
+                    <li>Sem fidelidade</li>
+                    <li>Sem taxa de cancelamento</li>
+                    <li>Sem taxa de manutenção</li>
+                    <li>Sem taxa de anuidade</li>
+                    <li>Acesso ao app Live Academia</li>
+                    <li>Aulas coletivas</li>
+                    <li>Climatização</li>
+                    <li>Atendimento aos domingos</li>
+                    <li>Espaço Relax</li>
+                    <li>Espaço Yoga</li>
+                    <li>Espaço Pose</li>
+                    <li>Studio de Bike</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 7: Aulas Coletivas -->
+        <section id="aulas" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">7</span>
+                    Gerenciando Aulas Coletivas
+                </h2>
+                <p class="section-description">
+                    Gerencie as modalidades e aulas coletivas da Live Academia.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>🎯 Modalidades Cadastradas</h3>
+                <ul>
+                    <li>Spinning</li>
+                    <li>Funcional</li>
+                    <li>Dança</li>
+                    <li>Pilates</li>
+                    <li>E outras modalidades</li>
+                </ul>
+
+                <h3>✏️ Editando uma Modalidade</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Modalidades"</strong></li>
+                    <li>Selecione a modalidade desejada</li>
+                    <li>Edite as informações conforme necessário</li>
+                    <li>Clique em "Publish" para salvar</li>
+                </ol>
+
+                <h4>Campos Editáveis:</h4>
+                <ul>
+                    <li><strong>Nome:</strong> Nome da modalidade</li>
+                    <li><strong>Descrição:</strong> Descrição da aula</li>
+                    <li><strong>Imagem:</strong> Foto da modalidade</li>
+                    <li><strong>Duração:</strong> Duração em minutos</li>
+                    <li><strong>Dificuldade:</strong> Iniciante, Intermediário, Avançado</li>
+                    <li><strong>Instrutor:</strong> Nome do instrutor</li>
+                    <li><strong>Horários:</strong> Dias e horários das aulas</li>
+                    <li><strong>Ordem:</strong> Ordem de exibição</li>
+                    <li><strong>Ativo:</strong> Se a modalidade está ativa</li>
+                </ul>
+
+                <h3>⏰ Configurando Horários</h3>
+                <ol>
+                    <li>Role até "Schedule"</li>
+                    <li>Clique em "+ Add item"</li>
+                    <li>Selecione o dia da semana</li>
+                    <li>Digite o horário (ex: "18:00")</li>
+                    <li>Repita para outros horários</li>
+                    <li>Clique em "Publish"</li>
+                </ol>
+
+                <div class="info-box">
+                    <div class="info-box-title">
+                        <span class="info-icon">⏰</span>
+                        Formato de Horário
+                    </div>
+                    <p>Use o formato 24h. Exemplo: "18:00", "09:30", "12:00"</p>
+                </div>
+
+                <h3>🆕 Adicionando Nova Modalidade</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Modalidades"</strong></li>
+                    <li>Clique em <strong>"+ Create"</strong></li>
+                    <li>Preencha todas as informações</li>
+                    <li>Configure os horários</li>
+                    <li>Adicione uma imagem representativa</li>
+                    <li>Clique em "Publish"</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Section 8: Benefícios -->
+        <section id="beneficios" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">8</span>
+                    Gerenciando Benefícios
+                </h2>
+                <p class="section-description">
+                    Gerencie os benefícios e diferenciais da Live Academia.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>✨ Benefícios Cadastrados</h3>
+                <ul>
+                    <li>Sem Fidelidade</li>
+                    <li>Equipamentos Modernos</li>
+                    <li>Aulas Coletivas</li>
+                    <li>Profissionais Qualificados</li>
+                    <li>Horário Flexível</li>
+                    <li>Ambiente Climatizado</li>
+                </ul>
+
+                <h3>✏️ Editando um Benefício</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Benefícios"</strong></li>
+                    <li>Selecione o benefício desejado</li>
+                    <li>Edite as informações conforme necessário</li>
+                    <li>Clique em "Publish" para salvar</li>
+                </ol>
+
+                <h4>Campos Editáveis:</h4>
+                <ul>
+                    <li><strong>Título:</strong> Título do benefício</li>
+                    <li><strong>Descrição:</strong> Descrição detalhada</li>
+                    <li><strong>Ícone:</strong> Nome do ícone (ex: "ShieldCheck")</li>
+                    <li><strong>Imagem:</strong> Imagem ilustrativa</li>
+                    <li><strong>Ordem:</strong> Ordem de exibição</li>
+                    <li><strong>Ativo:</strong> Se o benefício está ativo</li>
+                </ul>
+
+                <h3>🎨 Ícones Disponíveis</h3>
+                <p>Você pode usar os seguintes nomes de ícones:</p>
+                <ul>
+                    <li><strong>ShieldCheck</strong> - Para segurança/garantia</li>
+                    <li><strong>Users</strong> - Para comunidade/equipe</li>
+                    <li><strong>CheckCircle</strong> - Para benefícios inclusos</li>
+                    <li><strong>Clock</strong> - Para horários</li>
+                    <li><strong>Snowflake</strong> - Para climatização</li>
+                    <li><strong>Dumbbell</strong> - Para equipamentos</li>
+                </ul>
+
+                <div class="info-box">
+                    <div class="info-box-title">
+                        <span class="info-icon">🎨</span>
+                        Cores de Gradiente
+                    </div>
+                    <p>Use classes do Tailwind CSS para cores: "from-green-500 to-emerald-600", "from-blue-500 to-cyan-600", etc.</p>
+                </div>
+
+                <h3>🆕 Adicionando Novo Benefício</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Benefícios"</strong></li>
+                    <li>Clique em <strong>"+ Create"</strong></li>
+                    <li>Preencha todas as informações</li>
+                    <li>Escolha um ícone apropriado</li>
+                    <li>Adicione uma imagem ilustrativa</li>
+                    <li>Clique em "Publish"</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Section 9: Depoimentos -->
+        <section id="depoimentos" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">9</span>
+                    Gerenciando Depoimentos
+                </h2>
+                <p class="section-description">
+                    Gerencie os depoimentos e histórias de transformação dos alunos.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>💬 Depoimentos Cadastrados</h3>
+                <ul>
+                    <li>Maria Silva - Personal Trainer</li>
+                    <li>João Santos - Empresário</li>
+                    <li>Ana Costa - Estudante</li>
+                    <li>E outros depoimentos de alunos</li>
+                </ul>
+
+                <h3>✏️ Editando um Depoimento</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Depoimentos"</strong></li>
+                    <li>Selecione o depoimento desejado</li>
+                    <li>Edite as informações conforme necessário</li>
+                    <li>Clique em "Publish" para salvar</li>
+                </ol>
+
+                <h4>Campos Editáveis:</h4>
+                <ul>
+                    <li><strong>Nome:</strong> Nome do cliente</li>
+                    <li><strong>Cargo/Profissão:</strong> Profissão da pessoa</li>
+                    <li><strong>Conteúdo:</strong> Texto do depoimento</li>
+                    <li><strong>Avatar:</strong> Foto do cliente</li>
+                    <li><strong>Avaliação:</strong> Nota de 1 a 5 estrelas</li>
+                    <li><strong>Ordem:</strong> Ordem de exibição</li>
+                    <li><strong>Ativo:</strong> Se o depoimento está ativo</li>
+                </ul>
+
+                <h3>📝 Dicas para Depoimentos</h3>
+                <ul class="checklist">
+                    <li>Use depoimentos reais e autênticos</li>
+                    <li>Inclua o nome completo da pessoa</li>
+                    <li>Mencione a profissão ou contexto</li>
+                    <li>Mantenha o texto natural e conversacional</li>
+                    <li>Inclua resultados específicos quando possível</li>
+                    <li>Sempre peça autorização antes de publicar</li>
+                </ul>
+
+                <h3>🆕 Adicionando Novo Depoimento</h3>
+                <ol>
+                    <li>Menu lateral → <strong>"Depoimentos"</strong></li>
+                    <li>Clique em <strong>"+ Create"</strong></li>
+                    <li>Preencha todas as informações</li>
+                    <li>Adicione uma foto do cliente (se autorizada)</li>
+                    <li>Defina a avaliação (1-5 estrelas)</li>
+                    <li>Clique em "Publish"</li>
+                </ol>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">
+                        <span class="info-icon">📸</span>
+                        Uso de Imagens
+                    </div>
+                    <p>Sempre peça autorização antes de usar fotos de clientes. Respeite a privacidade e LGPD.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 10: Boas Práticas -->
+        <section id="praticas" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">10</span>
+                    Boas Práticas
+                </h2>
+                <p class="section-description">
+                    Dicas e recomendações para usar o Sanity CMS de forma eficiente.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>✅ Checklist Antes de Publicar</h3>
+                <ul class="checklist">
+                    <li>Revisei todos os textos (ortografia e gramática)</li>
+                    <li>Testei todos os links (CTAs, botões, links externos)</li>
+                    <li>Verifiquei se as imagens carregam corretamente</li>
+                    <li>Preenchi os campos de SEO (title, description, keywords)</li>
+                    <li>Testei em diferentes dispositivos (mobile, tablet, desktop)</li>
+                    <li>Verifiquei preços e informações de contato</li>
+                    <li>Confirmei horários e datas</li>
+                </ul>
+
+                <h3>✍️ Dicas de Escrita</h3>
+                <h4>Títulos:</h4>
+                <ul>
+                    <li>Use verbos de ação (Transforme, Descubra, Aprenda)</li>
+                    <li>Seja específico e claro</li>
+                    <li>Use números quando possível (3 Unidades, 24h)</li>
+                    <li>Mantenha o tom motivacional</li>
+                </ul>
+
+                <h4>CTAs (Chamadas para Ação):</h4>
+                <ul>
+                    <li>Seja específico: "MATRICULE-SE AGORA" > "Clique aqui"</li>
+                    <li>Crie urgência: "ÚLTIMAS VAGAS", "OFERTA LIMITADA"</li>
+                    <li>Use verbos no imperativo: TRANSFORME, DESCUBRA</li>
+                    <li>Mantenha consistência em todo o site</li>
+                </ul>
+
+                <h3>📸 Dicas de Imagens</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Tamanho Recomendado</th>
+                            <th>Formato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hero Section</td>
+                            <td>1920x1080px</td>
+                            <td>JPG/WebP</td>
+                        </tr>
+                        <tr>
+                            <td>Cards de Unidade</td>
+                            <td>800x600px</td>
+                            <td>JPG/WebP</td>
+                        </tr>
+                        <tr>
+                            <td>Imagens de Benefícios</td>
+                            <td>600x400px</td>
+                            <td>JPG/WebP</td>
+                        </tr>
+                        <tr>
+                            <td>Avatar de Depoimentos</td>
+                            <td>400x400px</td>
+                            <td>JPG/PNG</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <div class="info-box-title">
+                        <span class="info-icon">⚡</span>
+                        Performance
+                    </div>
+                    <p>Comprima imagens antes de usar (máx. 500KB). Use ferramentas como TinyPNG ou Squoosh para otimizar.</p>
+                </div>
+
+                <h3>🔗 Dicas de Links</h3>
+                <ul class="checklist">
+                    <li>Links internos começam com <code>/</code> (ex: <code>/planos</code>)</li>
+                    <li>Links externos começam com <code>https://</code></li>
+                    <li>Para âncoras, use <code>#nome-da-secao</code></li>
+                    <li>Teste todos os links após publicar</li>
+                    <li>Use links descritivos e claros</li>
+                </ul>
+
+                <h3>📱 Responsividade</h3>
+                <ul class="checklist">
+                    <li>Teste em dispositivos móveis</li>
+                    <li>Verifique se textos não ficam muito pequenos</li>
+                    <li>Confirme se botões são fáceis de tocar</li>
+                    <li>Teste em diferentes navegadores</li>
+                    <li>Verifique a velocidade de carregamento</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 11: Suporte -->
+        <section id="suporte" class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">11</span>
+                    Suporte
+                </h2>
+                <p class="section-description">
+                    Precisa de ajuda? Aqui estão os recursos de suporte disponíveis.
+                </p>
+            </div>
+
+            <div class="content">
+                <h3>🔧 Problemas Comuns e Soluções</h3>
+
+                <h4>1. Não consigo publicar alterações</h4>
+                <ul>
+                    <li>Verifique se você está logado</li>
+                    <li>Certifique-se de clicar em "Publish" (não apenas "Save")</li>
+                    <li>Aguarde alguns segundos e recarregue o site</li>
+                    <li>Limpe o cache do navegador (Ctrl+Shift+Delete)</li>
+                </ul>
+
+                <h4>2. Imagem não aparece no site</h4>
+                <ul>
+                    <li>Verifique se a URL está correta</li>
+                    <li>Teste abrindo a URL em uma nova aba</li>
+                    <li>Use URLs completas: <code>https://...</code> ou <code>/images/...</code></li>
+                    <li>Verifique se a imagem não está muito pesada</li>
+                </ul>
+
+                <h4>3. Link não funciona</h4>
+                <ul>
+                    <li>Links internos devem começar com <code>/</code></li>
+                    <li>Links externos devem começar com <code>https://</code></li>
+                    <li>Para âncoras, use <code>#nome-da-secao</code></li>
+                    <li>Teste o link em uma nova aba</li>
+                </ul>
+
+                <h4>4. Preço não aparece corretamente</h4>
+                <ul>
+                    <li>Lembre-se: preço deve estar em centavos</li>
+                    <li>R$ 119,90 = 11990 (sem pontos ou vírgulas)</li>
+                    <li>Verifique se o campo está preenchido</li>
+                </ul>
+
+                <h3>📞 Contato para Suporte</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏢</div>
+                        <div class="feature-title">M2Z Digital</div>
+                        <div class="feature-description">Desenvolvedor do sistema</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📧</div>
+                        <div class="feature-title">Email</div>
+                        <div class="feature-description">suporte@m2z.digital</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⏰</div>
+                        <div class="feature-title">Horário</div>
+                        <div class="feature-description">Seg-Sex, 9h às 18h</div>
+                    </div>
+                </div>
+
+                <h3>📚 Recursos Adicionais</h3>
+                <ul>
+                    <li><strong>Documentação Sanity:</strong> https://www.sanity.io/docs</li>
+                    <li><strong>Comunidade Sanity:</strong> https://slack.sanity.io</li>
+                    <li><strong>Canal YouTube Sanity:</strong> https://youtube.com/c/SanityIO</li>
+                    <li><strong>Live Academia Website:</strong> https://liveacademia.com.br</li>
+                </ul>
+
+                <div class="info-box success">
+                    <div class="info-box-title">
+                        <span class="info-icon">🎉</span>
+                        Sistema Funcionando
+                    </div>
+                    <p>O Sanity CMS da Live Academia está 100% funcional e otimizado. Todas as páginas e componentes são editáveis através desta interface.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="section-number">📊</span>
+                    Estatísticas do Projeto
+                </h2>
+            </div>
+
+            <div class="content">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏠</div>
+                        <div class="feature-title">1 Homepage</div>
+                        <div class="feature-description">Completamente editável</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏢</div>
+                        <div class="feature-title">26+ Unidades</div>
+                        <div class="feature-description">Gerenciáveis individualmente</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💳</div>
+                        <div class="feature-title">2+ Planos</div>
+                        <div class="feature-description">Com preços editáveis</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">10+ Modalidades</div>
+                        <div class="feature-description">Aulas coletivas</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✨</div>
+                        <div class="feature-title">6+ Benefícios</div>
+                        <div class="feature-description">Diferenciais da academia</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <div class="feature-title">3+ Depoimentos</div>
+                        <div class="feature-description">Histórias de transformação</div>
+                    </div>
+                </div>
+
+                <h3>🎯 Benefícios Alcançados</h3>
+                <ul class="checklist">
+                    <li>Autonomia total - Edite sem depender de programador</li>
+                    <li>Rapidez - Publique alterações em minutos</li>
+                    <li>Segurança - Versionamento e backups automáticos</li>
+                    <li>SEO Otimizado - Controle total sobre meta tags</li>
+                    <li>Performance - Site otimizado e rápido</li>
+                    <li>Responsivo - Funciona em todos os dispositivos</li>
+                    <li>Integração - Conectado com sistema de pagamentos</li>
+                </ul>
+
+                <h3>🚀 Funcionalidades Implementadas</h3>
+                <ul class="checklist">
+                    <li>Sistema completo de gerenciamento de conteúdo</li>
+                    <li>Interface intuitiva e fácil de usar</li>
+                    <li>Preview em tempo real das alterações</li>
+                    <li>Upload e gerenciamento de imagens</li>
+                    <li>Controle de SEO para cada página</li>
+                    <li>Sistema de versionamento de conteúdo</li>
+                    <li>Integração com analytics e tracking</li>
+                    <li>Suporte a múltiplos idiomas (preparado)</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logo">LIVE ACADEMIA</div>
+        <p class="footer-text">Sistema desenvolvido com excelência por M2Z Digital</p>
+        <p class="footer-text">Transformando Conhecimento em Tecnologia</p>
+        
+        <div class="footer-badges">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Live Academia
+            </div>
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Manaus
+            </div>
+            <div class="badge">
+                <span class="badge-dot"></span>
+                M2Z Digital
+            </div>
+        </div>
+        
+        <div class="version-info">
+            <div class="version-item">
+                <strong>Versão:</strong> 1.0
+            </div>
+            <div class="version-item">
+                <strong>Última Atualização:</strong> Dezembro 2024
+            </div>
+            <div class="version-item">
+                <strong>Project ID:</strong> c9pbklm2
+            </div>
+        </div>
+        
+        <p class="footer-text" style="margin-top: 2rem; font-size: 0.75rem; opacity: 0.5;">
+            © 2024 M2Z Digital - Todos os direitos reservados<br>
+            Live Academia | Rede de Academias em Manaus
+        </p>
+    </footer>
+</body>
+</html>

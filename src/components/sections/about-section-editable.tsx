@@ -19,6 +19,10 @@ interface AboutSectionProps {
 export default function AboutSectionEditable({ data }: AboutSectionProps) {
   if (!data) return null
 
+  // Provide defaults if data is incomplete
+  const highlights = data.highlights || []
+  const stats = data.stats || []
+
   return (
     <section id="sobre" className="relative py-28 px-6 lg:px-12 overflow-hidden">
       {/* Background transparente para usar o background fixo do layout */}
@@ -48,7 +52,7 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
               viewport={{ once: true }}
               className="space-y-4"
             >
-              {data.highlights.map(item => (
+              {highlights.map(item => (
                 <li key={item} className="group flex items-start gap-3">
                   <span className="mt-1 h-2 w-2 rounded-sm bg-yellow-400 shadow-[0_0_0_3px_rgba(255,204,0,0.25)] transition group-hover:scale-110" />
                   <p className="text-sm leading-relaxed text-white/75 transition group-hover:text-white/90 sm:text-base">{item}</p>
@@ -116,7 +120,7 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
           viewport={{ once: true }}
           className="grid grid-cols-2 gap-5 md:grid-cols-4"
         >
-          {data.stats.map(({ value, label }) => (
+          {stats.map(({ value, label }) => (
             <div
               key={label}
               className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-zinc-900/90 to-black/85 px-6 py-7"
