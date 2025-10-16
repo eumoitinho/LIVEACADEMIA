@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
     
     // Registrar acesso para anti-fraude
     const clientIP = pactoV2API.getClientIP(req)
-    await pactoV2API.registrarInicioAcesso(slug, 1, parseInt(planoId), clientIP) // codigo_unidade padrão
+    await pactoV2API.registrarInicioAcesso(clientIP, `https://liveacademia.com.br/unidades/${slug}`, `simulacao-plano-${planoId}`)
 
     // Preparar dados para simulação V2
     const dadosVenda = formatVendaData(
