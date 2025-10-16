@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pactoV2API } from '@/src/lib/api/pacto-v2'
-import { locations } from '@/lib/config/locations'
-import { getUnitBySlug } from '@/src/lib/api/supabase-repository'
+import { locations } from '@/src/lib/config/locations'
+import { getUnidadeConfig } from '@/src/config/unidades-chaves'
 import { rateLimiter } from '@/src/lib/utils/rate-limiter'
 import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
 
@@ -49,8 +49,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
       return NextResponse.json({ error: 'Unidade não encontrada' }, { status: 404 })
     }
 
-    // Buscar planos usando API V2 (usa slug diretamente)
-    const planos = await pactoV2API.getPlanosUnidade(slug, 1) // codigo_unidade padrão
+    // Buscar configuração da unidade para obter o código correto
+    const unidadeConfig = getUnidadeConfig(slug)
+    if (!unidadeConfig) {
+      return NextResponse.json({ error: 'Configuração da unidade não encontrada' }, { status: 404 })
+    }
+
+    // Buscar planos usando API V2 (usa código da unidade correto)
+    const planos = await pactoV2API.getPlanosUnidade(slug, unidadeConfig.codigoUnidade)
 
     // Armazenar no cache por 30 minutos
     cacheManager.set(cacheKey, planos, 30 * 60 * 1000)

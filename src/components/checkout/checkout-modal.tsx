@@ -48,6 +48,10 @@ interface CheckoutModalProps {
     name: string
     price: string
     codigo?: string
+    adesao?: number
+    fidelidade?: number
+    regimeRecorrencia?: boolean
+    modalidades?: string[]
   } | null
   unidadeName: string
   unidadeId: string

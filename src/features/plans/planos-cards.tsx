@@ -10,6 +10,8 @@ interface PlanoItem {
   codigo?: string
   adesao?: number
   fidelidade?: number
+  regimeRecorrencia?: boolean
+  modalidades?: string[]
 }
 
 interface PlanosCardsProps {

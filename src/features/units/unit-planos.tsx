@@ -12,20 +12,21 @@ interface DynamicPlano {
   fidelidade?: number
   categoria?: string
   recorrencia?: string
-  regimeRecorrencia?: string
+  regimeRecorrencia?: boolean
+  modalidades?: string[]
 }
 
 interface UnitPlanosProps {
   slug: string
   unidadeName: string
-  onMatricular: (plano: { name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number }) => void
-  fallbackPlanos?: Array<{ name: string; price: string; codigo?: string }>
+  onMatricular: (plano: { name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }) => void
+  fallbackPlanos?: Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }>
 }
 
 export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPlanos }: UnitPlanosProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number }>>([])
+  const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }>>([])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -53,12 +54,18 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
         }
       }
       
+      // Usar todos os planos por enquanto para debug
+      console.log(`[UnitPlanos] Total de planos recebidos:`, fetched.length)
+      console.log(`[UnitPlanos] Primeiros 3 planos:`, fetched.slice(0, 3).map(p => ({ nome: p.nome, codigo: p.codigo })))
+      
       const mapped = fetched.map(p => ({
         name: p.nome,
         price: p.mensalidade ? p.mensalidade.toFixed(2) : (typeof p.valor === 'number' ? p.valor.toFixed(2) : p.valor),
         codigo: p.codigo?.toString(),
         adesao: p.adesao,
         fidelidade: p.fidelidade,
+        regimeRecorrencia: p.regimeRecorrencia,
+        modalidades: p.modalidades || [],
       }))
       
       console.log(`[UnitPlanos] Planos mapeados:`, mapped)

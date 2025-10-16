@@ -34,7 +34,7 @@ interface UnidadeContentProps {
 
 export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number} | null>(null)
+  const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]} | null>(null)
   const { setCurrentUnit } = useUnit()
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
     }
   }, [unidade, setCurrentUnit])
 
-  const handleMatricular = (plano: {name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number}) => {
+  const handleMatricular = (plano: {name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]}) => {
     setSelectedPlano(plano)
     setIsModalOpen(true)
   }

@@ -237,20 +237,7 @@ class PactoV2API {
       },
     })
 
-    // Interceptor para adicionar Bearer Token automaticamente
-    this.client.interceptors.request.use(async (config) => {
-      if (config.url?.includes('/v2/')) {
-        const slug = config.headers['x-pacto-unidade'] as string
-        if (slug && !this.isTokenValid(slug)) {
-          await this.authenticate(slug)
-        }
-        const tokenData = this.tokens.get(slug)
-        if (tokenData?.token) {
-          config.headers.Authorization = `Bearer ${tokenData.token}`
-        }
-      }
-      return config
-    })
+    // Interceptor removido - vamos usar autenticação direta nos métodos
   }
 
   /**
@@ -301,14 +288,26 @@ class PactoV2API {
     }
 
     try {
-      const response = await this.client.post<PactoTokenResponse>(`/v2/vendas/tkn/${chaveUnidade}`)
+      // Tentar GET primeiro (método mais comum para obter tokens)
+      const response = await this.client.get(`/v2/vendas/tkn/${chaveUnidade}`)
+      
+      console.log(`[PactoV2] Resposta de autenticação para ${slug}:`, response.data)
+      
+      // Verificar se há erro na resposta
+      if (response.data.erro) {
+        throw new Error(`Erro na autenticação: ${response.data.erro}`)
+      }
+
+      // A API pode não retornar um token explícito, mas sim validar a chave
+      // Vamos usar a própria chave como "token" para autenticação
+      const token = chaveUnidade
       
       this.tokens.set(slug, {
-        token: response.data.token,
+        token,
         expiry: Date.now() + (3500 * 1000) // 58 minutos
       })
 
-      console.log(`[PactoV2] Token gerado para unidade ${slug}`)
+      console.log(`[PactoV2] Autenticação validada para unidade ${slug}`)
     } catch (error: unknown) {
       const axiosError = error as AxiosError
       const errorMessage = axiosError.response?.data || axiosError.message || 'Unknown error'
@@ -395,31 +394,27 @@ class PactoV2API {
    */
   async getPlanosUnidade(slug: string, codigoUnidade: number): Promise<PactoPlano[]> {
     try {
-      // Buscar o ID público da unidade
-      const unidadeConfig = getUnidadeConfig(slug)
-      if (!unidadeConfig) {
-        throw new Error(`Unidade ${slug} não encontrada`)
+      // Buscar a chave privada da rede (chave do centro)
+      const redeKey = await this.getChaveRede()
+      if (!redeKey) {
+        throw new Error('Chave da rede não configurada')
       }
 
-      // Buscar o valor da chave pública (ID da unidade)
-      const publicKey = process.env[unidadeConfig.chavePublic]
-      if (!publicKey) {
-        throw new Error(`Chave pública não encontrada para unidade ${slug}`)
-      }
-
-      // Garantir que temos um token válido
-      if (!this.isTokenValid(slug)) {
-        await this.authenticate(slug)
-      }
-
-      // Usar o ID público da unidade na URL
-      const response = await this.client.get(`/v2/vendas/${publicKey}/unidade/${codigoUnidade}`)
-      return response.data.retorno || []
+      // Usar a chave da rede diretamente na autenticação Bearer
+      const response = await this.client.get(`/v2/vendas/planos/${codigoUnidade}`, {
+        headers: {
+          'Authorization': `Bearer ${redeKey}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      console.log(`[PactoV2] Planos encontrados para unidade ${codigoUnidade}:`, response.data.return?.length || 0)
+      return response.data.return || []
     } catch (error: unknown) {
       const axiosError = error as AxiosError
       const errorMessage = axiosError.response?.data || axiosError.message || 'Unknown error'
-      console.error(`[PactoV2] Erro ao buscar planos da unidade ${codigoUnidade} da unidade ${slug}:`, errorMessage)
-      throw new Error(`Failed to fetch plans for unit ${codigoUnidade} from ${slug}`)
+      console.error(`[PactoV2] Erro ao buscar planos da unidade ${codigoUnidade}:`, errorMessage)
+      throw new Error(`Failed to fetch plans for unit ${codigoUnidade}`)
     }
   }
 
