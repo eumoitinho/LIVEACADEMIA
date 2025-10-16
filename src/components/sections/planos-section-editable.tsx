@@ -11,12 +11,12 @@ interface PlanosSectionProps {
     plans: Array<{
       name: string
       price: number
-      priceLabel: string
-      description: string
-      features: string[]
-      cta: string
-      highlight: boolean
-      badge: string
+      priceLabel?: string
+      description?: string
+      features?: string[]
+      cta?: string
+      highlight?: boolean
+      badge?: string
     }>
   }
 }

@@ -67,7 +67,9 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
           {/* Left Column - Heading */}
           <div className="order-1 opacity-0 animate-[slideInBlur_1.2s_ease-out_0.4s_forwards]" style={{transform: "translateY(30px)", filter: "blur(10px)"}}>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight text-white">
-              {data.title || "Transforme seu corpo e sua vida"}
+              {data.title || "Transforme."}<br />
+              {data.subtitle || "Evolua."}<br />
+              {data.thirdTitle || "Viva."}
             </h1>
           </div>
 

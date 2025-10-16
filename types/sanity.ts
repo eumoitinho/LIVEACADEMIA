@@ -185,6 +185,7 @@ export interface StructureFeature {
   title: string
   description?: string
   icon: string
+  image?: SanityImage
   order: number
   active: boolean
 }
