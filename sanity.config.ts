@@ -18,8 +18,8 @@ export default defineConfig({
   name: 'live-academia',
   title: 'Live Academia CMS',
   
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  projectId: 'c9pbklm2',
+  dataset: 'production',
   
   plugins: [
     structureTool({
