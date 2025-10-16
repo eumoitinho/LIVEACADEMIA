@@ -18,29 +18,8 @@ export default function HomepageEditable() {
   const { data: homepageData, loading: homepageLoading, error: homepageError } = useHomepageData()
   const { data: unitsData, loading: unitsLoading } = useUnitsData()
 
-  // Loading state
-  if (homepageLoading) {
-    return (
-      <main className="min-h-screen relative bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-lg">Carregando conteúdo...</p>
-        </div>
-      </main>
-    )
-  }
-
-  // Error state
-  if (homepageError || !homepageData) {
-    return (
-      <main className="min-h-screen relative bg-black flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-400 text-lg mb-4">Erro ao carregar conteúdo</p>
-          <p className="text-zinc-400">Por favor, tente novamente mais tarde.</p>
-        </div>
-      </main>
-    )
-  }
+  // Se houver erro ou dados não carregarem, use componentes estáticos originais
+  const useFallback = homepageError || (!homepageLoading && !homepageData)
 
   return (
     <main className="min-h-screen relative">

@@ -21,7 +21,12 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
 
   // Provide defaults if data is incomplete
   const highlights = data.highlights || []
-  const stats = data.stats || []
+  const stats = data.stats || [
+    { value: "10K+", label: "Alunos ativos" },
+    { value: "35+", label: "Unidades" },
+    { value: "4.9", label: "Avaliação média" },
+    { value: "10+", label: "Anos de experiência" }
+  ]
 
   return (
     <section id="sobre" className="relative py-28 px-6 lg:px-12 overflow-hidden bg-black">
@@ -41,16 +46,20 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
           viewport={{ once: true }}
           className="space-y-6 border-b border-white/10 pb-12 pt-4"
         >
-          <span className="block text-sm uppercase tracking-[0.35em] text-white/40">Live Academia</span>
+          <span className="block text-sm uppercase tracking-[0.35em] text-white/40">
+            {data.badge || "Live Academia"}
+          </span>
           <h1 className="text-[48px] md:text-[80px] lg:text-[96px] leading-[0.95] font-semibold tracking-tight text-white">
             {data.title || "Sobre"}
           </h1>
           <p className="text-base text-white/75 leading-relaxed">
             {data.description || "Transformamos treino em rotina sustentável e resultado real: liberdade multiunidade, atendimento humano que acompanha cada fase e estrutura premium para garantir evolução de verdade."}
           </p>
-          <p className="text-base text-white/65 leading-relaxed">
-            Somos uma rede criada em Manaus focada em experiência premium acessível: liberdade para treinar em qualquer unidade, avaliação constante e suporte humano de verdade — sem enrolação e sem barreiras.
-          </p>
+          {highlights.length > 0 && (
+            <p className="text-base text-white/65 leading-relaxed">
+              {highlights[0] || "Somos uma rede criada em Manaus focada em experiência premium acessível: liberdade para treinar em qualquer unidade, avaliação constante e suporte humano de verdade — sem enrolação e sem barreiras."}
+            </p>
+          )}
         </motion.header>
 
         <motion.div
