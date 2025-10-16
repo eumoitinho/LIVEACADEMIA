@@ -17,9 +17,15 @@ import { bioimpedanciaFeatureSchema } from './sanity/schemas/bioimpedancia-featu
 export default defineConfig({
   name: 'live-academia',
   title: 'Live Academia CMS',
-  
+
   projectId: 'c9pbklm2',
   dataset: 'production',
+
+  // API version
+  apiVersion: '2024-01-01',
+
+  // Enable authentication
+  token: process.env.SANITY_API_TOKEN,
   
   plugins: [
     structureTool({
