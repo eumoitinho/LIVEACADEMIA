@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Image from "next/image"
 import { useModalitiesData } from "../../hooks/use-sanity-data"
 import { urlFor } from "../../lib/sanity"
 
@@ -66,9 +67,9 @@ export default function AulasColetivasPage() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="col-span-12 sm:col-span-4 h-[350px] group"
+              className="col-span-12 sm:col-span-6 lg:col-span-4 h-[430px] group flex flex-col"
             >
-              <div className="relative h-full overflow-hidden rounded-3xl border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500 hover:transform hover:scale-[1.02] hover:-translate-y-1">
+              <div className="relative flex-1 overflow-hidden rounded-3xl border border-zinc-800/50 hover:border-amber-400/30 transition-all duration-500 hover:transform hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl hover:shadow-amber-400/10 flex flex-col">
                 {/* Header com informações */}
                 <div className="absolute z-10 top-4 left-4 right-4">
                   <p className="text-xs text-white/80 uppercase font-bold tracking-wider mb-1">
@@ -81,22 +82,28 @@ export default function AulasColetivasPage() {
 
                 {/* Imagem de fundo */}
                 {modality.image && (
-                  <img
+                  <Image
                     src={urlFor(modality.image).url()}
                     alt={modality.name}
-                    className="z-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    fill
+                    className="z-0 object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
+                    priority={index < 3}
                   />
                 )}
-                
-                {/* Gradiente overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 z-[1]" />
 
-                {/* Descrição no rodapé */}
-                <div className="absolute bottom-4 left-4 right-4 z-10">
-                  <p className="text-white/90 text-sm leading-relaxed">
-                    {modality.description || 'Descubra esta modalidade incrível na Live Academia!'}
-                  </p>
-                </div>
+                {/* Gradiente overlay com tom amarelado */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-amber-900/20 to-transparent z-[1]" />
+                
+                {/* Overlay amarelado adicional */}
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-400/10 via-transparent to-amber-600/20 z-[2]" />
+              </div>
+
+              {/* Descrição abaixo da foto */}
+              <div className="mt-4 px-2">
+                <p className="text-white/90 text-sm leading-relaxed text-center">
+                  {modality.description || 'Descubra esta modalidade incrível na Live Academia!'}
+                </p>
               </div>
             </motion.div>
           ))}

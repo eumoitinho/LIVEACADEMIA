@@ -69,7 +69,6 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight text-white">
               {data.title || "Transforme."}<br />
               {data.subtitle || "Evolua."}<br />
-              {data.thirdTitle || "Viva."}
             </h1>
           </div>
 

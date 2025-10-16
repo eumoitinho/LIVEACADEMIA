@@ -24,6 +24,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'cdn1.pactorian.net',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      }
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
