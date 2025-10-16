@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { useSobreNosData } from "@/hooks/use-sobre-nos-data"
 
 export default function SobreNos() {
@@ -204,18 +205,18 @@ export default function SobreNos() {
                   Venha conhecer de perto o que faz da Live Academia a melhor escolha para sua jornada fitness.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a
+                  <Link
                     href="/unidades"
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-black font-bold hover:scale-105 transition-all"
                   >
                     Encontrar Unidade
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href="/planos"
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all"
                   >
                     Ver Planos
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
