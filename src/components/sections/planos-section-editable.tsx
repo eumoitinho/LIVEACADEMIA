@@ -2,6 +2,7 @@
 
 import { Check, Star, Crown, Sparkles } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 
 interface PlanosSectionProps {
   data: {
@@ -15,6 +16,7 @@ interface PlanosSectionProps {
       description?: string
       features?: string[]
       cta?: string
+      ctaUrl?: string
       highlight?: boolean
       badge?: string
     }>

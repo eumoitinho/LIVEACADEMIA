@@ -159,6 +159,7 @@ export async function getPlans() {
         priceLabel,
         features,
         cta,
+        ctaUrl,
         highlight,
         badge,
         order,

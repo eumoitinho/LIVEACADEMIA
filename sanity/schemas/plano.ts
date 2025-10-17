@@ -42,6 +42,12 @@ export const planoSchema = defineType({
       initialValue: 'MATRICULE-SE AGORA',
     }),
     defineField({
+      name: 'ctaUrl',
+      title: 'URL do CTA',
+      type: 'url',
+      description: 'Link de destino quando o usuário clicar no botão CTA',
+    }),
+    defineField({
       name: 'highlight',
       title: 'Destaque',
       type: 'boolean',
