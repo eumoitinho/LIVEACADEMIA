@@ -407,7 +407,8 @@ export default function Planos() {
               className="mt-12"
             >
               <div className="max-w-6xl mx-auto">
-                <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-zinc-900/50 backdrop-blur-sm">
+                {/* Desktop Version - Table */}
+                <div className="hidden md:block rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-zinc-900/50 backdrop-blur-sm">
                   {/* Header */}
                   <div className="grid grid-cols-3 border-b border-white/10">
                     <div className="p-6 bg-black/20"></div>
@@ -474,18 +475,104 @@ export default function Planos() {
                   {/* CTA Buttons */}
                   <div className="grid grid-cols-3 p-6 bg-black/20">
                     <div></div>
-                    <div className="border-l border-white/10 flex justify-center">
+                    <div className="border-l border-white/10 flex justify-center px-2">
                       <button
                         onClick={() => handlePlanClick('TRADICIONAL')}
-                        className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-all"
+                        className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-all w-full"
+                      >
+                        Escolher
+                      </button>
+                    </div>
+                    <div className="border-l border-white/10 flex justify-center px-2">
+                      <button
+                        onClick={() => handlePlanClick('DIAMANTE')}
+                        className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold rounded-xl transition-all hover:scale-105 w-full"
+                      >
+                        Escolher
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Version - Cards */}
+                <div className="md:hidden space-y-6">
+                  {/* Tradicional Card */}
+                  <div className="rounded-2xl overflow-hidden border border-white/10 shadow-xl bg-zinc-900/50 backdrop-blur-sm">
+                    <div className="p-6 bg-black/20 text-center border-b border-white/10">
+                      <div className="text-xl font-bold text-white">TRADICIONAL</div>
+                      <div className="mt-3 text-4xl font-bold text-white">R$ 119,90</div>
+                      <div className="mt-1 text-gray-400 text-sm">/mês</div>
+                    </div>
+
+                    {comparisonFeatures.map((section, sectionIndex) => (
+                      <div key={sectionIndex}>
+                        <div className="px-6 py-3 bg-zinc-800/30 border-b border-white/5">
+                          <h3 className="text-xs font-semibold text-white uppercase tracking-wide">{section.section}</h3>
+                        </div>
+                        {section.items.map((item, itemIndex) => (
+                          <div key={itemIndex} className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
+                            <span className="text-white text-sm">{item.label}</span>
+                            <div>
+                              {item.tradicional === true ? (
+                                <Check className="w-5 h-5 text-green-400" />
+                              ) : item.tradicional === 'Parcial' ? (
+                                <span className="text-yellow-400 text-xs font-medium">PARCIAL</span>
+                              ) : (
+                                <span className="text-gray-500">—</span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+
+                    <div className="p-6 bg-black/20">
+                      <button
+                        onClick={() => handlePlanClick('TRADICIONAL')}
+                        className="w-full px-6 py-4 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-all"
                       >
                         Escolher Tradicional
                       </button>
                     </div>
-                    <div className="border-l border-white/10 flex justify-center">
+                  </div>
+
+                  {/* Diamante Card */}
+                  <div className="rounded-2xl overflow-hidden border border-yellow-500/30 shadow-xl bg-zinc-900/50 backdrop-blur-sm">
+                    <div className="p-6 bg-yellow-500/10 text-center border-b border-white/10 relative">
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">
+                          MAIS POPULAR
+                        </div>
+                      </div>
+                      <div className="text-xl font-bold text-white mt-2">DIAMANTE</div>
+                      <div className="mt-3 text-4xl font-bold text-yellow-400">R$ 159,90</div>
+                      <div className="mt-1 text-gray-400 text-sm">/mês</div>
+                    </div>
+
+                    {comparisonFeatures.map((section, sectionIndex) => (
+                      <div key={sectionIndex}>
+                        <div className="px-6 py-3 bg-zinc-800/30 border-b border-white/5">
+                          <h3 className="text-xs font-semibold text-white uppercase tracking-wide">{section.section}</h3>
+                        </div>
+                        {section.items.map((item, itemIndex) => (
+                          <div key={itemIndex} className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
+                            <span className="text-white text-sm">{item.label}</span>
+                            <div>
+                              {item.diamante === true ? (
+                                <Check className="w-5 h-5 text-green-400" />
+                              ) : (
+                                <span className="text-gray-500">—</span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+
+                    <div className="p-6 bg-black/20">
                       <button
                         onClick={() => handlePlanClick('DIAMANTE')}
-                        className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold rounded-xl transition-all hover:scale-105"
+                        className="w-full px-6 py-4 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold rounded-xl transition-all"
                       >
                         Escolher Diamante
                       </button>
