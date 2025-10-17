@@ -10,10 +10,23 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { currentUnit } = useUnit()
 
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isMenuOpen])
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/80 via-black/60 to-transparent backdrop-blur-md shadow-2xl">
-      <div className="lg:px-8 max-w-7xl mx-auto px-6">
-        <div className="flex pt-5 pb-5 items-center justify-between">
+    <>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/80 via-black/60 to-transparent backdrop-blur-md shadow-2xl">
+        <div className="lg:px-8 max-w-7xl mx-auto px-6">
+          <div className="flex pt-5 pb-5 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="inline-flex items-center justify-center">
             <div className="flex flex-col items-center gap-1">
@@ -77,11 +90,13 @@ export default function Header() {
             <span>{isMenuOpen ? 'Close' : 'Menu'}</span>
           </button>
         </div>
+      </div>
+    </header>
 
-        {/* Mobile Navigation Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden fixed inset-0 bg-black/95 backdrop-blur-xl z-50 transition-all duration-300 ease-out">
-            <div className="flex flex-col h-full pt-6 pb-8 px-6">
+    {/* Mobile Navigation Menu - Outside header for proper positioning */}
+    {isMenuOpen && (
+      <div className="lg:hidden fixed inset-0 bg-black/98 backdrop-blur-xl z-[100] transition-all duration-300 ease-out">
+        <div className="flex flex-col h-full pt-6 pb-8 px-6 overflow-y-auto">
               {/* Close Button */}
               <div className="flex justify-end mb-8">
                 <button 
@@ -154,17 +169,16 @@ export default function Header() {
                 <div className="mt-12 pt-8 border-t border-white/10">
                   <Link
                     href="/planos"
-                    className="w-full inline-flex gap-2 transition hover:bg-primary/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 text-base font-normal text-primary-foreground bg-primary border-primary/30 border rounded-full pt-3 pr-6 pb-3 pl-6 backdrop-blur items-center justify-center"
+                    className="w-full inline-flex gap-2 transition hover:from-amber-200 hover:to-amber-300 hover:shadow-[0_8px_20px_rgba(251,191,36,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 text-base font-bold text-black bg-gradient-to-b from-amber-300 to-amber-400 rounded-full pt-4 pr-6 pb-4 pl-6 shadow-[0_4px_12px_rgba(251,191,36,0.3)] items-center justify-center"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Matricule-se
+                    Matricule-se Agora
                   </Link>
                 </div>
               </nav>
             </div>
           </div>
         )}
-      </div>
-    </header>
-  )
-}
+      </>
+    )
+  }

@@ -42,7 +42,9 @@ const planosDefault = [
     gradient: "from-zinc-700 to-zinc-900",
     icone: Check,
     popular: false,
-    destaque: false
+    destaque: false,
+    cta: "MATRICULE-SE AGORA!",
+    ctaUrl: "/planos"
   },
   {
     nome: "DIAMANTE",
@@ -67,7 +69,9 @@ const planosDefault = [
     icone: Crown,
     popular: true,
     destaque: true,
-    badge: "O mais vendido"
+    badge: "O mais vendido",
+    cta: "MATRICULE-SE AGORA!",
+    ctaUrl: "/planos"
   }
 ]
 
@@ -196,13 +200,26 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
                   </ul>
 
                   {/* CTA Button */}
-                  <button className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 ${
-                    plano.destaque
-                      ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
-                      : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
-                  }`}>
-                    MATRICULE-SE AGORA!
-                  </button>
+                  {(plano as any).ctaUrl ? (
+                    <Link
+                      href={(plano as any).ctaUrl}
+                      className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 inline-block text-center ${
+                        plano.destaque
+                          ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
+                          : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
+                      }`}
+                    >
+                      {(plano as any).cta || 'MATRICULE-SE AGORA!'}
+                    </Link>
+                  ) : (
+                    <button className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 ${
+                      plano.destaque
+                        ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
+                        : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
+                    }`}>
+                      {(plano as any).cta || 'MATRICULE-SE AGORA!'}
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>
