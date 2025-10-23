@@ -254,7 +254,7 @@ export default function Planos() {
 
                     {/* Benefits */}
                     <ul className="space-y-4 mb-8">
-                      {(plano as any).beneficios.map((beneficio, i) => (
+                      {(plano as any).beneficios.map((beneficio: string, i: number) => (
                         <li key={i} className="flex items-start gap-3">
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
                             (plano as any).destaque
