@@ -98,7 +98,7 @@ export default async function UnidadePage(props: PageProps) {
 
   // Fetch from Sanity first
   const sanityUnits = await getUnits()
-  const sanityUnit = sanityUnits.find((unit: Unit) => unit.slug?.current === slug)
+  const sanityUnit = sanityUnits.find((unit: Unit) => unit.slug === slug)
 
   // Fallback to static locations
   const staticUnidade = locations.find(loc => loc.id === slug)
@@ -110,7 +110,7 @@ export default async function UnidadePage(props: PageProps) {
   // Merge Sanity data with static data (Sanity takes precedence)
   const unidade = sanityUnit ? {
     ...staticUnidade,
-    id: sanityUnit.slug?.current || slug,
+    id: sanityUnit.slug || slug,
     name: sanityUnit.name,
     address: sanityUnit.address,
     type: sanityUnit.type as 'tradicional' | 'premium' | 'diamante',

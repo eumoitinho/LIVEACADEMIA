@@ -106,56 +106,53 @@ export async function getHomepageData() {
   }
 }
 
+// Cache para unidades
+let unitsCache: any[] | null = null
+let cacheTimestamp = 0
+const CACHE_DURATION = 5 * 60 * 1000 // 5 minutos
+
 // Helper para buscar unidades
 export async function getUnits() {
   try {
+    // Verificar cache
+    if (unitsCache && Date.now() - cacheTimestamp < CACHE_DURATION) {
+      return unitsCache
+    }
+
     const data = await client.fetch(`
       *[_type == "unit" && active == true] | order(order asc) {
         _id,
         name,
-        slug,
+        "slug": slug.current,
         address,
-        city,
-        state,
-        zipCode,
-        phone,
-        whatsapp,
-        email,
-        latitude,
-        longitude,
         type,
         services,
         photo {
           asset-> {
-            _id,
             url
-          },
-          hotspot,
-          crop
+          }
         },
         backgroundImage {
           asset-> {
-            _id,
             url
-          },
-          hotspot,
-          crop
+          }
         },
         images[] {
           asset-> {
-            _id,
             url
-          },
-          alt,
-          hotspot
+          }
         },
-        description,
         openingHours,
         order,
         active,
         featured
       }
     `)
+    
+    // Atualizar cache
+    unitsCache = data
+    cacheTimestamp = Date.now()
+    
     return data
   } catch (error) {
     console.error('Error fetching units:', error)

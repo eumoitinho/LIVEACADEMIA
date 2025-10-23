@@ -129,35 +129,25 @@ export interface SEO {
 export interface Unit {
   _id: string
   name: string
-  slug: {
-    current: string
-  }
+  slug: string
   address: string
-  city: string
-  state: string
-  zipCode?: string
-  phone?: string
-  whatsapp?: string
-  email?: string
-  latitude: number
-  longitude: number
   type: string
   services: string[]
-  backgroundImage?: SanityImage
-  images?: Array<{
+  photo?: {
     asset?: {
-      _id: string
       url: string
     }
-    alt?: string
-    hotspot?: {
-      x: number
-      y: number
-      height: number
-      width: number
+  }
+  backgroundImage?: {
+    asset?: {
+      url: string
+    }
+  }
+  images?: Array<{
+    asset?: {
+      url: string
     }
   }>
-  description?: string
   openingHours: string
   order: number
   active: boolean
