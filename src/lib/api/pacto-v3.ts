@@ -293,22 +293,24 @@ class PactoV3API {
    */
   private async getChaveSecretaUnidade(slug: string): Promise<string | null> {
     try {
-      
-      const chaveVercel = process.env[`PACTO_SECRET_KEY_${slug.toUpperCase()}`]
+      // Convert hyphens to underscores for env var name
+      const envSlug = slug.toUpperCase().replace(/-/g, '_')
+
+      const chaveVercel = process.env[`PACTO_SECRET_KEY_${envSlug}`]
       if (chaveVercel) {
         console.log(`[PactoV3] Chave SECRETA da unidade ${slug} carregada via Vercel`)
         return chaveVercel
       }
 
-     
-      const chaveDev = process.env[`PACTO_SECRET_KEY_DEV_${slug.toUpperCase()}`]
+
+      const chaveDev = process.env[`PACTO_SECRET_KEY_DEV_${envSlug}`]
       if (chaveDev) {
         console.log(`[PactoV3] Chave SECRETA da unidade ${slug} carregada via dev env`)
         return chaveDev
       }
 
       console.error(`[PactoV3] Chave SECRETA da unidade ${slug} não encontrada`)
-      console.error(`[PactoV3] Procurando por: PACTO_SECRET_KEY_${slug.toUpperCase()}`)
+      console.error(`[PactoV3] Procurando por: PACTO_SECRET_KEY_${envSlug}`)
       return null
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
@@ -316,6 +318,8 @@ class PactoV3API {
       return null
     }
   }
+
+  // getCodigoUnidade removido - não mais necessário pois a busca de planos é feita pela API V2
 
   // ============================================
   // ENDPOINTS DA API V3
@@ -378,32 +382,11 @@ class PactoV3API {
   }
 
   /**
-   * 3. Consultar Planos da Empresa
-   * GET /psec/vendas/planos
+   * DEPRECATED: Use pactoV2API.getPlanosUnidade() instead
+   * A busca de planos por unidade deve ser feita na API V2
+   * GET /v2/vendas/planos/1 com Authorization: Bearer {chave_unidade}
    */
-  async getPlanos(slug: string): Promise<PactoV3Plano[]> {
-    try {
-      const chaveSecreta = await this.getChaveSecretaUnidade(slug)
-      if (!chaveSecreta) {
-        throw new Error(`Chave SECRETA da unidade ${slug} não configurada`)
-      }
-
-      const response = await this.client.get('/psec/vendas/planos', {
-        headers: {
-          'Authorization': `Bearer ${chaveSecreta}`,
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      console.log(`[PactoV3] ${response.data.return?.length || 0} planos encontrados para ${slug}`)
-      return response.data.return || []
-    } catch (error: unknown) {
-      const axiosError = error as any
-      const errorMessage = axiosError.response?.data || axiosError.message || 'Unknown error'
-      console.error(`[PactoV3] Erro ao buscar planos da unidade ${slug}:`, errorMessage)
-      throw new Error(`Failed to fetch plans for unit ${slug}`)
-    }
-  }
+  // Método removido - use pactoV2API.getPlanosUnidade() ao invés
 
   /**
    * 4. Consultar Configurações da Empresa

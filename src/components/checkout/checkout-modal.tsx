@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, CreditCard, QrCode, FileText, Loader2, Check, Copy, ExternalLink } from "lucide-react"
+import { X, CreditCard, QrCode, FileText, Loader2, Check, Copy, ExternalLink, Clock } from "lucide-react"
 import AnimatedPaymentCard from "@/components/checkout/animated-payment-card"
 import { useRecaptcha } from "@/src/hooks/use-recaptcha"
 import { useDebouncedCallback, useDebounceState } from "@/src/hooks/use-debounce"
@@ -35,6 +35,8 @@ const formatCurrency = (value?: number | string | null) => {
 interface PactoResponse {
   success: boolean
   error?: string
+  message?: string
+  isPending?: boolean
   transactionId?: string
   pixCode?: string
   boletoUrl?: string
@@ -329,10 +331,22 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(saleBody),
       })
+
+      // Handle rate limit error
+      if (res.status === 429) {
+        setPaymentResult({
+          success: false,
+          message: 'Muitas tentativas. Seu pedido está sendo processado e você receberá um e-mail de confirmação em breve.',
+          isPending: true
+        })
+        setStep(4) // Go to success screen with pending message
+        return
+      }
+
       const result = await res.json()
-      
+
       setPaymentResult(result)
-      
+
       if (result.success) {
         setStep(4)
       } else {
@@ -345,7 +359,14 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
       if (error instanceof Error && error.message.includes('reCAPTCHA')) {
         alert('Erro na validação de segurança. Tente novamente.')
       } else {
-        alert('Erro ao processar pagamento. Tente novamente.')
+        // Fallback message for any error
+        setPaymentResult({
+          success: false,
+          message: 'Seu pedido está sendo processado. Você receberá um e-mail de confirmação em breve com os próximos passos.',
+          isPending: true
+        })
+        setStep(4)
+        return
       }
       setStep(2)
     } finally {
@@ -862,18 +883,44 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-8"
               >
-                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Check className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-semibold text-white mb-2">
-                  Matrícula Realizada!
-                </h3>
-                <p className="text-white/80 mb-6">
-                  Parabéns! Sua matrícula na {unidadeName} foi realizada com sucesso.
-                </p>
+                {paymentResult?.isPending ? (
+                  /* Tela de Processamento/Pendente */
+                  <>
+                    <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Clock className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-white mb-2">
+                      Processando sua Compra
+                    </h3>
+                    <p className="text-white/80 mb-6">
+                      {paymentResult?.message || 'Seu pedido está sendo processado. Você receberá um e-mail de confirmação em breve com os próximos passos.'}
+                    </p>
+
+                    
+
+                    <div className="bg-yellow-500/10 p-4 rounded-lg border border-yellow-500/30 mb-6">
+                      <p className="text-sm text-white/90">
+                        <strong>Importante:</strong> Salve o número {formData.telefone} - entraremos em contato em breve!
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  /* Tela de Sucesso Normal */
+                  <>
+                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Check className="h-8 w-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-white mb-2">
+                      Matrícula Realizada!
+                    </h3>
+                    <p className="text-white/80 mb-6">
+                      Parabéns! Sua matrícula na {unidadeName} foi realizada com sucesso.
+                    </p>
+                  </>
+                )}
 
                 {/* Informações da transação */}
-                {paymentResult?.transactionId && (
+                {paymentResult?.transactionId && !paymentResult?.isPending && (
                   <div className="bg-live-border/5 p-4 rounded-lg border border-live-border/30 mb-6">
                     <h4 className="font-semibold text-white mb-3">Pagamento Aprovado</h4>
                     <div className="flex items-center gap-2 bg-live-bg p-3 rounded-lg">

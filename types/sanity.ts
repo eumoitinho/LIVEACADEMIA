@@ -143,6 +143,7 @@ export interface Unit {
   longitude: number
   type: string
   services: string[]
+  backgroundImage?: SanityImage
   images?: Array<{
     asset?: {
       _id: string

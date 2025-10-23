@@ -8,16 +8,9 @@ const contactInfo = [
   {
     icon: Phone,
     title: "WhatsApp",
-    info: "(92) 99999-9999",
+    info: "(92) 98527-9143",
     action: "Chamar agora",
     highlight: true
-  },
-  {
-    icon: Mail,
-    title: "Email",
-    info: "contato@liveacademia.com.br",
-    action: "Enviar email",
-    highlight: false
   },
   {
     icon: MapPin,

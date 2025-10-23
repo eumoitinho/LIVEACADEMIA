@@ -26,6 +26,19 @@ export default function RootLayout({
           {/* Google Tag Manager */}
           <GTM gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX'} />
           
+          {/* Widget de Chat */}
+          <script 
+            type="application/javascript" 
+            src="https://cdn.oihe.in/scripts/widget/v2/h-widget-min.js" 
+            data-companyid="fe8c1ee1-1719-417c-8f76-1f3dde7cce83" 
+            data-widgetid="92358358-493a-4600-bfc7-41941aa88bc5"
+            async
+          />
+          <link 
+            href="https://cdn.oihe.in/scripts/widget/v2/h-widget-min.css?v=2" 
+            rel="stylesheet" 
+          />
+          
           <script src="https://api.tracking.ninetwo.com.br/script/live-academia" async></script>
           <script dangerouslySetInnerHTML={{
             __html: `
