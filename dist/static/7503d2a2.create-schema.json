@@ -52,19 +52,19 @@
             "initialValue": "Transforme.",
             "name": "title",
             "type": "string",
-            "title": "Título Principal"
+            "title": "Título (Linha 1)"
           },
           {
             "initialValue": "Evolua.",
             "name": "subtitle",
             "type": "string",
-            "title": "Subtítulo"
+            "title": "Subtítulo (Linha 2)"
           },
           {
             "initialValue": "Viva.",
             "name": "thirdTitle",
             "type": "string",
-            "title": "Terceiro Título"
+            "title": "Terceiro Título (Linha 3)"
           },
           {
             "rows": 3,
@@ -741,6 +741,33 @@
         "name": "cta",
         "type": "string",
         "title": "Texto do CTA"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link de destino quando o usuário clicar no botão CTA",
+        "name": "ctaUrl",
+        "type": "url",
+        "title": "URL do CTA"
       },
       {
         "initialValue": false,
@@ -2170,5 +2197,171 @@
     ],
     "name": "dayUse",
     "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título Principal"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text",
+        "title": "Descrição Principal"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "fields": [
+          {
+            "name": "alt",
+            "type": "string",
+            "title": "Texto Alternativo"
+          }
+        ],
+        "name": "backgroundImage",
+        "type": "image",
+        "title": "Imagem de Fundo"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Parágrafos do conteúdo principal",
+        "of": [
+          {
+            "rows": 3,
+            "type": "text"
+          }
+        ],
+        "name": "content",
+        "type": "array",
+        "title": "Conteúdo"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 6
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "value",
+                "type": "string",
+                "title": "Valor"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "label",
+                "type": "string",
+                "title": "Rótulo"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "stats",
+        "type": "array",
+        "title": "Estatísticas"
+      },
+      {
+        "initialValue": "Pronto para fazer parte da nossa história?",
+        "name": "ctaTitle",
+        "type": "string",
+        "title": "Título do CTA Final"
+      },
+      {
+        "rows": 2,
+        "initialValue": "Venha conhecer de perto o que faz da Live Academia a melhor escolha para sua jornada fitness.",
+        "name": "ctaDescription",
+        "type": "text",
+        "title": "Descrição do CTA Final"
+      }
+    ],
+    "name": "sobreNos",
+    "type": "document",
+    "title": "Sobre Nós"
   }
 ]

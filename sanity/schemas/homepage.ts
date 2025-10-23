@@ -368,4 +368,16 @@ export const homepageSchema = defineType({
       ],
     }),
   ],
+  preview: {
+    select: {
+      title: 'seo.title',
+      subtitle: 'hero.title',
+    },
+    prepare({ title, subtitle }) {
+      return {
+        title: title || 'Homepage',
+        subtitle: subtitle || 'Página inicial da Live Academia',
+      }
+    },
+  },
 })
