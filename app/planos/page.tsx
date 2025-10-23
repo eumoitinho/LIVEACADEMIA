@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { Check, Crown, Sparkles, ChevronDown, MapPin, ChevronRight } from "lucide-react"
-import { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePlansData } from "../../hooks/use-sanity-data"
@@ -202,7 +202,7 @@ export default function Planos() {
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {displayPlans.map((plano, idx) => (
               <motion.div
-                key={plano.nome}
+                key={(plano as any).nome}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
@@ -230,7 +230,7 @@ export default function Planos() {
                     {/* Header */}
                     <div className="mb-8">
                       <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${(plano as any).gradient} flex items-center justify-center mb-4`}>
-                        {(plano as any).icone ? <(plano as any).icone className="w-6 h-6 text-white" /> : <Check className="w-6 h-6 text-white" />}
+                        {(plano as any).icone ? React.createElement((plano as any).icone, { className: "w-6 h-6 text-white" }) : <Check className="w-6 h-6 text-white" />}
                       </div>
                       <h3 className="text-2xl font-bold text-white mb-2">{plano.nome}</h3>
                       <p className="text-zinc-400 text-sm leading-relaxed">{plano.descricao}</p>
