@@ -5,6 +5,7 @@ import { Check, Crown, Sparkles, ChevronDown, MapPin, ChevronRight } from "lucid
 import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePlansData } from "../../hooks/use-sanity-data"
 
 const planos = [
   {
@@ -83,10 +84,14 @@ const customScrollbarStyles = `
 
 export default function Planos() {
   const [showComparison, setShowComparison] = useState(false)
+  const { data: sanityPlans, loading: plansLoading, error: plansError } = usePlansData()
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [sanityUnits, setSanityUnits] = useState<any[]>([])
   const [loadingSanity, setLoadingSanity] = useState(true)
   const [allLocations, setAllLocations] = useState<LocationUnit[]>([])
+
+  // Use Sanity plans or fallback to hardcoded
+  const displayPlans = sanityPlans && sanityPlans.length > 0 ? sanityPlans : planos
 
   // Fetch units from Sanity
   useEffect(() => {
@@ -212,17 +217,17 @@ export default function Planos() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {planos.map((plano, idx) => (
+            {displayPlans.map((plano, idx) => (
               <motion.div
                 key={plano.nome}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                className={`relative group ${plano.destaque ? 'md:-mt-4' : ''}`}
+                className={`relative group ${(plano as any).destaque ? 'md:-mt-4' : ''}`}
               >
                 {/* Card Container */}
                 <div className={`relative h-full rounded-3xl overflow-hidden border transition-all duration-500 ${
-                  plano.destaque
+                  (plano as any).destaque
                     ? 'border-yellow-500/50 shadow-2xl shadow-yellow-500/10'
                     : 'border-zinc-800/50 hover:border-zinc-700/50'
                 }`}>
@@ -232,7 +237,7 @@ export default function Planos() {
                     <div className="absolute top-6 right-6 z-20">
                       <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
                         <Sparkles className="w-3 h-3" />
-                        {plano.badge}
+                        {(plano as any).badge}
                       </div>
                     </div>
                   )}
@@ -241,8 +246,8 @@ export default function Planos() {
                   <div className="relative z-10 p-8">
                     {/* Header */}
                     <div className="mb-8">
-                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${plano.gradient} flex items-center justify-center mb-4`}>
-                        <plano.icone className="w-6 h-6 text-white" />
+                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${(plano as any).gradient} flex items-center justify-center mb-4`}>
+                        {(plano as any).icone ? <(plano as any).icone className="w-6 h-6 text-white" /> : <Check className="w-6 h-6 text-white" />}
                       </div>
                       <h3 className="text-2xl font-bold text-white mb-2">{plano.nome}</h3>
                       <p className="text-zinc-400 text-sm leading-relaxed">{plano.descricao}</p>
@@ -253,7 +258,7 @@ export default function Planos() {
                       <div className="flex items-baseline gap-1">
                         <span className="text-zinc-400 text-lg">R$</span>
                         <span className={`text-5xl font-bold ${
-                          plano.destaque
+                          (plano as any).destaque
                             ? 'bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent'
                             : 'text-white'
                         }`}>
@@ -269,12 +274,12 @@ export default function Planos() {
                       {plano.beneficios.map((beneficio, i) => (
                         <li key={i} className="flex items-start gap-3">
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                            plano.destaque
+                            (plano as any).destaque
                               ? 'bg-yellow-500/20'
                               : 'bg-zinc-800'
                           }`}>
                             <Check className={`w-3 h-3 ${
-                              plano.destaque ? 'text-yellow-500' : 'text-zinc-400'
+                              (plano as any).destaque ? 'text-yellow-500' : 'text-zinc-400'
                             }`} />
                           </div>
                           <span className="text-zinc-300 text-sm leading-relaxed">{beneficio}</span>
@@ -286,7 +291,7 @@ export default function Planos() {
                     <button
                       onClick={() => handlePlanClick(plano.nome)}
                       className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
-                        plano.destaque
+                        (plano as any).destaque
                           ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
                           : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
                       }`}

@@ -114,7 +114,7 @@ export default async function UnidadePage(props: PageProps) {
     name: sanityUnit.name,
     address: sanityUnit.address,
     type: sanityUnit.type as 'tradicional' | 'premium' | 'diamante',
-    photo: sanityUnit.photo?.asset?.url || sanityUnit.backgroundImage?.asset?.url || sanityUnit.images?.[0]?.asset?.url || staticUnidade?.photo || null,
+    photo: sanityUnit.photo?.asset?.url || sanityUnit.backgroundImage?.asset?.url || sanityUnit.images?.[0]?.asset?.url || staticUnidade?.photo || '/images/fachada.jpg',
     features: sanityUnit.services || staticUnidade?.features || [],
     hours: sanityUnit.openingHours || staticUnidade?.hours || '',
     phone: sanityUnit.phone,
