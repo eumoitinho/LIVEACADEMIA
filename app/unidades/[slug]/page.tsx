@@ -125,10 +125,19 @@ export default async function UnidadePage(props: PageProps) {
     images: sanityUnit.images?.map((img: any) => img.asset?.url).filter(Boolean) || [],
     description: sanityUnit.description,
     planos: sanityUnit.planos || []
-  } : {
+  } : staticUnidade ? {
     ...staticUnidade,
-    latitude: staticUnidade?.latitude || -3.1190275,
-    longitude: staticUnidade?.longitude || -60.0217314,
+    latitude: -3.1190275,
+    longitude: -60.0217314,
+  } : {
+    id: slug,
+    name: 'Unidade',
+    address: 'Manaus, AM',
+    hours: 'Seg-Sex: 5h30-22h',
+    features: [],
+    type: 'tradicional',
+    latitude: -3.1190275,
+    longitude: -60.0217314,
   }
 
   if (!unidade) {
