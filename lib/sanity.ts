@@ -106,10 +106,10 @@ export async function getHomepageData() {
   }
 }
 
-// Cache para unidades
+// Cache para unidades - DESABILITADO para desenvolvimento
 let unitsCache: any[] | null = null
 let cacheTimestamp = 0
-const CACHE_DURATION = 5 * 60 * 1000 // 5 minutos
+const CACHE_DURATION = 0 // 0 = sem cache
 
 // Helper para buscar unidades
 export async function getUnits() {
@@ -125,6 +125,8 @@ export async function getUnits() {
         name,
         "slug": slug.current,
         address,
+        latitude,
+        longitude,
         type,
         services,
         photo {
@@ -145,7 +147,14 @@ export async function getUnits() {
         openingHours,
         order,
         active,
-        featured
+        featured,
+        planos[] {
+          nome,
+          preco,
+          periodo,
+          destaque,
+          badge
+        }
       }
     `)
     

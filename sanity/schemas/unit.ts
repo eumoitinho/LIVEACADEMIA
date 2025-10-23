@@ -168,6 +168,64 @@ export const unitSchema = defineType({
       type: 'boolean',
       initialValue: false,
     }),
+    defineField({
+      name: 'planos',
+      title: 'Planos da Unidade',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'nome',
+              title: 'Nome do Plano',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'preco',
+              title: 'Preço',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+              description: 'Ex: "119,90" ou "R$ 119,90"',
+            }),
+            defineField({
+              name: 'periodo',
+              title: 'Período',
+              type: 'string',
+              initialValue: 'mês',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'destaque',
+              title: 'Plano em Destaque',
+              type: 'boolean',
+              initialValue: false,
+            }),
+            defineField({
+              name: 'badge',
+              title: 'Badge do Plano',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Mais vendido', value: 'MAIS VENDIDO' },
+                  { title: 'Recomendado', value: 'RECOMENDADO' },
+                  { title: 'Novidade', value: 'NOVIDADE' },
+                  { title: 'Oferta', value: 'OFERTA' },
+                ],
+              },
+            }),
+          ],
+          preview: {
+            select: {
+              title: 'nome',
+              subtitle: 'preco',
+            },
+          },
+        },
+      ],
+      description: 'Planos específicos desta unidade (sobrescreve os planos globais)',
+    }),
   ],
   preview: {
     select: {

@@ -131,6 +131,8 @@ export interface Unit {
   name: string
   slug: string
   address: string
+  latitude: number
+  longitude: number
   type: string
   services: string[]
   photo?: {
@@ -152,6 +154,13 @@ export interface Unit {
   order: number
   active: boolean
   featured: boolean
+  planos?: Array<{
+    nome: string
+    preco: string
+    periodo: string
+    destaque: boolean
+    badge?: string
+  }>
 }
 
 export interface HomepageContent {

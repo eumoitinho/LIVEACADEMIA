@@ -123,7 +123,8 @@ export default async function UnidadePage(props: PageProps) {
     latitude: sanityUnit.latitude,
     longitude: sanityUnit.longitude,
     images: sanityUnit.images?.map((img: any) => img.asset?.url).filter(Boolean) || [],
-    description: sanityUnit.description
+    description: sanityUnit.description,
+    planos: sanityUnit.planos || []
   } : staticUnidade
 
   if (!unidade) {
