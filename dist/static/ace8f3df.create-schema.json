@@ -628,6 +628,16 @@
         "title": "Serviços"
       },
       {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Foto principal da unidade (usada nos cards e hero da página)",
+        "name": "photo",
+        "type": "image",
+        "title": "Foto Principal"
+      },
+      {
+        "description": "Galeria adicional de imagens da unidade",
         "of": [
           {
             "options": {
@@ -638,7 +648,7 @@
         ],
         "name": "images",
         "type": "array",
-        "title": "Imagens"
+        "title": "Galeria de Imagens"
       },
       {
         "rows": 3,

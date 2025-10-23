@@ -55,7 +55,7 @@ export default function Unidades() {
           name: sanityUnit.name,
           address: sanityUnit.address,
           type: sanityUnit.type,
-          photo: sanityUnit.images?.[0]?.asset?.url || staticLoc.photo,
+          photo: sanityUnit.photo?.asset?.url || sanityUnit.images?.[0]?.asset?.url || staticLoc.photo,
           features: sanityUnit.services || staticLoc.features,
           hours: sanityUnit.openingHours || staticLoc.hours,
           coordinates: hasCoordinates ? {

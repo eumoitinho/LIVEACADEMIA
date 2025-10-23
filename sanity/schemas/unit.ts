@@ -115,8 +115,17 @@ export const unitSchema = defineType({
       ],
     }),
     defineField({
+      name: 'photo',
+      title: 'Foto Principal',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      description: 'Foto principal da unidade (usada nos cards e hero da página)',
+    }),
+    defineField({
       name: 'images',
-      title: 'Imagens',
+      title: 'Galeria de Imagens',
       type: 'array',
       of: [
         {
@@ -126,6 +135,7 @@ export const unitSchema = defineType({
           },
         },
       ],
+      description: 'Galeria adicional de imagens da unidade',
     }),
     defineField({
       name: 'description',
@@ -163,7 +173,7 @@ export const unitSchema = defineType({
     select: {
       title: 'name',
       subtitle: 'type',
-      media: 'images.0',
+      media: 'photo',
     },
     prepare(selection) {
       const { title, subtitle, media } = selection

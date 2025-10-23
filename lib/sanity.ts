@@ -125,6 +125,14 @@ export async function getUnits() {
         longitude,
         type,
         services,
+        photo {
+          asset-> {
+            _id,
+            url
+          },
+          hotspot,
+          crop
+        },
         backgroundImage {
           asset-> {
             _id,
