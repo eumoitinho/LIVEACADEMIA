@@ -17,6 +17,9 @@ import { appSectionSchema } from './sanity/schemas/app-section'
 import { beneficiosSectionSchema } from './sanity/schemas/beneficios-section'
 import { dayUse } from './sanity/schemas/day-use'
 import { sobreNosSchema } from './sanity/schemas/sobre-nos'
+import { contatoSchema } from './sanity/schemas/contato'
+import { trabalheConoscoSchema } from './sanity/schemas/trabalhe-conosco'
+import { sobreSchema } from './sanity/schemas/sobre'
 
 export default defineConfig({
   name: 'live-academia',
@@ -102,6 +105,27 @@ export default defineConfig({
                   .schemaType('sobreNos')
                   .documentId('sobreNos')
               ),
+            S.listItem()
+              .title('Contato')
+              .child(
+                S.document()
+                  .schemaType('contato')
+                  .documentId('contato')
+              ),
+            S.listItem()
+              .title('Trabalhe Conosco')
+              .child(
+                S.document()
+                  .schemaType('trabalheConosco')
+                  .documentId('trabalheConosco')
+              ),
+            S.listItem()
+              .title('Sobre')
+              .child(
+                S.document()
+                  .schemaType('sobre')
+                  .documentId('sobre')
+              ),
           ])
     }),
     visionTool()
@@ -123,6 +147,9 @@ export default defineConfig({
       beneficiosSectionSchema,
       dayUse,
       sobreNosSchema,
+      contatoSchema,
+      trabalheConoscoSchema,
+      sobreSchema,
     ],
   },
 })

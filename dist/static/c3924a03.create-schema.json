@@ -2467,5 +2467,803 @@
     "name": "sobreNos",
     "type": "document",
     "title": "Sobre Nós"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título da Página"
+      },
+      {
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "heroImage",
+        "type": "image",
+        "title": "Imagem de Fundo"
+      },
+      {
+        "fields": [
+          {
+            "name": "phone",
+            "type": "string",
+            "title": "Telefone"
+          },
+          {
+            "name": "whatsapp",
+            "type": "string",
+            "title": "WhatsApp"
+          },
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "type": "text",
+            "title": "Endereço"
+          },
+          {
+            "name": "hours",
+            "type": "text",
+            "title": "Horário de Funcionamento"
+          }
+        ],
+        "name": "contactInfo",
+        "type": "object",
+        "title": "Informações de Contato"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "title": "Nome da Rede"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "url",
+                "type": "url",
+                "title": "URL"
+              },
+              {
+                "description": "Nome do ícone (ex: instagram, facebook, twitter)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "socialNetworks",
+        "type": "array",
+        "title": "Redes Sociais"
+      },
+      {
+        "initialValue": "Entre em contato",
+        "name": "formTitle",
+        "type": "string",
+        "title": "Título do Formulário"
+      },
+      {
+        "name": "formDescription",
+        "type": "text",
+        "title": "Descrição do Formulário"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "title": "Nome do Campo"
+              },
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Texto",
+                      "value": "text"
+                    },
+                    {
+                      "title": "Email",
+                      "value": "email"
+                    },
+                    {
+                      "title": "Telefone",
+                      "value": "tel"
+                    },
+                    {
+                      "title": "Textarea",
+                      "value": "textarea"
+                    },
+                    {
+                      "title": "Select",
+                      "value": "select"
+                    }
+                  ]
+                },
+                "name": "type",
+                "type": "string",
+                "title": "Tipo"
+              },
+              {
+                "initialValue": false,
+                "name": "required",
+                "type": "boolean",
+                "title": "Obrigatório"
+              },
+              {
+                "name": "placeholder",
+                "type": "string"
+              },
+              {
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "hidden": "conditional",
+                "name": "options",
+                "type": "array",
+                "title": "Opções (para select)"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "formFields",
+        "type": "array",
+        "title": "Campos do Formulário"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Enviar Mensagem",
+            "name": "text",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "url",
+            "type": "url",
+            "title": "URL de Destino"
+          }
+        ],
+        "name": "ctaButton",
+        "type": "object",
+        "title": "Botão CTA"
+      }
+    ],
+    "name": "contato",
+    "type": "document",
+    "title": "Página de Contato"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título da Página"
+      },
+      {
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "heroImage",
+        "type": "image",
+        "title": "Imagem de Fundo"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "description": "Nome do ícone (ex: heart, users, award)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "benefits",
+        "type": "array",
+        "title": "Benefícios"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string",
+                "title": "Título da Vaga"
+              },
+              {
+                "name": "department",
+                "type": "string",
+                "title": "Departamento"
+              },
+              {
+                "name": "location",
+                "type": "string",
+                "title": "Localização"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "CLT",
+                      "value": "clt"
+                    },
+                    {
+                      "title": "PJ",
+                      "value": "pj"
+                    },
+                    {
+                      "title": "Estágio",
+                      "value": "estagio"
+                    },
+                    {
+                      "title": "Freelance",
+                      "value": "freelance"
+                    }
+                  ]
+                },
+                "name": "type",
+                "type": "string",
+                "title": "Tipo de Contrato"
+              },
+              {
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "name": "requirements",
+                "type": "array",
+                "title": "Requisitos"
+              },
+              {
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "name": "benefits",
+                "type": "array",
+                "title": "Benefícios da Vaga"
+              },
+              {
+                "name": "salary",
+                "type": "string",
+                "title": "Faixa Salarial"
+              },
+              {
+                "initialValue": true,
+                "name": "isActive",
+                "type": "boolean",
+                "title": "Vaga Ativa"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "openPositions",
+        "type": "array",
+        "title": "Vagas Abertas"
+      },
+      {
+        "initialValue": "Candidatar-se",
+        "name": "formTitle",
+        "type": "string",
+        "title": "Título do Formulário"
+      },
+      {
+        "name": "formDescription",
+        "type": "text",
+        "title": "Descrição do Formulário"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "title": "Nome do Campo"
+              },
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Texto",
+                      "value": "text"
+                    },
+                    {
+                      "title": "Email",
+                      "value": "email"
+                    },
+                    {
+                      "title": "Telefone",
+                      "value": "tel"
+                    },
+                    {
+                      "title": "Textarea",
+                      "value": "textarea"
+                    },
+                    {
+                      "title": "Select",
+                      "value": "select"
+                    },
+                    {
+                      "title": "File",
+                      "value": "file"
+                    }
+                  ]
+                },
+                "name": "type",
+                "type": "string",
+                "title": "Tipo"
+              },
+              {
+                "initialValue": false,
+                "name": "required",
+                "type": "boolean",
+                "title": "Obrigatório"
+              },
+              {
+                "name": "placeholder",
+                "type": "string"
+              },
+              {
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "hidden": "conditional",
+                "name": "options",
+                "type": "array",
+                "title": "Opções (para select)"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "formFields",
+        "type": "array",
+        "title": "Campos do Formulário"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Enviar Candidatura",
+            "name": "text",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "url",
+            "type": "url",
+            "title": "URL de Destino"
+          }
+        ],
+        "name": "ctaButton",
+        "type": "object",
+        "title": "Botão CTA"
+      },
+      {
+        "fields": [
+          {
+            "name": "email",
+            "type": "string",
+            "title": "Email para CV"
+          },
+          {
+            "name": "phone",
+            "type": "string",
+            "title": "Telefone"
+          },
+          {
+            "name": "whatsapp",
+            "type": "string",
+            "title": "WhatsApp"
+          }
+        ],
+        "name": "contactInfo",
+        "type": "object",
+        "title": "Informações de Contato"
+      }
+    ],
+    "name": "trabalheConosco",
+    "type": "document",
+    "title": "Página Trabalhe Conosco"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título da Página"
+      },
+      {
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "heroImage",
+        "type": "image",
+        "title": "Imagem de Fundo"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string",
+                "title": "Título da Seção"
+              },
+              {
+                "rows": 4,
+                "name": "content",
+                "type": "text",
+                "title": "Conteúdo"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image",
+                "title": "Imagem"
+              },
+              {
+                "name": "order",
+                "type": "number",
+                "title": "Ordem"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "content",
+        "type": "array",
+        "title": "Conteúdo Principal"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "description": "Nome do ícone (ex: heart, users, target)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "values",
+        "type": "array",
+        "title": "Nossos Valores"
+      },
+      {
+        "rows": 3,
+        "name": "mission",
+        "type": "text",
+        "title": "Missão"
+      },
+      {
+        "rows": 3,
+        "name": "vision",
+        "type": "text",
+        "title": "Visão"
+      },
+      {
+        "rows": 5,
+        "name": "history",
+        "type": "text",
+        "title": "Nossa História"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "number",
+                "type": "string",
+                "title": "Número"
+              },
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "name": "description",
+                "type": "string",
+                "title": "Descrição"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "stats",
+        "type": "array",
+        "title": "Estatísticas"
+      },
+      {
+        "fields": [
+          {
+            "name": "title",
+            "type": "string",
+            "title": "Título da Seção"
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "name",
+                    "type": "string",
+                    "title": "Nome"
+                  },
+                  {
+                    "name": "position",
+                    "type": "string",
+                    "title": "Cargo"
+                  },
+                  {
+                    "name": "bio",
+                    "type": "text",
+                    "title": "Biografia"
+                  },
+                  {
+                    "options": {
+                      "hotspot": true
+                    },
+                    "name": "photo",
+                    "type": "image",
+                    "title": "Foto"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "members",
+            "type": "array",
+            "title": "Membros da Equipe"
+          }
+        ],
+        "name": "team",
+        "type": "object",
+        "title": "Nossa Equipe"
+      },
+      {
+        "fields": [
+          {
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "name": "buttonText",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "buttonUrl",
+            "type": "url",
+            "title": "URL do Botão"
+          }
+        ],
+        "name": "cta",
+        "type": "object",
+        "title": "Call to Action"
+      }
+    ],
+    "name": "sobre",
+    "type": "document",
+    "title": "Página Sobre"
   }
 ]

@@ -7,6 +7,7 @@ import Link from "next/link"
 import UnitPlanos from '@/features/units/unit-planos'
 import CheckoutModal from '@/components/checkout/checkout-modal'
 import { useUnit } from "@/contexts/unit-context"
+import { useUnitsData } from '../../../../hooks/use-sanity-data'  
 
 interface UnidadeContentProps {
   unidade: {
@@ -38,7 +39,8 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]} | null>(null)
   const { setCurrentUnit } = useUnit()
-
+  const { data: sanityUnits, loading: loadingUnits } = useUnitsData()
+  
   useEffect(() => {
     if (unidade.logo) {
       setCurrentUnit({
@@ -463,35 +465,18 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
             viewport={{ once: true }}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Aqui você pode importar e usar as outras unidades, excluindo a atual */}
-              {[
-                {
-                  id: 'unidade-exemplo-1',
-                  name: 'Live Academia Centro',
-                  address: 'Rua do Centro, 123 - Centro',
-                  type: 'diamante',
-                  hours: 'Seg-Sex: 5h30-22h | Sáb: 8h-17h | Dom: 8h-14h',
-                  photo: '/images/fachada.jpg'
-                },
-                {
-                  id: 'unidade-exemplo-2', 
-                  name: 'Live Academia Zona Sul',
-                  address: 'Av. Zona Sul, 456 - Zona Sul',
-                  type: 'premium',
-                  hours: 'Seg-Sex: 5h30-22h | Sáb: 8h-17h | Dom: 8h-14h',
-                  photo: '/images/fachada.jpg'
-                },
-                {
-                  id: 'unidade-exemplo-3',
-                  name: 'Live Academia Zona Norte', 
-                  address: 'Rua Zona Norte, 789 - Zona Norte',
-                  type: 'tradicional',
-                  hours: 'Seg-Sex: 5h30-22h | Sáb: 8h-17h | Dom: 8h-14h',
-                  photo: '/images/fachada.jpg'
-                }
-              ].filter(unit => unit.id !== unidade.id).slice(0, 3).map((unit, index) => (
+              {/* Usar unidades reais do Sanity, excluindo a atual */}
+              {loadingUnits ? (
+                Array.from({ length: 3 }).map((_, index) => (
+                  <div key={index} className="animate-pulse bg-zinc-800 rounded-3xl h-64"></div>
+                ))
+              ) : (
+                (sanityUnits || [])
+                  .filter(unit => unit.slug !== unidade.id)
+                  .slice(0, 3)
+                  .map((unit, index) => (
                 <motion.div
-                  key={unit.id}
+                  key={unit.slug}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -499,9 +484,9 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                   className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-yellow-400/30 transition-all duration-300"
                 >
                   <div className="relative h-48">
-                    {unit.photo ? (
+                    {unit.photo?.asset?.url ? (
                       <img
-                        src={unit.photo}
+                        src={unit.photo.asset.url}
                         alt={unit.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
@@ -539,12 +524,12 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                     <div className="flex items-start gap-3 mb-6">
                       <Clock className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
                       <p className="text-white/70 text-sm leading-relaxed">
-                        {unit.hours}
+                        {unit.openingHours || 'Horários disponíveis'}
                       </p>
                     </div>
                     
                     <Link
-                      href={`/unidades/${unit.id}`}
+                      href={`/unidades/${unit.slug}`}
                       className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-full transition-colors text-sm"
                     >
                       Ver Unidade
@@ -552,7 +537,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                     </Link>
                   </div>
                 </motion.div>
-              ))}
+              )))}
             </div>
             
             {/* Botão para ver todas as unidades */}

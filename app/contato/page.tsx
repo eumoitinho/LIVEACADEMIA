@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion"
 import { Phone, Mail, MapPin, Clock, MessageCircle, Send, Instagram, Facebook, Youtube, BadgeCheck } from "lucide-react"
-import { useState } from "react"
+import React, { useState } from "react"
 import Image from "next/image"
+import { useContatoData } from "@/hooks/use-contato-data"
 
 const contactInfo = [
   {
@@ -62,6 +63,7 @@ const socialMedia = [
 ]
 
 export default function ContatoPage() {
+  const { data: contatoData, loading, error } = useContatoData()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -98,7 +100,7 @@ export default function ContatoPage() {
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black" />
         <Image
-          src="/bg.jpeg"
+          src={contatoData?.heroImage?.asset?.url || "/bg.jpeg"}
           alt="Background Overlay"
           fill
           className="object-cover opacity-20"
@@ -118,10 +120,10 @@ export default function ContatoPage() {
             className="text-center mb-16"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Entre em <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">contato</span>
+              {contatoData?.title || 'Entre em'} <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">contato</span>
             </h1>
             <p className="text-zinc-300 text-lg max-w-4xl mx-auto">
-              Estamos aqui para ajudar você a começar sua jornada fitness. Entre em contato conosco através dos canais abaixo ou preencha o formulário.
+              {contatoData?.description || 'Estamos aqui para ajudar você a começar sua jornada fitness. Entre em contato conosco através dos canais abaixo ou preencha o formulário.'}
             </p>
           </motion.div>
         </div>
@@ -201,8 +203,8 @@ export default function ContatoPage() {
                     </div>
                     <div>
                       <p className="text-white font-medium">Email</p>
-                      <a href="mailto:contato@liveacademia.com.br" className="text-zinc-400 hover:text-yellow-400 transition-colors">
-                        contato@liveacademia.com.br
+                      <a href={`mailto:${contatoData?.contactInfo?.email || 'contato@liveacademia.com.br'}`} className="text-zinc-400 hover:text-yellow-400 transition-colors">
+                        {contatoData?.contactInfo?.email || 'contato@liveacademia.com.br'}
                       </a>
                     </div>
                   </div>
@@ -213,8 +215,8 @@ export default function ContatoPage() {
                     </div>
                     <div>
                       <p className="text-white font-medium">Telefone</p>
-                      <a href="tel:+559233456789" className="text-zinc-400 hover:text-yellow-400 transition-colors">
-                        (92) 3345-6789
+                      <a href={`tel:${contatoData?.contactInfo?.phone || '+559233456789'}`} className="text-zinc-400 hover:text-yellow-400 transition-colors">
+                        {contatoData?.contactInfo?.phone || '(92) 3345-6789'}
                       </a>
                     </div>
                   </div>
@@ -225,7 +227,7 @@ export default function ContatoPage() {
                     </div>
                     <div>
                       <p className="text-white font-medium">Localização</p>
-                      <p className="text-zinc-400">Manaus - AM</p>
+                      <p className="text-zinc-400">{contatoData?.contactInfo?.address || 'Manaus - AM'}</p>
                     </div>
                   </div>
                 </div>
@@ -234,15 +236,15 @@ export default function ContatoPage() {
                 <div className="mt-8">
                   <p className="text-white font-medium mb-4">Siga-nos nas redes sociais</p>
                   <div className="flex gap-4">
-                    {socialMedia.map((social, index) => (
+                    {(contatoData?.socialNetworks || socialMedia).map((social, index) => (
                       <a
                         key={index}
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`w-12 h-12 rounded-xl bg-gradient-to-r ${social.color} flex items-center justify-center hover:scale-110 transition-transform`}
+                        className={`w-12 h-12 rounded-xl bg-gradient-to-r ${(social as any).color || 'from-zinc-600 to-zinc-700'} flex items-center justify-center hover:scale-110 transition-transform`}
                       >
-                        <social.icon className="w-6 h-6 text-white" />
+                        {(social as any).icon ? React.createElement((social as any).icon, { className: "w-6 h-6 text-white" }) : <Instagram className="w-6 h-6 text-white" />}
                       </a>
                     ))}
                   </div>
@@ -251,7 +253,7 @@ export default function ContatoPage() {
 
               {/* Right Side - Form */}
               <div>
-                <h3 className="text-2xl font-semibold text-white mb-6">Envie sua mensagem</h3>
+                <h3 className="text-2xl font-semibold text-white mb-6">{contatoData?.formTitle || 'Envie sua mensagem'}</h3>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -345,7 +347,7 @@ export default function ContatoPage() {
                     className="w-full bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-semibold py-4 px-6 rounded-xl hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/25"
                   >
                     <Send className="w-5 h-5" />
-                    Enviar Mensagem
+                    {contatoData?.ctaButton?.text || 'Enviar Mensagem'}
                   </button>
                 </form>
               </div>

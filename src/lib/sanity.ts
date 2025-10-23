@@ -126,6 +126,16 @@ export async function getUnits() {
         type,
         services,
         images,
+        photo {
+          asset->{
+            url
+          }
+        },
+        backgroundImage {
+          asset->{
+            url
+          }
+        },
         description,
         openingHours,
         order,

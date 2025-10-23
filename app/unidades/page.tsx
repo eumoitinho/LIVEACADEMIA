@@ -7,35 +7,16 @@ import Link from "next/link"
 import { locations } from '@/src/lib/config/locations'
 import { UnidadeCard } from '@/src/components/unidade-card'
 import { UnidadeCardModern } from '@/src/components/unidade-card-modern'
+import { useUnitsData } from '../../hooks/use-sanity-data'
 import type { Unit } from '../../types/sanity'
 
 export default function Unidades() {
-  const [sanityUnits, setSanityUnits] = useState<any[]>([])
-  const [loadingSanity, setLoadingSanity] = useState(true)
+  const { data: sanityUnits, loading: loadingSanity } = useUnitsData()
   const [filterType, setFilterType] = useState("todos")
   const [searchQuery, setSearchQuery] = useState("")
   const [radiusFilter, setRadiusFilter] = useState<number | null>(null)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [loadingLocation, setLoadingLocation] = useState(false)
-
-  // Fetch units from Sanity
-  useEffect(() => {
-    const fetchSanityUnits = async () => {
-      try {
-        setLoadingSanity(true)
-        const response = await fetch('/api/sanity/units')
-        const data = await response.json()
-        if (data.units) {
-          setSanityUnits(data.units)
-        }
-      } catch (error) {
-        console.error('Error fetching Sanity units:', error)
-      } finally {
-        setLoadingSanity(false)
-      }
-    }
-    fetchSanityUnits()
-  }, [])
 
   // Merge Sanity units with static locations (Sanity takes precedence)
   const allLocations = useMemo(() => {
