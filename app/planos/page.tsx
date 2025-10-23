@@ -65,22 +65,6 @@ interface LocationUnit {
   [key: string]: any
 }
 
-const customScrollbarStyles = `
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(39, 39, 42, 0.5);
-    border-radius: 10px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(250, 204, 21, 0.3);
-    border-radius: 10px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(250, 204, 21, 0.5);
-  }
-`
 
 export default function Planos() {
   const [showComparison, setShowComparison] = useState(false)
@@ -201,7 +185,6 @@ export default function Planos() {
 
   return (
     <main className="min-h-screen bg-black text-white pt-20">
-      <style jsx global>{customScrollbarStyles}</style>
       <section className="py-20">
         <div className="container mx-auto px-4">
           <motion.div
@@ -332,7 +315,7 @@ export default function Planos() {
                       Carregando unidades...
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-2">
                       {filteredUnits.map((unit) => (
                         <Link
                           key={unit.id}
