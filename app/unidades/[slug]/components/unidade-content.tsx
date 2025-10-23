@@ -16,6 +16,8 @@ interface UnidadeContentProps {
     hours: string
     features: string[]
     type: string
+    latitude: number
+    longitude: number
     tourUrl?: string | null
     logo?: string | null
     photo?: string | null

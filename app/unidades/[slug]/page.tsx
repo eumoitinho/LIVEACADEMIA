@@ -120,12 +120,16 @@ export default async function UnidadePage(props: PageProps) {
     phone: sanityUnit.phone,
     whatsapp: sanityUnit.whatsapp,
     email: sanityUnit.email,
-    latitude: sanityUnit.latitude,
-    longitude: sanityUnit.longitude,
+    latitude: sanityUnit.latitude || -3.1190275,
+    longitude: sanityUnit.longitude || -60.0217314,
     images: sanityUnit.images?.map((img: any) => img.asset?.url).filter(Boolean) || [],
     description: sanityUnit.description,
     planos: sanityUnit.planos || []
-  } : staticUnidade
+  } : {
+    ...staticUnidade,
+    latitude: staticUnidade?.latitude || -3.1190275,
+    longitude: staticUnidade?.longitude || -60.0217314,
+  }
 
   if (!unidade) {
     notFound()

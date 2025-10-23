@@ -680,6 +680,100 @@
         "name": "featured",
         "type": "boolean",
         "title": "Destaque"
+      },
+      {
+        "description": "Planos específicos desta unidade (sobrescreve os planos globais)",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "nome",
+                "type": "string",
+                "title": "Nome do Plano"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Ex: \"119,90\" ou \"R$ 119,90\"",
+                "name": "preco",
+                "type": "string",
+                "title": "Preço"
+              },
+              {
+                "initialValue": "mês",
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "periodo",
+                "type": "string",
+                "title": "Período"
+              },
+              {
+                "initialValue": false,
+                "name": "destaque",
+                "type": "boolean",
+                "title": "Plano em Destaque"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Mais vendido",
+                      "value": "MAIS VENDIDO"
+                    },
+                    {
+                      "title": "Recomendado",
+                      "value": "RECOMENDADO"
+                    },
+                    {
+                      "title": "Novidade",
+                      "value": "NOVIDADE"
+                    },
+                    {
+                      "title": "Oferta",
+                      "value": "OFERTA"
+                    }
+                  ]
+                },
+                "name": "badge",
+                "type": "string",
+                "title": "Badge do Plano"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "planos",
+        "type": "array",
+        "title": "Planos da Unidade"
       }
     ],
     "name": "unit",

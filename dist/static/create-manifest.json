@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "createdAt": "2025-10-23T16:31:23.135Z",
+  "createdAt": "2025-10-23T16:50:41.622Z",
   "workspaces": [
     {
       "name": "live-academia",
@@ -12,7 +12,7 @@
       "mediaLibrary": {
         "enabled": false
       },
-      "schema": "ace8f3df.create-schema.json",
+      "schema": "f76022b4.create-schema.json",
       "tools": "08382af6.create-tools.json"
     }
   ]
