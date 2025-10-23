@@ -216,7 +216,7 @@ export default function Planos() {
                 }`}>
 
                   {/* Popular Badge */}
-                  {plano.popular && (
+                  {(plano as any).popular && (
                     <div className="absolute top-6 right-6 z-20">
                       <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
                         <Sparkles className="w-3 h-3" />
@@ -232,8 +232,8 @@ export default function Planos() {
                       <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${(plano as any).gradient} flex items-center justify-center mb-4`}>
                         {(plano as any).icone ? React.createElement((plano as any).icone, { className: "w-6 h-6 text-white" }) : <Check className="w-6 h-6 text-white" />}
                       </div>
-                      <h3 className="text-2xl font-bold text-white mb-2">{plano.nome}</h3>
-                      <p className="text-zinc-400 text-sm leading-relaxed">{plano.descricao}</p>
+                      <h3 className="text-2xl font-bold text-white mb-2">{(plano as any).nome}</h3>
+                      <p className="text-zinc-400 text-sm leading-relaxed">{(plano as any).descricao}</p>
                     </div>
 
                     {/* Price */}
@@ -245,16 +245,16 @@ export default function Planos() {
                             ? 'bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent'
                             : 'text-white'
                         }`}>
-                          {plano.preco}
+                          {(plano as any).preco}
                         </span>
-                        <span className="text-zinc-400 text-lg">/{plano.periodo}</span>
+                        <span className="text-zinc-400 text-lg">/{(plano as any).periodo}</span>
                       </div>
                       <p className="text-yellow-400 text-sm font-medium mt-2">Oferta por tempo limitado</p>
                     </div>
 
                     {/* Benefits */}
                     <ul className="space-y-4 mb-8">
-                      {plano.beneficios.map((beneficio, i) => (
+                      {(plano as any).beneficios.map((beneficio, i) => (
                         <li key={i} className="flex items-start gap-3">
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
                             (plano as any).destaque
@@ -272,7 +272,7 @@ export default function Planos() {
 
                     {/* CTA Button */}
                     <button
-                      onClick={() => handlePlanClick(plano.nome)}
+                        onClick={() => handlePlanClick((plano as any).nome)}
                       className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
                         (plano as any).destaque
                           ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
@@ -280,7 +280,7 @@ export default function Planos() {
                       }`}
                     >
                       MATRICULE-SE AGORA!
-                      <ChevronDown className={`w-5 h-5 transition-transform ${selectedPlan === plano.nome ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-5 h-5 transition-transform ${selectedPlan === (plano as any).nome ? 'rotate-180' : ''}`} />
                     </button>
                   </div>
                 </div>
