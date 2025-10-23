@@ -50,19 +50,19 @@ export const homepageSchema = defineType({
         }),
         defineField({
           name: 'title',
-          title: 'Título Principal',
+          title: 'Título (Linha 1)',
           type: 'string',
           initialValue: 'Transforme.',
         }),
         defineField({
           name: 'subtitle',
-          title: 'Subtítulo',
+          title: 'Subtítulo (Linha 2)',
           type: 'string',
           initialValue: 'Evolua.',
         }),
         defineField({
           name: 'thirdTitle',
-          title: 'Terceiro Título',
+          title: 'Terceiro Título (Linha 3)',
           type: 'string',
           initialValue: 'Viva.',
         }),
