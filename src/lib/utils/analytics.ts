@@ -5,14 +5,16 @@
 // CONFIGURAÇÕES E CONSTANTES
 // ========================================
 
-// IDs de configuração (substituir pelos reais)
+// IDs de configuração
 export const ANALYTICS_CONFIG = {
-  GA4_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID || 'G-XXXXXXXXXX',
+  GA4_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA4_ID || 'G-XXXXXXXXXX',
   GTM_ID: process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX',
   META_PIXEL_ID: process.env.NEXT_PUBLIC_META_PIXEL_ID || '123456789012345',
   GOOGLE_ADS_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-XXXXXXXXX',
   GOOGLE_ADS_CONVERSION_PURCHASE: process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_PURCHASE || 'XXXXXXXXX',
   GOOGLE_ADS_CONVERSION_LEAD: process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LEAD || 'YYYYYYYYY',
+  SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://liveacademia.com.br',
+  ENV: process.env.NEXT_PUBLIC_ENV || 'development',
 } as const
 
 // Eventos padronizados - COMPLETOS
@@ -75,6 +77,10 @@ export const AnalyticsEvents = {
   UNIT_VIEW: 'unit_view',
   UNIT_CONTACT: 'unit_contact',
   UNIT_DIRECTIONS: 'unit_directions',
+
+  // ========== WHATSAPP ==========
+  WHATSAPP_CLICK: 'whatsapp_click',
+  WHATSAPP_LEAD_SUBMIT: 'whatsapp_lead_submit',
   
   // ========== CONTEÚDO ==========
   CONTENT_VIEW: 'content_view',

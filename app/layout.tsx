@@ -5,7 +5,9 @@ import "./globals.css"
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import { UnitProvider } from "@/contexts/unit-context"
-import GTM from '@/src/components/analytics/gtm'
+import GTMScript from '@/components/gtm/gtm-script'
+import GTMNoScript from '@/components/gtm/gtm-noscript'
+import AnalyticsProvider from '@/components/analytics/analytics-provider'
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,7 +26,7 @@ export default function RootLayout({
       <html lang="pt-BR" suppressHydrationWarning>
         <head>
           {/* Google Tag Manager */}
-          <GTM gtmId={process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX'} />
+          <GTMScript />
           
           {/* Widget de Chat */}
           <script 
@@ -79,10 +81,14 @@ export default function RootLayout({
           }} />
         </head>
         <body className={`${inter.className} min-h-screen antialiased overflow-x-hidden text-white bg-neutral-950`}>
+          {/* Google Tag Manager (noscript) */}
+          <GTMNoScript />
+
           <UnitProvider>
+            <AnalyticsProvider>
                 {/* Background parallax - hero.jpg com blur progressivo */}
-                <div 
-                  className="fixed top-0 w-full h-screen bg-cover bg-center -z-10" 
+                <div
+                  className="fixed top-0 w-full h-screen bg-cover bg-center -z-10"
                   style={{
                     backgroundImage: "url('/hero.jpg')",
                     animation: "scrollBlur linear both",
@@ -90,12 +96,13 @@ export default function RootLayout({
                     animationRange: "entry 100% exit 50%"
                   }}
                 />
-            
-            <div className="relative z-20 min-h-screen flex flex-col">
-              <Header />
-              <div className="flex-grow">{children}</div>
-              <Footer />
-            </div>
+
+                <div className="relative z-20 min-h-screen flex flex-col">
+                  <Header />
+                  <div className="flex-grow">{children}</div>
+                  <Footer />
+                </div>
+            </AnalyticsProvider>
           </UnitProvider>
         </body>
       </html>

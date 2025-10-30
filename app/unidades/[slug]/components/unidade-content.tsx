@@ -7,7 +7,8 @@ import Link from "next/link"
 import UnitPlanos from '@/features/units/unit-planos'
 import CheckoutModal from '@/components/checkout/checkout-modal'
 import { useUnit } from "@/contexts/unit-context"
-import { useUnitsData } from '../../../../hooks/use-sanity-data'  
+import { useUnitsData } from '../../../../hooks/use-sanity-data'
+import { useAnalytics } from '@/hooks/use-analytics'  
 
 interface UnidadeContentProps {
   unidade: {
@@ -50,6 +51,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]} | null>(null)
   const { setCurrentUnit } = useUnit()
   const { data: sanityUnits, loading: loadingUnits } = useUnitsData()
+  const { trackEvent } = useAnalytics()
   
   useEffect(() => {
     if (unidade.logo) {
@@ -577,6 +579,21 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
         unidadeId={unidade.id}
         unidadeName={unidade.name}
       />
+
+      {/* Unit page tracking via useEffect */}
+      {(() => {
+        // Track unit page view
+        if (typeof window !== 'undefined' && (window as any).dataLayer) {
+          (window as any).dataLayer.push({
+            event: 'unit_page_view',
+            unidade_id: unidade.id,
+            unidade_nome: unidade.name,
+            page_type: 'unit_page',
+            has_planos: !!unidade.planos && unidade.planos.length > 0
+          })
+        }
+        return null
+      })()}
     </main>
   )
 }

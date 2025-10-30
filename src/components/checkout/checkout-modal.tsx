@@ -6,6 +6,14 @@ import { X, CreditCard, QrCode, FileText, Loader2, Check, Copy, ExternalLink, Cl
 import AnimatedPaymentCard from "@/components/checkout/animated-payment-card"
 import { useRecaptcha } from "@/src/hooks/use-recaptcha"
 import { useDebouncedCallback, useDebounceState } from "@/src/hooks/use-debounce"
+import { useAnalytics } from "@/hooks/use-analytics"
+import {
+  AnalyticsEvents,
+  trackPurchase,
+  trackCheckoutStep,
+  trackPaymentAttempt,
+  trackPaymentResult
+} from "@/src/lib/utils/analytics"
 
 interface SimulacaoResumo {
   valorTotal?: number | string
@@ -68,6 +76,9 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
   const [simulationLoading, setSimulationLoading] = useState(false)
   const [simulationError, setSimulationError] = useState<string | null>(null)
   const [simulationFallback, setSimulationFallback] = useState(false)
+
+  // Analytics hooks
+  const { trackEvent } = useAnalytics()
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -103,6 +114,13 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
     }
   }, [])
 
+  // Helper to get plan value in cents
+  const getPlanValueInCents = useCallback(() => {
+    if (!plano?.price) return 0
+    const value = normalizeToNumber(plano.price)
+    return Number.isNaN(value) ? 0 : Math.round(value * 100)
+  }, [plano?.price])
+
   useEffect(() => {
     if (isOpen) {
       setStep(1)
@@ -113,6 +131,19 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
       setSimulationError(null)
       setSimulationFallback(false)
       setSimulationLoading(false)
+
+      // Track checkout start via dataLayer
+      if (plano && typeof window !== 'undefined' && (window as any).dataLayer) {
+        (window as any).dataLayer.push({
+          event: 'begin_checkout',
+          value: getPlanValueInCents() / 100,
+          currency: 'BRL',
+          plano_id: plano.codigo || plano.name,
+          plano_nome: plano.name,
+          unidade_id: unidadeId,
+          unidade_nome: unidadeName
+        })
+      }
       setFormData({
         nome: '',
         email: '',
@@ -245,8 +276,30 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
       ]
       
       if (camposObrigatorios.every(campo => campo.trim() !== '') && formData.aceiteTermos) {
+        // Track checkout step completion via dataLayer
+        if (plano && typeof window !== 'undefined' && (window as any).dataLayer) {
+          (window as any).dataLayer.push({
+            event: 'checkout_step_complete',
+            step: 2,
+            step_name: 'pagamento',
+            plano_id: plano.codigo || plano.name,
+            plano_valor: getPlanValueInCents(),
+            unidade_id: unidadeId
+          })
+        }
         setStep(2)
       } else {
+        // Track form error via dataLayer
+        if (plano && typeof window !== 'undefined' && (window as any).dataLayer) {
+          const errorType = !formData.aceiteTermos ? 'termos_nao_aceitos' : 'campos_obrigatorios'
+          (window as any).dataLayer.push({
+            event: 'checkout_form_error',
+            error_type: errorType,
+            plano_id: plano.codigo || plano.name,
+            unidade_id: unidadeId
+          })
+        }
+
         if (!formData.aceiteTermos) {
           alert('Você deve aceitar os Termos de Uso e Política de Privacidade para continuar')
         } else {
