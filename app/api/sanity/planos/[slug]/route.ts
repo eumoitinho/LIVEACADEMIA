@@ -7,8 +7,8 @@ export async function GET(
   try {
     const { slug } = await params
 
-    // Usar a API existente que já funciona
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/pacto/planos/${slug}`, {
+    // Usar a API V3 existente que já funciona
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/pacto-v3/planos/${slug}`, {
       headers: {
         'User-Agent': 'Sanity-Studio-Internal'
       }
