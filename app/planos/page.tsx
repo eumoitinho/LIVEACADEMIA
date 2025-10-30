@@ -75,9 +75,9 @@ export default function Planos() {
   const [loadingSanity, setLoadingSanity] = useState(true)
   const [allLocations, setAllLocations] = useState<LocationUnit[]>([])
 
-  // Use Sanity plans (ordered by page config) or fallback to hardcoded
-  const displayPlans = pageData?.plansOrder?.length > 0 ? pageData.plansOrder :
-                     (sanityPlans && sanityPlans.length > 0 ? sanityPlans : planos)
+  // Use Sanity plans (ordered by page config) or fallback to hardcoded - ensure it's always an array
+  const displayPlans = Array.isArray(pageData?.plansOrder) && pageData.plansOrder.length > 0 ? pageData.plansOrder :
+                     (Array.isArray(sanityPlans) && sanityPlans.length > 0 ? sanityPlans : planos)
 
   // Fetch units from Sanity
   useEffect(() => {
@@ -154,8 +154,8 @@ export default function Planos() {
     )
   }, [selectedPlan, allLocations])
 
-  // Use Sanity comparison data or fallback to hardcoded
-  const comparisonFeatures = pageData?.comparison?.sections || [
+  // Use Sanity comparison data or fallback to hardcoded - ensure it's always an array
+  const comparisonFeatures = Array.isArray(pageData?.comparison?.sections) ? pageData.comparison.sections : [
     {
       sectionTitle: 'Benefícios Principais',
       items: [
@@ -257,7 +257,7 @@ export default function Planos() {
 
                     {/* Benefits */}
                     <ul className="space-y-4 mb-8">
-                      {(plano as any).beneficios.map((beneficio: string, i: number) => (
+                      {Array.isArray((plano as any).beneficios) && (plano as any).beneficios.map((beneficio: string, i: number) => (
                         <li key={i} className="flex items-start gap-3">
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
                             (plano as any).destaque

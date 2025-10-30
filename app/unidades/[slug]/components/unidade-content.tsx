@@ -1,13 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { motion } from "framer-motion"
 import { MapPin, Clock, Check, Phone, Users, Dumbbell, ArrowRight, Star } from "lucide-react"
 import Link from "next/link"
 import UnitPlanos from '@/features/units/unit-planos'
 import CheckoutModal from '@/components/checkout/checkout-modal'
 import { useUnit } from "@/contexts/unit-context"
-import { useUnitsData } from '../../../../hooks/use-sanity-data'  
+import { useUnitsData } from '../../../../hooks/use-sanity-data'
+import { locations } from '@/src/lib/config/locations'  
 
 interface UnidadeContentProps {
   unidade: {
@@ -50,6 +51,36 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]} | null>(null)
   const { setCurrentUnit } = useUnit()
   const { data: sanityUnits, loading: loadingUnits } = useUnitsData()
+
+  // Merge Sanity units with static locations (same logic as /unidades page)
+  const allUnidades = useMemo(() => {
+    if (loadingUnits || !sanityUnits || sanityUnits.length === 0) {
+      return locations.filter(loc => loc.type !== "inauguracao")
+    }
+
+    return locations
+      .filter(loc => loc.type !== "inauguracao")
+      .map(staticLoc => {
+        const sanityUnit = sanityUnits.find((unit: any) =>
+          unit.slug === staticLoc.id
+        )
+
+        if (sanityUnit) {
+          return {
+            ...staticLoc,
+            slug: sanityUnit.slug,
+            name: sanityUnit.name,
+            address: sanityUnit.address,
+            type: sanityUnit.type,
+            photo: sanityUnit.photo?.asset?.url || sanityUnit.images?.[0]?.asset?.url || staticLoc.photo || '/images/fachada.jpg',
+            features: sanityUnit.services || staticLoc.features,
+            hours: sanityUnit.openingHours || staticLoc.hours,
+            openingHours: sanityUnit.openingHours || staticLoc.hours
+          }
+        }
+        return staticLoc
+      })
+  }, [sanityUnits, loadingUnits])
   
   useEffect(() => {
     if (unidade.logo) {
@@ -366,9 +397,9 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
             className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10"
           >
             <div className="relative h-96 lg:h-[500px]">
-              {/* Google Maps Embed usando endereço da unidade */}
+              {/* Google Maps Embed com endereço específico da unidade e pin */}
               <iframe
-                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d${unidade.longitude}!3d${unidade.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(unidade.address)}!5e0!3m2!1spt-BR!2sbr!4v1234567890`}
+                src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dOWTgdKrUhD1HI&q=${encodeURIComponent(`Live Academia ${unidade.name}, ${unidade.address}, Manaus, AM`)}&zoom=16&maptype=roadmap`}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -376,13 +407,13 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 className="rounded-3xl"
-                title={`Localização da ${unidade.name}`}
+                title={`Localização da Live Academia ${unidade.name}`}
               />
               
               {/* Overlay com botão para abrir no Google Maps */}
               <div className="absolute top-4 right-4">
                 <a
-                  href={unidade.mapLink || `https://www.google.com/maps?q=${unidade.latitude},${unidade.longitude}`}
+                  href={unidade.mapLink || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Live Academia ${unidade.name}, ${unidade.address}, Manaus, AM`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-black font-semibold px-4 py-2 rounded-full transition-colors shadow-lg"
@@ -480,18 +511,18 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
             viewport={{ once: true }}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Usar unidades reais do Sanity, excluindo a atual */}
+              {/* Usar unidades reais com merge Sanity + estáticas, excluindo a atual */}
               {loadingUnits ? (
                 Array.from({ length: 3 }).map((_, index) => (
                   <div key={index} className="animate-pulse bg-zinc-800 rounded-3xl h-64"></div>
                 ))
               ) : (
-                (sanityUnits || [])
-                  .filter(unit => unit.slug !== unidade.id)
+                allUnidades
+                  .filter(unit => (unit.slug || unit.id) !== unidade.id)
                   .slice(0, 3)
                   .map((unit, index) => (
                 <motion.div
-                  key={unit.slug}
+                  key={unit.slug || unit.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -499,18 +530,18 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                   className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-yellow-400/30 transition-all duration-300"
                 >
                   <div className="relative h-48">
-                    {unit.photo?.asset?.url ? (
+                    {unit.photo ? (
                       <img
-                        src={unit.photo.asset.url}
+                        src={unit.photo}
                         alt={unit.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                     ) : (
                       <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/20 to-amber-500/10"></div>
                     )}
-                    
+
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                    
+
                     {/* Badge do tipo */}
                     <div className="absolute top-3 left-3">
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -523,28 +554,28 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                       </span>
                     </div>
                   </div>
-                  
+
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-white mb-2 group-hover:text-yellow-300 transition-colors">
                       {unit.name}
                     </h3>
-                    
+
                     <div className="flex items-start gap-3 mb-4">
                       <MapPin className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
                       <p className="text-white/70 text-sm leading-relaxed">
                         {unit.address}
                       </p>
                     </div>
-                    
+
                     <div className="flex items-start gap-3 mb-6">
                       <Clock className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
                       <p className="text-white/70 text-sm leading-relaxed">
-                        {unit.openingHours || 'Horários disponíveis'}
+                        {unit.openingHours || unit.hours || 'Horários disponíveis'}
                       </p>
                     </div>
-                    
+
                     <Link
-                      href={`/unidades/${unit.slug}`}
+                      href={`/unidades/${unit.slug || unit.id}`}
                       className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-full transition-colors text-sm"
                     >
                       Ver Unidade
