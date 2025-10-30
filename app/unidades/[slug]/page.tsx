@@ -9,11 +9,31 @@ const unidadeData = {
   // Tradicional
   tradicional: {
     modalidades: [
-      "Musculação",
-      "Aulas Coletivas",
-      "Treino Funcional",
-      "Cardio",
-      "Alongamento"
+      {
+        nome: "Musculação",
+        descricao: "Equipamentos de última geração para fortalecimento",
+        imagem: "/images/modalidades/musculacao.jpg"
+      },
+      {
+        nome: "Aulas Coletivas",
+        descricao: "Energia em grupo para motivar seu treino",
+        imagem: "/images/modalidades/aulas-coletivas.jpg"
+      },
+      {
+        nome: "Treino Funcional",
+        descricao: "Movimentos naturais para o dia a dia",
+        imagem: "/images/modalidades/treino-funcional.jpg"
+      },
+      {
+        nome: "Cardio",
+        descricao: "Queime calorias e melhore seu condicionamento",
+        imagem: "/images/modalidades/cardio.jpg"
+      },
+      {
+        nome: "Alongamento",
+        descricao: "Flexibilidade e relaxamento muscular",
+        imagem: "/images/modalidades/alongamento.jpg"
+      }
     ],
     beneficios: [
       {
@@ -47,17 +67,42 @@ const unidadeData = {
       "/images/academia-2.webp",
       "/images/academia-3.webp",
       "/images/academia-4.webp"
-    ]
+    ],
+    heroBackground: "/images/unidades/tradicional-hero.jpg"
   },
   // Premium
   premium: {
     modalidades: [
-      "Musculação",
-      "Aulas Coletivas",
-      "Treino Funcional",
-      "Cardio",
-      "Alongamento",
-      "Pilates"
+      {
+        nome: "Musculação",
+        descricao: "Equipamentos de última geração para fortalecimento",
+        imagem: "/images/modalidades/musculacao.jpg"
+      },
+      {
+        nome: "Aulas Coletivas",
+        descricao: "Energia em grupo para motivar seu treino",
+        imagem: "/images/modalidades/aulas-coletivas.jpg"
+      },
+      {
+        nome: "Treino Funcional",
+        descricao: "Movimentos naturais para o dia a dia",
+        imagem: "/images/modalidades/treino-funcional.jpg"
+      },
+      {
+        nome: "Cardio",
+        descricao: "Queime calorias e melhore seu condicionamento",
+        imagem: "/images/modalidades/cardio.jpg"
+      },
+      {
+        nome: "Alongamento",
+        descricao: "Flexibilidade e relaxamento muscular",
+        imagem: "/images/modalidades/alongamento.jpg"
+      },
+      {
+        nome: "Pilates",
+        descricao: "Fortalecimento do core e flexibilidade",
+        imagem: "/images/modalidades/pilates.jpg"
+      }
     ],
     beneficios: [
       {
@@ -101,21 +146,62 @@ const unidadeData = {
       "/images/academia-2.webp",
       "/images/academia-3.webp",
       "/images/academia-4.webp"
-    ]
+    ],
+    heroBackground: "/images/unidades/premium-hero.jpg"
   },
   // Diamante
   diamante: {
     modalidades: [
-      "Musculação",
-      "Aulas Coletivas",
-      "Treino Funcional",
-      "Cardio",
-      "Alongamento",
-      "Pilates",
-      "Yoga",
-      "Indoor Cycling",
-      "Dança",
-      "Pose"
+      {
+        nome: "Musculação",
+        descricao: "Equipamentos de última geração para fortalecimento",
+        imagem: "/images/modalidades/musculacao.jpg"
+      },
+      {
+        nome: "Aulas Coletivas",
+        descricao: "Energia em grupo para motivar seu treino",
+        imagem: "/images/modalidades/aulas-coletivas.jpg"
+      },
+      {
+        nome: "Treino Funcional",
+        descricao: "Movimentos naturais para o dia a dia",
+        imagem: "/images/modalidades/treino-funcional.jpg"
+      },
+      {
+        nome: "Cardio",
+        descricao: "Queime calorias e melhore seu condicionamento",
+        imagem: "/images/modalidades/cardio.jpg"
+      },
+      {
+        nome: "Alongamento",
+        descricao: "Flexibilidade e relaxamento muscular",
+        imagem: "/images/modalidades/alongamento.jpg"
+      },
+      {
+        nome: "Pilates",
+        descricao: "Fortalecimento do core e flexibilidade",
+        imagem: "/images/modalidades/pilates.jpg"
+      },
+      {
+        nome: "Yoga",
+        descricao: "Equilíbrio entre corpo e mente",
+        imagem: "/images/modalidades/yoga.jpg"
+      },
+      {
+        nome: "Indoor Cycling",
+        descricao: "Pedaladas intensas ao som de música envolvente",
+        imagem: "/images/modalidades/indoor-cycling.jpg"
+      },
+      {
+        nome: "Dança",
+        descricao: "Ritmo e diversão para queimar calorias",
+        imagem: "/images/modalidades/danca.jpg"
+      },
+      {
+        nome: "Pose",
+        descricao: "Posturas e movimentos para flexibilidade",
+        imagem: "/images/modalidades/pose.jpg"
+      }
     ],
     beneficios: [
       {
@@ -179,7 +265,8 @@ const unidadeData = {
       "/images/academia-2.webp",
       "/images/academia-3.webp",
       "/images/academia-4.webp"
-    ]
+    ],
+    heroBackground: "/images/unidades/diamante-hero.jpg"
   }
 }
 

@@ -29,13 +29,18 @@ interface UnidadeContentProps {
     hotsite?: string
   }
   data: {
-    modalidades: string[]
+    modalidades: Array<{
+      nome: string
+      descricao: string
+      imagem: string
+    }>
     beneficios: Array<{
       titulo: string
       descricao: string
       imagem: string
     }>
     fotos: string[]
+    heroBackground: string
   }
 }
 
@@ -73,10 +78,12 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
       {/* Hero Section - Design System da Home */}
       <section className="relative z-10 flex min-h-[100vh] items-end">
         {/* Background específico da unidade */}
-        <div 
+        <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: unidade.photo ? `url('${unidade.photo}')` : "url('/images/fachada.jpg')",
+            backgroundImage: data.heroBackground ? `url('${data.heroBackground}')` :
+                           unidade.photo ? `url('${unidade.photo}')` :
+                           "url('/images/fachada.jpg')",
             backgroundPosition: "center center"
           }}
         />
@@ -215,24 +222,27 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-yellow-400/30 transition-all duration-300"
               >
                 <div className="relative h-48">
-                  {/* Background Image */}
+                  {/* Background Image específica para cada modalidade */}
                   <img
-                    src={unidade.photo || '/images/fachada.jpg'}
-                    alt={modalidade}
+                    src={modalidade.imagem || '/images/fachada.jpg'}
+                    alt={modalidade.nome}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  
-                  {/* Content */}
-                  <div className="absolute inset-0 flex items-center justify-center">
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+                  {/* Content reorganizado */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mb-3 group-hover:bg-yellow-400/30 transition-colors">
-                        <Dumbbell className="w-8 h-8 text-yellow-400 group-hover:scale-110 transition-transform" />
+                      <div className="w-12 h-12 bg-yellow-400/20 rounded-full flex items-center justify-center mb-3 mx-auto group-hover:bg-yellow-400/30 transition-colors">
+                        <Dumbbell className="w-6 h-6 text-yellow-400 group-hover:scale-110 transition-transform" />
                       </div>
-                      <h3 className="text-lg font-bold text-white group-hover:text-yellow-300 transition-colors">
-                        {modalidade}
+                      <h3 className="text-lg font-bold text-white group-hover:text-yellow-300 transition-colors mb-1">
+                        {modalidade.nome}
                       </h3>
+                      <p className="text-white/80 text-sm leading-relaxed">
+                        {modalidade.descricao}
+                      </p>
                     </div>
                   </div>
                   
