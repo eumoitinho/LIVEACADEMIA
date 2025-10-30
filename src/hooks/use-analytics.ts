@@ -1,218 +1,223 @@
 'use client'
 
 import { useCallback } from 'react'
-import { 
-  track, 
-  trackPurchase, 
-  trackLead, 
-  trackCheckoutStep, 
-  trackPaymentAttempt, 
-  trackPaymentResult,
-  trackCTAClick,
+import { usePathname } from 'next/navigation'
+import {
+  track,
   trackPlanSelect,
   trackCheckoutStart,
+  trackCTAClick,
   trackPageView,
-  AnalyticsEvents,
-  type AnalyticsEvent 
-} from '@/src/lib/utils/analytics'
+  AnalyticsEvents
+} from '@/lib/utils/analytics'
 
 export function useAnalytics() {
-  // Função genérica de tracking
-  const trackEvent = useCallback((event: AnalyticsEvent, payload?: Record<string, any>, meta?: any) => {
-    track({ event, payload, meta })
-  }, [])
+  const pathname = usePathname()
 
-  // Eventos específicos do checkout
-  const trackCheckoutStepEvent = useCallback((step: number, stepName: string, planoId: string, valor: number) => {
-    trackCheckoutStep(step, stepName, planoId, valor)
-  }, [])
+  // Track page view
+  const trackPage = useCallback((customPath?: string, extra?: Record<string, any>) => {
+    trackPageView(customPath || pathname, {
+      page_title: document.title,
+      page_location: window.location.href,
+      ...extra
+    })
+  }, [pathname])
 
-  const trackPaymentAttemptEvent = useCallback((method: 'pix' | 'cartao' | 'boleto', planoId: string, valor: number) => {
-    trackPaymentAttempt(method, planoId, valor)
-  }, [])
-
-  const trackPaymentResultEvent = useCallback((
-    method: 'pix' | 'cartao' | 'boleto',
-    status: 'aprovado' | 'rejeitado' | 'pendente',
-    transactionId: string,
-    valor: number,
-    planoId: string
+  // Track plan selection with unit context
+  const trackPlan = useCallback((
+    planoId: string,
+    planoNome: string,
+    planoValor: number,
+    unidadeId?: string,
+    extra?: Record<string, any>
   ) => {
-    trackPaymentResult(method, status, transactionId, valor, planoId)
-  }, [])
+    const unitId = unidadeId || extractUnitFromPath(pathname) || 'homepage'
+    trackPlanSelect(planoId, planoNome, planoValor, unitId)
 
-  // Eventos de conversão
-  const trackPurchaseEvent = useCallback((data: {
-    transaction_id: string
-    value: number
-    currency: string
-    plano_id: string
-    plano_nome: string
-    unidade_id: string
-    payment_method: 'pix' | 'cartao' | 'boleto'
-    installments?: number
-  }) => {
-    trackPurchase(data)
-  }, [])
+    // Track additional context
+    if (extra) {
+      track({
+        event: AnalyticsEvents.CUSTOM_EVENT,
+        payload: {
+          custom_event: 'plan_select_extended',
+          plano_id: planoId,
+          plano_nome: planoNome,
+          plano_valor: planoValor,
+          unidade_id: unitId,
+          page_location: pathname,
+          ...extra
+        }
+      })
+    }
+  }, [pathname])
 
-  const trackLeadEvent = useCallback((data: {
-    lead_type: 'newsletter' | 'contact' | 'demo' | 'quote'
-    lead_source: string
-    lead_value?: number
-    contact_method: 'email' | 'phone' | 'whatsapp'
-  }) => {
-    trackLead(data)
-  }, [])
+  // Track checkout start with enhanced context
+  const trackCheckout = useCallback((
+    planoId: string,
+    planoNome: string,
+    planoValor: number,
+    unidadeId?: string
+  ) => {
+    const unitId = unidadeId || extractUnitFromPath(pathname) || 'homepage'
+    trackCheckoutStart(planoId, planoNome, planoValor, unitId)
+  }, [pathname])
 
-  // Eventos de engajamento
-  const trackCTAClickEvent = useCallback((ctaName: string, location: string, extra?: Record<string, any>) => {
-    trackCTAClick(ctaName, location, extra)
-  }, [])
-
-  const trackPlanSelectEvent = useCallback((planoId: string, planoNome: string, planoValor: number, unidadeId: string) => {
-    trackPlanSelect(planoId, planoNome, planoValor, unidadeId)
-  }, [])
-
-  const trackCheckoutStartEvent = useCallback((planoId: string, planoNome: string, planoValor: number, unidadeId: string) => {
-    trackCheckoutStart(planoId, planoNome, planoValor, unidadeId)
-  }, [])
-
-  // Page view
-  const trackPageViewEvent = useCallback((path: string, extra?: Record<string, any>) => {
-    trackPageView(path, extra)
-  }, [])
-
-  // Eventos específicos do negócio
-  const trackPlanView = useCallback((planoId: string, planoNome: string, valor: number, unidadeId?: string) => {
-    trackEvent(AnalyticsEvents.PLAN_VIEW, {
-      plano_id: planoId,
-      plano_nome: planoNome,
-      plano_valor: valor,
-      unidade_id: unidadeId,
+  // Track CTA clicks with automatic location detection
+  const trackCTA = useCallback((ctaName: string, extra?: Record<string, any>) => {
+    const location = determinePageLocation(pathname)
+    trackCTAClick(ctaName, location, {
+      page_path: pathname,
+      unidade_id: extractUnitFromPath(pathname),
+      ...extra
     })
-  }, [trackEvent])
+  }, [pathname])
 
-  const trackUnitView = useCallback((unitId: string, unitName: string) => {
-    trackEvent(AnalyticsEvents.UNIT_VIEW, {
-      unit_id: unitId,
-      unit_name: unitName,
-    })
-  }, [trackEvent])
+  // Track unit-specific events
+  const trackUnitEvent = useCallback((eventType: string, extra?: Record<string, any>) => {
+    const unidadeId = extractUnitFromPath(pathname)
 
-  const trackVideoPlay = useCallback((videoTitle: string, videoDuration?: number) => {
-    trackEvent(AnalyticsEvents.VIDEO_PLAY, {
-      video_title: videoTitle,
-      video_duration: videoDuration,
-    })
-  }, [trackEvent])
+    if (!unidadeId) return
 
-  const trackFormStart = useCallback((formType: string, formLocation: string) => {
-    trackEvent(AnalyticsEvents.FORM_START, {
-      form_type: formType,
-      form_location: formLocation,
+    track({
+      event: AnalyticsEvents.UNIT_VIEW,
+      payload: {
+        unidade_id: unidadeId,
+        event_type: eventType,
+        page_path: pathname,
+        ...extra
+      }
     })
-  }, [trackEvent])
+  }, [pathname])
 
-  const trackFormComplete = useCallback((formType: string, formLocation: string, success: boolean) => {
-    trackEvent(AnalyticsEvents.FORM_COMPLETE, {
-      form_type: formType,
-      form_location: formLocation,
-      success: success,
+  // Track modal events
+  const trackModal = useCallback((modalName: string, action: 'open' | 'close' | 'step', extra?: Record<string, any>) => {
+    track({
+      event: AnalyticsEvents.CUSTOM_EVENT,
+      payload: {
+        custom_event: 'modal_interaction',
+        modal_name: modalName,
+        modal_action: action,
+        page_path: pathname,
+        unidade_id: extractUnitFromPath(pathname),
+        ...extra
+      }
     })
-  }, [trackEvent])
+  }, [pathname])
 
-  const trackError = useCallback((errorType: string, errorMessage: string, context?: string) => {
-    trackEvent(AnalyticsEvents.ERROR, {
-      error_type: errorType,
-      error_message: errorMessage,
-      error_context: context,
-    })
-  }, [trackEvent])
+  // Track form interactions
+  const trackForm = useCallback((
+    formName: string,
+    action: 'start' | 'complete' | 'abandon' | 'error',
+    extra?: Record<string, any>
+  ) => {
+    const eventMap = {
+      start: AnalyticsEvents.FORM_START,
+      complete: AnalyticsEvents.FORM_COMPLETE,
+      abandon: AnalyticsEvents.FORM_ABANDON,
+      error: AnalyticsEvents.ERROR
+    }
 
-  // PIX específicos
-  const trackPixQRGenerated = useCallback((transactionId: string, valor: number) => {
-    trackEvent(AnalyticsEvents.PIX_QR_GENERATED, {
-      transaction_id: transactionId,
-      value: valor,
+    track({
+      event: eventMap[action],
+      payload: {
+        form_name: formName,
+        page_path: pathname,
+        unidade_id: extractUnitFromPath(pathname),
+        ...extra
+      }
     })
-  }, [trackEvent])
+  }, [pathname])
 
-  const trackPixQRDisplayed = useCallback((transactionId: string) => {
-    trackEvent(AnalyticsEvents.PIX_QR_DISPLAYED, {
-      transaction_id: transactionId,
+  // Track scroll depth
+  const trackScroll = useCallback((depth: number) => {
+    track({
+      event: AnalyticsEvents.SCROLL_DEPTH,
+      payload: {
+        scroll_depth: depth,
+        page_path: pathname,
+        unidade_id: extractUnitFromPath(pathname)
+      }
     })
-  }, [trackEvent])
+  }, [pathname])
 
-  const trackPixCopyCode = useCallback((transactionId: string) => {
-    trackEvent(AnalyticsEvents.PIX_COPY_CODE, {
-      transaction_id: transactionId,
-    })
-  }, [trackEvent])
+  // Track video interactions
+  const trackVideo = useCallback((
+    action: 'play' | 'complete' | 'pause',
+    videoTitle: string,
+    duration?: number,
+    currentTime?: number
+  ) => {
+    const eventMap = {
+      play: AnalyticsEvents.VIDEO_PLAY,
+      complete: AnalyticsEvents.VIDEO_COMPLETE,
+      pause: AnalyticsEvents.CUSTOM_EVENT
+    }
 
-  // Boleto específicos
-  const trackBoletoGenerated = useCallback((transactionId: string, valor: number) => {
-    trackEvent(AnalyticsEvents.BOLETO_GENERATED, {
-      transaction_id: transactionId,
-      value: valor,
+    track({
+      event: eventMap[action],
+      payload: {
+        video_title: videoTitle,
+        video_duration: duration,
+        video_current_time: currentTime,
+        page_path: pathname,
+        unidade_id: extractUnitFromPath(pathname),
+        ...(action === 'pause' && { custom_event: 'video_pause' })
+      }
     })
-  }, [trackEvent])
+  }, [pathname])
 
-  const trackBoletoDownloaded = useCallback((transactionId: string) => {
-    trackEvent(AnalyticsEvents.BOLETO_DOWNLOADED, {
-      transaction_id: transactionId,
+  // Track user engagement
+  const trackEngagement = useCallback((
+    engagementType: string,
+    value?: number,
+    extra?: Record<string, any>
+  ) => {
+    track({
+      event: AnalyticsEvents.CUSTOM_EVENT,
+      payload: {
+        custom_event: 'user_engagement',
+        engagement_type: engagementType,
+        engagement_value: value,
+        page_path: pathname,
+        unidade_id: extractUnitFromPath(pathname),
+        ...extra
+      }
     })
-  }, [trackEvent])
-
-  // Cartão específicos
-  const trackCardFormStart = useCallback((transactionId: string) => {
-    trackEvent(AnalyticsEvents.CARD_FORM_START, {
-      transaction_id: transactionId,
-    })
-  }, [trackEvent])
-
-  const trackCardTokenGenerated = useCallback((transactionId: string, success: boolean) => {
-    trackEvent(AnalyticsEvents.CARD_TOKEN_GENERATED, {
-      transaction_id: transactionId,
-      success: success,
-    })
-  }, [trackEvent])
+  }, [pathname])
 
   return {
-    // Genéricos
-    trackEvent,
-    trackPageView: trackPageViewEvent,
-    
-    // Checkout
-    trackCheckoutStep: trackCheckoutStepEvent,
-    trackPaymentAttempt: trackPaymentAttemptEvent,
-    trackPaymentResult: trackPaymentResultEvent,
-    
-    // Conversões
-    trackPurchase: trackPurchaseEvent,
-    trackLead: trackLeadEvent,
-    
-    // Engajamento
-    trackCTAClick: trackCTAClickEvent,
-    trackPlanSelect: trackPlanSelectEvent,
-    trackCheckoutStart: trackCheckoutStartEvent,
-    trackPlanView,
-    trackUnitView,
-    trackVideoPlay,
-    trackFormStart,
-    trackFormComplete,
-    trackError,
-    
-    // PIX
-    trackPixQRGenerated,
-    trackPixQRDisplayed,
-    trackPixCopyCode,
-    
-    // Boleto
-    trackBoletoGenerated,
-    trackBoletoDownloaded,
-    
-    // Cartão
-    trackCardFormStart,
-    trackCardTokenGenerated,
+    trackPage,
+    trackPageView: trackPage, // Alias for compatibility
+    trackPlan,
+    trackCheckout,
+    trackCTA,
+    trackUnitEvent,
+    trackModal,
+    trackForm,
+    trackScroll,
+    trackVideo,
+    trackEngagement,
+    trackEvent: track, // Alias for compatibility
+    // Direct access to track function for custom events
+    track
   }
+}
+
+// Helper functions
+function extractUnitFromPath(pathname: string): string | null {
+  const match = pathname.match(/\/unidades\/([^/]+)/)
+  return match ? match[1] : null
+}
+
+function determinePageLocation(pathname: string): string {
+  if (pathname === '/') return 'homepage'
+  if (pathname.startsWith('/unidades/')) {
+    const unitId = extractUnitFromPath(pathname)
+    return unitId ? `unidade_${unitId}` : 'unidades_list'
+  }
+  if (pathname.startsWith('/planos')) return 'planos'
+  if (pathname.startsWith('/aulas')) return 'aulas'
+  if (pathname.startsWith('/sobre')) return 'sobre'
+  if (pathname.startsWith('/contato')) return 'contato'
+  return pathname.replace(/^\//, '').replace(/\//g, '_') || 'unknown'
 }

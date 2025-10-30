@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { initializeAnalytics } from '@/src/lib/utils/analytics'
+import { initializeAnalytics } from '@/lib/utils/analytics'
 import { useAnalytics } from '@/hooks/use-analytics'
 import SimplifiedWhatsAppTracker from './simplified-whatsapp-tracker'
 
-export default function AnalyticsProvider({ children }: { children: React.ReactNode }) {
+function AnalyticsProviderInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const { trackPageView } = useAnalytics()
@@ -38,5 +38,13 @@ export default function AnalyticsProvider({ children }: { children: React.ReactN
       {children}
       <SimplifiedWhatsAppTracker />
     </>
+  )
+}
+
+export default function AnalyticsProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<>{children}</>}>
+      <AnalyticsProviderInner>{children}</AnalyticsProviderInner>
+    </Suspense>
   )
 }

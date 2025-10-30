@@ -1,4 +1,4 @@
-import { ANALYTICS_CONFIG } from '@/src/lib/utils/analytics'
+import { ANALYTICS_CONFIG } from '@/lib/utils/analytics'
 
 export default function GTMNoScript() {
   const gtmId = ANALYTICS_CONFIG.GTM_ID

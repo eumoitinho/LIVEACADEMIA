@@ -8,7 +8,7 @@ import UnitPlanos from '@/features/units/unit-planos'
 import CheckoutModal from '@/components/checkout/checkout-modal'
 import { useUnit } from "@/contexts/unit-context"
 import { useUnitsData } from '../../../../hooks/use-sanity-data'
-import { useAnalytics } from '@/hooks/use-analytics'  
+  
 
 interface UnidadeContentProps {
   unidade: {
@@ -51,7 +51,6 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]} | null>(null)
   const { setCurrentUnit } = useUnit()
   const { data: sanityUnits, loading: loadingUnits } = useUnitsData()
-  const { trackEvent } = useAnalytics()
   
   useEffect(() => {
     if (unidade.logo) {

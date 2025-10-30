@@ -1,7 +1,7 @@
 'use client'
 
 import Script from 'next/script'
-import { ANALYTICS_CONFIG } from '@/src/lib/utils/analytics'
+import { ANALYTICS_CONFIG } from '@/lib/utils/analytics'
 
 export default function GTMScript() {
   const gtmId = ANALYTICS_CONFIG.GTM_ID

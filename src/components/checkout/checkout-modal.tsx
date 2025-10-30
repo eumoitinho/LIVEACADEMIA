@@ -13,7 +13,7 @@ import {
   trackCheckoutStep,
   trackPaymentAttempt,
   trackPaymentResult
-} from "@/src/lib/utils/analytics"
+} from "@/lib/utils/analytics"
 
 interface SimulacaoResumo {
   valorTotal?: number | string
@@ -275,7 +275,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
         formData.sexo
       ]
       
-      if (camposObrigatorios.every(campo => campo.trim() !== '') && formData.aceiteTermos) {
+      if (camposObrigatorios.every(campo => String(campo).trim() !== '') && formData.aceiteTermos) {
         // Track checkout step completion via dataLayer
         if (plano && typeof window !== 'undefined' && (window as any).dataLayer) {
           (window as any).dataLayer.push({
@@ -291,7 +291,7 @@ export default function CheckoutModal({ isOpen, onClose, plano, unidadeName, uni
       } else {
         // Track form error via dataLayer
         if (plano && typeof window !== 'undefined' && (window as any).dataLayer) {
-          const errorType = !formData.aceiteTermos ? 'termos_nao_aceitos' : 'campos_obrigatorios'
+          const errorType = !formData.aceiteTermos ? 'termos_nao_aceitos' as string : 'campos_obrigatorios' as string
           (window as any).dataLayer.push({
             event: 'checkout_form_error',
             error_type: errorType,
