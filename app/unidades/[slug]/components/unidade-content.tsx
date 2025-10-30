@@ -30,7 +30,11 @@ interface UnidadeContentProps {
   }
   data: {
     modalidades: string[]
-    beneficios: string[]
+    beneficios: Array<{
+      titulo: string
+      descricao: string
+      imagem: string
+    }>
     fotos: string[]
   }
 }
@@ -280,16 +284,16 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-amber-400/30 transition-all duration-300"
               >
                 <div className="relative h-48">
-                  {/* Background Image */}
+                  {/* Background Image específica para cada benefício */}
                   <img
-                    src={unidade.photo || '/images/fachada.jpg'}
-                    alt={beneficio}
+                    src={beneficio.imagem || '/images/fachada.jpg'}
+                    alt={beneficio.titulo}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  
+
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                  
-                  {/* Content */}
+
+                  {/* Content reorganizado */}
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-colors flex-shrink-0">
@@ -297,10 +301,10 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-300 transition-colors">
-                          Benefício
+                          {beneficio.titulo}
                         </h3>
                         <p className="text-white/90 leading-relaxed text-sm">
-                          {beneficio}
+                          {beneficio.descricao}
                         </p>
                       </div>
                     </div>

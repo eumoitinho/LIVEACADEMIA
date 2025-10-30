@@ -16,11 +16,31 @@ const unidadeData = {
       "Alongamento"
     ],
     beneficios: [
-      "Sem taxa de matrícula",
-      "Sem fidelidade",
-      "Acesso via app",
-      "Orientação profissional",
-      "Equipamentos modernos"
+      {
+        titulo: "Sem taxa de matrícula",
+        descricao: "Comece a treinar sem custos adicionais",
+        imagem: "/images/beneficios/sem-taxa.jpg"
+      },
+      {
+        titulo: "Sem fidelidade",
+        descricao: "Liberdade total para cancelar quando quiser",
+        imagem: "/images/beneficios/sem-fidelidade.jpg"
+      },
+      {
+        titulo: "Acesso via app",
+        descricao: "Controle completo na palma da sua mão",
+        imagem: "/images/beneficios/app.jpg"
+      },
+      {
+        titulo: "Orientação profissional",
+        descricao: "Acompanhamento especializado para seus resultados",
+        imagem: "/images/beneficios/orientacao.jpg"
+      },
+      {
+        titulo: "Equipamentos modernos",
+        descricao: "Tecnologia de ponta para seu treino",
+        imagem: "/images/beneficios/equipamentos.jpg"
+      }
     ],
     fotos: [
       "/images/academia-1.webp",
@@ -40,13 +60,41 @@ const unidadeData = {
       "Pilates"
     ],
     beneficios: [
-      "Sem taxa de matrícula",
-      "Sem fidelidade",
-      "Ambiente climatizado",
-      "Acesso via app",
-      "Orientação profissional",
-      "Equipamentos premium",
-      "Vestiários modernos"
+      {
+        titulo: "Sem taxa de matrícula",
+        descricao: "Comece a treinar sem custos adicionais",
+        imagem: "/images/beneficios/sem-taxa.jpg"
+      },
+      {
+        titulo: "Sem fidelidade",
+        descricao: "Liberdade total para cancelar quando quiser",
+        imagem: "/images/beneficios/sem-fidelidade.jpg"
+      },
+      {
+        titulo: "Ambiente climatizado",
+        descricao: "Conforto térmico em todas as estações",
+        imagem: "/images/beneficios/climatizado.jpg"
+      },
+      {
+        titulo: "Acesso via app",
+        descricao: "Controle completo na palma da sua mão",
+        imagem: "/images/beneficios/app.jpg"
+      },
+      {
+        titulo: "Orientação profissional",
+        descricao: "Acompanhamento especializado para seus resultados",
+        imagem: "/images/beneficios/orientacao.jpg"
+      },
+      {
+        titulo: "Equipamentos premium",
+        descricao: "Tecnologia de última geração",
+        imagem: "/images/beneficios/equipamentos-premium.jpg"
+      },
+      {
+        titulo: "Vestiários modernos",
+        descricao: "Comodidade e higiene em primeiro lugar",
+        imagem: "/images/beneficios/vestiarios.jpg"
+      }
     ],
     fotos: [
       "/images/academia-1.webp",
@@ -70,17 +118,61 @@ const unidadeData = {
       "Pose"
     ],
     beneficios: [
-      "Sem taxa de matrícula",
-      "Sem fidelidade",
-      "Ambiente climatizado",
-      "Espaço Relax",
-      "Espaço Yoga",
-      "Studio de Bike",
-      "Espaço Pose",
-      "Acesso via app",
-      "Orientação profissional",
-      "Equipamentos premium",
-      "Vestiários luxuosos"
+      {
+        titulo: "Sem taxa de matrícula",
+        descricao: "Comece a treinar sem custos adicionais",
+        imagem: "/images/beneficios/sem-taxa.jpg"
+      },
+      {
+        titulo: "Sem fidelidade",
+        descricao: "Liberdade total para cancelar quando quiser",
+        imagem: "/images/beneficios/sem-fidelidade.jpg"
+      },
+      {
+        titulo: "Ambiente climatizado",
+        descricao: "Conforto térmico em todas as estações",
+        imagem: "/images/beneficios/climatizado.jpg"
+      },
+      {
+        titulo: "Espaço Relax",
+        descricao: "Área exclusiva para relaxamento e descanso",
+        imagem: "/images/beneficios/espaco-relax.jpg"
+      },
+      {
+        titulo: "Espaço Yoga",
+        descricao: "Ambiente zen para práticas contemplativas",
+        imagem: "/images/beneficios/espaco-yoga.jpg"
+      },
+      {
+        titulo: "Studio de Bike",
+        descricao: "Cycling indoor com energia contagiante",
+        imagem: "/images/beneficios/studio-bike.jpg"
+      },
+      {
+        titulo: "Espaço Pose",
+        descricao: "Área dedicada para poses e alongamento",
+        imagem: "/images/beneficios/espaco-pose.jpg"
+      },
+      {
+        titulo: "Acesso via app",
+        descricao: "Controle completo na palma da sua mão",
+        imagem: "/images/beneficios/app.jpg"
+      },
+      {
+        titulo: "Orientação profissional",
+        descricao: "Acompanhamento especializado para seus resultados",
+        imagem: "/images/beneficios/orientacao.jpg"
+      },
+      {
+        titulo: "Equipamentos premium",
+        descricao: "Tecnologia de última geração",
+        imagem: "/images/beneficios/equipamentos-premium.jpg"
+      },
+      {
+        titulo: "Vestiários luxuosos",
+        descricao: "Máximo conforto e sofisticação",
+        imagem: "/images/beneficios/vestiarios-luxuosos.jpg"
+      }
     ],
     fotos: [
       "/images/academia-1.webp",
