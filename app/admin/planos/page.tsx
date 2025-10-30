@@ -1,6 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import { Badge } from '@/components/ui/badge'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Separator } from '@/components/ui/separator'
+import { AlertCircle, CheckCircle, Eye, Loader2, Save, Trash2 } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface Plano {
   codigo: number
@@ -19,17 +30,24 @@ interface PlanoConfig {
 }
 
 const UNIDADES = [
-  'torres', 'centro', 'tradicional', 'premium', 'diamante',
-  'cidade-de-deus', 'cachoeirinha', 'silves', 'planalto'
+  { value: 'torres', label: 'Torres' },
+  { value: 'centro', label: 'Centro' },
+  { value: 'tradicional', label: 'Tradicional' },
+  { value: 'premium', label: 'Premium' },
+  { value: 'diamante', label: 'Diamante' },
+  { value: 'cidade-de-deus', label: 'Cidade de Deus' },
+  { value: 'cachoeirinha', label: 'Cachoeirinha' },
+  { value: 'silves', label: 'Silves' },
+  { value: 'planalto', label: 'Planalto' },
 ]
 
 const BADGES = [
   { value: '', label: 'Sem badge' },
-  { value: 'MAIS VENDIDO', label: '🔥 Mais vendido' },
-  { value: 'RECOMENDADO', label: '👑 Recomendado' },
-  { value: 'NOVIDADE', label: '✨ Novidade' },
-  { value: 'OFERTA', label: '💰 Oferta' },
-  { value: 'PROMOÇÃO', label: '🎯 Promoção' },
+  { value: 'MAIS VENDIDO', label: 'Mais vendido' },
+  { value: 'RECOMENDADO', label: 'Recomendado' },
+  { value: 'NOVIDADE', label: 'Novidade' },
+  { value: 'OFERTA', label: 'Oferta' },
+  { value: 'PROMOÇÃO', label: 'Promoção' },
 ]
 
 export default function AdminPlanosPage() {
@@ -38,9 +56,8 @@ export default function AdminPlanosPage() {
   const [configSalva, setConfigSalva] = useState<PlanoConfig[]>([])
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
-  // Buscar planos da API para a unidade selecionada
   const buscarPlanosApi = async (slug: string) => {
     setLoading(true)
     try {
@@ -54,13 +71,12 @@ export default function AdminPlanosPage() {
       setPlanosApi(data.planos || [])
     } catch (error) {
       console.error('Erro ao buscar planos:', error)
-      setMessage('❌ Erro ao buscar planos da API')
+      setMessage({ type: 'error', text: 'Erro ao buscar planos da API' })
     } finally {
       setLoading(false)
     }
   }
 
-  // Buscar configuração salva para a unidade
   const buscarConfigSalva = async (slug: string) => {
     try {
       const response = await fetch(`/api/admin/planos-config/${slug}`)
@@ -71,7 +87,6 @@ export default function AdminPlanosPage() {
     }
   }
 
-  // Salvar configuração
   const salvarConfig = async () => {
     setSaving(true)
     try {
@@ -87,32 +102,23 @@ export default function AdminPlanosPage() {
         throw new Error(data.error || 'Erro ao salvar')
       }
 
-      setMessage('✅ Configuração salva com sucesso!')
+      setMessage({ type: 'success', text: 'Configuração salva com sucesso!' })
     } catch (error) {
       console.error('Erro ao salvar:', error)
-      setMessage('❌ Erro ao salvar configuração')
+      setMessage({ type: 'error', text: 'Erro ao salvar configuração' })
     } finally {
       setSaving(false)
     }
   }
 
-  // Verificar se um plano está na configuração
   const isPlanoConfigurado = (codigo: number) => {
     return configSalva.some(p => p.codigo === codigo)
   }
 
-  // Obter configuração de um plano
-  const getPlanoConfig = (codigo: number) => {
-    return configSalva.find(p => p.codigo === codigo)
-  }
-
-  // Adicionar/remover plano da configuração
   const togglePlano = (plano: Plano) => {
     if (isPlanoConfigurado(plano.codigo)) {
-      // Remover
       setConfigSalva(prev => prev.filter(p => p.codigo !== plano.codigo))
     } else {
-      // Adicionar
       const novoPlano: PlanoConfig = {
         codigo: plano.codigo,
         nome: plano.nome,
@@ -125,331 +131,302 @@ export default function AdminPlanosPage() {
     }
   }
 
-  // Atualizar configuração de um plano
   const updatePlanoConfig = (codigo: number, updates: Partial<PlanoConfig>) => {
     setConfigSalva(prev =>
       prev.map(p => p.codigo === codigo ? { ...p, ...updates } : p)
     )
   }
 
-  // Carregar dados quando a unidade muda
   useEffect(() => {
     buscarPlanosApi(unidadeSelecionada)
     buscarConfigSalva(unidadeSelecionada)
   }, [unidadeSelecionada])
 
-  // Limpar mensagem após 3 segundos
   useEffect(() => {
     if (message) {
-      const timer = setTimeout(() => setMessage(''), 3000)
+      const timer = setTimeout(() => setMessage(null), 5000)
       return () => clearTimeout(timer)
     }
   }, [message])
 
+  const planosDestacados = configSalva.filter(p => p.destaque).sort((a, b) => a.ordem - b.ordem)
+  const outrosPlanos = configSalva.filter(p => !p.destaque).sort((a, b) => a.ordem - b.ordem)
+
   return (
-    <div style={{ padding: '40px', maxWidth: '1400px', margin: '0 auto', fontFamily: 'system-ui' }}>
-      <div style={{ marginBottom: '30px' }}>
-        <h1 style={{ fontSize: '32px', marginBottom: '10px', color: '#333' }}>
-          🔧 Administração de Planos por Unidade
-        </h1>
-        <p style={{ color: '#666', fontSize: '16px' }}>
-          Configure quais planos aparecem em cada unidade, ordem de exibição e destaques.
-        </p>
-      </div>
-
-      {/* Seleção de Unidade */}
-      <div style={{
-        marginBottom: '30px',
-        padding: '20px',
-        backgroundColor: '#f5f5f5',
-        borderRadius: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '20px'
-      }}>
-        <label style={{ fontWeight: 'bold', minWidth: '120px' }}>
-          Unidade:
-        </label>
-        <select
-          value={unidadeSelecionada}
-          onChange={(e) => setUnidadeSelecionada(e.target.value)}
-          style={{
-            padding: '12px',
-            fontSize: '16px',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            minWidth: '200px'
-          }}
-        >
-          {UNIDADES.map(unidade => (
-            <option key={unidade} value={unidade}>
-              {unidade.charAt(0).toUpperCase() + unidade.slice(1).replace('-', ' ')}
-            </option>
-          ))}
-        </select>
-
-        <button
-          onClick={() => buscarPlanosApi(unidadeSelecionada)}
-          disabled={loading}
-          style={{
-            padding: '12px 24px',
-            backgroundColor: loading ? '#ccc' : '#0066cc',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {loading ? 'Carregando...' : 'Atualizar Planos'}
-        </button>
-      </div>
-
-      {/* Mensagem */}
-      {message && (
-        <div style={{
-          padding: '15px',
-          backgroundColor: message.includes('✅') ? '#d4edda' : '#f8d7da',
-          border: `1px solid ${message.includes('✅') ? '#c3e6cb' : '#f5c6cb'}`,
-          borderRadius: '4px',
-          marginBottom: '20px',
-          color: message.includes('✅') ? '#155724' : '#721c24'
-        }}>
-          {message}
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto py-8 px-4 max-w-7xl">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Administração de Planos
+          </h1>
+          <p className="text-gray-600">
+            Configure quais planos aparecem em cada unidade e como são exibidos
+          </p>
         </div>
-      )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
-        {/* Coluna 1: Planos Disponíveis na API */}
-        <div>
-          <h2 style={{ fontSize: '24px', marginBottom: '20px', color: '#333' }}>
-            📡 Planos da API ({planosApi.length})
-          </h2>
+        {/* Controls */}
+        <Card className="mb-6">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-4">
+              <div className="flex-1">
+                <Label htmlFor="unidade">Unidade</Label>
+                <Select value={unidadeSelecionada} onValueChange={setUnidadeSelecionada}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecione uma unidade" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {UNIDADES.map(unidade => (
+                      <SelectItem key={unidade.value} value={unidade.value}>
+                        {unidade.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                onClick={() => buscarPlanosApi(unidadeSelecionada)}
+                disabled={loading}
+                variant="outline"
+              >
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Atualizar
+              </Button>
+              {configSalva.length > 0 && (
+                <Button
+                  onClick={salvarConfig}
+                  disabled={saving}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  <Save className="mr-2 h-4 w-4" />
+                  Salvar
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
-          {loading ? (
-            <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
-              Carregando planos...
-            </div>
-          ) : planosApi.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
-              Nenhum plano encontrado
-            </div>
-          ) : (
-            <div style={{ display: 'grid', gap: '12px' }}>
-              {planosApi.map(plano => {
-                const configurado = isPlanoConfigurado(plano.codigo)
-                return (
-                  <div
-                    key={plano.codigo}
-                    style={{
-                      padding: '15px',
-                      border: `2px solid ${configurado ? '#28a745' : '#ddd'}`,
-                      borderRadius: '8px',
-                      backgroundColor: configurado ? '#f8fff9' : 'white',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s'
-                    }}
-                    onClick={() => togglePlano(plano)}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div>
-                        <h3 style={{ margin: '0 0 5px 0', fontSize: '16px', color: '#333' }}>
-                          {configurado ? '✅' : '⚪'} {plano.nome}
-                        </h3>
-                        <div style={{ fontSize: '14px', color: '#666' }}>
-                          <span>#{plano.codigo}</span> •
-                          <span> R$ {typeof plano.valor === 'number' ? plano.valor.toFixed(2) : plano.valor}</span>
+        {/* Messages */}
+        {message && (
+          <Alert className={`mb-6 ${message.type === 'success' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+            {message.type === 'success' ?
+              <CheckCircle className="h-4 w-4 text-green-600" /> :
+              <AlertCircle className="h-4 w-4 text-red-600" />
+            }
+            <AlertDescription className={message.type === 'success' ? 'text-green-800' : 'text-red-800'}>
+              {message.text}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Planos Disponíveis */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                Planos da API
+                <Badge variant="secondary">{planosApi.length} encontrados</Badge>
+              </CardTitle>
+              <CardDescription>
+                Selecione os planos que devem aparecer na unidade
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  Carregando planos...
+                </div>
+              ) : planosApi.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  Nenhum plano encontrado
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {planosApi.map(plano => {
+                    const configurado = isPlanoConfigurado(plano.codigo)
+                    return (
+                      <div
+                        key={plano.codigo}
+                        className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                          configurado
+                            ? 'border-green-200 bg-green-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        onClick={() => togglePlano(plano)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <Checkbox
+                              checked={configurado}
+                            />
+                            <div>
+                              <div className="font-medium text-gray-900">
+                                {plano.nome}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                #{plano.codigo} • R$ {
+                                  typeof plano.valor === 'number'
+                                    ? plano.valor.toFixed(2)
+                                    : plano.valor
+                                }
+                              </div>
+                            </div>
+                          </div>
+                          <Badge variant={configurado ? 'default' : 'secondary'}>
+                            {configurado ? 'Ativo' : 'Inativo'}
+                          </Badge>
                         </div>
                       </div>
-                      <div style={{
-                        padding: '4px 12px',
-                        backgroundColor: configurado ? '#28a745' : '#6c757d',
-                        color: 'white',
-                        borderRadius: '20px',
-                        fontSize: '12px'
-                      }}>
-                        {configurado ? 'ATIVO' : 'CLIQUE PARA ATIVAR'}
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* Coluna 2: Configuração dos Planos Selecionados */}
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <h2 style={{ fontSize: '24px', color: '#333', margin: 0 }}>
-              ⚙️ Configuração ({configSalva.length})
-            </h2>
-            {configSalva.length > 0 && (
-              <button
-                onClick={salvarConfig}
-                disabled={saving}
-                style={{
-                  padding: '10px 20px',
-                  backgroundColor: saving ? '#ccc' : '#28a745',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: saving ? 'not-allowed' : 'pointer',
-                  fontWeight: 'bold'
-                }}
-              >
-                {saving ? 'Salvando...' : '💾 Salvar Configuração'}
-              </button>
-            )}
-          </div>
-
-          {configSalva.length === 0 ? (
-            <div style={{
-              textAlign: 'center',
-              padding: '40px',
-              color: '#666',
-              border: '2px dashed #ddd',
-              borderRadius: '8px'
-            }}>
-              Selecione planos na coluna ao lado para configurar
-            </div>
-          ) : (
-            <div style={{ display: 'grid', gap: '15px' }}>
-              {configSalva
-                .sort((a, b) => a.ordem - b.ordem)
-                .map(config => (
-                <div
-                  key={config.codigo}
-                  style={{
-                    padding: '20px',
-                    border: `2px solid ${config.destaque ? '#ffc107' : '#28a745'}`,
-                    borderRadius: '8px',
-                    backgroundColor: config.destaque ? '#fff9c4' : '#f8fff9'
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-                    <h3 style={{ margin: 0, fontSize: '16px', color: '#333' }}>
-                      {config.destaque ? '⭐' : '✅'} {config.nome}
-                    </h3>
-                    <button
-                      onClick={() => togglePlano({ codigo: config.codigo, nome: config.nome, valor: 0 })}
-                      style={{
-                        padding: '4px 8px',
-                        backgroundColor: '#dc3545',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontSize: '12px'
-                      }}
-                    >
-                      ❌ Remover
-                    </button>
-                  </div>
-
-                  <div style={{ display: 'grid', gap: '10px' }}>
-                    {/* Destaque */}
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <input
-                        type="checkbox"
-                        checked={config.destaque}
-                        onChange={(e) => updatePlanoConfig(config.codigo, { destaque: e.target.checked })}
-                      />
-                      <span style={{ fontSize: '14px' }}>⭐ Plano em destaque (aparece nos cards principais)</span>
-                    </label>
-
-                    {/* Ordem */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <label style={{ fontSize: '14px', minWidth: '60px' }}>📊 Ordem:</label>
-                      <input
-                        type="number"
-                        value={config.ordem}
-                        onChange={(e) => updatePlanoConfig(config.codigo, { ordem: parseInt(e.target.value) || 0 })}
-                        style={{
-                          padding: '4px 8px',
-                          border: '1px solid #ddd',
-                          borderRadius: '4px',
-                          width: '80px'
-                        }}
-                        min="0"
-                      />
-                      <span style={{ fontSize: '12px', color: '#666' }}>(menor número aparece primeiro)</span>
-                    </div>
-
-                    {/* Badge */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <label style={{ fontSize: '14px', minWidth: '60px' }}>🏷️ Badge:</label>
-                      <select
-                        value={config.badge || ''}
-                        onChange={(e) => updatePlanoConfig(config.codigo, { badge: e.target.value || undefined })}
-                        style={{
-                          padding: '4px 8px',
-                          border: '1px solid #ddd',
-                          borderRadius: '4px',
-                          flex: 1
-                        }}
-                      >
-                        {BADGES.map(badge => (
-                          <option key={badge.value} value={badge.value}>
-                            {badge.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
+                    )
+                  })}
                 </div>
-              ))}
-            </div>
-          )}
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Configurações */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                Configuração
+                <Badge variant="secondary">{configSalva.length} configurados</Badge>
+              </CardTitle>
+              <CardDescription>
+                Configure a exibição dos planos selecionados
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {configSalva.length === 0 ? (
+                <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-200 rounded-lg">
+                  Selecione planos para configurar
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {configSalva
+                    .sort((a, b) => a.ordem - b.ordem)
+                    .map(config => (
+                    <Card key={config.codigo} className={`${config.destaque ? 'border-yellow-200 bg-yellow-50' : ''}`}>
+                      <CardContent className="pt-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="font-medium">{config.nome}</div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => togglePlano({ codigo: config.codigo, nome: config.nome, valor: 0 })}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+
+                        <div className="space-y-4">
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              checked={config.destaque}
+                              onCheckedChange={(checked) =>
+                                updatePlanoConfig(config.codigo, { destaque: checked })
+                              }
+                            />
+                            <Label className="text-sm">Plano em destaque</Label>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor={`ordem-${config.codigo}`} className="text-xs">Ordem</Label>
+                              <Input
+                                id={`ordem-${config.codigo}`}
+                                type="number"
+                                value={config.ordem}
+                                onChange={(e) => updatePlanoConfig(config.codigo, {
+                                  ordem: parseInt(e.target.value) || 0
+                                })}
+                                min="0"
+                                className="h-8"
+                              />
+                            </div>
+
+                            <div>
+                              <Label htmlFor={`badge-${config.codigo}`} className="text-xs">Badge</Label>
+                              <Select
+                                value={config.badge || ''}
+                                onValueChange={(value) => updatePlanoConfig(config.codigo, {
+                                  badge: value || undefined
+                                })}
+                              >
+                                <SelectTrigger className="h-8">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {BADGES.map(badge => (
+                                    <SelectItem key={badge.value} value={badge.value}>
+                                      {badge.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
+
+        {/* Preview */}
+        {configSalva.length > 0 && (
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Eye className="mr-2 h-5 w-5" />
+                Preview da Exibição
+              </CardTitle>
+              <CardDescription>
+                Como os planos aparecerão no site
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium mb-3">Planos em Destaque</h4>
+                  {planosDestacados.length === 0 ? (
+                    <p className="text-gray-500 text-sm">Nenhum plano em destaque</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {planosDestacados.map(p => (
+                        <div key={p.codigo} className="flex items-center justify-between p-2 bg-yellow-50 border border-yellow-200 rounded">
+                          <span className="text-sm">{p.nome}</span>
+                          {p.badge && <Badge variant="secondary" className="text-xs">{p.badge}</Badge>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <h4 className="font-medium mb-3">Outros Planos</h4>
+                  {outrosPlanos.length === 0 ? (
+                    <p className="text-gray-500 text-sm">Nenhum outro plano</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {outrosPlanos.map(p => (
+                        <div key={p.codigo} className="flex items-center justify-between p-2 bg-gray-50 border border-gray-200 rounded">
+                          <span className="text-sm">{p.nome}</span>
+                          {p.badge && <Badge variant="secondary" className="text-xs">{p.badge}</Badge>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
-
-      {/* Preview */}
-      {configSalva.length > 0 && (
-        <div style={{ marginTop: '40px', padding: '20px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>
-          <h3 style={{ margin: '0 0 15px 0', color: '#333' }}>👁️ Preview da Exibição</h3>
-          <div style={{ fontSize: '14px', color: '#666', marginBottom: '10px' }}>
-            Como os planos aparecerão no site:
-          </div>
-
-          <div style={{ display: 'grid', gap: '10px' }}>
-            <div>
-              <strong>Planos em Destaque (cards principais):</strong>
-              {configSalva.filter(p => p.destaque).length === 0 ? (
-                <span style={{ color: '#999', marginLeft: '10px' }}>Nenhum</span>
-              ) : (
-                <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
-                  {configSalva
-                    .filter(p => p.destaque)
-                    .sort((a, b) => a.ordem - b.ordem)
-                    .map(p => (
-                      <li key={p.codigo}>
-                        {p.nome} {p.badge && `(${p.badge})`}
-                      </li>
-                    ))}
-                </ul>
-              )}
-            </div>
-
-            <div>
-              <strong>Outros Planos (seção expandível):</strong>
-              {configSalva.filter(p => !p.destaque).length === 0 ? (
-                <span style={{ color: '#999', marginLeft: '10px' }}>Nenhum</span>
-              ) : (
-                <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
-                  {configSalva
-                    .filter(p => !p.destaque)
-                    .sort((a, b) => a.ordem - b.ordem)
-                    .map(p => (
-                      <li key={p.codigo}>
-                        {p.nome} {p.badge && `(${p.badge})`}
-                      </li>
-                    ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
