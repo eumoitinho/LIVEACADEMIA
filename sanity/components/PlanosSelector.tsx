@@ -1,36 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useFormValue } from 'sanity'
-import { Button, Card, Checkbox, Flex, Stack, Text, Spinner, Badge } from '@sanity/ui'
+import { Button, Card, Flex, Stack, Text, Spinner } from '@sanity/ui'
+import type { ArrayOfObjectsInputProps } from 'sanity'
 
 interface Plano {
   codigo: number
   nome: string
   valor: number | string
   categoria?: string
-  recorrencia?: string
 }
 
-interface PlanosPermitidos {
-  codigo: number
-  nome?: string
-  exibir?: boolean
-  ordem?: number
-  destaque?: boolean
-  badge?: string
-}
-
-interface PlanosSelectorProps {
-  value?: PlanosPermitidos[]
-  onChange: (value: PlanosPermitidos[]) => void
-}
-
-export function PlanosSelector({ value = [], onChange }: PlanosSelectorProps) {
+export function PlanosSelector(props: ArrayOfObjectsInputProps) {
   const [planos, setPlanos] = useState<Plano[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   // Pegar o slug da unidade atual do formulário
-  const slug = useFormValue(['slug', 'current'])
+  const slug = useFormValue(['slug', 'current']) as string
 
   const fetchPlanos = async () => {
     if (!slug) {
@@ -57,45 +43,10 @@ export function PlanosSelector({ value = [], onChange }: PlanosSelectorProps) {
     }
   }
 
-  const togglePlano = (plano: Plano) => {
-    const existingIndex = value.findIndex(p => p.codigo === plano.codigo)
-
-    if (existingIndex >= 0) {
-      // Remover plano
-      const newValue = value.filter(p => p.codigo !== plano.codigo)
-      onChange(newValue)
-    } else {
-      // Adicionar plano
-      const newPlano: PlanosPermitidos = {
-        codigo: plano.codigo,
-        nome: plano.nome,
-        exibir: true,
-        ordem: value.length,
-        destaque: false
-      }
-      onChange([...value, newPlano])
-    }
-  }
-
-  const updatePlano = (codigo: number, updates: Partial<PlanosPermitidos>) => {
-    const newValue = value.map(p =>
-      p.codigo === codigo ? { ...p, ...updates } : p
-    )
-    onChange(newValue)
-  }
-
-  const isSelected = (codigo: number) => {
-    return value.some(p => p.codigo === codigo)
-  }
-
-  const getPlanoConfig = (codigo: number) => {
-    return value.find(p => p.codigo === codigo)
-  }
-
   return (
     <Stack space={4}>
       <Flex align="center" gap={3}>
-        <Text weight="semibold">Planos da API</Text>
+        <Text weight="semibold">Planos disponíveis da API</Text>
         <Button
           text="Buscar Planos"
           tone="primary"
@@ -125,96 +76,28 @@ export function PlanosSelector({ value = [], onChange }: PlanosSelectorProps) {
       )}
 
       {planos.length > 0 && (
-        <Stack space={3}>
-          <Text size={1} muted>
-            Selecione quais planos devem aparecer na página da unidade:
-          </Text>
-
-          {planos.map((plano) => {
-            const selected = isSelected(plano.codigo)
-            const config = getPlanoConfig(plano.codigo)
-
-            return (
-              <Card
-                key={plano.codigo}
-                padding={3}
-                tone={selected ? 'primary' : 'default'}
-                border
-              >
-                <Stack space={3}>
-                  <Flex align="center" gap={3}>
-                    <Checkbox
-                      checked={selected}
-                      onChange={() => togglePlano(plano)}
-                    />
-                    <Text weight="medium">
-                      {plano.nome}
-                    </Text>
-                    <Badge tone="default">
-                      #{plano.codigo}
-                    </Badge>
-                    <Badge tone="positive">
-                      R$ {typeof plano.valor === 'number' ? plano.valor.toFixed(2) : plano.valor}
-                    </Badge>
-                  </Flex>
-
-                  {selected && config && (
-                    <Stack space={2} marginLeft={4}>
-                      <Flex align="center" gap={3}>
-                        <Checkbox
-                          checked={config.destaque || false}
-                          onChange={() => updatePlano(plano.codigo, {
-                            destaque: !config.destaque
-                          })}
-                        />
-                        <Text size={1}>Plano em destaque</Text>
-                      </Flex>
-
-                      <Flex align="center" gap={3}>
-                        <Text size={1} style={{ minWidth: '60px' }}>Badge:</Text>
-                        <select
-                          value={config.badge || ''}
-                          onChange={(e) => updatePlano(plano.codigo, {
-                            badge: e.target.value || undefined
-                          })}
-                          style={{ padding: '4px 8px', fontSize: '12px' }}
-                        >
-                          <option value="">Sem badge</option>
-                          <option value="MAIS VENDIDO">Mais vendido</option>
-                          <option value="RECOMENDADO">Recomendado</option>
-                          <option value="NOVIDADE">Novidade</option>
-                          <option value="OFERTA">Oferta</option>
-                          <option value="PROMOÇÃO">Promoção</option>
-                        </select>
-                      </Flex>
-
-                      <Flex align="center" gap={3}>
-                        <Text size={1} style={{ minWidth: '60px' }}>Ordem:</Text>
-                        <input
-                          type="number"
-                          value={config.ordem || 0}
-                          onChange={(e) => updatePlano(plano.codigo, {
-                            ordem: parseInt(e.target.value) || 0
-                          })}
-                          style={{ padding: '4px 8px', fontSize: '12px', width: '80px' }}
-                        />
-                      </Flex>
-                    </Stack>
-                  )}
-                </Stack>
-              </Card>
-            )
-          })}
-        </Stack>
-      )}
-
-      {value.length > 0 && (
-        <Card padding={3} tone="positive">
-          <Text size={1}>
-            {value.length} plano(s) selecionado(s) para exibição
-          </Text>
+        <Card padding={3} tone="primary">
+          <Stack space={3}>
+            <Text weight="medium">Planos encontrados na API:</Text>
+            {planos.map((plano) => (
+              <Flex key={plano.codigo} align="center" gap={3}>
+                <Text size={1} style={{ fontFamily: 'monospace' }}>
+                  #{plano.codigo}
+                </Text>
+                <Text size={1}>
+                  {plano.nome} - R$ {typeof plano.valor === 'number' ? plano.valor.toFixed(2) : plano.valor}
+                </Text>
+              </Flex>
+            ))}
+            <Text size={1} muted>
+              Use os códigos acima para configurar os planos na seção abaixo.
+            </Text>
+          </Stack>
         </Card>
       )}
+
+      {/* Renderizar o componente padrão do array */}
+      {React.cloneElement(props.renderDefault(props), props)}
     </Stack>
   )
 }

@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getUnitBySlug } from '@/lib/repository'
-import { pactoAPI } from '@/lib/pacto-api'
 
 export async function GET(
   request: NextRequest,
@@ -9,31 +7,21 @@ export async function GET(
   try {
     const { slug } = await params
 
-    // Buscar dados da unidade
-    const unit = await getUnitBySlug(slug)
-    if (!unit) {
-      return NextResponse.json(
-        { error: 'Unidade não encontrada' },
-        { status: 404 }
-      )
+    // Usar a API existente que já funciona
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/pacto/planos/${slug}`, {
+      headers: {
+        'User-Agent': 'Sanity-Studio-Internal'
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error(`API retornou ${response.status}`)
     }
 
-    // Buscar planos da API
-    const planosResponse = await pactoAPI.getPlanosUnidade(
-      unit.chave_publica,
-      unit.chave_publica,
-      unit.codigo_unidade || slug
-    )
+    const data = await response.json()
 
-    if (!planosResponse.success) {
-      return NextResponse.json(
-        { error: 'Erro ao buscar planos da API' },
-        { status: 500 }
-      )
-    }
-
-    // Mapear para formato simplificado
-    const planos = planosResponse.data.map((plano: any) => ({
+    // Mapear para formato simplificado para o Sanity
+    const planos = (data.planos || []).map((plano: any) => ({
       codigo: plano.codigo,
       nome: plano.nome,
       valor: plano.mensalidade || plano.valor,
