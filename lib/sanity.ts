@@ -139,10 +139,44 @@ export async function getUnits() {
             url
           }
         },
+        heroBackground {
+          asset-> {
+            url
+          }
+        },
         images[] {
           asset-> {
             url
           }
+        },
+        modalidades[]-> {
+          _id,
+          name,
+          description,
+          image {
+            asset-> {
+              url
+            }
+          },
+          duration,
+          difficulty,
+          instructor,
+          schedule,
+          order,
+          active
+        },
+        beneficios[]-> {
+          _id,
+          title,
+          description,
+          icon,
+          image {
+            asset-> {
+              url
+            }
+          },
+          order,
+          active
         },
         openingHours,
         order,
