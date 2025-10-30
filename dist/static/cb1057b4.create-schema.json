@@ -2278,7 +2278,7 @@
         "title": "Imagem de Fundo do Hero"
       },
       {
-        "description": "Configure quais planos da API devem ser exibidos e como devem aparecer",
+        "description": "Busque os planos da API e configure quais devem aparecer na página",
         "of": [
           {
             "fields": [
@@ -2294,34 +2294,31 @@
                     "level": "error"
                   }
                 ],
-                "description": "Código numérico do plano retornado pela API Pacto",
+                "readOnly": true,
                 "name": "codigo",
                 "type": "number",
-                "title": "Código do Plano na API"
+                "title": "Código do Plano"
               },
               {
-                "description": "Nome para identificar o plano (apenas para organização)",
+                "readOnly": true,
                 "name": "nome",
                 "type": "string",
-                "title": "Nome do Plano (referência)"
+                "title": "Nome do Plano"
               },
               {
                 "initialValue": true,
-                "description": "Se este plano deve ser exibido na página da unidade",
                 "name": "exibir",
                 "type": "boolean",
                 "title": "Exibir na Página"
               },
               {
                 "initialValue": 0,
-                "description": "Ordem de exibição (menor número aparece primeiro)",
                 "name": "ordem",
                 "type": "number",
                 "title": "Ordem de Exibição"
               },
               {
                 "initialValue": false,
-                "description": "Se este plano deve aparecer em destaque",
                 "name": "destaque",
                 "type": "boolean",
                 "title": "Plano em Destaque"
@@ -2351,10 +2348,8 @@
                     }
                   ]
                 },
-                "description": "Badge opcional para destacar o plano",
                 "name": "badge",
-                "type": "string",
-                "title": "Badge Personalizada"
+                "type": "string"
               }
             ],
             "type": "object"
@@ -2362,7 +2357,7 @@
         ],
         "name": "planosPermitidos",
         "type": "array",
-        "title": "Filtro de Planos da API"
+        "title": "Planos da API - Configuração de Exibição"
       },
       {
         "description": "Planos estáticos usados quando a API não estiver disponível",
