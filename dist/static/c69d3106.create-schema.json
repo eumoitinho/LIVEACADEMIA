@@ -1,0 +1,6325 @@
+[
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "+5592999999999",
+            "description": "Telefone principal da empresa (ex: +5592999999999)",
+            "name": "phone",
+            "type": "string",
+            "title": "Telefone Principal"
+          },
+          {
+            "initialValue": "5592999999999",
+            "description": "Número do WhatsApp (ex: 5592999999999)",
+            "name": "whatsapp",
+            "type": "string",
+            "title": "WhatsApp"
+          },
+          {
+            "initialValue": "contato@liveacademia.com.br",
+            "name": "email",
+            "type": "string",
+            "title": "E-mail Principal"
+          }
+        ],
+        "name": "contact",
+        "type": "object",
+        "title": "Informações de Contato"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "https://www.instagram.com/liveacademiamanaus/",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "URL do perfil no Instagram",
+            "name": "instagram",
+            "type": "url"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "URL da página no Facebook",
+            "name": "facebook",
+            "type": "url"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "URL do canal no YouTube",
+            "name": "youtube",
+            "type": "url",
+            "title": "YouTube"
+          }
+        ],
+        "name": "socialMedia",
+        "type": "object",
+        "title": "Redes Sociais"
+      },
+      {
+        "fields": [
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Link do app na App Store",
+            "name": "appStoreUrl",
+            "type": "url",
+            "title": "App Store URL"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Link do app no Google Play",
+            "name": "playStoreUrl",
+            "type": "url",
+            "title": "Google Play URL"
+          }
+        ],
+        "name": "appUrls",
+        "type": "object",
+        "title": "URLs dos Aplicativos"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "MATRICULE-SE AGORA",
+            "description": "Texto do botão principal (ex: MATRICULE-SE AGORA)",
+            "name": "primaryCTA",
+            "type": "string",
+            "title": "CTA Primário"
+          },
+          {
+            "initialValue": "SAIBA MAIS",
+            "description": "Texto do botão secundário (ex: SAIBA MAIS)",
+            "name": "secondaryCTA",
+            "type": "string",
+            "title": "CTA Secundário"
+          },
+          {
+            "initialValue": "Ver planos e preços",
+            "description": "Texto para ver planos",
+            "name": "plansCTA",
+            "type": "string",
+            "title": "CTA Ver Planos"
+          },
+          {
+            "initialValue": "Falar com consultor",
+            "description": "Texto para contato",
+            "name": "consultorCTA",
+            "type": "string",
+            "title": "CTA Falar com Consultor"
+          }
+        ],
+        "name": "globalCTAs",
+        "type": "object",
+        "title": "CTAs Globais"
+      },
+      {
+        "initialValue": [
+          {
+            "label": "Telefone",
+            "type": "phone",
+            "url": "tel:+5592999999999",
+            "icon": "Phone",
+            "order": 1,
+            "active": true
+          },
+          {
+            "label": "WhatsApp",
+            "type": "whatsapp",
+            "url": "https://wa.me/5592999999999",
+            "icon": "MessageCircle",
+            "order": 2,
+            "active": true
+          },
+          {
+            "label": "Instagram",
+            "type": "instagram",
+            "url": "https://www.instagram.com/liveacademiamanaus/",
+            "icon": "Instagram",
+            "order": 3,
+            "active": true
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "label",
+                "type": "string",
+                "title": "Rótulo"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Telefone",
+                      "value": "phone"
+                    },
+                    {
+                      "title": "WhatsApp",
+                      "value": "whatsapp"
+                    },
+                    {
+                      "title": "Instagram",
+                      "value": "instagram"
+                    },
+                    {
+                      "title": "E-mail",
+                      "value": "email"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "phone",
+                          "whatsapp",
+                          "instagram",
+                          "email"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "type",
+                "type": "string",
+                "title": "Tipo"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "URL completa (tel:, https:, mailto:)",
+                "name": "url",
+                "type": "string",
+                "title": "URL/Link"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Nome do ícone Lucide (Phone, MessageCircle, Instagram, Mail)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              },
+              {
+                "initialValue": 0,
+                "description": "Ordem de exibição",
+                "name": "order",
+                "type": "number",
+                "title": "Ordem"
+              },
+              {
+                "initialValue": true,
+                "description": "Exibir este botão",
+                "name": "active",
+                "type": "boolean",
+                "title": "Ativo"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "floatingButtons",
+        "type": "array",
+        "title": "Botões Flutuantes"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Live Academia",
+            "name": "companyName",
+            "type": "string",
+            "title": "Nome da Empresa"
+          },
+          {
+            "description": "Frase marcante da empresa",
+            "name": "tagline",
+            "type": "string",
+            "title": "Slogan"
+          },
+          {
+            "description": "Endereço da sede/matriz",
+            "name": "address",
+            "type": "text",
+            "title": "Endereço Principal"
+          },
+          {
+            "initialValue": "Seg-Dom: 6h às 23h",
+            "description": "Horário padrão de funcionamento",
+            "name": "workingHours",
+            "type": "string",
+            "title": "Horário de Funcionamento"
+          }
+        ],
+        "name": "general",
+        "type": "object",
+        "title": "Configurações Gerais"
+      }
+    ],
+    "name": "globalSettings",
+    "type": "document",
+    "title": "Configurações Globais"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Live Academia | Rede de Academias em Manaus",
+            "name": "title",
+            "type": "string",
+            "title": "Título da Página"
+          },
+          {
+            "rows": 3,
+            "initialValue": "Transforme seu corpo e sua vida na maior rede de academias de Manaus. Sem fidelidade, sem anuidade, sem pegadinha.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "initialValue": [
+              "academia",
+              "manaus",
+              "fitness",
+              "musculação",
+              "aulas coletivas"
+            ],
+            "of": [
+              {
+                "type": "string"
+              }
+            ],
+            "name": "keywords",
+            "type": "array",
+            "title": "Palavras-chave"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "SEO"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "name": "backgroundImage",
+            "type": "image",
+            "title": "Imagem de Fundo"
+          },
+          {
+            "initialValue": "Transforme.",
+            "name": "title",
+            "type": "string",
+            "title": "Título (Linha 1)"
+          },
+          {
+            "initialValue": "Evolua.",
+            "name": "subtitle",
+            "type": "string",
+            "title": "Subtítulo (Linha 2)"
+          },
+          {
+            "initialValue": "Viva.",
+            "name": "thirdTitle",
+            "type": "string",
+            "title": "Terceiro Título (Linha 3)"
+          },
+          {
+            "rows": 3,
+            "initialValue": "Transforme seu corpo e sua vida na maior rede de academias de Manaus. Construído para atletas que exigem excelência em cada repetição.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "4.9",
+                "name": "value",
+                "type": "string",
+                "title": "Valor da Avaliação"
+              },
+              {
+                "initialValue": "Elite rating",
+                "name": "label",
+                "type": "string",
+                "title": "Label da Avaliação"
+              },
+              {
+                "initialValue": "15k+ atletas",
+                "name": "subscribers",
+                "type": "string",
+                "title": "Número de Alunos"
+              }
+            ],
+            "name": "rating",
+            "type": "object",
+            "title": "Avaliação"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "Comece Agora",
+                "name": "text",
+                "type": "string",
+                "title": "Texto"
+              },
+              {
+                "initialValue": "/planos",
+                "name": "link",
+                "type": "string"
+              }
+            ],
+            "name": "primaryCta",
+            "type": "object",
+            "title": "CTA Principal"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "Ver as aulas",
+                "name": "text",
+                "type": "string",
+                "title": "Texto"
+              },
+              {
+                "initialValue": "/aulas-coletivas",
+                "name": "link",
+                "type": "string"
+              }
+            ],
+            "name": "secondaryCta",
+            "type": "object",
+            "title": "CTA Secundário"
+          },
+          {
+            "initialValue": "Protocolos de treino de elite. Suporte premium. Todos os dispositivos suportados.",
+            "name": "footerText",
+            "type": "string",
+            "title": "Texto do Rodapé"
+          }
+        ],
+        "name": "hero",
+        "type": "object",
+        "title": "Seção Hero"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Sobre a Live Academia",
+            "name": "badge",
+            "type": "string"
+          },
+          {
+            "initialValue": "Seu treino, suas regras",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "rows": 4,
+            "initialValue": "A Live Academia está presente em Manaus há mais de 10 anos, oferecendo estrutura moderna, equipamentos de última geração e profissionais altamente qualificados para te ajudar a alcançar seus objetivos.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "name": "image",
+            "type": "image",
+            "title": "Imagem"
+          },
+          {
+            "initialValue": [
+              {
+                "value": "10+",
+                "label": "Anos de Experiência"
+              },
+              {
+                "value": "15k+",
+                "label": "Alunos Ativos"
+              }
+            ],
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "value",
+                    "type": "string",
+                    "title": "Valor"
+                  },
+                  {
+                    "name": "label",
+                    "type": "string"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "stats",
+            "type": "array",
+            "title": "Estatísticas"
+          },
+          {
+            "initialValue": [
+              "Equipamentos de última geração",
+              "Profissionais qualificados",
+              "Aulas coletivas inclusas",
+              "Sem fidelidade",
+              "Horário flexível",
+              "Ambiente climatizado"
+            ],
+            "of": [
+              {
+                "type": "string"
+              }
+            ],
+            "name": "highlights",
+            "type": "array",
+            "title": "Destaques"
+          }
+        ],
+        "name": "about",
+        "type": "object",
+        "title": "Seção Sobre"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Benefícios",
+            "name": "badge",
+            "type": "string"
+          },
+          {
+            "initialValue": "Por que escolher a Live Academia?",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "rows": 3,
+            "initialValue": "Descubra todos os benefícios que fazem da Live Academia a melhor escolha para sua jornada fitness.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "initialValue": "ShieldCheck",
+                    "name": "icon",
+                    "type": "string",
+                    "title": "Ícone"
+                  },
+                  {
+                    "name": "title",
+                    "type": "string",
+                    "title": "Título"
+                  },
+                  {
+                    "rows": 2,
+                    "name": "description",
+                    "type": "text",
+                    "title": "Descrição"
+                  },
+                  {
+                    "initialValue": "from-amber-500 to-yellow-600",
+                    "name": "color",
+                    "type": "string",
+                    "title": "Cor do Gradiente"
+                  },
+                  {
+                    "initialValue": "/images/beneficios/placeholder.jpg",
+                    "name": "image",
+                    "type": "string",
+                    "title": "Imagem"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "items",
+            "type": "array",
+            "title": "Lista de Benefícios"
+          }
+        ],
+        "name": "beneficios",
+        "type": "object",
+        "title": "Seção Benefícios"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Planos",
+            "name": "badge",
+            "type": "string"
+          },
+          {
+            "initialValue": "Escolha o plano ideal para você",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "rows": 3,
+            "initialValue": "Planos flexíveis sem fidelidade. Cancele quando quiser, sem multas ou taxas.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "of": [
+              {
+                "to": [
+                  {
+                    "type": "plano"
+                  }
+                ],
+                "type": "reference",
+                "title": "Reference to plano"
+              }
+            ],
+            "name": "plans",
+            "type": "array",
+            "title": "Planos Disponíveis"
+          }
+        ],
+        "name": "planos",
+        "type": "object",
+        "title": "Seção Planos"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Depoimentos",
+            "name": "badge",
+            "type": "string"
+          },
+          {
+            "initialValue": "O que nossos alunos dizem",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "rows": 3,
+            "initialValue": "Conheça histórias reais de transformação de nossos alunos.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "of": [
+              {
+                "to": [
+                  {
+                    "type": "testimonial"
+                  }
+                ],
+                "type": "reference",
+                "title": "Reference to depoimento"
+              }
+            ],
+            "name": "testimonials",
+            "type": "array",
+            "title": "Lista de Depoimentos"
+          }
+        ],
+        "name": "testimonials",
+        "type": "object",
+        "title": "Seção Depoimentos"
+      }
+    ],
+    "name": "homepage",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Nome da Unidade"
+      },
+      {
+        "options": {
+          "source": "name",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "address",
+        "type": "string",
+        "title": "Endereço"
+      },
+      {
+        "initialValue": "Manaus",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "city",
+        "type": "string",
+        "title": "Cidade"
+      },
+      {
+        "initialValue": "AM",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "state",
+        "type": "string",
+        "title": "Estado"
+      },
+      {
+        "name": "zipCode",
+        "type": "string",
+        "title": "CEP"
+      },
+      {
+        "name": "phone",
+        "type": "string",
+        "title": "Telefone"
+      },
+      {
+        "name": "whatsapp",
+        "type": "string",
+        "title": "WhatsApp"
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "title": "E-mail"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "latitude",
+        "type": "number"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "longitude",
+        "type": "number"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Tradicional",
+              "value": "Tradicional"
+            },
+            {
+              "title": "Tradicional Climatizada",
+              "value": "Tradicional Climatizada"
+            },
+            {
+              "title": "Premium",
+              "value": "Premium"
+            },
+            {
+              "title": "Diamante",
+              "value": "Diamante"
+            },
+            {
+              "title": "Em Inauguração",
+              "value": "Em Inauguração"
+            }
+          ]
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "Tradicional",
+                  "Tradicional Climatizada",
+                  "Premium",
+                  "Diamante",
+                  "Em Inauguração"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "type",
+        "type": "string",
+        "title": "Tipo"
+      },
+      {
+        "of": [
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Climatização",
+                  "value": "Climatização"
+                },
+                {
+                  "title": "Espaço Relax",
+                  "value": "Espaço Relax"
+                },
+                {
+                  "title": "Espaço Yoga",
+                  "value": "Espaço Yoga"
+                },
+                {
+                  "title": "Espaço Pose",
+                  "value": "Espaço Pose"
+                },
+                {
+                  "title": "Studio de Bike",
+                  "value": "Studio de Bike"
+                },
+                {
+                  "title": "Sauna",
+                  "value": "Sauna"
+                },
+                {
+                  "title": "Estacionamento",
+                  "value": "Estacionamento"
+                },
+                {
+                  "title": "Estacionamento Coberto",
+                  "value": "Estacionamento Coberto"
+                },
+                {
+                  "title": "Toalhas de Cortesia",
+                  "value": "Toalhas de Cortesia"
+                },
+                {
+                  "title": "Espaço Gourmet",
+                  "value": "Espaço Gourmet"
+                },
+                {
+                  "title": "Atendimento Domingos",
+                  "value": "Atendimento Domingos"
+                }
+              ]
+            },
+            "type": "string"
+          }
+        ],
+        "name": "services",
+        "type": "array",
+        "title": "Serviços"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Foto principal da unidade (usada nos cards e hero da página)",
+        "name": "photo",
+        "type": "image",
+        "title": "Foto Principal"
+      },
+      {
+        "description": "Galeria adicional de imagens da unidade",
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "type": "image"
+          }
+        ],
+        "name": "images",
+        "type": "array",
+        "title": "Galeria de Imagens"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "initialValue": "Segunda a Sexta: 5h às 23h | Sábado: 6h às 22h | Domingo: 6h às 20h",
+        "name": "openingHours",
+        "type": "string",
+        "title": "Horário de Funcionamento"
+      },
+      {
+        "initialValue": 0,
+        "description": "Ordem de exibição no carousel (menor número aparece primeiro)",
+        "name": "order",
+        "type": "number",
+        "title": "Ordem"
+      },
+      {
+        "initialValue": true,
+        "name": "active",
+        "type": "boolean",
+        "title": "Ativa"
+      },
+      {
+        "initialValue": false,
+        "name": "featured",
+        "type": "boolean",
+        "title": "Destaque"
+      },
+      {
+        "description": "Planos específicos desta unidade (sobrescreve os planos globais)",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "nome",
+                "type": "string",
+                "title": "Nome do Plano"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Ex: \"119,90\" ou \"R$ 119,90\"",
+                "name": "preco",
+                "type": "string",
+                "title": "Preço"
+              },
+              {
+                "initialValue": "mês",
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "periodo",
+                "type": "string",
+                "title": "Período"
+              },
+              {
+                "initialValue": false,
+                "name": "destaque",
+                "type": "boolean",
+                "title": "Plano em Destaque"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Mais vendido",
+                      "value": "MAIS VENDIDO"
+                    },
+                    {
+                      "title": "Recomendado",
+                      "value": "RECOMENDADO"
+                    },
+                    {
+                      "title": "Novidade",
+                      "value": "NOVIDADE"
+                    },
+                    {
+                      "title": "Oferta",
+                      "value": "OFERTA"
+                    }
+                  ]
+                },
+                "name": "badge",
+                "type": "string",
+                "title": "Badge do Plano"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "planos",
+        "type": "array",
+        "title": "Planos da Unidade"
+      }
+    ],
+    "name": "unit",
+    "type": "document",
+    "title": "Unidade"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Nome do Plano"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "price",
+        "type": "number",
+        "title": "Preço (em centavos)"
+      },
+      {
+        "initialValue": "Oferta por tempo limitado",
+        "name": "priceLabel",
+        "type": "string",
+        "title": "Label do Preço"
+      },
+      {
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "features",
+        "type": "array",
+        "title": "Benefícios/Recursos"
+      },
+      {
+        "initialValue": "MATRICULE-SE AGORA",
+        "name": "cta",
+        "type": "string",
+        "title": "Texto do CTA"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link de destino quando o usuário clicar no botão CTA",
+        "name": "ctaUrl",
+        "type": "url",
+        "title": "URL do CTA"
+      },
+      {
+        "initialValue": false,
+        "name": "highlight",
+        "type": "boolean",
+        "title": "Destaque"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Mais vendido",
+              "value": "mais_vendido"
+            },
+            {
+              "title": "Recomendado",
+              "value": "recomendado"
+            },
+            {
+              "title": "Novidade",
+              "value": "novidade"
+            },
+            {
+              "title": "Oferta",
+              "value": "oferta"
+            }
+          ]
+        },
+        "name": "badge",
+        "type": "string",
+        "title": "Badge de Destaque"
+      },
+      {
+        "initialValue": 0,
+        "name": "order",
+        "type": "number",
+        "title": "Ordem de Exibição"
+      },
+      {
+        "initialValue": true,
+        "name": "active",
+        "type": "boolean",
+        "title": "Ativo"
+      }
+    ],
+    "name": "plano",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "initialValue": "🏋️‍♂️",
+        "name": "icon",
+        "type": "string",
+        "title": "Ícone (Emoji)"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Imagem"
+      },
+      {
+        "initialValue": 0,
+        "name": "order",
+        "type": "number",
+        "title": "Ordem de Exibição"
+      },
+      {
+        "initialValue": true,
+        "name": "active",
+        "type": "boolean",
+        "title": "Ativo"
+      }
+    ],
+    "name": "benefit",
+    "type": "document",
+    "title": "Benefício"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Nome do Cliente"
+      },
+      {
+        "name": "role",
+        "type": "string",
+        "title": "Cargo/Profissão"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "content",
+        "type": "text",
+        "title": "Conteúdo do Depoimento"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "avatar",
+        "type": "image",
+        "title": "Foto do Cliente"
+      },
+      {
+        "initialValue": 5,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 5
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "rating",
+        "type": "number",
+        "title": "Avaliação (1-5)"
+      },
+      {
+        "initialValue": 0,
+        "name": "order",
+        "type": "number",
+        "title": "Ordem de Exibição"
+      },
+      {
+        "initialValue": true,
+        "name": "active",
+        "type": "boolean",
+        "title": "Ativo"
+      }
+    ],
+    "name": "testimonial",
+    "type": "document",
+    "title": "Depoimento"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Monitoramento de Treino",
+              "value": "BarChart3"
+            },
+            {
+              "title": "Agendamento",
+              "value": "Calendar"
+            },
+            {
+              "title": "Histórico",
+              "value": "History"
+            },
+            {
+              "title": "Progresso",
+              "value": "TrendingUp"
+            },
+            {
+              "title": "Metas",
+              "value": "Target"
+            },
+            {
+              "title": "Notificações",
+              "value": "Bell"
+            }
+          ]
+        },
+        "name": "icon",
+        "type": "string",
+        "title": "Ícone"
+      },
+      {
+        "initialValue": 0,
+        "name": "order",
+        "type": "number",
+        "title": "Ordem de Exibição"
+      },
+      {
+        "initialValue": true,
+        "name": "active",
+        "type": "boolean",
+        "title": "Ativo"
+      }
+    ],
+    "name": "appFeature",
+    "type": "document",
+    "title": "Recurso do App"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Nome da Modalidade"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Imagem"
+      },
+      {
+        "initialValue": 60,
+        "name": "duration",
+        "type": "number",
+        "title": "Duração (minutos)"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Iniciante",
+              "value": "iniciante"
+            },
+            {
+              "title": "Intermediário",
+              "value": "intermediario"
+            },
+            {
+              "title": "Avançado",
+              "value": "avancado"
+            }
+          ]
+        },
+        "name": "difficulty",
+        "type": "string",
+        "title": "Nível de Dificuldade"
+      },
+      {
+        "name": "instructor",
+        "type": "string",
+        "title": "Instrutor"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Segunda-feira",
+                      "value": "monday"
+                    },
+                    {
+                      "title": "Terça-feira",
+                      "value": "tuesday"
+                    },
+                    {
+                      "title": "Quarta-feira",
+                      "value": "wednesday"
+                    },
+                    {
+                      "title": "Quinta-feira",
+                      "value": "thursday"
+                    },
+                    {
+                      "title": "Sexta-feira",
+                      "value": "friday"
+                    },
+                    {
+                      "title": "Sábado",
+                      "value": "saturday"
+                    },
+                    {
+                      "title": "Domingo",
+                      "value": "sunday"
+                    }
+                  ]
+                },
+                "name": "day",
+                "type": "string",
+                "title": "Dia da Semana"
+              },
+              {
+                "name": "time",
+                "type": "string",
+                "title": "Horário"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "schedule",
+        "type": "array",
+        "title": "Horários"
+      },
+      {
+        "initialValue": 0,
+        "name": "order",
+        "type": "number",
+        "title": "Ordem de Exibição"
+      },
+      {
+        "initialValue": true,
+        "name": "active",
+        "type": "boolean",
+        "title": "Ativo"
+      }
+    ],
+    "name": "modality",
+    "type": "document",
+    "title": "Modalidade"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Equipamentos",
+              "value": "Dumbbell"
+            },
+            {
+              "title": "Climatização",
+              "value": "Snowflake"
+            },
+            {
+              "title": "Estacionamento",
+              "value": "Car"
+            },
+            {
+              "title": "WiFi",
+              "value": "Wifi"
+            },
+            {
+              "title": "Vestiário",
+              "value": "Shirt"
+            },
+            {
+              "title": "Segurança",
+              "value": "Shield"
+            },
+            {
+              "title": "Acessibilidade",
+              "value": "Wheelchair"
+            }
+          ]
+        },
+        "name": "icon",
+        "type": "string",
+        "title": "Ícone"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Imagem"
+      },
+      {
+        "initialValue": 0,
+        "name": "order",
+        "type": "number",
+        "title": "Ordem de Exibição"
+      },
+      {
+        "initialValue": true,
+        "name": "active",
+        "type": "boolean",
+        "title": "Ativo"
+      }
+    ],
+    "name": "structureFeature",
+    "type": "document",
+    "title": "Recurso da Estrutura"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Yoga",
+              "value": "Yoga"
+            },
+            {
+              "title": "Pilates",
+              "value": "Pilates"
+            },
+            {
+              "title": "Meditação",
+              "value": "Meditation"
+            },
+            {
+              "title": "Sauna",
+              "value": "Sauna"
+            },
+            {
+              "title": "Massagem",
+              "value": "Massage"
+            },
+            {
+              "title": "Nutrição",
+              "value": "Nutrition"
+            }
+          ]
+        },
+        "name": "icon",
+        "type": "string",
+        "title": "Ícone"
+      },
+      {
+        "initialValue": 0,
+        "name": "order",
+        "type": "number",
+        "title": "Ordem de Exibição"
+      },
+      {
+        "initialValue": true,
+        "name": "active",
+        "type": "boolean",
+        "title": "Ativo"
+      }
+    ],
+    "name": "wellhubFeature",
+    "type": "document",
+    "title": "Recurso Wellhub"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "initialValue": [
+          "Percentual de gordura corporal",
+          "Massa muscular",
+          "Água corporal total",
+          "Metabolismo basal",
+          "Idade metabólica"
+        ],
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "benefits",
+        "type": "array",
+        "title": "Benefícios"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image",
+        "title": "Imagem"
+      },
+      {
+        "initialValue": 0,
+        "name": "order",
+        "type": "number",
+        "title": "Ordem de Exibição"
+      },
+      {
+        "initialValue": true,
+        "name": "active",
+        "type": "boolean",
+        "title": "Ativo"
+      }
+    ],
+    "name": "bioimpedanciaFeature",
+    "type": "document",
+    "title": "Recurso Bioimpedância"
+  },
+  {
+    "fields": [
+      {
+        "description": "Texto pequeno acima do título (ex: \"Tecnologia e fitness\")",
+        "name": "badge",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Texto que aparece em gradiente amarelo (ex: \"palma da mão\")",
+        "name": "highlightedText",
+        "type": "string",
+        "title": "Texto em Destaque"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text",
+        "title": "Descrição Principal"
+      },
+      {
+        "description": "Texto secundário em itálico",
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "description": "Lista de benefícios do app",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "name": "benefits",
+        "type": "array",
+        "title": "Benefícios"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "appImage",
+        "type": "image",
+        "title": "Imagem do App"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link para download do App Live na App Store",
+        "name": "appLiveUrl",
+        "type": "url",
+        "title": "URL App Live (App Store)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link para download do App Treino na App Store",
+        "name": "appTreinoUrl",
+        "type": "url",
+        "title": "URL App Treino (App Store)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link para download do App Live no Google Play",
+        "name": "appLivePlayStoreUrl",
+        "type": "url",
+        "title": "URL App Live (Google Play)"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Link para download do App Treino no Google Play",
+        "name": "appTreinoPlayStoreUrl",
+        "type": "url",
+        "title": "URL App Treino (Google Play)"
+      }
+    ],
+    "name": "appSection",
+    "type": "document",
+    "title": "Seção do App"
+  },
+  {
+    "fields": [
+      {
+        "description": "Texto pequeno acima do título",
+        "name": "badge",
+        "type": "string"
+      },
+      {
+        "initialValue": "Mais do que treino, uma experiência completa",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título"
+      },
+      {
+        "rows": 2,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 6
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Escudo (Proteção)",
+                      "value": "ShieldCheck"
+                    },
+                    {
+                      "title": "Estrela (Qualidade)",
+                      "value": "Star"
+                    },
+                    {
+                      "title": "Pessoas (Comunidade)",
+                      "value": "Users"
+                    },
+                    {
+                      "title": "Floco de Neve (Climatização)",
+                      "value": "Snowflake"
+                    },
+                    {
+                      "title": "Raio (Energia)",
+                      "value": "Zap"
+                    },
+                    {
+                      "title": "Check (Confirmação)",
+                      "value": "CheckCircle"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "ShieldCheck",
+                          "Star",
+                          "Users",
+                          "Snowflake",
+                          "Zap",
+                          "CheckCircle"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Nome do ícone (ShieldCheck, Star, Users, Snowflake, Zap, CheckCircle)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "rows": 3,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Amarelo para Âmbar",
+                      "value": "from-yellow-400 to-amber-500"
+                    },
+                    {
+                      "title": "Âmbar para Amarelo Escuro",
+                      "value": "from-amber-500 to-yellow-600"
+                    },
+                    {
+                      "title": "Amarelo Médio para Âmbar",
+                      "value": "from-yellow-500 to-amber-600"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "from-yellow-400 to-amber-500",
+                          "from-amber-500 to-yellow-600",
+                          "from-yellow-500 to-amber-600"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Classes Tailwind para o gradiente (ex: from-yellow-400 to-amber-500)",
+                "name": "color",
+                "type": "string",
+                "title": "Cor do Gradiente"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "image",
+                "type": "image",
+                "title": "Imagem de Fundo"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "items",
+        "type": "array",
+        "title": "Benefícios"
+      }
+    ],
+    "name": "beneficiosSection",
+    "type": "document",
+    "title": "Seção de Benefícios"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título Principal"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 4,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "fields": [
+          {
+            "name": "alt",
+            "type": "string",
+            "title": "Texto Alternativo"
+          }
+        ],
+        "name": "heroImage",
+        "type": "image",
+        "title": "Imagem do Hero"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 6
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "titulo",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "rows": 2,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "descricao",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "MapPin",
+                      "value": "MapPin"
+                    },
+                    {
+                      "title": "Check",
+                      "value": "Check"
+                    },
+                    {
+                      "title": "Clock",
+                      "value": "Clock"
+                    },
+                    {
+                      "title": "Zap",
+                      "value": "Zap"
+                    },
+                    {
+                      "title": "Users",
+                      "value": "Users"
+                    },
+                    {
+                      "title": "Dumbbell",
+                      "value": "Dumbbell"
+                    },
+                    {
+                      "title": "Star",
+                      "value": "Star"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "MapPin",
+                          "Check",
+                          "Clock",
+                          "Zap",
+                          "Users",
+                          "Dumbbell",
+                          "Star"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "beneficios",
+        "type": "array",
+        "title": "Benefícios"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 4
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "titulo",
+                "type": "string",
+                "title": "Título do Pacote"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "preco",
+                "type": "string",
+                "title": "Preço"
+              },
+              {
+                "rows": 2,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "descricao",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "initialValue": false,
+                "name": "popular",
+                "type": "boolean",
+                "title": "Mais Popular"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 1
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "name": "beneficios",
+                "type": "array",
+                "title": "Benefícios do Pacote"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "pacotes",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "pergunta",
+                "type": "string"
+              },
+              {
+                "rows": 3,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "resposta",
+                "type": "text"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "faqs",
+        "type": "array",
+        "title": "Perguntas Frequentes"
+      },
+      {
+        "initialValue": "Pronto para experimentar a Live Academia?",
+        "name": "ctaTitle",
+        "type": "string",
+        "title": "Título do CTA Final"
+      },
+      {
+        "rows": 2,
+        "initialValue": "Adquira seu Day Use agora e descubra por que somos a melhor academia de Manaus.",
+        "name": "ctaDescription",
+        "type": "text",
+        "title": "Descrição do CTA Final"
+      }
+    ],
+    "name": "dayUse",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título Principal"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text",
+        "title": "Descrição Principal"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "fields": [
+          {
+            "name": "alt",
+            "type": "string",
+            "title": "Texto Alternativo"
+          }
+        ],
+        "name": "backgroundImage",
+        "type": "image",
+        "title": "Imagem de Fundo"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Parágrafos do conteúdo principal",
+        "of": [
+          {
+            "rows": 3,
+            "type": "text"
+          }
+        ],
+        "name": "content",
+        "type": "array",
+        "title": "Conteúdo"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 6
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "value",
+                "type": "string",
+                "title": "Valor"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "label",
+                "type": "string",
+                "title": "Rótulo"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "stats",
+        "type": "array",
+        "title": "Estatísticas"
+      },
+      {
+        "initialValue": "Pronto para fazer parte da nossa história?",
+        "name": "ctaTitle",
+        "type": "string",
+        "title": "Título do CTA Final"
+      },
+      {
+        "rows": 2,
+        "initialValue": "Venha conhecer de perto o que faz da Live Academia a melhor escolha para sua jornada fitness.",
+        "name": "ctaDescription",
+        "type": "text",
+        "title": "Descrição do CTA Final"
+      }
+    ],
+    "name": "sobreNos",
+    "type": "document",
+    "title": "Sobre Nós"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título da Página"
+      },
+      {
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "heroImage",
+        "type": "image",
+        "title": "Imagem de Fundo"
+      },
+      {
+        "fields": [
+          {
+            "name": "phone",
+            "type": "string",
+            "title": "Telefone"
+          },
+          {
+            "name": "whatsapp",
+            "type": "string",
+            "title": "WhatsApp"
+          },
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "name": "address",
+            "type": "text",
+            "title": "Endereço"
+          },
+          {
+            "name": "hours",
+            "type": "text",
+            "title": "Horário de Funcionamento"
+          }
+        ],
+        "name": "contactInfo",
+        "type": "object",
+        "title": "Informações de Contato"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "title": "Nome da Rede"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "url",
+                "type": "url",
+                "title": "URL"
+              },
+              {
+                "description": "Nome do ícone (ex: instagram, facebook, twitter)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "socialNetworks",
+        "type": "array",
+        "title": "Redes Sociais"
+      },
+      {
+        "initialValue": "Entre em contato",
+        "name": "formTitle",
+        "type": "string",
+        "title": "Título do Formulário"
+      },
+      {
+        "name": "formDescription",
+        "type": "text",
+        "title": "Descrição do Formulário"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "title": "Nome do Campo"
+              },
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Texto",
+                      "value": "text"
+                    },
+                    {
+                      "title": "Email",
+                      "value": "email"
+                    },
+                    {
+                      "title": "Telefone",
+                      "value": "tel"
+                    },
+                    {
+                      "title": "Textarea",
+                      "value": "textarea"
+                    },
+                    {
+                      "title": "Select",
+                      "value": "select"
+                    }
+                  ]
+                },
+                "name": "type",
+                "type": "string",
+                "title": "Tipo"
+              },
+              {
+                "initialValue": false,
+                "name": "required",
+                "type": "boolean",
+                "title": "Obrigatório"
+              },
+              {
+                "name": "placeholder",
+                "type": "string"
+              },
+              {
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "hidden": "conditional",
+                "name": "options",
+                "type": "array",
+                "title": "Opções (para select)"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "formFields",
+        "type": "array",
+        "title": "Campos do Formulário"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Enviar Mensagem",
+            "name": "text",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "url",
+            "type": "url",
+            "title": "URL de Destino"
+          }
+        ],
+        "name": "ctaButton",
+        "type": "object",
+        "title": "Botão CTA"
+      }
+    ],
+    "name": "contato",
+    "type": "document",
+    "title": "Página de Contato"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título da Página"
+      },
+      {
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "heroImage",
+        "type": "image",
+        "title": "Imagem de Fundo"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "description": "Nome do ícone (ex: heart, users, award)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "benefits",
+        "type": "array",
+        "title": "Benefícios"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string",
+                "title": "Título da Vaga"
+              },
+              {
+                "name": "department",
+                "type": "string",
+                "title": "Departamento"
+              },
+              {
+                "name": "location",
+                "type": "string",
+                "title": "Localização"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "CLT",
+                      "value": "clt"
+                    },
+                    {
+                      "title": "PJ",
+                      "value": "pj"
+                    },
+                    {
+                      "title": "Estágio",
+                      "value": "estagio"
+                    },
+                    {
+                      "title": "Freelance",
+                      "value": "freelance"
+                    }
+                  ]
+                },
+                "name": "type",
+                "type": "string",
+                "title": "Tipo de Contrato"
+              },
+              {
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "name": "requirements",
+                "type": "array",
+                "title": "Requisitos"
+              },
+              {
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "name": "benefits",
+                "type": "array",
+                "title": "Benefícios da Vaga"
+              },
+              {
+                "name": "salary",
+                "type": "string",
+                "title": "Faixa Salarial"
+              },
+              {
+                "initialValue": true,
+                "name": "isActive",
+                "type": "boolean",
+                "title": "Vaga Ativa"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "openPositions",
+        "type": "array",
+        "title": "Vagas Abertas"
+      },
+      {
+        "initialValue": "Candidatar-se",
+        "name": "formTitle",
+        "type": "string",
+        "title": "Título do Formulário"
+      },
+      {
+        "name": "formDescription",
+        "type": "text",
+        "title": "Descrição do Formulário"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string",
+                "title": "Nome do Campo"
+              },
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Texto",
+                      "value": "text"
+                    },
+                    {
+                      "title": "Email",
+                      "value": "email"
+                    },
+                    {
+                      "title": "Telefone",
+                      "value": "tel"
+                    },
+                    {
+                      "title": "Textarea",
+                      "value": "textarea"
+                    },
+                    {
+                      "title": "Select",
+                      "value": "select"
+                    },
+                    {
+                      "title": "File",
+                      "value": "file"
+                    }
+                  ]
+                },
+                "name": "type",
+                "type": "string",
+                "title": "Tipo"
+              },
+              {
+                "initialValue": false,
+                "name": "required",
+                "type": "boolean",
+                "title": "Obrigatório"
+              },
+              {
+                "name": "placeholder",
+                "type": "string"
+              },
+              {
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "hidden": "conditional",
+                "name": "options",
+                "type": "array",
+                "title": "Opções (para select)"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "formFields",
+        "type": "array",
+        "title": "Campos do Formulário"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Enviar Candidatura",
+            "name": "text",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "url",
+            "type": "url",
+            "title": "URL de Destino"
+          }
+        ],
+        "name": "ctaButton",
+        "type": "object",
+        "title": "Botão CTA"
+      },
+      {
+        "fields": [
+          {
+            "name": "email",
+            "type": "string",
+            "title": "Email para CV"
+          },
+          {
+            "name": "phone",
+            "type": "string",
+            "title": "Telefone"
+          },
+          {
+            "name": "whatsapp",
+            "type": "string",
+            "title": "WhatsApp"
+          }
+        ],
+        "name": "contactInfo",
+        "type": "object",
+        "title": "Informações de Contato"
+      }
+    ],
+    "name": "trabalheConosco",
+    "type": "document",
+    "title": "Página Trabalhe Conosco"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título da Página"
+      },
+      {
+        "name": "subtitle",
+        "type": "string",
+        "title": "Subtítulo"
+      },
+      {
+        "rows": 3,
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "heroImage",
+        "type": "image",
+        "title": "Imagem de Fundo"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string",
+                "title": "Título da Seção"
+              },
+              {
+                "rows": 4,
+                "name": "content",
+                "type": "text",
+                "title": "Conteúdo"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image",
+                "title": "Imagem"
+              },
+              {
+                "name": "order",
+                "type": "number",
+                "title": "Ordem"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "content",
+        "type": "array",
+        "title": "Conteúdo Principal"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "description": "Nome do ícone (ex: heart, users, target)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "values",
+        "type": "array",
+        "title": "Nossos Valores"
+      },
+      {
+        "rows": 3,
+        "name": "mission",
+        "type": "text",
+        "title": "Missão"
+      },
+      {
+        "rows": 3,
+        "name": "vision",
+        "type": "text",
+        "title": "Visão"
+      },
+      {
+        "rows": 5,
+        "name": "history",
+        "type": "text",
+        "title": "Nossa História"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "number",
+                "type": "string",
+                "title": "Número"
+              },
+              {
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "name": "description",
+                "type": "string",
+                "title": "Descrição"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "stats",
+        "type": "array",
+        "title": "Estatísticas"
+      },
+      {
+        "fields": [
+          {
+            "name": "title",
+            "type": "string",
+            "title": "Título da Seção"
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "name",
+                    "type": "string",
+                    "title": "Nome"
+                  },
+                  {
+                    "name": "position",
+                    "type": "string",
+                    "title": "Cargo"
+                  },
+                  {
+                    "name": "bio",
+                    "type": "text",
+                    "title": "Biografia"
+                  },
+                  {
+                    "options": {
+                      "hotspot": true
+                    },
+                    "name": "photo",
+                    "type": "image",
+                    "title": "Foto"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "members",
+            "type": "array",
+            "title": "Membros da Equipe"
+          }
+        ],
+        "name": "team",
+        "type": "object",
+        "title": "Nossa Equipe"
+      },
+      {
+        "fields": [
+          {
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "name": "buttonText",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "buttonUrl",
+            "type": "url",
+            "title": "URL do Botão"
+          }
+        ],
+        "name": "cta",
+        "type": "object",
+        "title": "Call to Action"
+      }
+    ],
+    "name": "sobre",
+    "type": "document",
+    "title": "Página Sobre"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Energia e motivação em grupo para você ir além",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "title",
+            "type": "string",
+            "title": "Título Principal"
+          },
+          {
+            "initialValue": "As aulas coletivas da Live Academia são a maneira perfeita de se exercitar com motivação, energia e resultados garantidos. Nossos professores especializados guiam você em cada movimento.",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho da Seção"
+      },
+      {
+        "initialValue": [
+          {
+            "subtitle": "Dança",
+            "title": "Fitdance",
+            "description": "Transforme seu treino em diversão! Queime calorias dançando hits nacionais e internacionais com coreografias envolventes.",
+            "order": 1,
+            "active": true
+          },
+          {
+            "subtitle": "Bike",
+            "title": "Top Ride",
+            "description": "Pedale rumo aos seus objetivos! Aula de cycling com música motivante e instructor experiente para queimar muitas calorias.",
+            "order": 2,
+            "active": true
+          },
+          {
+            "subtitle": "Flexibilidade",
+            "title": "Pilates Solo",
+            "description": "Fortaleça seu core e melhore sua postura. Exercícios de pilates focados no fortalecimento e flexibilidade.",
+            "order": 3,
+            "active": true
+          }
+        ],
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 6
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Categoria ou tipo da modalidade",
+                "name": "subtitle",
+                "type": "string",
+                "title": "Subtítulo"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "title",
+                "type": "string",
+                "title": "Nome da Modalidade"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "image",
+                "type": "image",
+                "title": "Imagem"
+              },
+              {
+                "initialValue": 0,
+                "description": "Ordem em que aparece na seção",
+                "name": "order",
+                "type": "number",
+                "title": "Ordem de Exibição"
+              },
+              {
+                "initialValue": true,
+                "description": "Se deve ser exibida na seção",
+                "name": "active",
+                "type": "boolean",
+                "title": "Ativa"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "featuredModalities",
+        "type": "array",
+        "title": "Modalidades em Destaque"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "VEJA TODAS AS MODALIDADES",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "text",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "initialValue": "/aulas-coletivas",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Página para onde o botão direciona",
+            "name": "url",
+            "type": "string",
+            "title": "URL de Destino"
+          }
+        ],
+        "name": "cta",
+        "type": "object",
+        "title": "Call to Action"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "description": "Se esta seção deve aparecer na homepage",
+            "name": "showOnHomepage",
+            "type": "boolean",
+            "title": "Exibir na Homepage"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Padrão (Transparente)"
+                },
+                {
+                  "title": "Preto",
+                  "value": "bg-black"
+                },
+                {
+                  "title": "Cinza Escuro",
+                  "value": "bg-zinc-900"
+                },
+                {
+                  "title": "Cinza",
+                  "value": "bg-zinc-800"
+                }
+              ]
+            },
+            "description": "Classe CSS para cor de fundo (opcional)",
+            "name": "backgroundColor",
+            "type": "string",
+            "title": "Cor de Fundo"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "modalidadesSection",
+    "type": "document",
+    "title": "Seção de Modalidades"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Parceria oficial",
+            "description": "Texto do badge acima do título",
+            "name": "badge",
+            "type": "string"
+          },
+          {
+            "initialValue": "Somos parceiros Wellhub",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "title",
+            "type": "string",
+            "title": "Título Principal"
+          },
+          {
+            "initialValue": "Na Live é assim. Estrutura e benefícios em um só lugar.",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho Principal"
+      },
+      {
+        "initialValue": [
+          {
+            "icon": "CheckCircle",
+            "title": "Acesso gratuito",
+            "description": "Use seu benefício corporativo para treinar sem custo adicional",
+            "order": 1
+          },
+          {
+            "icon": "Star",
+            "title": "Rede completa",
+            "description": "Acesse todas as unidades Live Academia de Manaus",
+            "order": 2
+          },
+          {
+            "icon": "Shield",
+            "title": "Sem burocracia",
+            "description": "Ativação simples e rápida através do app Wellhub",
+            "order": 3
+          },
+          {
+            "icon": "Calendar",
+            "title": "Flexibilidade total",
+            "description": "Treine quando quiser, sem restrições de horário",
+            "order": 4
+          }
+        ],
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 6
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Nome do ícone Lucide (ex: CheckCircle, Star, Shield)",
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "initialValue": 0,
+                "name": "order",
+                "type": "number",
+                "title": "Ordem"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "benefits",
+        "type": "array",
+        "title": "Benefícios Wellhub"
+      },
+      {
+        "initialValue": [
+          "Acesso a todas as unidades Live Academia em Manaus através do seu benefício corporativo.",
+          "Ambiente climatizado, equipamentos modernos e aulas coletivas inclusas.",
+          "Flexibilidade total para treinar nos horários que melhor se adequam à sua rotina."
+        ],
+        "description": "Lista de benefícios em texto corrido",
+        "of": [
+          {
+            "type": "text"
+          }
+        ],
+        "name": "detailedBenefits",
+        "type": "array",
+        "title": "Benefícios Detalhados"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "SAIBA MAIS",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "text",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "description": "Link para mais informações sobre Wellhub",
+            "name": "url",
+            "type": "string",
+            "title": "URL de Destino"
+          }
+        ],
+        "name": "primaryCTA",
+        "type": "object",
+        "title": "CTA Principal"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Acesse a Live Academia através do Wellhub",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "title",
+            "type": "string",
+            "title": "Título do Banner"
+          },
+          {
+            "initialValue": "Funcionários de empresas parceiras podem acessar nossa rede de academias através do benefício corporativo. Consulte se sua empresa é parceira.",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "description",
+            "type": "text",
+            "title": "Descrição do Banner"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "description": "Logo ou imagem representativa do Wellhub",
+            "name": "image",
+            "type": "image",
+            "title": "Imagem do Banner"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "Consultar Empresa",
+                "name": "text",
+                "type": "string",
+                "title": "Texto do Botão"
+              },
+              {
+                "description": "Link para consulta de empresas parceiras",
+                "name": "url",
+                "type": "string",
+                "title": "URL"
+              }
+            ],
+            "name": "cta",
+            "type": "object",
+            "title": "CTA do Banner"
+          }
+        ],
+        "name": "banner",
+        "type": "object",
+        "title": "Banner Wellhub"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "description": "Se esta seção deve aparecer na homepage",
+            "name": "showOnHomepage",
+            "type": "boolean",
+            "title": "Exibir na Homepage"
+          },
+          {
+            "initialValue": true,
+            "description": "Se o banner Wellhub deve ser exibido",
+            "name": "showBanner",
+            "type": "boolean",
+            "title": "Exibir Banner"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Padrão (Transparente)"
+                },
+                {
+                  "title": "Preto",
+                  "value": "bg-black"
+                },
+                {
+                  "title": "Cinza Escuro",
+                  "value": "bg-zinc-900"
+                },
+                {
+                  "title": "Cinza",
+                  "value": "bg-zinc-800"
+                }
+              ]
+            },
+            "description": "Classe CSS para cor de fundo",
+            "name": "backgroundColor",
+            "type": "string",
+            "title": "Cor de Fundo"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "wellhubSection",
+    "type": "document",
+    "title": "Seção Wellhub"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Depoimentos reais",
+            "description": "Texto do badge acima do título",
+            "name": "badge",
+            "type": "string"
+          },
+          {
+            "initialValue": "O que dizem nossos alunos",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "title",
+            "type": "string",
+            "title": "Título Principal"
+          },
+          {
+            "initialValue": "Histórias de evolução e motivação para você entrar agora.",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho da Seção"
+      },
+      {
+        "initialValue": [
+          {
+            "name": "Maria Silva",
+            "role": "Enfermeira",
+            "content": "A Live Academia mudou minha vida! Perdi 15kg e ganhei muito mais disposição. Os professores são incríveis e sempre me motivam a dar o meu melhor.",
+            "rating": 5,
+            "order": 1,
+            "featured": true,
+            "active": true
+          },
+          {
+            "name": "João Santos",
+            "role": "Engenheiro",
+            "content": "Excelente estrutura e atendimento. Consegui ganhar massa muscular e melhorar minha postura. Recomendo para todos!",
+            "rating": 5,
+            "order": 2,
+            "featured": true,
+            "active": true
+          },
+          {
+            "name": "Ana Costa",
+            "role": "Professora",
+            "content": "O ambiente é acolhedor e os equipamentos são modernos. As aulas coletivas são fantásticas, principalmente o FitDance!",
+            "rating": 5,
+            "order": 3,
+            "featured": true,
+            "active": true
+          }
+        ],
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 10
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "name",
+                "type": "string",
+                "title": "Nome do Cliente"
+              },
+              {
+                "description": "Profissão ou cargo do cliente",
+                "name": "role",
+                "type": "string",
+                "title": "Profissão/Cargo"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "content",
+                "type": "text",
+                "title": "Conteúdo do Depoimento"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "description": "Foto do cliente (opcional)",
+                "name": "avatar",
+                "type": "image",
+                "title": "Foto do Cliente"
+              },
+              {
+                "initialValue": 5,
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 1
+                      },
+                      {
+                        "flag": "max",
+                        "constraint": 5
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "rating",
+                "type": "number",
+                "title": "Avaliação (1-5)"
+              },
+              {
+                "initialValue": 0,
+                "description": "Ordem em que aparece na seção",
+                "name": "order",
+                "type": "number",
+                "title": "Ordem de Exibição"
+              },
+              {
+                "initialValue": false,
+                "description": "Se deve aparecer em destaque",
+                "name": "featured",
+                "type": "boolean",
+                "title": "Destaque"
+              },
+              {
+                "initialValue": true,
+                "description": "Se deve ser exibido",
+                "name": "active",
+                "type": "boolean",
+                "title": "Ativo"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "featuredTestimonials",
+        "type": "array",
+        "title": "Depoimentos em Destaque"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "4.9",
+            "description": "Avaliação média exibida (ex: 4.9)",
+            "name": "averageRating",
+            "type": "string",
+            "title": "Avaliação Média"
+          },
+          {
+            "initialValue": "10K+",
+            "description": "Número de alunos satisfeitos (ex: 10K+)",
+            "name": "satisfiedStudents",
+            "type": "string",
+            "title": "Alunos Satisfeitos"
+          },
+          {
+            "initialValue": "98%",
+            "description": "Porcentagem que recomendaria (ex: 98%)",
+            "name": "recommendation",
+            "type": "string",
+            "title": "Porcentagem de Recomendação"
+          }
+        ],
+        "name": "statistics",
+        "type": "object",
+        "title": "Estatísticas"
+      },
+      {
+        "initialValue": false,
+        "description": "Se deve usar os depoimentos do schema testimonial em vez dos depoimentos em destaque",
+        "name": "useExistingTestimonials",
+        "type": "boolean",
+        "title": "Usar Depoimentos Cadastrados"
+      },
+      {
+        "description": "Depoimentos do schema testimonial para exibir nesta seção",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "testimonial"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to depoimento"
+          }
+        ],
+        "hidden": "conditional",
+        "name": "linkedTestimonials",
+        "type": "array",
+        "title": "Depoimentos Vinculados"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "description": "Se esta seção deve aparecer na homepage",
+            "name": "showOnHomepage",
+            "type": "boolean",
+            "title": "Exibir na Homepage"
+          },
+          {
+            "initialValue": true,
+            "description": "Se as estatísticas devem ser exibidas",
+            "name": "showStatistics",
+            "type": "boolean",
+            "title": "Exibir Estatísticas"
+          },
+          {
+            "initialValue": 6,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 1
+                  },
+                  {
+                    "flag": "max",
+                    "constraint": 10
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Número máximo de depoimentos a exibir",
+            "name": "maxTestimonials",
+            "type": "number",
+            "title": "Máximo de Depoimentos"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Padrão (Transparente)"
+                },
+                {
+                  "title": "Preto",
+                  "value": "bg-black"
+                },
+                {
+                  "title": "Cinza Escuro",
+                  "value": "bg-zinc-900"
+                },
+                {
+                  "title": "Cinza",
+                  "value": "bg-zinc-800"
+                }
+              ]
+            },
+            "description": "Classe CSS para cor de fundo",
+            "name": "backgroundColor",
+            "type": "string",
+            "title": "Cor de Fundo"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "testimonialSection",
+    "type": "document",
+    "title": "Seção de Depoimentos"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Nossa Estrutura",
+            "name": "badge",
+            "type": "string"
+          },
+          {
+            "initialValue": "Estrutura completa para sua evolução",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "rows": 3,
+            "initialValue": "Equipamentos modernos, espaços exclusivos e tecnologia de ponta em todas as nossas unidades.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Estrutura Completa",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "rows": 4,
+            "initialValue": "Cada unidade Live Academia é equipada com o que há de mais moderno em equipamentos de musculação, cardio e funcional, além de espaços exclusivos para aulas coletivas e áreas de descanso.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "additionalInfo",
+        "type": "object",
+        "title": "Informação Adicional"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "name": "showOnHomepage",
+            "type": "boolean",
+            "title": "Exibir na Homepage"
+          },
+          {
+            "initialValue": true,
+            "name": "showAdditionalInfo",
+            "type": "boolean",
+            "title": "Exibir Informação Adicional"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "estruturaSection",
+    "type": "document",
+    "title": "Seção Estrutura"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Bioimpedância",
+            "name": "badge",
+            "type": "string"
+          },
+          {
+            "initialValue": "Avaliação Corporal Completa",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "rows": 3,
+            "initialValue": "Descubra todos os detalhes da sua composição corporal com nossa avaliação de bioimpedância de alta precisão.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "name": "showOnHomepage",
+            "type": "boolean",
+            "title": "Exibir na Homepage"
+          },
+          {
+            "initialValue": 2,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 1
+                  },
+                  {
+                    "flag": "max",
+                    "constraint": 10
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "maxItemsToShow",
+            "type": "number",
+            "title": "Máximo de Itens para Exibir"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "bioimpedanciaSection",
+    "type": "document",
+    "title": "Seção Bioimpedância"
+  },
+  {
+    "fields": [
+      {
+        "initialValue": "Transforme seu corpo e sua vida",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título Principal"
+      },
+      {
+        "rows": 3,
+        "initialValue": "A maior rede de academias de Manaus, com planos flexíveis e sem fidelidade para você treinar do seu jeito.",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Planos a partir de",
+            "name": "text",
+            "type": "string",
+            "title": "Texto da Tag"
+          },
+          {
+            "initialValue": "R$ 119,90",
+            "name": "price",
+            "type": "string",
+            "title": "Preço"
+          },
+          {
+            "initialValue": true,
+            "name": "showIcon",
+            "type": "boolean",
+            "title": "Mostrar Ícone Estrela"
+          }
+        ],
+        "name": "priceTag",
+        "type": "object",
+        "title": "Tag de Preço"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "MATRICULE-SE AGORA",
+            "name": "text",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "initialValue": "/planos",
+            "name": "url",
+            "type": "string",
+            "title": "URL do Link"
+          },
+          {
+            "initialValue": true,
+            "name": "showArrow",
+            "type": "boolean",
+            "title": "Mostrar Seta"
+          }
+        ],
+        "name": "cta",
+        "type": "object",
+        "title": "Chamada para Ação"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "name": "enabled",
+            "type": "boolean",
+            "title": "Habilitar Overlay"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Leve (30%)",
+                  "value": "from-black/30 via-black/20 to-black/10"
+                },
+                {
+                  "title": "Médio (50%)",
+                  "value": "from-black/50 via-black/30 to-black/20"
+                },
+                {
+                  "title": "Forte (70%)",
+                  "value": "from-black/70 via-black/50 to-black/30"
+                }
+              ]
+            },
+            "initialValue": "from-black/70 via-black/50 to-black/30",
+            "name": "opacity",
+            "type": "string",
+            "title": "Opacidade do Overlay"
+          }
+        ],
+        "name": "overlay",
+        "type": "object",
+        "title": "Configurações do Overlay"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "name": "showOnHomepage",
+            "type": "boolean",
+            "title": "Exibir na Homepage"
+          },
+          {
+            "initialValue": true,
+            "name": "showPriceTag",
+            "type": "boolean",
+            "title": "Exibir Tag de Preço"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "heroSection",
+    "type": "document",
+    "title": "Seção Hero"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Conheça nossos planos",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "initialValue": "planos",
+            "description": "Palavra que será destacada com gradiente (ex: \"planos\")",
+            "name": "highlightWord",
+            "type": "string",
+            "title": "Palavra em Destaque"
+          },
+          {
+            "rows": 3,
+            "initialValue": "Escolha o plano que cresce com você e se adapta às suas necessidades de treino.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 4
+              },
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "nome",
+                "type": "string",
+                "title": "Nome do Plano"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "preco",
+                "type": "string",
+                "title": "Preço"
+              },
+              {
+                "initialValue": "mês",
+                "name": "periodo",
+                "type": "string",
+                "title": "Período"
+              },
+              {
+                "rows": 3,
+                "name": "descricao",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "description": "Lista de benefícios inclusos no plano",
+                "of": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "name": "beneficios",
+                "type": "array",
+                "title": "Benefícios"
+              },
+              {
+                "initialValue": false,
+                "name": "popular",
+                "type": "boolean",
+                "title": "É Popular?"
+              },
+              {
+                "initialValue": false,
+                "name": "destaque",
+                "type": "boolean",
+                "title": "É Destaque?"
+              },
+              {
+                "description": "Texto exibido na badge quando é popular (ex: \"O mais vendido\")",
+                "name": "badge",
+                "type": "string",
+                "title": "Texto da Badge"
+              },
+              {
+                "description": "Número exibido no canto (01, 02, etc.)",
+                "name": "numero",
+                "type": "string",
+                "title": "Número de Ordem"
+              },
+              {
+                "description": "Tempo para ativação (ex: \"Setup em 24 horas\")",
+                "name": "setup",
+                "type": "string",
+                "title": "Tempo de Setup"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "name": "image",
+                "type": "image",
+                "title": "Imagem"
+              },
+              {
+                "initialValue": "Matricule-se",
+                "name": "ctaText",
+                "type": "string",
+                "title": "Texto do Botão"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Zinco (Tradicional)",
+                      "value": "from-zinc-700 to-zinc-900"
+                    },
+                    {
+                      "title": "Dourado (Premium)",
+                      "value": "from-amber-500 to-yellow-600"
+                    },
+                    {
+                      "title": "Azul (Diamante)",
+                      "value": "from-blue-600 to-cyan-600"
+                    }
+                  ]
+                },
+                "initialValue": "from-zinc-700 to-zinc-900",
+                "name": "gradient",
+                "type": "string",
+                "title": "Gradiente"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "order",
+                "type": "number",
+                "title": "Ordem de Exibição"
+              },
+              {
+                "initialValue": true,
+                "name": "active",
+                "type": "boolean",
+                "title": "Ativo"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "featuredPlans",
+        "type": "array",
+        "title": "Planos em Destaque"
+      },
+      {
+        "fields": [
+          {
+            "rows": 2,
+            "initialValue": "Os preços, serviços e condições promocionais podem variar de acordo com a unidade escolhida.",
+            "name": "text",
+            "type": "text",
+            "title": "Texto da Nota"
+          },
+          {
+            "initialValue": "Ver comparação detalhada",
+            "name": "linkText",
+            "type": "string",
+            "title": "Texto do Link"
+          },
+          {
+            "initialValue": "#",
+            "name": "linkUrl",
+            "type": "string",
+            "title": "URL do Link"
+          }
+        ],
+        "name": "footnote",
+        "type": "object",
+        "title": "Nota de Rodapé"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "name": "showOnHomepage",
+            "type": "boolean",
+            "title": "Exibir na Homepage"
+          },
+          {
+            "initialValue": true,
+            "name": "showBackgroundEffects",
+            "type": "boolean",
+            "title": "Exibir Efeitos de Fundo"
+          },
+          {
+            "initialValue": true,
+            "name": "showFootnote",
+            "type": "boolean",
+            "title": "Exibir Nota de Rodapé"
+          },
+          {
+            "initialValue": 2,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 1
+                  },
+                  {
+                    "flag": "max",
+                    "constraint": 4
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "maxPlansToShow",
+            "type": "number",
+            "title": "Máximo de Planos para Exibir"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "planosSection",
+    "type": "document",
+    "title": "Seção Planos"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Conheça nossos planos | Live Academia",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 60
+                  }
+                ],
+                "level": "warning",
+                "message": "O título deve ter no máximo 60 caracteres para SEO"
+              }
+            ],
+            "name": "title",
+            "type": "string",
+            "title": "Título da Página"
+          },
+          {
+            "initialValue": "Escolha o plano que melhor se adapta às suas necessidades e comece sua jornada fitness hoje mesmo na Live Academia.",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 160
+                  }
+                ],
+                "level": "warning",
+                "message": "A descrição deve ter no máximo 160 caracteres para SEO"
+              }
+            ],
+            "name": "description",
+            "type": "text",
+            "title": "Descrição da Página"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "SEO"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Conheça nossos planos",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "title",
+            "type": "string",
+            "title": "Título Principal"
+          },
+          {
+            "initialValue": "Escolha o plano que melhor se adapta às suas necessidades e comece sua jornada fitness hoje mesmo.",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho da Página"
+      },
+      {
+        "description": "Arraste os planos para definir a ordem de exibição na página",
+        "of": [
+          {
+            "to": [
+              {
+                "type": "plano"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to plano"
+          }
+        ],
+        "name": "plansOrder",
+        "type": "array",
+        "title": "Ordem dos Planos"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Comparar planos",
+            "name": "title",
+            "type": "string",
+            "title": "Título da Seção"
+          },
+          {
+            "initialValue": [
+              {
+                "sectionTitle": "Benefícios Principais",
+                "items": [
+                  {
+                    "label": "Sem taxa de matrícula",
+                    "tradicional": "true",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "Sem fidelidade",
+                    "tradicional": "true",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "Acesso via app Live",
+                    "tradicional": "true",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "Aulas coletivas",
+                    "tradicional": "true",
+                    "diamante": "true"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "Estrutura Premium",
+                "items": [
+                  {
+                    "label": "Ambiente climatizado",
+                    "tradicional": "partial",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "Espaços exclusivos",
+                    "tradicional": "false",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "Espaço Relax",
+                    "tradicional": "false",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "Espaço Yoga",
+                    "tradicional": "false",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "Studio de Bike",
+                    "tradicional": "false",
+                    "diamante": "true"
+                  }
+                ]
+              },
+              {
+                "sectionTitle": "Serviços",
+                "items": [
+                  {
+                    "label": "Avaliação física",
+                    "tradicional": "true",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "App de treinos",
+                    "tradicional": "true",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "Atendimento domingos",
+                    "tradicional": "partial",
+                    "diamante": "true"
+                  },
+                  {
+                    "label": "Suporte prioritário",
+                    "tradicional": "false",
+                    "diamante": "true"
+                  }
+                ]
+              }
+            ],
+            "of": [
+              {
+                "fields": [
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "name": "sectionTitle",
+                    "type": "string",
+                    "title": "Título da Seção"
+                  },
+                  {
+                    "of": [
+                      {
+                        "fields": [
+                          {
+                            "validation": [
+                              {
+                                "rules": [
+                                  {
+                                    "flag": "presence",
+                                    "constraint": "required"
+                                  }
+                                ],
+                                "level": "error"
+                              }
+                            ],
+                            "name": "label",
+                            "type": "string",
+                            "title": "Nome do Benefício"
+                          },
+                          {
+                            "options": {
+                              "list": [
+                                {
+                                  "title": "Incluído",
+                                  "value": "true"
+                                },
+                                {
+                                  "title": "Não incluído",
+                                  "value": "false"
+                                },
+                                {
+                                  "title": "Parcial",
+                                  "value": "partial"
+                                }
+                              ]
+                            },
+                            "name": "tradicional",
+                            "type": "string",
+                            "title": "Plano Tradicional"
+                          },
+                          {
+                            "options": {
+                              "list": [
+                                {
+                                  "title": "Incluído",
+                                  "value": "true"
+                                },
+                                {
+                                  "title": "Não incluído",
+                                  "value": "false"
+                                },
+                                {
+                                  "title": "Parcial",
+                                  "value": "partial"
+                                }
+                              ]
+                            },
+                            "name": "diamante",
+                            "type": "string",
+                            "title": "Plano Diamante"
+                          }
+                        ],
+                        "type": "object"
+                      }
+                    ],
+                    "name": "items",
+                    "type": "array",
+                    "title": "Itens da Seção"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "sections",
+            "type": "array",
+            "title": "Seções da Comparação"
+          }
+        ],
+        "name": "comparison",
+        "type": "object",
+        "title": "Tabela de Comparação"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Os preços, serviços e condições promocionais podem variar de acordo com a academia escolhida.",
+            "name": "disclaimer",
+            "type": "text",
+            "title": "Texto de Aviso"
+          }
+        ],
+        "name": "footer",
+        "type": "object",
+        "title": "Rodapé da Página"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "name": "showComparison",
+            "type": "boolean",
+            "title": "Exibir Tabela de Comparação"
+          },
+          {
+            "initialValue": true,
+            "name": "showUnitsSection",
+            "type": "boolean",
+            "title": "Exibir Seção de Unidades"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "planosPage",
+    "type": "document",
+    "title": "Página de Planos"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Nossas Unidades | Live Academia",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 60
+                  }
+                ],
+                "level": "warning",
+                "message": "O título deve ter no máximo 60 caracteres para SEO"
+              }
+            ],
+            "name": "title",
+            "type": "string",
+            "title": "Título da Página"
+          },
+          {
+            "initialValue": "Encontre a Live Academia mais perto de você. Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "max",
+                    "constraint": 160
+                  }
+                ],
+                "level": "warning",
+                "message": "A descrição deve ter no máximo 160 caracteres para SEO"
+              }
+            ],
+            "name": "description",
+            "type": "text",
+            "title": "Descrição da Página"
+          }
+        ],
+        "name": "seo",
+        "type": "object",
+        "title": "SEO"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Encontre a Live mais perto de você",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "title",
+            "type": "string",
+            "title": "Título Principal"
+          },
+          {
+            "initialValue": "Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho da Página"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "name": "showSearchBar",
+            "type": "boolean",
+            "title": "Exibir Barra de Busca"
+          },
+          {
+            "initialValue": "Buscar por nome ou endereço...",
+            "name": "searchPlaceholder",
+            "type": "string",
+            "title": "Texto do Placeholder de Busca"
+          },
+          {
+            "initialValue": true,
+            "name": "showTypeFilters",
+            "type": "boolean",
+            "title": "Exibir Filtros por Tipo"
+          },
+          {
+            "initialValue": [
+              {
+                "value": "todos",
+                "label": "Todas as unidades"
+              },
+              {
+                "value": "diamante",
+                "label": "Diamante"
+              },
+              {
+                "value": "premium",
+                "label": "Premium"
+              },
+              {
+                "value": "tradicional",
+                "label": "Tradicional"
+              },
+              {
+                "value": "inauguracao",
+                "label": "Em breve"
+              }
+            ],
+            "of": [
+              {
+                "fields": [
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "name": "value",
+                    "type": "string",
+                    "title": "Valor"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "name": "label",
+                    "type": "string",
+                    "title": "Rótulo"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "typeFilterOptions",
+            "type": "array",
+            "title": "Opções de Filtro por Tipo"
+          },
+          {
+            "initialValue": true,
+            "name": "showLocationFilter",
+            "type": "boolean",
+            "title": "Exibir Filtro por Localização"
+          },
+          {
+            "initialValue": "Usar minha localização",
+            "name": "locationFilterText",
+            "type": "string",
+            "title": "Texto do Botão de Localização"
+          },
+          {
+            "initialValue": [
+              2,
+              5,
+              10,
+              15
+            ],
+            "of": [
+              {
+                "type": "number"
+              }
+            ],
+            "name": "radiusOptions",
+            "type": "array",
+            "title": "Opções de Raio (km)"
+          }
+        ],
+        "name": "filters",
+        "type": "object",
+        "title": "Configurações de Filtros"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Nenhuma unidade encontrada",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "initialValue": "Tente ajustar os filtros ou fazer uma nova busca",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "initialValue": "Ver todas as unidades",
+            "name": "buttonText",
+            "type": "string",
+            "title": "Texto do Botão"
+          }
+        ],
+        "name": "emptyState",
+        "type": "object",
+        "title": "Estado Vazio (Quando não encontra unidades)"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "Pronto para começar sua transformação?",
+            "name": "title",
+            "type": "string",
+            "title": "Título"
+          },
+          {
+            "initialValue": "Escolha uma unidade, conheça nossos planos e dê o primeiro passo rumo ao seu melhor.",
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "Ver planos e preços",
+                "name": "text",
+                "type": "string",
+                "title": "Texto"
+              },
+              {
+                "initialValue": "/planos",
+                "name": "url",
+                "type": "string",
+                "title": "URL"
+              }
+            ],
+            "name": "primaryButton",
+            "type": "object",
+            "title": "Botão Primário"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "Falar com consultor",
+                "name": "text",
+                "type": "string",
+                "title": "Texto"
+              },
+              {
+                "initialValue": "https://wa.me/5592999999999",
+                "name": "url",
+                "type": "string",
+                "title": "URL"
+              },
+              {
+                "initialValue": true,
+                "name": "isExternal",
+                "type": "boolean",
+                "title": "Link Externo"
+              }
+            ],
+            "name": "secondaryButton",
+            "type": "object",
+            "title": "Botão Secundário"
+          }
+        ],
+        "name": "cta",
+        "type": "object",
+        "title": "Seção Call-to-Action (Final da Página)"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "name": "showCta",
+            "type": "boolean",
+            "title": "Exibir Seção CTA"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "2 colunas",
+                  "value": "md:grid-cols-2"
+                },
+                {
+                  "title": "3 colunas",
+                  "value": "md:grid-cols-3"
+                },
+                {
+                  "title": "4 colunas",
+                  "value": "md:grid-cols-4"
+                }
+              ]
+            },
+            "initialValue": "md:grid-cols-3",
+            "name": "gridColumns",
+            "type": "string",
+            "title": "Colunas da Grade"
+          },
+          {
+            "initialValue": 0,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 0
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "cardsPerPage",
+            "type": "number",
+            "title": "Cards por Página (0 = todos)"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "unidadesPage",
+    "type": "document",
+    "title": "Página de Unidades"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "fields": [
+              {
+                "initialValue": true,
+                "description": "Exibe o nome da unidade atual abaixo do logo quando disponível",
+                "name": "showUnitName",
+                "type": "boolean",
+                "title": "Mostrar Nome da Unidade"
+              }
+            ],
+            "name": "logo",
+            "type": "object",
+            "title": "Configurações do Logo"
+          },
+          {
+            "initialValue": [
+              {
+                "label": "Sobre",
+                "type": "internal",
+                "url": "/sobre-nos",
+                "order": 1,
+                "showOnMobile": true,
+                "showOnDesktop": true
+              },
+              {
+                "label": "Benefícios",
+                "type": "scroll",
+                "url": "beneficios",
+                "order": 2,
+                "showOnMobile": true,
+                "showOnDesktop": true
+              },
+              {
+                "label": "Unidades",
+                "type": "internal",
+                "url": "/unidades",
+                "order": 3,
+                "showOnMobile": true,
+                "showOnDesktop": true
+              },
+              {
+                "label": "Aulas Coletivas",
+                "type": "internal",
+                "url": "/aulas-coletivas",
+                "order": 4,
+                "showOnMobile": true,
+                "showOnDesktop": true
+              },
+              {
+                "label": "Day Use",
+                "type": "internal",
+                "url": "/day-use",
+                "order": 5,
+                "showOnMobile": true,
+                "showOnDesktop": true
+              },
+              {
+                "label": "Planos",
+                "type": "internal",
+                "url": "/planos",
+                "order": 6,
+                "showOnMobile": true,
+                "showOnDesktop": true
+              },
+              {
+                "label": "Contato",
+                "type": "scroll",
+                "url": "contato",
+                "order": 7,
+                "showOnMobile": true,
+                "showOnDesktop": true
+              }
+            ],
+            "of": [
+              {
+                "fields": [
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "name": "label",
+                    "type": "string",
+                    "title": "Texto do Link"
+                  },
+                  {
+                    "options": {
+                      "list": [
+                        {
+                          "title": "Link Interno",
+                          "value": "internal"
+                        },
+                        {
+                          "title": "Link Externo",
+                          "value": "external"
+                        },
+                        {
+                          "title": "Scroll para Seção",
+                          "value": "scroll"
+                        }
+                      ]
+                    },
+                    "initialValue": "internal",
+                    "name": "type",
+                    "type": "string",
+                    "title": "Tipo de Link"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "description": "Para links internos use /pagina, para externos use https://..., para scroll use o ID da seção (ex: beneficios)",
+                    "name": "url",
+                    "type": "string",
+                    "title": "URL/Caminho"
+                  },
+                  {
+                    "initialValue": false,
+                    "description": "Apenas para links externos",
+                    "name": "openInNewTab",
+                    "type": "boolean",
+                    "title": "Abrir em Nova Aba"
+                  },
+                  {
+                    "initialValue": 0,
+                    "name": "order",
+                    "type": "number",
+                    "title": "Ordem"
+                  },
+                  {
+                    "initialValue": true,
+                    "name": "showOnMobile",
+                    "type": "boolean",
+                    "title": "Exibir no Mobile"
+                  },
+                  {
+                    "initialValue": true,
+                    "name": "showOnDesktop",
+                    "type": "boolean",
+                    "title": "Exibir no Desktop"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "navigation",
+            "type": "array",
+            "title": "Links de Navegação"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "Matricule-se",
+                "name": "text",
+                "type": "string",
+                "title": "Texto do Botão"
+              },
+              {
+                "initialValue": "Matricule-se Agora",
+                "name": "mobileText",
+                "type": "string",
+                "title": "Texto do Botão Mobile"
+              },
+              {
+                "initialValue": "/planos",
+                "name": "url",
+                "type": "string",
+                "title": "URL do Botão"
+              },
+              {
+                "initialValue": true,
+                "name": "show",
+                "type": "boolean",
+                "title": "Exibir Botão"
+              }
+            ],
+            "name": "ctaButton",
+            "type": "object",
+            "title": "Botão de Call-to-Action"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "Menu",
+                "name": "openText",
+                "type": "string",
+                "title": "Texto Botão Abrir"
+              },
+              {
+                "initialValue": "Close",
+                "name": "closeText",
+                "type": "string",
+                "title": "Texto Botão Fechar"
+              }
+            ],
+            "name": "mobileMenu",
+            "type": "object",
+            "title": "Menu Mobile"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho (Header)"
+      },
+      {
+        "fields": [
+          {
+            "fields": [
+              {
+                "initialValue": "Live Academia",
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "initialValue": "A maior rede de academias de Manaus, oferecendo estrutura completa e planos flexíveis para sua jornada fitness.",
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              }
+            ],
+            "name": "about",
+            "type": "object",
+            "title": "Seção Sobre"
+          },
+          {
+            "initialValue": [
+              {
+                "title": "Navegação",
+                "order": 1,
+                "links": [
+                  {
+                    "label": "Sobre Nós",
+                    "url": "/sobre-nos",
+                    "external": false
+                  },
+                  {
+                    "label": "Unidades",
+                    "url": "/unidades",
+                    "external": false
+                  },
+                  {
+                    "label": "Planos",
+                    "url": "/planos",
+                    "external": false
+                  },
+                  {
+                    "label": "Contato",
+                    "url": "/contato",
+                    "external": false
+                  }
+                ]
+              },
+              {
+                "title": "Serviços",
+                "order": 2,
+                "links": [
+                  {
+                    "label": "Aulas Coletivas",
+                    "url": "/aulas-coletivas",
+                    "external": false
+                  },
+                  {
+                    "label": "Day Use",
+                    "url": "/day-use",
+                    "external": false
+                  },
+                  {
+                    "label": "Personal Trainer",
+                    "url": "/personal",
+                    "external": false
+                  },
+                  {
+                    "label": "Avaliação Física",
+                    "url": "/avaliacao",
+                    "external": false
+                  }
+                ]
+              },
+              {
+                "title": "Suporte",
+                "order": 3,
+                "links": [
+                  {
+                    "label": "Central de Ajuda",
+                    "url": "/ajuda",
+                    "external": false
+                  },
+                  {
+                    "label": "Trabalhe Conosco",
+                    "url": "/trabalhe-conosco",
+                    "external": false
+                  },
+                  {
+                    "label": "WhatsApp",
+                    "url": "https://wa.me/5592999999999",
+                    "external": true
+                  }
+                ]
+              }
+            ],
+            "of": [
+              {
+                "fields": [
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "name": "title",
+                    "type": "string",
+                    "title": "Título da Seção"
+                  },
+                  {
+                    "of": [
+                      {
+                        "fields": [
+                          {
+                            "validation": [
+                              {
+                                "rules": [
+                                  {
+                                    "flag": "presence",
+                                    "constraint": "required"
+                                  }
+                                ],
+                                "level": "error"
+                              }
+                            ],
+                            "name": "label",
+                            "type": "string",
+                            "title": "Texto do Link"
+                          },
+                          {
+                            "validation": [
+                              {
+                                "rules": [
+                                  {
+                                    "flag": "presence",
+                                    "constraint": "required"
+                                  }
+                                ],
+                                "level": "error"
+                              }
+                            ],
+                            "name": "url",
+                            "type": "string",
+                            "title": "URL"
+                          },
+                          {
+                            "initialValue": false,
+                            "name": "external",
+                            "type": "boolean",
+                            "title": "Link Externo"
+                          }
+                        ],
+                        "type": "object"
+                      }
+                    ],
+                    "name": "links",
+                    "type": "array"
+                  },
+                  {
+                    "initialValue": 0,
+                    "name": "order",
+                    "type": "number",
+                    "title": "Ordem"
+                  }
+                ],
+                "type": "object"
+              }
+            ],
+            "name": "sections",
+            "type": "array",
+            "title": "Seções do Footer"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "Nos siga",
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "options": {
+                          "list": [
+                            {
+                              "title": "Instagram",
+                              "value": "instagram"
+                            },
+                            {
+                              "title": "Facebook",
+                              "value": "facebook"
+                            },
+                            {
+                              "title": "YouTube",
+                              "value": "youtube"
+                            },
+                            {
+                              "title": "TikTok",
+                              "value": "tiktok"
+                            },
+                            {
+                              "title": "LinkedIn",
+                              "value": "linkedin"
+                            },
+                            {
+                              "title": "WhatsApp",
+                              "value": "whatsapp"
+                            }
+                          ]
+                        },
+                        "name": "platform",
+                        "type": "string",
+                        "title": "Plataforma"
+                      },
+                      {
+                        "validation": [
+                          {
+                            "rules": [
+                              {
+                                "flag": "presence",
+                                "constraint": "required"
+                              }
+                            ],
+                            "level": "error"
+                          }
+                        ],
+                        "name": "url",
+                        "type": "string",
+                        "title": "URL"
+                      },
+                      {
+                        "initialValue": true,
+                        "name": "show",
+                        "type": "boolean",
+                        "title": "Exibir"
+                      }
+                    ],
+                    "type": "object"
+                  }
+                ],
+                "name": "links",
+                "type": "array",
+                "title": "Links das Redes Sociais"
+              }
+            ],
+            "name": "socialMedia",
+            "type": "object",
+            "title": "Redes Sociais"
+          },
+          {
+            "fields": [
+              {
+                "initialValue": "© 2024 Live Academia. Todos os direitos reservados.",
+                "name": "text",
+                "type": "string",
+                "title": "Texto do Copyright"
+              },
+              {
+                "initialValue": "Live Academia",
+                "name": "companyName",
+                "type": "string",
+                "title": "Nome da Empresa"
+              }
+            ],
+            "name": "copyright",
+            "type": "object"
+          }
+        ],
+        "name": "footer",
+        "type": "object",
+        "title": "Rodapé (Footer)"
+      }
+    ],
+    "name": "navigation",
+    "type": "document",
+    "title": "Navegação do Site"
+  }
+]
