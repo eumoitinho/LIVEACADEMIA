@@ -2278,7 +2278,7 @@
         "title": "Imagem de Fundo do Hero"
       },
       {
-        "description": "Busque os planos da API e configure quais devem aparecer na página",
+        "description": "🚀 Interface automática: busca planos da API e permite configuração visual. Apenas clique em \"Buscar Planos\" após salvar a unidade.",
         "of": [
           {
             "fields": [
@@ -2357,7 +2357,7 @@
         ],
         "name": "planosPermitidos",
         "type": "array",
-        "title": "Planos da API - Configuração de Exibição"
+        "title": "🔗 Planos da API - Configuração de Exibição"
       },
       {
         "description": "Planos estáticos usados quando a API não estiver disponível",
