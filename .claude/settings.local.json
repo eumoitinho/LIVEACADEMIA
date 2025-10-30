@@ -36,7 +36,8 @@
       "Bash(pnpm sanity:seed-units:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run type-check:*)",
-      "Bash(pnpm lint:*)"
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm add:*)"
     ],
     "deny": []
   }
