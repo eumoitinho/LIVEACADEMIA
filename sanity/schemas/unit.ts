@@ -169,6 +169,39 @@ export const unitSchema = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'modalidades',
+      title: 'Modalidades Disponíveis',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'modality' }],
+        },
+      ],
+      description: 'Selecione as modalidades disponíveis nesta unidade',
+    }),
+    defineField({
+      name: 'beneficios',
+      title: 'Benefícios da Unidade',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'benefit' }],
+        },
+      ],
+      description: 'Selecione os benefícios específicos desta unidade',
+    }),
+    defineField({
+      name: 'heroBackground',
+      title: 'Imagem de Fundo do Hero',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      description: 'Imagem de fundo específica para a seção hero desta unidade',
+    }),
+    defineField({
       name: 'planos',
       title: 'Planos da Unidade',
       type: 'array',
