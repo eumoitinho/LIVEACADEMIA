@@ -3,6 +3,7 @@ import { locations } from '@/src/lib/config/locations'
 import { getUnits } from '@/lib/sanity'
 import UnidadeContent from "./components/unidade-content"
 import type { Unit } from '../../../types/sanity'
+import { unidadesMapData } from './utils/map-unidades-data'
 
 // Dados específicos por unidade (modalidades, benefícios, fotos)
 const unidadeData = {
@@ -286,12 +287,15 @@ export default async function UnidadePage(props: PageProps) {
     notFound()
   }
 
+  // Get correct address and mapLink from unidades.json data
+  const unidadeMapInfo = unidadesMapData[slug as keyof typeof unidadesMapData]
+
   // Merge Sanity data with static data (Sanity takes precedence)
   const unidade = sanityUnit ? {
     ...staticUnidade,
     id: sanityUnit.slug || slug,
     name: sanityUnit.name,
-    address: sanityUnit.address,
+    address: sanityUnit.address || unidadeMapInfo?.endereco || staticUnidade?.address,
     type: sanityUnit.type as 'tradicional' | 'premium' | 'diamante',
     photo: sanityUnit.photo?.asset?.url || sanityUnit.backgroundImage?.asset?.url || sanityUnit.images?.[0]?.asset?.url || staticUnidade?.photo || '/images/fachada.jpg',
     features: sanityUnit.services || staticUnidade?.features || [],
@@ -303,20 +307,24 @@ export default async function UnidadePage(props: PageProps) {
     longitude: sanityUnit.longitude || -60.0217314,
     images: sanityUnit.images?.map((img: any) => img.asset?.url).filter(Boolean) || [],
     description: sanityUnit.description,
-    planos: sanityUnit.planos || []
+    planos: sanityUnit.planos || [],
+    mapLink: unidadeMapInfo?.mapLink || staticUnidade?.mapLink || ''
   } : staticUnidade ? {
     ...staticUnidade,
+    address: unidadeMapInfo?.endereco || staticUnidade.address,
+    mapLink: unidadeMapInfo?.mapLink || staticUnidade.mapLink || '',
     latitude: -3.1190275,
     longitude: -60.0217314,
   } : {
     id: slug,
     name: 'Unidade',
-    address: 'Manaus, AM',
+    address: unidadeMapInfo?.endereco || 'Manaus, AM',
     hours: 'Seg-Sex: 5h30-22h',
     features: [],
     type: 'tradicional',
     latitude: -3.1190275,
     longitude: -60.0217314,
+    mapLink: unidadeMapInfo?.mapLink || ''
   }
 
   if (!unidade) {

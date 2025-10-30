@@ -27,6 +27,7 @@ interface UnidadeContentProps {
       price: string
     }>
     hotsite?: string
+    mapLink?: string
   }
   data: {
     modalidades: Array<{
@@ -365,9 +366,9 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
             className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10"
           >
             <div className="relative h-96 lg:h-[500px]">
-              {/* Google Maps Embed - Sem API Key */}
+              {/* Google Maps Embed usando endereço da unidade */}
               <iframe
-                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.0!2d${unidade.longitude}!3d${unidade.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${Math.floor(unidade.latitude * 1000000)}%2C${Math.floor(unidade.longitude * 1000000)}!5e0!3m2!1spt-BR!2sbr!4v1234567890`}
+                src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d${unidade.longitude}!3d${unidade.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(unidade.address)}!5e0!3m2!1spt-BR!2sbr!4v1234567890`}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -381,7 +382,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
               {/* Overlay com botão para abrir no Google Maps */}
               <div className="absolute top-4 right-4">
                 <a
-                  href={`https://www.google.com/maps?q=${unidade.latitude},${unidade.longitude}`}
+                  href={unidade.mapLink || `https://www.google.com/maps?q=${unidade.latitude},${unidade.longitude}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-black font-semibold px-4 py-2 rounded-full transition-colors shadow-lg"
