@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { PlanosSelector } from '../components/PlanosSelector'
 
 export const unitSchema = defineType({
   name: 'unit',
@@ -203,7 +204,7 @@ export const unitSchema = defineType({
     }),
     defineField({
       name: 'planosPermitidos',
-      title: 'Filtro de Planos da API',
+      title: 'Planos da API - Configuração de Exibição',
       type: 'array',
       of: [
         {
@@ -211,41 +212,38 @@ export const unitSchema = defineType({
           fields: [
             defineField({
               name: 'codigo',
-              title: 'Código do Plano na API',
+              title: 'Código do Plano',
               type: 'number',
               validation: (Rule) => Rule.required(),
-              description: 'Código numérico do plano retornado pela API Pacto',
+              readOnly: true,
             }),
             defineField({
               name: 'nome',
-              title: 'Nome do Plano (referência)',
+              title: 'Nome do Plano',
               type: 'string',
-              description: 'Nome para identificar o plano (apenas para organização)',
+              readOnly: true,
             }),
             defineField({
               name: 'exibir',
               title: 'Exibir na Página',
               type: 'boolean',
               initialValue: true,
-              description: 'Se este plano deve ser exibido na página da unidade',
             }),
             defineField({
               name: 'ordem',
               title: 'Ordem de Exibição',
               type: 'number',
               initialValue: 0,
-              description: 'Ordem de exibição (menor número aparece primeiro)',
             }),
             defineField({
               name: 'destaque',
               title: 'Plano em Destaque',
               type: 'boolean',
               initialValue: false,
-              description: 'Se este plano deve aparecer em destaque',
             }),
             defineField({
               name: 'badge',
-              title: 'Badge Personalizada',
+              title: 'Badge',
               type: 'string',
               options: {
                 list: [
@@ -256,7 +254,6 @@ export const unitSchema = defineType({
                   { title: 'Promoção', value: 'PROMOÇÃO' },
                 ],
               },
-              description: 'Badge opcional para destacar o plano',
             }),
           ],
           preview: {
@@ -277,7 +274,10 @@ export const unitSchema = defineType({
           },
         },
       ],
-      description: 'Configure quais planos da API devem ser exibidos e como devem aparecer',
+      components: {
+        input: PlanosSelector,
+      },
+      description: 'Busque os planos da API e configure quais devem aparecer na página',
     }),
     defineField({
       name: 'planos',
