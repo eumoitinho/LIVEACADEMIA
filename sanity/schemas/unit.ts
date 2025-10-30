@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { PlanosApiSelector } from '../components/PlanosApiSelector'
 
 export const unitSchema = defineType({
   name: 'unit',
@@ -273,7 +274,10 @@ export const unitSchema = defineType({
           },
         },
       ],
-      description: '📋 INSTRUÇÕES: 1) Salve esta unidade primeiro. 2) Acesse /api/sanity/planos/[slug-da-unidade] para ver os planos disponíveis. 3) Use os códigos dos planos para configurar quais devem aparecer na página.',
+      components: {
+        input: PlanosApiSelector,
+      },
+      description: '🚀 Interface automática: busca planos da API e permite configuração visual. Apenas clique em "Buscar Planos" após salvar a unidade.',
     }),
     defineField({
       name: 'planos',
