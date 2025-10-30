@@ -4,7 +4,7 @@ import Link from "next/link"
 import { Instagram, Facebook, Youtube, MapPin, Phone, Mail, BadgeCheck, Check, Send, Github, Twitter, Linkedin } from "lucide-react"
 import LiveLogo from "@/components/shared/live-logo"
 import ScrollToTopButton from '@/components/layout/scroll-to-top-button'
-import { useNavigationData } from "@/hooks/use-sanity-data"
+import { useNavigationData } from "../../../hooks/use-sanity-data"
 
 export default function Footer() {
   const { data: navigationData, loading } = useNavigationData()
@@ -119,54 +119,66 @@ export default function Footer() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 pt-12">
-            <div>
-              <h4 className="text-white/80 text-xs uppercase tracking-[0.2em]">Serviços</h4>
-              <ul className="mt-3 space-y-2 text-sm">
-                <li><Link href="/planos" className="text-neutral-300 hover:text-white transition inline-flex items-center gap-2"> Planos</Link></li>
-                <li><Link href="/unidades" className="text-neutral-300 hover:text-white transition inline-flex items-center gap-2"> Unidades</Link></li>
-                <li><Link href="/aulas-coletivas" className="text-neutral-300 hover:text-white transition inline-flex items-center gap-2"> Aulas Coletivas</Link></li>
-                <li><Link href="/day-use" className="text-neutral-300 hover:text-white transition inline-flex items-center gap-2"> Day Use</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white/80 text-xs uppercase tracking-[0.2em]">Sobre</h4>
-              <ul className="mt-3 space-y-2 text-sm">
-                <li><Link href="/sobre-nos" className="text-neutral-300 hover:text-white transition">Sobre Nós</Link></li>
-                <li><Link href="/contatox`" className="text-neutral-300 hover:text-white transition">Trabalhe Conosco</Link></li>
-                <li><Link href="#contact" className="text-neutral-300 hover:text-white transition">Contato</Link></li>
-                <li><Link href="/unidades" className="text-neutral-300 hover:text-white transition">Localização</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white/80 text-xs uppercase tracking-[0.2em]">Suporte</h4>
-              <ul className="mt-3 space-y-2 text-sm">
-                <li><Link href="/politica-de-privacidade" className="text-neutral-300 hover:text-white transition">Política de Privacidade</Link></li>
-                <li><Link href="/termos-de-uso" className="text-neutral-300 hover:text-white transition">Termos de Uso</Link></li>
-                <li><Link href="/app" className="text-neutral-300 hover:text-white transition">App Mobile</Link></li>
-                <li><Link href="/bioimpedancia" className="text-neutral-300 hover:text-white transition">Bioimpedância</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="uppercase text-xs text-white/80 tracking-[0.2em]">Redes Sociais</h4>
-              <div className="mt-4 flex items-center gap-3">
-                <a href="https://www.instagram.com/liveacademiamanaus/" aria-label="Instagram"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 text-white/80 hover:text-white hover:bg-white/10 transition">
-                  <Instagram className="w-[16px] h-[16px]" />
-                </a>
-                <a href="https://web.facebook.com/liveacademiamanaus" aria-label="Facebook"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 text-white/80 hover:text-white hover:bg-white/10 transition">
-                  <Facebook className="w-[16px] h-[16px]" />
-                </a>
-                <a href="https://www.youtube.com/@liveacademiaoficial" aria-label="YouTube"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 text-white/80 hover:text-white hover:bg-white/10 transition">
-                  <Youtube className="w-[16px] h-[16px]" />
-                </a>
+            {footerSections.map((section: any, index: number) => (
+              <div key={index}>
+                <h4 className="text-white/80 text-xs uppercase tracking-[0.2em]">{section.title}</h4>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {section.links?.map((link: any, linkIndex: number) => (
+                    <li key={linkIndex}>
+                      {link.external ? (
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-neutral-300 hover:text-white transition inline-flex items-center gap-2"
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={link.url}
+                          className="text-neutral-300 hover:text-white transition inline-flex items-center gap-2"
+                        >
+                          {link.label}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
+            ))}
+
+            {socialMedia && (
+              <div>
+                <h4 className="uppercase text-xs text-white/80 tracking-[0.2em]">{socialMedia.title || 'Redes Sociais'}</h4>
+                <div className="mt-4 flex items-center gap-3">
+                  {socialMedia.links
+                    ?.filter((social: any) => social.show !== false)
+                    ?.map((social: any, index: number) => {
+                      const IconComponent = socialIconMap[social.platform] || Instagram
+                      return (
+                        <a
+                          key={index}
+                          href={social.url}
+                          aria-label={social.platform}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 text-white/80 hover:text-white hover:bg-white/10 transition"
+                        >
+                          <IconComponent className="w-[16px] h-[16px]" />
+                        </a>
+                      )
+                    })}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <p className="text-white/60 text-sm">© {new Date().getFullYear()} Live Academia. Todos os direitos reservados.</p>
+            <p className="text-white/60 text-sm">
+              {copyright?.text?.replace('{year}', new Date().getFullYear().toString()) ||
+               `© ${new Date().getFullYear()} ${copyright?.companyName || 'Live Academia'}. Todos os direitos reservados.`}
+            </p>
             <div className="flex items-center gap-4 text-white/60 text-sm">
               <Link href="/politica-de-privacidade" className="hover:text-white transition">Privacidade</Link>
               <span className="hidden sm:block text-white/20">•</span>

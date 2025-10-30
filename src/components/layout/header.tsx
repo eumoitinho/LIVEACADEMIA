@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import LiveLogo from "@/components/shared/live-logo"
 import { useUnit } from "@/contexts/unit-context"
-import { useNavigationData } from "@/hooks/use-sanity-data"
+import { useNavigationData } from "../../../hooks/use-sanity-data"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
