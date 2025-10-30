@@ -37,7 +37,8 @@
       "Bash(npx tsc:*)",
       "Bash(npm run type-check:*)",
       "Bash(pnpm lint:*)",
-      "Bash(pnpm add:*)"
+      "Bash(pnpm add:*)",
+      "Read(//home/moitinho/Pictures/Screenshots/**)"
     ],
     "deny": []
   }

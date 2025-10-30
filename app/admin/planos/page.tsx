@@ -153,7 +153,7 @@ export default function AdminPlanosPage() {
   const outrosPlanos = configSalva.filter(p => !p.destaque).sort((a, b) => a.ordem - b.ordem)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         {/* Header */}
         <div className="mb-8">
@@ -166,7 +166,7 @@ export default function AdminPlanosPage() {
         </div>
 
         {/* Controls */}
-        <Card className="mb-6">
+        <Card className="mb-6 bg-white border-gray-200">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
               <div className="flex-1">
@@ -222,13 +222,13 @@ export default function AdminPlanosPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Planos Disponíveis */}
-          <Card>
+          <Card className="bg-white border-gray-200">
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
+              <CardTitle className="flex items-center justify-between text-gray-900">
                 Planos da API
-                <Badge variant="secondary">{planosApi.length} encontrados</Badge>
+                <Badge variant="secondary" className="bg-gray-100 text-gray-700">{planosApi.length} encontrados</Badge>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-gray-600">
                 Selecione os planos que devem aparecer na unidade
               </CardDescription>
             </CardHeader>
@@ -287,13 +287,13 @@ export default function AdminPlanosPage() {
           </Card>
 
           {/* Configurações */}
-          <Card>
+          <Card className="bg-white border-gray-200">
             <CardHeader>
-              <CardTitle className="flex items-center justify-between">
+              <CardTitle className="flex items-center justify-between text-gray-900">
                 Configuração
-                <Badge variant="secondary">{configSalva.length} configurados</Badge>
+                <Badge variant="secondary" className="bg-gray-100 text-gray-700">{configSalva.length} configurados</Badge>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-gray-600">
                 Configure a exibição dos planos selecionados
               </CardDescription>
             </CardHeader>
@@ -307,7 +307,7 @@ export default function AdminPlanosPage() {
                   {configSalva
                     .sort((a, b) => a.ordem - b.ordem)
                     .map(config => (
-                    <Card key={config.codigo} className={`${config.destaque ? 'border-yellow-200 bg-yellow-50' : ''}`}>
+                    <Card key={config.codigo} className={`bg-white border-gray-200 ${config.destaque ? 'border-yellow-300 bg-yellow-50' : ''}`}>
                       <CardContent className="pt-4">
                         <div className="flex items-center justify-between mb-4">
                           <div className="font-medium">{config.nome}</div>
@@ -379,13 +379,13 @@ export default function AdminPlanosPage() {
 
         {/* Preview */}
         {configSalva.length > 0 && (
-          <Card className="mt-6">
+          <Card className="mt-6 bg-white border-gray-200">
             <CardHeader>
-              <CardTitle className="flex items-center">
+              <CardTitle className="flex items-center text-gray-900">
                 <Eye className="mr-2 h-5 w-5" />
                 Preview da Exibição
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-gray-600">
                 Como os planos aparecerão no site
               </CardDescription>
             </CardHeader>
