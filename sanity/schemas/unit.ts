@@ -202,8 +202,86 @@ export const unitSchema = defineType({
       description: 'Imagem de fundo específica para a seção hero desta unidade',
     }),
     defineField({
+      name: 'planosPermitidos',
+      title: 'Filtro de Planos da API',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'codigo',
+              title: 'Código do Plano na API',
+              type: 'number',
+              validation: (Rule) => Rule.required(),
+              description: 'Código numérico do plano retornado pela API Pacto',
+            }),
+            defineField({
+              name: 'nome',
+              title: 'Nome do Plano (referência)',
+              type: 'string',
+              description: 'Nome para identificar o plano (apenas para organização)',
+            }),
+            defineField({
+              name: 'exibir',
+              title: 'Exibir na Página',
+              type: 'boolean',
+              initialValue: true,
+              description: 'Se este plano deve ser exibido na página da unidade',
+            }),
+            defineField({
+              name: 'ordem',
+              title: 'Ordem de Exibição',
+              type: 'number',
+              initialValue: 0,
+              description: 'Ordem de exibição (menor número aparece primeiro)',
+            }),
+            defineField({
+              name: 'destaque',
+              title: 'Plano em Destaque',
+              type: 'boolean',
+              initialValue: false,
+              description: 'Se este plano deve aparecer em destaque',
+            }),
+            defineField({
+              name: 'badge',
+              title: 'Badge Personalizada',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Mais vendido', value: 'MAIS VENDIDO' },
+                  { title: 'Recomendado', value: 'RECOMENDADO' },
+                  { title: 'Novidade', value: 'NOVIDADE' },
+                  { title: 'Oferta', value: 'OFERTA' },
+                  { title: 'Promoção', value: 'PROMOÇÃO' },
+                ],
+              },
+              description: 'Badge opcional para destacar o plano',
+            }),
+          ],
+          preview: {
+            select: {
+              title: 'nome',
+              subtitle: 'codigo',
+              destaque: 'destaque',
+              exibir: 'exibir',
+            },
+            prepare(selection) {
+              const { title, subtitle, destaque, exibir } = selection
+              const status = !exibir ? '🚫' : destaque ? '⭐' : '✅'
+              return {
+                title: title || `Plano #${subtitle}`,
+                subtitle: `Código: ${subtitle} ${status}`,
+              }
+            },
+          },
+        },
+      ],
+      description: 'Configure quais planos da API devem ser exibidos e como devem aparecer',
+    }),
+    defineField({
       name: 'planos',
-      title: 'Planos da Unidade',
+      title: 'Planos Estáticos (Fallback)',
       type: 'array',
       of: [
         {
@@ -257,7 +335,7 @@ export const unitSchema = defineType({
           },
         },
       ],
-      description: 'Planos específicos desta unidade (sobrescreve os planos globais)',
+      description: 'Planos estáticos usados quando a API não estiver disponível',
     }),
   ],
   preview: {

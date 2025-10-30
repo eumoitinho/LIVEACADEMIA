@@ -21,12 +21,20 @@ interface UnitPlanosProps {
   unidadeName: string
   onMatricular: (plano: { name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }) => void
   fallbackPlanos?: Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }>
+  planosPermitidos?: Array<{
+    codigo: number
+    nome?: string
+    exibir?: boolean
+    ordem?: number
+    destaque?: boolean
+    badge?: string
+  }>
 }
 
-export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPlanos }: UnitPlanosProps) {
+export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPlanos, planosPermitidos }: UnitPlanosProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }>>([])
+  const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]; destaque?: boolean; badge?: string }>>([])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -54,21 +62,59 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
         }
       }
       
-      // Usar todos os planos por enquanto para debug
       console.log(`[UnitPlanos] Total de planos recebidos:`, fetched.length)
-      console.log(`[UnitPlanos] Primeiros 3 planos:`, fetched.slice(0, 3).map(p => ({ nome: p.nome, codigo: p.codigo })))
-      
-      const mapped = fetched.map(p => ({
-        name: p.nome,
-        price: p.mensalidade ? p.mensalidade.toFixed(2) : (typeof p.valor === 'number' ? p.valor.toFixed(2) : p.valor),
-        codigo: p.codigo?.toString(),
-        adesao: p.adesao,
-        fidelidade: p.fidelidade,
-        regimeRecorrencia: p.regimeRecorrencia,
-        modalidades: p.modalidades || [],
-      }))
-      
-      console.log(`[UnitPlanos] Planos mapeados:`, mapped)
+      console.log(`[UnitPlanos] Filtros de planos do Sanity:`, planosPermitidos)
+
+      // Aplicar filtros do Sanity se existirem
+      let planosParaExibir = fetched
+
+      if (planosPermitidos && planosPermitidos.length > 0) {
+        // Filtrar apenas os planos permitidos que devem ser exibidos
+        const filtrosAtivos = planosPermitidos.filter(filtro => filtro.exibir !== false)
+        const codigosPermitidos = filtrosAtivos.map(filtro => filtro.codigo)
+
+        planosParaExibir = fetched.filter(plano =>
+          codigosPermitidos.includes(plano.codigo || 0)
+        )
+
+        console.log(`[UnitPlanos] Planos filtrados:`, planosParaExibir.length, 'de', fetched.length)
+        console.log(`[UnitPlanos] Códigos permitidos:`, codigosPermitidos)
+
+        // Ordenar os planos de acordo com a ordem definida no Sanity
+        planosParaExibir.sort((a, b) => {
+          const filtroA = filtrosAtivos.find(f => f.codigo === a.codigo)
+          const filtroB = filtrosAtivos.find(f => f.codigo === b.codigo)
+          const ordemA = filtroA?.ordem || 999
+          const ordemB = filtroB?.ordem || 999
+          return ordemA - ordemB
+        })
+      } else {
+        // Se não há filtros, filtrar apenas planos com preço válido
+        planosParaExibir = fetched.filter(plano =>
+          plano.mensalidade && plano.mensalidade > 0
+        )
+        console.log(`[UnitPlanos] Sem filtros do Sanity, exibindo planos com preço válido:`, planosParaExibir.length)
+      }
+
+      const mapped = planosParaExibir.map(p => {
+        // Buscar configurações personalizadas do Sanity
+        const filtroSanity = planosPermitidos?.find(filtro => filtro.codigo === p.codigo)
+
+        return {
+          name: p.nome,
+          price: p.mensalidade ? p.mensalidade.toFixed(2) : (typeof p.valor === 'number' ? p.valor.toFixed(2) : p.valor),
+          codigo: p.codigo?.toString(),
+          adesao: p.adesao,
+          fidelidade: p.fidelidade,
+          regimeRecorrencia: p.regimeRecorrencia,
+          modalidades: p.modalidades || [],
+          // Propriedades do Sanity
+          destaque: filtroSanity?.destaque || false,
+          badge: filtroSanity?.badge || undefined,
+        }
+      })
+
+      console.log(`[UnitPlanos] Planos finais para exibição:`, mapped)
       setPlanos(mapped)
       
       if (json.source === 'static') {
@@ -87,7 +133,7 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
     } finally {
       setLoading(false)
     }
-  }, [slug, fallbackPlanos])
+  }, [slug, fallbackPlanos, planosPermitidos])
 
   useEffect(() => { load() }, [load])
 

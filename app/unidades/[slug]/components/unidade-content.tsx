@@ -27,6 +27,14 @@ interface UnidadeContentProps {
       name: string
       price: string
     }>
+    planosPermitidos?: Array<{
+      codigo: number
+      nome?: string
+      exibir?: boolean
+      ordem?: number
+      destaque?: boolean
+      badge?: string
+    }>
     hotsite?: string
     mapLink?: string
   }
@@ -211,6 +219,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                   slug={unidade.id}
                   unidadeName={unidade.name}
                   fallbackPlanos={unidade.planos}
+                  planosPermitidos={unidade.planosPermitidos}
                   onMatricular={handleMatricular}
                 />
               </motion.div>

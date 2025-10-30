@@ -308,6 +308,7 @@ export default async function UnidadePage(props: PageProps) {
     images: sanityUnit.images?.map((img: any) => img.asset?.url).filter(Boolean) || [],
     description: sanityUnit.description,
     planos: sanityUnit.planos || [],
+    planosPermitidos: sanityUnit.planosPermitidos || [],
     mapLink: unidadeMapInfo?.mapLink || staticUnidade?.mapLink || ''
   } : staticUnidade ? {
     ...staticUnidade,
