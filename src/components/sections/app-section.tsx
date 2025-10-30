@@ -4,35 +4,37 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Smartphone, Activity, Calendar, BarChart3, Bell, Users, CheckCircle, Star, Zap } from "lucide-react"
-
-const appScreens = [
-  {
-    id: 1,
-    image: "/images/app.jpeg",
-    title: "",
-    description: ""
-  }
-]
-
-const features = [
-  { icon: Activity, title: "Treinos Personalizados", description: "Exercícios adaptados ao seu objetivo" },
-  { icon: Calendar, title: "Agende Aulas", description: "Reserve seu lugar nas aulas coletivas" },
-  { icon: BarChart3, title: "Acompanhe Evolução", description: "Gráficos detalhados do seu progresso" },
-  { icon: Bell, title: "Notificações", description: "Lembretes de treino e aulas" },
-  { icon: Users, title: "Comunidade", description: "Conecte-se com outros alunos" },
-  { icon: Smartphone, title: "Check-in Digital", description: "Entre na academia com o celular" },
-]
-
-const beneficios = [
-  "Visualize seus treinos, com vídeos explicativos sobre a execução correta dos exercícios",
-  "Consulte o vencimento do seu plano",
-  "Renove seu plano diretamente pelo app",
-  "Confira a grade de aulas coletivas, por unidade",
-  "Receba notificações e comunicados importantes sobre a sua unidade (função disponível somente no App Treino)"
-]
+import { useAppSectionData } from "../../../hooks/use-sanity-data"
+import { urlFor } from "../../../lib/sanity"
 
 export default function AppSection() {
   const [currentScreen, setCurrentScreen] = useState(0)
+  const { data: appData, loading } = useAppSectionData()
+
+  if (loading) {
+    return (
+      <section className="relative py-20 px-6 lg:px-12 overflow-hidden" id="app">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white text-lg">Carregando aplicativo...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (!appData) {
+    return null
+  }
+
+  // Create screen data from Sanity
+  const appScreens = [
+    {
+      id: 1,
+      image: appData.appImage ? urlFor(appData.appImage).width(300).height(600).url() : "/images/app.jpeg",
+      title: appData.title || "",
+      description: appData.description || ""
+    }
+  ]
 
   return (
     <section className="relative py-20 px-6 lg:px-12 overflow-hidden" id="app">
@@ -48,16 +50,18 @@ export default function AppSection() {
             viewport={{ once: true }}
             className="order-2 lg:order-1"
           >
-            {/* <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6 bg-gradient-to-r from-yellow-500/10 to-amber-500/10"
-            >
-              <Zap className="w-4 h-4 text-yellow-400 mr-2" />
-              <span className="text-yellow-300 text-sm font-medium">Tecnologia e fitness</span>
-            </motion.div> */}
+            {appData.badge && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="inline-flex items-center rounded-full border border-zinc-800 px-4 py-2 mb-6 bg-gradient-to-r from-yellow-500/10 to-amber-500/10"
+              >
+                <Zap className="w-4 h-4 text-yellow-400 mr-2" />
+                <span className="text-yellow-300 text-sm font-medium">{appData.badge}</span>
+              </motion.div>
+            )}
 
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -66,8 +70,11 @@ export default function AppSection() {
               viewport={{ once: true }}
               className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight"
             >
-              Seu treino na
-              <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-pulse"> palma da mão</span>
+              {appData.title.split(appData.highlightedText)[0]}
+              <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-pulse">
+                {appData.highlightedText}
+              </span>
+              {appData.title.split(appData.highlightedText)[1]}
             </motion.h2>
 
             <motion.p
@@ -77,22 +84,25 @@ export default function AppSection() {
               viewport={{ once: true }}
               className="text-zinc-400 text-lg mb-8 leading-relaxed"
             >
-              A Live Academia conta com dois aplicativos exclusivos (App Live e App Treino) para facilitar sua jornada fitness e melhorar sua experiência de treino – dentro e fora da academia!
+              {appData.description}
             </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              viewport={{ once: true }}
-              className="text-zinc-500 text-sm mb-8 italic"
-            >
-              Disponíveis para Google Play e App Store.
-            </motion.p>
+            {appData.subtitle && (
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                viewport={{ once: true }}
+                className="text-zinc-500 text-sm mb-8 italic"
+              >
+                {appData.subtitle}
+              </motion.p>
+            )}
 
             {/* Benefícios */}
-            <div className="space-y-4 mb-10">
-              {beneficios.map((beneficio, index) => (
+            {appData.benefits && appData.benefits.length > 0 && (
+              <div className="space-y-4 mb-10">
+                {appData.benefits.map((beneficio: string, index: number) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
@@ -110,8 +120,9 @@ export default function AppSection() {
                   </motion.div>
                   <span className="text-zinc-300 text-sm group-hover:text-white transition-colors duration-300">{beneficio}</span>
                 </motion.div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             
 
@@ -123,39 +134,43 @@ export default function AppSection() {
               viewport={{ once: true }}
               className="flex flex-wrap gap-4"
             >
-              <motion.a
-                href="https://apps.apple.com/br/app/live-academia/id6745790187"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-8 py-4 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-4"
-              >
-                <div className="w-10 h-10">
-                  <svg viewBox="0 0 24 24" className="w-full h-full fill-zinc-400 group-hover:fill-white transition-colors">
-                    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-                  </svg>
-                </div>
-                <div className="text-left">
-                  <div className="text-sm font-bold text-white">App Live</div>
-                  <div className="text-xs text-zinc-400">Baixar na App Store</div>
-                </div>
-              </motion.a>
+              {appData.appLiveUrl && (
+                <motion.a
+                  href={appData.appLiveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-8 py-4 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-4"
+                >
+                  <div className="w-10 h-10">
+                    <svg viewBox="0 0 24 24" className="w-full h-full fill-zinc-400 group-hover:fill-white transition-colors">
+                      <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                    </svg>
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-bold text-white">App Live</div>
+                    <div className="text-xs text-zinc-400">Baixar na App Store</div>
+                  </div>
+                </motion.a>
+              )}
 
-              <motion.a
-                href="https://apps.apple.com/br/app/treino/id862662527"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-8 py-4 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-4"
-              >
-                <div className="w-10 h-10">
-                  <svg viewBox="0 0 24 24" className="w-full h-full fill-zinc-400 group-hover:fill-white transition-colors">
-                    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-                  </svg>
-                </div>
-                <div className="text-left">
-                  <div className="text-sm font-bold text-white">App Treino</div>
-                  <div className="text-xs text-zinc-400">Baixar na App Store</div>
-                </div>
-              </motion.a>
+              {appData.appTreinoUrl && (
+                <motion.a
+                  href={appData.appTreinoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-8 py-4 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-4"
+                >
+                  <div className="w-10 h-10">
+                    <svg viewBox="0 0 24 24" className="w-full h-full fill-zinc-400 group-hover:fill-white transition-colors">
+                      <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                    </svg>
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-bold text-white">App Treino</div>
+                    <div className="text-xs text-zinc-400">Baixar na App Store</div>
+                  </div>
+                </motion.a>
+              )}
             </motion.div>
           </motion.div>
 

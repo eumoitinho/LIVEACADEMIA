@@ -7,11 +7,12 @@ import Link from "next/link"
 import { locations } from '@/src/lib/config/locations'
 import { UnidadeCard } from '@/src/components/unidade-card'
 import { UnidadeCardModern } from '@/src/components/unidade-card-modern'
-import { useUnitsData } from '../../hooks/use-sanity-data'
+import { useUnitsData, useUnidadesPageData } from '../../hooks/use-sanity-data'
 import type { Unit } from '../../types/sanity'
 
 export default function Unidades() {
   const { data: sanityUnits, loading: loadingSanity } = useUnitsData()
+  const { data: pageData, loading: pageLoading } = useUnidadesPageData()
   const [filterType, setFilterType] = useState("todos")
   const [searchQuery, setSearchQuery] = useState("")
   const [radiusFilter, setRadiusFilter] = useState<number | null>(null)
@@ -139,11 +140,11 @@ export default function Unidades() {
             className="text-center mb-16"
           >
             <h1 className="mb-6">
-              Encontre a Live mais perto de você
+              {pageData?.header?.title || 'Encontre a Live mais perto de você'}
             </h1>
 
             <p className="section-description max-w-3xl mx-auto">
-              Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.
+              {pageData?.header?.description || 'Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.'}
             </p>
           </motion.div>
 
@@ -160,7 +161,7 @@ export default function Unidades() {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
                 <input
                   type="text"
-                  placeholder="Buscar por nome ou endereço..."
+                  placeholder={pageData?.filters?.searchPlaceholder || "Buscar por nome ou endereço..."}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:border-white/20 transition-colors backdrop-blur-xl"
@@ -169,13 +170,13 @@ export default function Unidades() {
 
               {/* Type Filters */}
               <div className="flex flex-wrap gap-3">
-                {[
+                {(pageData?.filters?.typeFilterOptions || [
                   { value: 'todos', label: 'Todas as unidades' },
                   { value: 'diamante', label: 'Diamante' },
                   { value: 'premium', label: 'Premium' },
                   { value: 'tradicional', label: 'Tradicional' },
                   { value: 'inauguracao', label: 'Em breve' },
-                ].map((filter) => (
+                ]).map((filter: any) => (
                   <button
                     key={filter.value}
                     onClick={() => setFilterType(filter.value)}
@@ -203,7 +204,7 @@ export default function Unidades() {
                     }`}
                   >
                     <Navigation className={`w-4 h-4 ${loadingLocation ? 'animate-spin' : ''}`} />
-                    {loadingLocation ? 'Localizando...' : userLocation ? 'Localização ativa' : 'Usar minha localização'}
+                    {loadingLocation ? 'Localizando...' : userLocation ? 'Localização ativa' : (pageData?.filters?.locationFilterText || 'Usar minha localização')}
                   </button>
                   {userLocation && radiusFilter && (
                     <button
@@ -226,7 +227,7 @@ export default function Unidades() {
                     className="flex items-center gap-2 flex-wrap"
                   >
                     <span className="text-sm text-white/60">Raio:</span>
-                    {[2, 5, 10, 15].map((radius) => (
+                    {(pageData?.filters?.radiusOptions || [2, 5, 10, 15]).map((radius: number) => (
                       <button
                         key={radius}
                         onClick={() => setRadiusFilter(radius)}
@@ -296,10 +297,10 @@ export default function Unidades() {
                 {filteredLocations.length === 0 ? (
                   <div className="text-center py-20">
                     <h3 className="text-2xl font-bold text-neutral-100 mb-2 font-geist">
-                      Nenhuma unidade encontrada
+                      {pageData?.emptyState?.title || 'Nenhuma unidade encontrada'}
                     </h3>
                     <p className="text-neutral-400 mb-6 font-geist">
-                      Tente ajustar os filtros ou fazer uma nova busca
+                      {pageData?.emptyState?.description || 'Tente ajustar os filtros ou fazer uma nova busca'}
                     </p>
                     <button
                       onClick={() => {
@@ -310,11 +311,11 @@ export default function Unidades() {
                       }}
                       className="inline-flex items-center gap-2 text-sm text-neutral-200 bg-white/5 hover:bg-white/10 rounded-full px-4 py-2 border border-white/10 font-geist transition-colors"
                     >
-                      <span>Ver todas as unidades</span>
+                      <span>{pageData?.emptyState?.buttonText || 'Ver todas as unidades'}</span>
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  <div className={`grid grid-cols-1 ${pageData?.displaySettings?.gridColumns || 'md:grid-cols-3'} gap-5`}>
                     {filteredLocations.map((location: any, index: number) => (
                       <motion.div
                         key={location.id}
@@ -332,39 +333,41 @@ export default function Unidades() {
           </section>
 
           {/* CTA Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-20 text-center"
-          >
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-12">
-              <div className="relative z-10">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                  Pronto para começar sua transformação?
-                </h2>
-                <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">
-                  Escolha uma unidade, conheça nossos planos e dê o primeiro passo rumo ao seu melhor.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link
-                    href="/planos"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-black font-bold hover:scale-105 transition-all"
-                  >
-                    Ver planos e preços
-                  </Link>
-                  <a
-                    href="https://wa.me/5592999999999"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all"
-                  >
-                    Falar com consultor
-                  </a>
+          {pageData?.displaySettings?.showCta !== false && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-20 text-center"
+            >
+              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-12">
+                <div className="relative z-10">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                    {pageData?.cta?.title || 'Pronto para começar sua transformação?'}
+                  </h2>
+                  <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">
+                    {pageData?.cta?.description || 'Escolha uma unidade, conheça nossos planos e dê o primeiro passo rumo ao seu melhor.'}
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Link
+                      href={pageData?.cta?.primaryButton?.url || "/planos"}
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-black font-bold hover:scale-105 transition-all"
+                    >
+                      {pageData?.cta?.primaryButton?.text || 'Ver planos e preços'}
+                    </Link>
+                    <a
+                      href={pageData?.cta?.secondaryButton?.url || "https://wa.me/5592999999999"}
+                      target={pageData?.cta?.secondaryButton?.isExternal ? "_blank" : "_self"}
+                      rel={pageData?.cta?.secondaryButton?.isExternal ? "noopener noreferrer" : undefined}
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all"
+                    >
+                      {pageData?.cta?.secondaryButton?.text || 'Falar com consultor'}
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
         </div>
       </div>
     </main>

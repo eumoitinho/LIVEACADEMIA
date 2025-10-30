@@ -20,6 +20,17 @@ import { sobreNosSchema } from './sanity/schemas/sobre-nos'
 import { contatoSchema } from './sanity/schemas/contato'
 import { trabalheConoscoSchema } from './sanity/schemas/trabalhe-conosco'
 import { sobreSchema } from './sanity/schemas/sobre'
+import { globalSettingsSchema } from './sanity/schemas/global-settings'
+import { modalidadesSectionSchema } from './sanity/schemas/modalidades-section'
+import { wellhubSectionSchema } from './sanity/schemas/wellhub-section'
+import { testimonialSectionSchema } from './sanity/schemas/testimonial-section'
+import { estruturaSectionSchema } from './sanity/schemas/estrutura-section'
+import { bioimpedanciaSectionSchema } from './sanity/schemas/bioimpedancia-section'
+import { heroSectionSchema } from './sanity/schemas/hero-section'
+import { planosSectionSchema } from './sanity/schemas/planos-section'
+import { planosPageSchema } from './sanity/schemas/planos-page'
+import { unidadesPageSchema } from './sanity/schemas/unidades-page'
+import { navigationSchema } from './sanity/schemas/navigation'
 
 export default defineConfig({
   name: 'live-academia',
@@ -40,6 +51,14 @@ export default defineConfig({
         S.list()
           .title('Live Academia')
           .items([
+            S.listItem()
+              .title('Configurações Globais')
+              .child(
+                S.document()
+                  .schemaType('globalSettings')
+                  .documentId('globalSettings')
+              ),
+            S.divider(),
             S.listItem()
               .title('Homepage')
               .child(
@@ -126,6 +145,78 @@ export default defineConfig({
                   .schemaType('sobre')
                   .documentId('sobre')
               ),
+            S.divider(),
+            // Seções da Homepage
+            S.listItem()
+              .title('Seção Modalidades')
+              .child(
+                S.document()
+                  .schemaType('modalidadesSection')
+                  .documentId('modalidadesSection')
+              ),
+            S.listItem()
+              .title('Seção Wellhub')
+              .child(
+                S.document()
+                  .schemaType('wellhubSection')
+                  .documentId('wellhubSection')
+              ),
+            S.listItem()
+              .title('Seção Depoimentos')
+              .child(
+                S.document()
+                  .schemaType('testimonialSection')
+                  .documentId('testimonialSection')
+              ),
+            S.listItem()
+              .title('Seção Estrutura')
+              .child(
+                S.document()
+                  .schemaType('estruturaSection')
+                  .documentId('estruturaSection')
+              ),
+            S.listItem()
+              .title('Seção Bioimpedância')
+              .child(
+                S.document()
+                  .schemaType('bioimpedanciaSection')
+                  .documentId('bioimpedanciaSection')
+              ),
+            S.listItem()
+              .title('Seção Hero')
+              .child(
+                S.document()
+                  .schemaType('heroSection')
+                  .documentId('heroSection')
+              ),
+            S.listItem()
+              .title('Seção Planos')
+              .child(
+                S.document()
+                  .schemaType('planosSection')
+                  .documentId('planosSection')
+              ),
+            S.listItem()
+              .title('Página de Planos')
+              .child(
+                S.document()
+                  .schemaType('planosPage')
+                  .documentId('planosPage')
+              ),
+            S.listItem()
+              .title('Página de Unidades')
+              .child(
+                S.document()
+                  .schemaType('unidadesPage')
+                  .documentId('unidadesPage')
+              ),
+            S.listItem()
+              .title('Navegação do Site')
+              .child(
+                S.document()
+                  .schemaType('navigation')
+                  .documentId('navigation')
+              ),
           ])
     }),
     visionTool()
@@ -133,6 +224,7 @@ export default defineConfig({
   
   schema: {
     types: [
+      globalSettingsSchema,
       homepageSchema,
       unitSchema,
       planoSchema,
@@ -150,6 +242,16 @@ export default defineConfig({
       contatoSchema,
       trabalheConoscoSchema,
       sobreSchema,
+      modalidadesSectionSchema,
+      wellhubSectionSchema,
+      testimonialSectionSchema,
+      estruturaSectionSchema,
+      bioimpedanciaSectionSchema,
+      heroSectionSchema,
+      planosSectionSchema,
+      planosPageSchema,
+      unidadesPageSchema,
+      navigationSchema,
     ],
   },
 })

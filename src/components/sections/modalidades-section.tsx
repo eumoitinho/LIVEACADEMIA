@@ -1,39 +1,38 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowRight, Music, Bike, Heart } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-
-const modalidadesHome = [
-  {
-    subtitle: "Ritmo e movimento",
-    title: "Fitdance",
-    description: "Ritmo e movimento para queimar calorias e liberar o estresse.",
-    image: "/images/academia-1.webp",
-    style: "col-span-12 sm:col-span-4"
-  },
-  {
-    subtitle: "Simule rotas e percursos",
-    title: "Top Ride",
-    description: "Simule rotas, percursos e pistas de treino com técnicas de ciclismo.",
-    image: "/images/academia-2.webp",
-    style: "col-span-12 sm:col-span-4"
-  },
-  {
-    subtitle: "Fortaleça seu corpo",
-    title: "Pilates Solo",
-    description: "Fortaleça seu corpo, melhore a postura e aumente a flexibilidade.",
-    image: "/images/academia-3.webp",
-    style: "col-span-12 sm:col-span-4"
-  }
-]
+import { useModalidadesSection } from "../../hooks/use-homepage-sections"
 
 export default function ModalidadesSection() {
+  const { data: sectionData, loading } = useModalidadesSection()
+
+  if (loading) {
+    return (
+      <section id="servicos" className="py-20 relative overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="animate-pulse text-center">
+            <div className="h-8 bg-zinc-800 rounded w-96 mx-auto mb-4"></div>
+            <div className="h-4 bg-zinc-800 rounded w-64 mx-auto"></div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  const { header, featuredModalities, cta, displaySettings } = sectionData
+
+  if (!displaySettings?.showOnHomepage) {
+    return null
+  }
+
   return (
-    <section id="servicos" className="py-20 relative overflow-hidden">
-      {/* Background transparente para usar o background fixo do layout */}
-      
+    <section
+      id="servicos"
+      className={`py-20 relative overflow-hidden ${displaySettings?.backgroundColor || ''}`}
+    >
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -42,26 +41,24 @@ export default function ModalidadesSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          
-          
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Energia e motivação em grupo para você ir além
+            {header.title}
           </h2>
           <p className="text-zinc-300 text-lg max-w-4xl mx-auto">
-            As aulas coletivas da Live Academia são a maneira perfeita de se exercitar, se divertir e fazer novas amizades! Com a energia contagiante do grupo, você se mantém motivado e alcança seus objetivos de forma mais prazerosa.
+            {header.description}
           </p>
         </motion.div>
 
         {/* Grid estilo NextUI/HeroUI */}
         <div className="max-w-[1200px] gap-4 grid grid-cols-12 mx-auto mb-12">
-          {modalidadesHome.map((modalidade, index) => (
+          {featuredModalities.map((modalidade: any, index: number) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className={`${modalidade.style} h-[350px] group`}
+              className="col-span-12 sm:col-span-4 h-[350px] group"
             >
               <div className="relative h-full overflow-hidden rounded-3xl border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500 hover:transform hover:scale-[1.02] hover:-translate-y-1">
                 {/* Header com informações */}
@@ -75,14 +72,18 @@ export default function ModalidadesSection() {
                 </div>
 
                 {/* Imagem de fundo */}
-                <Image
-                  src={modalidade.image}
-                  alt={modalidade.title}
-                  fill
-                  className="z-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  quality={90}
-                />
-                
+                {modalidade.image?.asset?.url ? (
+                  <Image
+                    src={modalidade.image.asset.url}
+                    alt={modalidade.image.alt || modalidade.title}
+                    fill
+                    className="z-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    quality={90}
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-zinc-700 to-zinc-900 z-0" />
+                )}
+
                 {/* Gradiente overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/20 z-[1]" />
 
@@ -106,10 +107,10 @@ export default function ModalidadesSection() {
           className="text-center"
         >
           <Link
-            href="/aulas-coletivas"
+            href={cta.url}
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition-colors duration-200 group"
           >
-            <span>VEJA TODAS AS MODALIDADES</span>
+            <span>{cta.text}</span>
             <ArrowRight className="h-5 w-5" />
           </Link>
         </motion.div>

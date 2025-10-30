@@ -3,72 +3,54 @@
 import { Check, Star, Crown, Sparkles, Clock, ArrowUpRight, Zap, MessagesSquare } from "lucide-react"
 import { motion } from "framer-motion"
 import Image from "next/image"
-
-const planos = [
-  {
-    nome: "TRADICIONAL",
-    preco: "119,90",
-    periodo: "mês",
-    descricao: "Treine em todas as unidades Tradicionais, incluindo as Tradicionais Climatizadas.",
-    beneficios: [
-      "Sem fidelidade",
-      "Sem taxa de cancelamento",
-      "Sem taxa de manutenção",
-      "Sem taxa de anuidade",
-      "Acesso ao app Live Academia",
-      "Aulas coletivas",
-      "Climatização (apenas unidades Torquato Bemol e Tiradentes)",
-      "Atendimento aos domingos (consultar unidade)"
-    ],
-    gradient: "from-zinc-700 to-zinc-900",
-    icone: Check,
-    popular: false,
-    numero: "01",
-    setup: "Setup em 24 horas",
-    dots: [true, true, false],
-    image: "/images/academia-1.webp"
-  },
-  {
-    nome: "DIAMANTE",
-    preco: "159,90",
-    periodo: "mês",
-    descricao: "Treine em todas as unidades da rede em Manaus, exceto Morada do Sol e Alphaville.",
-    beneficios: [
-      "Sem fidelidade",
-      "Sem taxa de cancelamento",
-      "Sem taxa de manutenção",
-      "Sem taxa de anuidade",
-      "Acesso ao app Live Academia",
-      "Espaço Relax",
-      "Espaço Yoga",
-      "Espaço Pose",
-      "Acesso ao Studio de Bike",
-      "Aulas coletivas",
-      "Climatização",
-      "Atendimento aos domingos"
-    ],
-    gradient: "from-amber-500 to-yellow-600",
-    icone: Crown,
-    popular: true,
-    destaque: true,
-    badge: "O mais vendido",
-    numero: "02",
-    setup: "Setup em 12 horas",
-    dots: [true, true, true],
-    image: "/images/academia-3.webp"
-  }
-]
+import { usePlanosSectionData } from "../../../hooks/use-sanity-data"
 
 export default function PlanosSection() {
+  const { data: sectionData, loading } = usePlanosSectionData()
   const easing = [0.16, 1, 0.3, 1] as const
+
+  if (loading) {
+    return (
+      <section className="relative py-24 px-6 lg:px-12 overflow-hidden bg-black" id="planos">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white text-lg">Carregando planos...</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (!sectionData?.displaySettings?.showOnHomepage) {
+    return null
+  }
+
+  const { header, featuredPlans, footnote, displaySettings } = sectionData
+
+  // Filtra e ordena os planos ativos
+  const activePlans = featuredPlans
+    ?.filter((plano: any) => plano.active)
+    ?.sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
+    ?.slice(0, displaySettings?.maxPlansToShow || 2) || []
+
+  // Função para gerar dots baseado na ordem
+  const generateDots = (planIndex: number, totalPlans: number) => {
+    const dots = Array(3).fill(false)
+    const filledDots = Math.min(planIndex + 1, 3)
+    for (let i = 0; i < filledDots; i++) {
+      dots[i] = true
+    }
+    return dots
+  }
 
   return (
     <section className="relative py-24 px-6 lg:px-12 overflow-hidden bg-black" id="planos">
       {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
-      </div>
+      {displaySettings?.showBackgroundEffects && (
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
@@ -78,17 +60,23 @@ export default function PlanosSection() {
           viewport={{ once: true, amount: 0.3 }}
           className="text-center mb-20"
         >
-          
+
           <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight tracking-tight">
-            Conheça nossos <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">planos</span>
+            {header?.title?.split(header.highlightWord)[0]}
+            <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">
+              {header?.highlightWord}
+            </span>
+            {header?.title?.split(header.highlightWord)[1]}
           </h2>
           <p className="text-lg text-zinc-400 max-w-3xl mx-auto">
-            Escolha o plano que cresce com você e se adapta às suas necessidades de treino.
+            {header?.description}
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {planos.map((plano, idx) => (
+          {activePlans.map((plano: any, idx: number) => {
+            const dots = generateDots(idx, activePlans.length)
+            return (
             <motion.article
               key={plano.nome}
               initial={{ opacity: 0, y: 32 }}
@@ -118,7 +106,7 @@ export default function PlanosSection() {
                     {plano.numero}
                   </span>
                   <div className="flex items-center gap-1">
-                    {plano.dots.map((dot, i) => (
+                    {dots.map((dot: boolean, i: number) => (
                       <span
                         key={i}
                         className={`h-1.5 w-1.5 rounded-full ${plano.destaque
@@ -151,7 +139,7 @@ export default function PlanosSection() {
                   ? 'bg-white/90 text-zinc-900 hover:bg-white'
                   : 'bg-white/90 text-zinc-900 hover:bg-white'
                 }`}>
-                Matricule-se
+                {plano.ctaText}
                 {plano.destaque ? <Zap className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
               </button>
 
@@ -159,7 +147,7 @@ export default function PlanosSection() {
               <div>
                 <p className="text-xs text-zinc-400 mb-3">Tudo que você precisa:</p>
                 <ul className="space-y-3">
-                  {plano.beneficios.slice(0, 3).map((beneficio, i) => (
+                  {plano.beneficios.slice(0, 3).map((beneficio: string, i: number) => (
                     <li key={i} className="flex items-start gap-3">
                       <span className={`mt-0.5 h-5 w-5 rounded-full flex items-center justify-center backdrop-blur ${plano.destaque ? 'bg-zinc-900/70 border border-yellow-500/20' : 'bg-zinc-900/70 border border-white/10'
                         }`}>
@@ -180,24 +168,27 @@ export default function PlanosSection() {
                 </ul>
               </div>
             </motion.article>
-          ))}
+            )
+          })}
         </div>
 
         {/* Footnote */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: easing }}
-          viewport={{ once: true }}
-          className="flex flex-col text-center mt-12 items-center"
-        >
-          <p className="text-xs text-zinc-500">
-            Os preços, serviços e condições promocionais podem variar de acordo com a unidade escolhida.
-            <a href="#" className="underline decoration-zinc-700 underline-offset-4 text-zinc-300 hover:text-white ml-1">
-              Ver comparação detalhada
-            </a>.
-          </p>
-        </motion.div>
+        {displaySettings?.showFootnote && footnote && (
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: easing }}
+            viewport={{ once: true }}
+            className="flex flex-col text-center mt-12 items-center"
+          >
+            <p className="text-xs text-zinc-500">
+              {footnote.text}
+              <a href={footnote.linkUrl} className="underline decoration-zinc-700 underline-offset-4 text-zinc-300 hover:text-white ml-1">
+                {footnote.linkText}
+              </a>.
+            </p>
+          </motion.div>
+        )}
       </div>
     </section>
   )

@@ -90,10 +90,11 @@ export function UnidadeCard({ location }: UnidadeCardProps) {
         {/* Image */}
         <div className="relative h-64 overflow-hidden">
           {location.photo ? (
-            <img
+            <Image
               src={location.photo}
               alt={`${location.name} - Live Academia`}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-white/5 to-black/20" />

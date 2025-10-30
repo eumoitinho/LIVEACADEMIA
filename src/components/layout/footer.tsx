@@ -4,8 +4,26 @@ import Link from "next/link"
 import { Instagram, Facebook, Youtube, MapPin, Phone, Mail, BadgeCheck, Check, Send, Github, Twitter, Linkedin } from "lucide-react"
 import LiveLogo from "@/components/shared/live-logo"
 import ScrollToTopButton from '@/components/layout/scroll-to-top-button'
+import { useNavigationData } from "@/hooks/use-sanity-data"
 
 export default function Footer() {
+  const { data: navigationData, loading } = useNavigationData()
+
+  const footerData = navigationData?.footer
+  const aboutSection = footerData?.about
+  const footerSections = footerData?.sections?.sort((a: any, b: any) => (a.order || 0) - (b.order || 0)) || []
+  const socialMedia = footerData?.socialMedia
+  const copyright = footerData?.copyright
+
+  // Icons mapping for social media
+  const socialIconMap: { [key: string]: any } = {
+    instagram: Instagram,
+    facebook: Facebook,
+    youtube: Youtube,
+    twitter: Twitter,
+    linkedin: Linkedin,
+  }
+
   return (
     <footer className="w-full sm:px-6 md:px-10 max-w-7xl mr-auto ml-auto pt-12 pr-4 pb-10 pl-4">
       <div className="relative overflow-hidden bg-neutral-900 rounded-3xl">
@@ -14,9 +32,9 @@ export default function Footer() {
             <div className="lg:col-span-4">
               <div className="flex items-center gap-2 mb-4">
                 <BadgeCheck className="w-5 h-5 text-yellow-400" />
-                <h3 className="text-2xl font-semibold text-white tracking-tight">Live Academia</h3>
+                <h3 className="text-2xl font-semibold text-white tracking-tight">{aboutSection?.title || 'Live Academia'}</h3>
               </div>
-              <p className="text-white/70 max-w-3xl">Transforme seu corpo e sua vida na maior rede de academias de Manaus. Conte conosco para sua jornada fitness.</p>
+              <p className="text-white/70 max-w-3xl">{aboutSection?.description || 'Transforme seu corpo e sua vida na maior rede de academias de Manaus. Conte conosco para sua jornada fitness.'}</p>
 
               <div id="contact" className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6 md:p-8">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

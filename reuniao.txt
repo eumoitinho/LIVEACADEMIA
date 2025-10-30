@@ -1,0 +1,29 @@
+Gabriel Resende Spirlandelli
+17:27
+site
+Gabriel Resende Spirlandelli
+17:29
+filters={"site":true}
+Gabriel Resende Spirlandelli
+17:34
+sort: atributo,asc
+desc
+descontoAntecipado
+aceitaDescontoExtra
+Gabriel Resende Spirlandelli
+17:35
+condicoesPagamento.percentualDesconto
+Gabriel Resende Spirlandelli
+17:39
+/v1/configuracao/cliente
+GET
+Gabriel Resende Spirlandelli
+17:45
+/negociacao/gravarContrato
+Felipe Heinrich Alves de Morais
+17:47
+c5cb2eb02760ea005248d846cf32758df01af90358b9b597a3e561e3206ae669a9d561bd78
+Gabriel Resende Spirlandelli
+17:53
+modeloContrato
+termoAceite

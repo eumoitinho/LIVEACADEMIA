@@ -1,0 +1,621 @@
+# Documentação - Processo de Negociação e Venda de Planos
+
+## Sumário
+1. [Visão Geral](#visão-geral)
+2. [Fluxo Completo de Negociação](#fluxo-completo-de-negociação)
+3. [Endpoints da API](#endpoints-da-api)
+4. [Informações Necessárias para Negociação](#informações-necessárias-para-negociação)
+5. [Estrutura de Dados](#estrutura-de-dados)
+6. [Exemplos de Uso](#exemplos-de-uso)
+
+---
+
+## Visão Geral
+
+O processo de negociação e venda de planos é composto por várias etapas que envolvem consultas à API para obter informações necessárias e, ao final, a finalização da negociação com geração de link de pagamento.
+
+### Pré-requisitos
+- **Token de API**: Token de autenticação gerado no módulo administrativo
+- **Empresa ID**: Código identificador da empresa no sistema
+- **Credenciais Completas** (para finalização): Username, senha e chave da empresa
+
+---
+
+## Fluxo Completo de Negociação
+
+```
+1. Buscar Cliente
+   ↓
+2. Checar Dados Iniciais da Negociação
+   ↓
+3. Consultar Planos Disponíveis (opcional)
+   ↓
+4. Consultar Dados do Plano Escolhido
+   ↓
+5. Consultar Produtos Disponíveis (opcional)
+   ↓
+6. Consultar Usuário Responsável
+   ↓
+7. Simular Plano
+   ↓
+8. Finalizar Negociação
+```
+
+---
+
+## Endpoints da API
+
+### 1. Consultar Clientes para Negociação
+
+**Endpoint**: `GET {API_GATEWAY_URL}/negociacao/cliente`
+
+**Descrição**: Busca clientes disponíveis para negociação de planos pelo nome ou parte do nome.
+
+**Headers**:
+```json
+{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer {token}"
+}
+```
+
+**Query Parameters**:
+- `nome` (string, obrigatório): Nome ou parte do nome do cliente
+
+**Resposta**:
+```json
+{
+  "content": [
+    {
+      "codigo": 123,
+      "nome": "João da Silva",
+      "empresa": 1,
+      "situacao": "ATIVO",
+      "matricula": "MAT001"
+    }
+  ]
+}
+```
+
+---
+
+### 2. Checar Dados para Início da Negociação
+
+**Endpoint**: `GET {API_GATEWAY_URL}/negociacao/check/{cliente}/{contratoForcar}`
+
+**Descrição**: Verifica dados iniciais do cliente para negociação, incluindo plano sugerido, parcelas em aberto e permissões.
+
+**Headers**:
+```json
+{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer {token}",
+  "empresaId": "{empresaId}"
+}
+```
+
+**Path Parameters**:
+- `cliente` (number, obrigatório): Código do cliente
+- `contratoForcar` (number, opcional): Código do contrato a forçar (padrão: 0)
+
+**Query Parameters**:
+- `verificarEmpresaEContratoResponsavelRematricula` (boolean, opcional): Verificar empresa e contrato responsável (padrão: true)
+
+**Resposta**:
+```json
+{
+  "content": {
+    "planoSugerido": 10,
+    "valorParcelasAberto": 150.00,
+    "permiteContratoConcomitante": true,
+    "nivelAluno": 1,
+    "usaProdutos": true,
+    "usaDesconto": true,
+    "codigoContratoRenovacao": 456,
+    "finalContratoAtivo": 1735689600000
+  }
+}
+```
+
+**Informações Importantes**:
+- `planoSugerido`: Código do plano recomendado para o cliente
+- `valorParcelasAberto`: Valor de parcelas em aberto (deve ser informado ao usuário)
+- `permiteContratoConcomitante`: Se permite contratos simultâneos
+- `usaProdutos`: Se a empresa utiliza produtos na negociação
+- `usaDesconto`: Se permite aplicar descontos
+
+---
+
+### 3. Consultar Planos Vigentes para Negociação
+
+**Endpoint**: `GET {API_GATEWAY_URL}/negociacao/planos/{codigoCliente}`
+
+**Descrição**: Retorna os planos disponíveis para negociação com um cliente específico.
+
+**Headers**:
+```json
+{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer {token}",
+  "EmpresaId": "{empresaId}"
+}
+```
+
+**Path Parameters**:
+- `codigoCliente` (number, obrigatório): Código do cliente
+
+**Query Parameters**:
+- `contrato` (number, opcional): Código do contrato
+- `incluirBolsa` (boolean, opcional): Incluir planos de bolsa (padrão: true)
+- `planoForcar` (number, opcional): Código do plano a forçar (padrão: 0)
+
+**Resposta**:
+```json
+{
+  "content": [
+    {
+      "codigo": 10,
+      "descricao": "Plano Mensal Premium",
+      "quantidadeCompartilhamentos": 0,
+      "restringeVendaPorCategoria": false,
+      "categorias": [],
+      "bloquearRecompra": false,
+      "permitirTransferenciaDeCredito": true
+    }
+  ]
+}
+```
+
+---
+
+### 4. Consultar Dados do Plano para Negociação
+
+**Endpoint**: `GET {API_GATEWAY_URL}/negociacao/plano/{plano}/{contratoBaseado}/{situacaoContrato}`
+
+**Descrição**: Consulta informações detalhadas de um plano específico para montar a negociação.
+
+**Headers**:
+```json
+{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer {token}",
+  "empresaId": "{empresaId}"
+}
+```
+
+**Path Parameters**:
+- `plano` (number, obrigatório): Código do plano
+- `contratoBaseado` (number, obrigatório): Código do contrato base
+- `situacaoContrato` (string, obrigatório): Situação do contrato (ex: "ATIVO", "INATIVO")
+
+**Resposta**:
+```json
+{
+  "content": {
+    "plano": 10,
+    "bolsa": false,
+    "recorrencia": true,
+    "duracoes": [
+      {
+        "codigo": 1,
+        "nrMeses": 12,
+        "descricao": "Anual",
+        "condicoes": [
+          {
+            "codigo": 1,
+            "nrParcelas": 12,
+            "descricao": "12x"
+          }
+        ]
+      }
+    ],
+    "horarios": [
+      {
+        "codigo": 1,
+        "descricao": "Manhã",
+        "livre": false
+      }
+    ],
+    "modalidades": [
+      {
+        "codigo": 5,
+        "descricao": "Musculação",
+        "nrvezes": 3,
+        "valorModalidade": 150.00,
+        "utilizarTurma": false,
+        "aulaColetivaFixa": false,
+        "configsVezes": [
+          {
+            "codigo": 1,
+            "vezes": 3,
+            "duracao": 1,
+            "horario": 1,
+            "valorModalidade": 150.00
+          }
+        ]
+      }
+    ],
+    "produtos": [],
+    "descontos": [
+      {
+        "codigo": 1,
+        "descricao": "Desconto Promocional",
+        "tipo": "PERCENTUAL",
+        "valor": 10.00
+      }
+    ]
+  }
+}
+```
+
+**Informações Importantes**:
+- `duracoes`: Durações disponíveis do plano (mensal, trimestral, anual, etc.)
+- `horarios`: Horários disponíveis para o plano
+- `modalidades`: Modalidades incluídas no plano (musculação, natação, etc.)
+- `produtos`: Produtos que podem ser adicionados
+- `descontos`: Descontos disponíveis
+
+---
+
+### 5. Consultar Produtos para Negociação
+
+**Endpoint**: `GET {API_GATEWAY_URL}/produtos`
+
+**Descrição**: Consulta produtos disponíveis para serem adicionados à negociação.
+
+**Headers**:
+```json
+{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer {token}",
+  "empresaId": "{empresaId}"
+}
+```
+
+**Resposta**:
+```json
+{
+  "content": [
+    {
+      "codigo": 1,
+      "descricao": "Camiseta Personalizada",
+      "valorFinal": 50.00,
+      "desativado": false,
+      "tipoProduto": "PRODUTO",
+      "tipoProdutoDescricao": "Produto Físico"
+    }
+  ]
+}
+```
+
+---
+
+### 6. Consultar Usuários
+
+**Endpoint**: `GET {API_GATEWAY_URL}/v1/usuario`
+
+**Descrição**: Busca usuários do sistema para definir responsável pela venda e autorização de descontos.
+
+**Headers**:
+```json
+{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer {token}"
+}
+```
+
+**Query Parameters**:
+- `nome` (string, obrigatório): Nome do usuário
+- `page` (number, opcional): Número da página (padrão: 0)
+- `size` (number, opcional): Quantidade de elementos (padrão: 10)
+
+**Resposta**:
+```json
+{
+  "content": [
+    {
+      "codigo": 5,
+      "nome": "Maria Vendedora"
+    }
+  ]
+}
+```
+
+---
+
+### 7. Simular Plano
+
+**Endpoint**: `POST {API_GATEWAY_URL}/negociacao/simular`
+
+**Descrição**: Realiza a simulação dos valores do plano com todas as configurações escolhidas.
+
+**Headers**:
+```json
+{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer {token}",
+  "empresaId": "{empresaId}"
+}
+```
+
+**Body** (ConfigsContratoDTO):
+```json
+{
+  "contratoBase": 0,
+  "plano": 10,
+  "empresa": 1,
+  "usuario": 5,
+  "cliente": 123,
+  "duracao": 1,
+  "condicao": 1,
+  "horario": 1,
+  "dataLancamento": 1735689600000,
+  "diaPrimeiraParcela": 10,
+  "tipoContrato": "ESPONTANEO",
+  "inicio": 1735689600000,
+  "gerarLink": true,
+  "modalidades": [
+    {
+      "codigo": 5,
+      "nrvezes": 3,
+      "descricao": "Musculação",
+      "valorModalidade": 150.00,
+      "configsVezes": [
+        {
+          "codigo": 1,
+          "vezes": 3,
+          "duracao": 1,
+          "horario": 1
+        }
+      ]
+    }
+  ],
+  "produtos": [],
+  "descontoExtraValor": 0,
+  "descontoExtraPercentual": 0
+}
+```
+
+**Resposta**:
+```json
+{
+  "content": {
+    "valorFinal": 150.00,
+    "valorBase": 150.00,
+    "valorPlano": 150.00,
+    "descontos": 0,
+    "nrParcelas": 12,
+    "valorPrimeiraParcela": 150.00,
+    "parcelas": [
+      {
+        "nrParcela": 1,
+        "valorParcela": 150.00,
+        "descricao": "Parcela 1/12"
+      }
+    ],
+    "modalidades": [
+      {
+        "modalidade": "Musculação",
+        "nrVezesSemana": 3
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 8. Finalizar Negociação
+
+**Endpoint**: `POST {API_GATEWAY_URL}/negociacao/gravar`
+
+**Descrição**: Finaliza a negociação e gera o link de pagamento para o cliente.
+
+**Headers**:
+```json
+{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer {token}",
+  "empresaId": "{empresaId}"
+}
+```
+
+**Body** (ConfigsContratoDTO - mesmo da simulação):
+```json
+{
+  "contratoBase": 0,
+  "plano": 10,
+  "empresa": 1,
+  "usuario": 5,
+  "cliente": 123,
+  "duracao": 1,
+  "condicao": 1,
+  "horario": 1,
+  "dataLancamento": 1735689600000,
+  "diaPrimeiraParcela": 10,
+  "tipoContrato": "ESPONTANEO",
+  "inicio": 1735689600000,
+  "gerarLink": true,
+  "modalidades": [...],
+  "produtos": []
+}
+```
+
+**Resposta**:
+```json
+{
+  "contrato": 789,
+  "link": "https://pagamento.exemplo.com/xyz123",
+  "whatsapp": "https://wa.me/5511999999999?text=..."
+}
+```
+
+---
+
+## Informações Necessárias para Negociação
+
+### Dados Obrigatórios
+
+#### 1. Informações de Autenticação
+- **token**: Token de API da empresa
+- **empresaId**: Código da empresa
+- **chaveEmpresa**: Chave de identificação da empresa (para finalização)
+- **username**: Username do usuário (para finalização)
+- **senha**: Senha do usuário (para finalização)
+
+#### 2. Informações do Cliente
+- **cliente** (código): Obtido via endpoint de consulta de clientes
+- **nome**: Para buscar o cliente
+
+#### 3. Informações do Plano
+- **plano** (código): Código do plano escolhido
+- **contratoBase**: Código do contrato base (obtido no check de negociação)
+- **duracao**: Código da duração escolhida
+- **condicao**: Código da condição de pagamento
+- **horario**: Código do horário escolhido
+
+#### 4. Informações de Modalidades
+- **modalidades**: Array com as modalidades do plano
+  - `codigo`: Código da modalidade
+  - `nrvezes`: Número de vezes por semana
+  - `descricao`: Descrição da modalidade
+  - `valorModalidade`: Valor da modalidade
+  - `configsVezes`: Configurações de vezes/semana
+    - `horario`: Código do horário (obrigatório)
+
+#### 5. Informações de Datas e Valores
+- **dataLancamento**: Data de lançamento do contrato (timestamp)
+- **inicio**: Data de início do contrato (timestamp)
+- **diaPrimeiraParcela**: Dia do vencimento da primeira parcela
+- **tipoContrato**: "ESPONTANEO" (inicia imediatamente) ou "AGENDADO" (inicia em data futura)
+
+#### 6. Informações do Usuário Responsável
+- **usuario**: Código do usuário responsável pela venda
+- **usuarioAutorizouDesconto** (opcional): Código do usuário que autorizou desconto
+
+### Dados Opcionais
+
+#### 1. Produtos
+- **produtos**: Array de produtos adicionais
+  - `codigo`: Código do produto
+  - `produto`: Código do produto
+  - `quantidade`: Quantidade
+  - `descontoPadrao`: Desconto aplicado ao produto
+
+#### 2. Descontos
+- **descontoExtraValor**: Valor fixo de desconto
+- **descontoExtraPercentual**: Percentual de desconto
+- **convenioDesconto**: Código do convênio de desconto
+- **usuarioAutorizouDesconto**: Usuário que autorizou o desconto
+
+#### 3. Configurações Avançadas
+- **configuracoesAvancadas**:
+  - `cobrarMatricula`: Se deve cobrar matrícula
+  - `vezesCobrarMatricula`: Número de vezes para parcelar matrícula
+  - `diaPrimeiraParcela`: Dia customizado da primeira parcela
+  - `diaProrata`: Dia do pro-rata
+  - `cobrarProdutosSeparados`: Se produtos são cobrados separadamente
+  - `vezesCobrarProdutosSeparados`: Parcelas para produtos
+
+#### 4. Outras Informações
+- **observacao**: Observações sobre o contrato
+- **cupom**: Código de cupom promocional
+- **gerarLink**: Se deve gerar link de pagamento (padrão: true)
+- **codigoConvenio**: Código do convênio
+- **vencimentoCartao**: Dia de vencimento para cartão
+
+---
+
+## Estrutura de Dados
+
+### ConfigsContratoDTO (Objeto Principal)
+
+```typescript
+{
+  contratoBase?: number;           // Código do contrato base
+  plano?: number;                  // Código do plano
+  empresa?: number;                // Código da empresa
+  usuario?: number;                // Código do usuário responsável
+  usuarioAutorizouDesconto?: number; // Usuário que autorizou desconto
+  cliente: number;                 // Código do cliente (obrigatório)
+  duracao?: number;                // Duração do contrato
+  condicao?: number;               // Condição de pagamento
+  horario?: number;                // Horário escolhido
+  dataLancamento?: number;         // Data de lançamento (timestamp)
+  diaPrimeiraParcela?: number;     // Dia da primeira parcela
+  tipoContrato?: string;           // "ESPONTANEO" ou "AGENDADO"
+  inicio?: number;                 // Data de início (timestamp)
+  gerarLink?: boolean;             // Gerar link de pagamento
+  descontoExtraValor?: number;     // Desconto em valor
+  descontoExtraPercentual?: number; // Desconto em percentual
+  modalidades: PlanoModalidadeDTO[]; // Modalidades (obrigatório)
+  produtos?: PlanoProdutoDTO[];    // Produtos adicionais
+  configuracoesAvancadas?: ConfigsAvancadasDTO;
+  observacao?: string;             // Observações
+  cupom?: string;                  // Cupom promocional
+}
+```
+
+---
+
+## Exemplos de Uso
+
+### Exemplo Completo: Venda de Plano Mensal
+
+```javascript
+// 1. Buscar cliente
+GET /negociacao/cliente?nome=João
+
+// 2. Checar dados iniciais
+GET /negociacao/check/123/0
+
+// 3. Consultar planos disponíveis
+GET /negociacao/planos/123
+
+// 4. Consultar dados do plano escolhido
+GET /negociacao/plano/10/0/ATIVO
+
+// 5. Consultar produtos (se necessário)
+GET /produtos
+
+// 6. Consultar usuário responsável
+GET /v1/usuario?nome=Maria&page=0&size=10
+
+// 7. Simular plano
+POST /negociacao/simular
+{
+  "plano": 10,
+  "cliente": 123,
+  "usuario": 5,
+  "empresa": 1,
+  "duracao": 1,
+  "condicao": 1,
+  "horario": 1,
+  "inicio": 1735689600000,
+  "diaPrimeiraParcela": 10,
+  "modalidades": [...]
+}
+
+// 8. Finalizar negociação
+POST /negociacao/gravar
+{
+  // Mesmo payload da simulação
+}
+```
+
+---
+
+## Observações Importantes
+
+1. **Sempre simular antes de finalizar**: É obrigatório passar pela simulação pelo menos uma vez antes de finalizar
+2. **Verificar parcelas em aberto**: Informar ao cliente se houver parcelas em aberto
+3. **Permissões**: Para finalizar, o usuário precisa ter a permissão "2.69 Permite Fechar e Receber Contrato"
+4. **Dados obrigatórios do cliente**: Verificar se o cliente tem todos os dados obrigatórios preenchidos antes de finalizar
+5. **Horário nas modalidades**: O campo `horario` dentro de `configsVezes` é obrigatório
+6. **Timestamps**: Datas devem ser enviadas em formato timestamp (milissegundos)
+7. **Tipo de contrato**: "ESPONTANEO" inicia imediatamente, "AGENDADO" inicia em data futura
+
+---
+
+**Versão**: 1.0  
+**Data**: 2025-10-21

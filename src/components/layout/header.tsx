@@ -5,10 +5,17 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import LiveLogo from "@/components/shared/live-logo"
 import { useUnit } from "@/contexts/unit-context"
+import { useNavigationData } from "@/hooks/use-sanity-data"
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { currentUnit } = useUnit()
+  const { data: navigationData, loading } = useNavigationData()
+
+  const navigation = navigationData?.header?.navigation || []
+  const ctaButton = navigationData?.header?.ctaButton
+  const mobileMenu = navigationData?.header?.mobileMenu
+  const showUnitName = navigationData?.header?.logo?.showUnitName !== false
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -31,7 +38,7 @@ export default function Header() {
           <Link href="/" className="inline-flex items-center justify-center">
             <div className="flex flex-col items-center gap-1">
               <LiveLogo className="h-8 w-auto brightness-0 invert" />
-              {currentUnit && (
+              {showUnitName && currentUnit && (
                 <span className="text-xs font-semibold text-white/80">
                   {currentUnit.name}
                 </span>
@@ -41,39 +48,58 @@ export default function Header() {
           
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
-            <Link href="/sobre-nos" className="hover:text-white/90 transition text-sm font-normal text-white/80">
-              Sobre
-            </Link>
-            <button 
-              onClick={() => {
-                const element = document.getElementById("beneficios")
-                if (element) element.scrollIntoView({ behavior: "smooth" })
-              }}
-              className="hover:text-white/90 transition text-sm font-normal text-white/80"
-            >
-              Benefícios
-            </button>
-            <Link href="/unidades" className="hover:text-white/90 transition text-sm font-normal text-white/80">
-              Unidades
-            </Link>
-            <Link href="/aulas-coletivas" className="hover:text-white/90 transition text-sm font-normal text-white/80">
-              Aulas Coletivas
-            </Link>
-            <Link href="/day-use" className="hover:text-white/90 transition text-sm font-normal text-white/80">
-              Day Use
-            </Link>
-            <Link href="/planos" className="hover:text-white/90 transition text-sm font-normal text-white/80">
-              Planos
-            </Link>
-            <Link href="/contato" className="hover:text-white/90 transition text-sm font-normal text-white/80">
-              Contato
-            </Link>
-            <Link
-              href="/planos"
-              className="inline-flex gap-2 transition hover:from-amber-200 hover:to-amber-300 hover:shadow-[0_8px_20px_rgba(251,191,36,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 text-sm font-bold text-black bg-gradient-to-b from-amber-300 to-amber-400 rounded-full pt-2.5 pr-5 pb-2.5 pl-5 shadow-[0_4px_12px_rgba(251,191,36,0.3)] items-center"
-            >
-              Matricule-se
-            </Link>
+            {navigation
+              .filter((item: any) => item.showOnDesktop !== false)
+              .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
+              .map((item: any, index: number) => {
+                if (item.type === 'scroll') {
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        const element = document.getElementById(item.url)
+                        if (element) element.scrollIntoView({ behavior: "smooth" })
+                      }}
+                      className="hover:text-white/90 transition text-sm font-normal text-white/80"
+                    >
+                      {item.label}
+                    </button>
+                  )
+                }
+
+                if (item.type === 'external') {
+                  return (
+                    <a
+                      key={index}
+                      href={item.url}
+                      target={item.openInNewTab ? "_blank" : undefined}
+                      rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                      className="hover:text-white/90 transition text-sm font-normal text-white/80"
+                    >
+                      {item.label}
+                    </a>
+                  )
+                }
+
+                return (
+                  <Link
+                    key={index}
+                    href={item.url}
+                    className="hover:text-white/90 transition text-sm font-normal text-white/80"
+                  >
+                    {item.label}
+                  </Link>
+                )
+              })}
+
+            {ctaButton?.show && (
+              <Link
+                href={ctaButton.url || '/planos'}
+                className="inline-flex gap-2 transition hover:from-amber-200 hover:to-amber-300 hover:shadow-[0_8px_20px_rgba(251,191,36,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 text-sm font-bold text-black bg-gradient-to-b from-amber-300 to-amber-400 rounded-full pt-2.5 pr-5 pb-2.5 pl-5 shadow-[0_4px_12px_rgba(251,191,36,0.3)] items-center"
+              >
+                {ctaButton.text || 'Matricule-se'}
+              </Link>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -87,7 +113,7 @@ export default function Header() {
             ) : (
               <Menu className="h-4 w-4" />
             )}
-            <span>{isMenuOpen ? 'Close' : 'Menu'}</span>
+            <span>{isMenuOpen ? (mobileMenu?.closeText || 'Close') : (mobileMenu?.openText || 'Menu')}</span>
           </button>
         </div>
       </div>
@@ -109,72 +135,65 @@ export default function Header() {
               
               <nav className="flex-1">
                 <div className="space-y-6">
-                  <Link 
-                    href="/sobre-nos" 
-                    className="block hover:text-white transition text-2xl font-normal text-white/80"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Sobre
-                  </Link>
-                  <button 
-                    onClick={() => {
-                      const element = document.getElementById("beneficios")
-                      if (element) element.scrollIntoView({ behavior: "smooth" })
-                      setIsMenuOpen(false)
-                    }}
-                    className="block w-full text-left hover:text-white transition text-2xl font-normal text-white/80"
-                  >
-                    Benefícios
-                  </button>
-                  <Link 
-                    href="/unidades" 
-                    className="block hover:text-white transition text-2xl font-normal text-white/80"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Unidades
-                  </Link>
-                  <Link 
-                    href="/aulas-coletivas" 
-                    className="block hover:text-white transition text-2xl font-normal text-white/80"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Aulas Coletivas
-                  </Link>
-                  <Link 
-                    href="/day-use" 
-                    className="block hover:text-white transition text-2xl font-normal text-white/80"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Day Use
-                  </Link>
-                  <Link 
-                    href="/planos" 
-                    className="block hover:text-white transition text-2xl font-normal text-white/80"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Planos
-                  </Link>
-                  <button 
-                    onClick={() => {
-                      const element = document.getElementById("contato")
-                      if (element) element.scrollIntoView({ behavior: "smooth" })
-                      setIsMenuOpen(false)
-                    }}
-                    className="block w-full text-left hover:text-white transition text-2xl font-normal text-white/80"
-                  >
-                    Contato
-                  </button>
+                  {navigation
+                    .filter((item: any) => item.showOnMobile !== false)
+                    .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
+                    .map((item: any, index: number) => {
+                      if (item.type === 'scroll') {
+                        return (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              const element = document.getElementById(item.url)
+                              if (element) element.scrollIntoView({ behavior: "smooth" })
+                              setIsMenuOpen(false)
+                            }}
+                            className="block w-full text-left hover:text-white transition text-2xl font-normal text-white/80"
+                          >
+                            {item.label}
+                          </button>
+                        )
+                      }
+
+                      if (item.type === 'external') {
+                        return (
+                          <a
+                            key={index}
+                            href={item.url}
+                            target={item.openInNewTab ? "_blank" : undefined}
+                            rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                            className="block hover:text-white transition text-2xl font-normal text-white/80"
+                            onClick={() => setIsMenuOpen(false)}
+                          >
+                            {item.label}
+                          </a>
+                        )
+                      }
+
+                      return (
+                        <Link
+                          key={index}
+                          href={item.url}
+                          className="block hover:text-white transition text-2xl font-normal text-white/80"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {item.label}
+                        </Link>
+                      )
+                    })}
                 </div>
-                
-                <div className="mt-12 pt-8 border-t border-white/10">
-                  <Link
-                    href="/planos"
-                    className="w-full inline-flex gap-2 transition hover:from-amber-200 hover:to-amber-300 hover:shadow-[0_8px_20px_rgba(251,191,36,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 text-base font-bold text-black bg-gradient-to-b from-amber-300 to-amber-400 rounded-full pt-4 pr-6 pb-4 pl-6 shadow-[0_4px_12px_rgba(251,191,36,0.3)] items-center justify-center"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Matricule-se Agora
-                  </Link>
-                </div>
+
+                {ctaButton?.show && (
+                  <div className="mt-12 pt-8 border-t border-white/10">
+                    <Link
+                      href={ctaButton.url || '/planos'}
+                      className="w-full inline-flex gap-2 transition hover:from-amber-200 hover:to-amber-300 hover:shadow-[0_8px_20px_rgba(251,191,36,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 text-base font-bold text-black bg-gradient-to-b from-amber-300 to-amber-400 rounded-full pt-4 pr-6 pb-4 pl-6 shadow-[0_4px_12px_rgba(251,191,36,0.3)] items-center justify-center"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {ctaButton.mobileText || ctaButton.text || 'Matricule-se Agora'}
+                    </Link>
+                  </div>
+                )}
               </nav>
             </div>
           </div>

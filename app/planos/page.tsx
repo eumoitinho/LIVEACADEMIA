@@ -5,7 +5,7 @@ import { Check, Crown, Sparkles, ChevronDown, MapPin, ChevronRight } from "lucid
 import React, { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePlansData } from "../../hooks/use-sanity-data"
+import { usePlansData, usePlanosPageData } from "../../hooks/use-sanity-data"
 
 const planos = [
   {
@@ -69,13 +69,15 @@ interface LocationUnit {
 export default function Planos() {
   const [showComparison, setShowComparison] = useState(false)
   const { data: sanityPlans, loading: plansLoading, error: plansError } = usePlansData()
+  const { data: pageData, loading: pageLoading, error: pageError } = usePlanosPageData()
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [sanityUnits, setSanityUnits] = useState<any[]>([])
   const [loadingSanity, setLoadingSanity] = useState(true)
   const [allLocations, setAllLocations] = useState<LocationUnit[]>([])
 
-  // Use Sanity plans or fallback to hardcoded
-  const displayPlans = sanityPlans && sanityPlans.length > 0 ? sanityPlans : planos
+  // Use Sanity plans (ordered by page config) or fallback to hardcoded
+  const displayPlans = pageData?.plansOrder?.length > 0 ? pageData.plansOrder :
+                     (sanityPlans && sanityPlans.length > 0 ? sanityPlans : planos)
 
   // Fetch units from Sanity
   useEffect(() => {
@@ -152,33 +154,34 @@ export default function Planos() {
     )
   }, [selectedPlan, allLocations])
 
-  const comparisonFeatures = [
+  // Use Sanity comparison data or fallback to hardcoded
+  const comparisonFeatures = pageData?.comparison?.sections || [
     {
-      section: 'Benefícios Principais',
+      sectionTitle: 'Benefícios Principais',
       items: [
-        { label: 'Sem taxa de matrícula', tradicional: true, diamante: true },
-        { label: 'Sem fidelidade', tradicional: true, diamante: true },
-        { label: 'Acesso via app Live', tradicional: true, diamante: true },
-        { label: 'Aulas coletivas', tradicional: true, diamante: true },
+        { label: 'Sem taxa de matrícula', tradicional: 'true', diamante: 'true' },
+        { label: 'Sem fidelidade', tradicional: 'true', diamante: 'true' },
+        { label: 'Acesso via app Live', tradicional: 'true', diamante: 'true' },
+        { label: 'Aulas coletivas', tradicional: 'true', diamante: 'true' },
       ]
     },
     {
-      section: 'Estrutura Premium',
+      sectionTitle: 'Estrutura Premium',
       items: [
-        { label: 'Ambiente climatizado', tradicional: 'Parcial', diamante: true },
-        { label: 'Espaços exclusivos', tradicional: false, diamante: true },
-        { label: 'Espaço Relax', tradicional: false, diamante: true },
-        { label: 'Espaço Yoga', tradicional: false, diamante: true },
-        { label: 'Studio de Bike', tradicional: false, diamante: true },
+        { label: 'Ambiente climatizado', tradicional: 'partial', diamante: 'true' },
+        { label: 'Espaços exclusivos', tradicional: 'false', diamante: 'true' },
+        { label: 'Espaço Relax', tradicional: 'false', diamante: 'true' },
+        { label: 'Espaço Yoga', tradicional: 'false', diamante: 'true' },
+        { label: 'Studio de Bike', tradicional: 'false', diamante: 'true' },
       ]
     },
     {
-      section: 'Serviços',
+      sectionTitle: 'Serviços',
       items: [
-        { label: 'Avaliação física', tradicional: true, diamante: true },
-        { label: 'App de treinos', tradicional: true, diamante: true },
-        { label: 'Atendimento domingos', tradicional: 'Parcial', diamante: true },
-        { label: 'Suporte prioritário', tradicional: false, diamante: true },
+        { label: 'Avaliação física', tradicional: 'true', diamante: 'true' },
+        { label: 'App de treinos', tradicional: 'true', diamante: 'true' },
+        { label: 'Atendimento domingos', tradicional: 'partial', diamante: 'true' },
+        { label: 'Suporte prioritário', tradicional: 'false', diamante: 'true' },
       ]
     }
   ]
@@ -193,14 +196,14 @@ export default function Planos() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h1 className="text-5xl font-bold mb-6">Conheça nossos planos</h1>
+            <h1 className="text-5xl font-bold mb-6">{pageData?.header?.title || 'Conheça nossos planos'}</h1>
             <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
-              Escolha o plano que melhor se adapta às suas necessidades e comece sua jornada fitness hoje mesmo.
+              {pageData?.header?.description || 'Escolha o plano que melhor se adapta às suas necessidades e comece sua jornada fitness hoje mesmo.'}
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {displayPlans.map((plano, idx) => (
+            {displayPlans.map((plano: any, idx: number) => (
               <motion.div
                 key={(plano as any).nome}
                 initial={{ opacity: 0, y: 20 }}
@@ -380,7 +383,7 @@ export default function Planos() {
               onClick={() => setShowComparison(!showComparison)}
               className="px-8 py-4 rounded-xl border border-white/20 text-white hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2 mx-auto bg-gradient-to-r from-zinc-900/50 to-zinc-800/50 backdrop-blur-sm"
             >
-              {showComparison ? 'Ocultar comparação' : 'Comparar planos'}
+              {showComparison ? 'Ocultar comparação' : (pageData?.comparison?.title || 'Comparar planos')}
               <ChevronDown className={`h-5 w-5 transition-transform ${showComparison ? 'rotate-180' : ''}`} />
             </button>
           </motion.div>
@@ -422,34 +425,34 @@ export default function Planos() {
                   </div>
 
                   {/* Features */}
-                  {comparisonFeatures.map((section, sectionIndex) => (
+                  {comparisonFeatures.map((section: any, sectionIndex: number) => (
                     <div key={sectionIndex}>
                       {/* Section Header */}
                       <div className="grid grid-cols-3 border-b border-white/10 bg-zinc-800/30">
                         <div className="p-4 bg-zinc-700/30">
-                          <h3 className="text-sm font-semibold text-white uppercase tracking-wide">{section.section}</h3>
+                          <h3 className="text-sm font-semibold text-white uppercase tracking-wide">{section.sectionTitle}</h3>
                         </div>
                         <div className="p-4 border-l border-white/10"></div>
                         <div className="p-4 border-l border-white/10"></div>
                       </div>
 
                       {/* Features */}
-                      {section.items.map((item, itemIndex) => (
+                      {section.items.map((item: any, itemIndex: number) => (
                         <div key={itemIndex} className="grid grid-cols-3 border-b border-white/5 hover:bg-white/5 transition-colors">
                           <div className="p-4 flex items-center">
                             <span className="text-white text-sm">{item.label}</span>
                           </div>
                           <div className="p-4 border-l border-white/10 flex items-center justify-center">
-                            {item.tradicional === true ? (
+                            {item.tradicional === 'true' ? (
                               <Check className="w-5 h-5 text-green-400" />
-                            ) : item.tradicional === 'Parcial' ? (
+                            ) : item.tradicional === 'partial' ? (
                               <span className="text-yellow-400 text-xs font-medium">PARCIAL</span>
                             ) : (
                               <span className="text-gray-500">—</span>
                             )}
                           </div>
                           <div className="p-4 border-l border-white/10 flex items-center justify-center">
-                            {item.diamante === true ? (
+                            {item.diamante === 'true' ? (
                               <Check className="w-5 h-5 text-green-400" />
                             ) : (
                               <span className="text-gray-500">—</span>
@@ -492,18 +495,18 @@ export default function Planos() {
                       <div className="mt-1 text-gray-400 text-sm">/mês</div>
                     </div>
 
-                    {comparisonFeatures.map((section, sectionIndex) => (
+                    {comparisonFeatures.map((section: any, sectionIndex: number) => (
                       <div key={sectionIndex}>
                         <div className="px-6 py-3 bg-zinc-800/30 border-b border-white/5">
-                          <h3 className="text-xs font-semibold text-white uppercase tracking-wide">{section.section}</h3>
+                          <h3 className="text-xs font-semibold text-white uppercase tracking-wide">{section.sectionTitle}</h3>
                         </div>
-                        {section.items.map((item, itemIndex) => (
+                        {section.items.map((item: any, itemIndex: number) => (
                           <div key={itemIndex} className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
                             <span className="text-white text-sm">{item.label}</span>
                             <div>
-                              {item.tradicional === true ? (
+                              {item.tradicional === 'true' ? (
                                 <Check className="w-5 h-5 text-green-400" />
-                              ) : item.tradicional === 'Parcial' ? (
+                              ) : item.tradicional === 'partial' ? (
                                 <span className="text-yellow-400 text-xs font-medium">PARCIAL</span>
                               ) : (
                                 <span className="text-gray-500">—</span>
@@ -537,16 +540,16 @@ export default function Planos() {
                       <div className="mt-1 text-gray-400 text-sm">/mês</div>
                     </div>
 
-                    {comparisonFeatures.map((section, sectionIndex) => (
+                    {comparisonFeatures.map((section: any, sectionIndex: number) => (
                       <div key={sectionIndex}>
                         <div className="px-6 py-3 bg-zinc-800/30 border-b border-white/5">
-                          <h3 className="text-xs font-semibold text-white uppercase tracking-wide">{section.section}</h3>
+                          <h3 className="text-xs font-semibold text-white uppercase tracking-wide">{section.sectionTitle}</h3>
                         </div>
-                        {section.items.map((item, itemIndex) => (
+                        {section.items.map((item: any, itemIndex: number) => (
                           <div key={itemIndex} className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
                             <span className="text-white text-sm">{item.label}</span>
                             <div>
-                              {item.diamante === true ? (
+                              {item.diamante === 'true' ? (
                                 <Check className="w-5 h-5 text-green-400" />
                               ) : (
                                 <span className="text-gray-500">—</span>
@@ -579,7 +582,7 @@ export default function Planos() {
             className="mt-16 text-center"
           >
             <p className="text-zinc-400 text-sm">
-              Os preços, serviços e condições promocionais podem variar de acordo com a academia escolhida.
+              {pageData?.footer?.disclaimer || 'Os preços, serviços e condições promocionais podem variar de acordo com a academia escolhida.'}
             </p>
           </motion.div>
         </div>
