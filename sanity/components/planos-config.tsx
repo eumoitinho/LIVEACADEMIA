@@ -268,7 +268,7 @@ export function PlanosConfigInput(props: StringInputProps) {
                         value={config.descricaoCustomizada || ''}
                         onChange={(e) => handleUpdateConfig(config.codigo, { descricaoCustomizada: e.target.value || undefined })}
                         placeholder="Descrição personalizada para o card"
-                        style={{ width: '100%', marginTop: '2px', padding: '4px', fontSize: '12px', rows: 2, resize: 'vertical' }}
+                        style={{ width: '100%', marginTop: '2px', padding: '4px', fontSize: '12px', resize: 'vertical' }}
                         rows={2}
                       />
                     </label>
