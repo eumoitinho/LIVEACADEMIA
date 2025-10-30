@@ -527,11 +527,11 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 ))
               ) : (
                 allUnidades
-                  .filter(unit => (unit.slug || unit.id) !== unidade.id)
+                  .filter(unit => unit.id !== unidade.id)
                   .slice(0, 3)
                   .map((unit, index) => (
                 <motion.div
-                  key={unit.slug || unit.id}
+                  key={unit.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -579,12 +579,12 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                     <div className="flex items-start gap-3 mb-6">
                       <Clock className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
                       <p className="text-white/70 text-sm leading-relaxed">
-                        {unit.openingHours || unit.hours || 'Horários disponíveis'}
+                        {(unit as any).openingHours || unit.hours || 'Horários disponíveis'}
                       </p>
                     </div>
 
                     <Link
-                      href={`/unidades/${unit.slug || unit.id}`}
+                      href={`/unidades/${unit.id}`}
                       className="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-full transition-colors text-sm"
                     >
                       Ver Unidade

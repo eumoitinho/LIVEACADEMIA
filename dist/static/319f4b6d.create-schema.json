@@ -2278,7 +2278,94 @@
         "title": "Imagem de Fundo do Hero"
       },
       {
-        "description": "Planos específicos desta unidade (sobrescreve os planos globais)",
+        "description": "Configure quais planos da API devem ser exibidos e como devem aparecer",
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "Código numérico do plano retornado pela API Pacto",
+                "name": "codigo",
+                "type": "number",
+                "title": "Código do Plano na API"
+              },
+              {
+                "description": "Nome para identificar o plano (apenas para organização)",
+                "name": "nome",
+                "type": "string",
+                "title": "Nome do Plano (referência)"
+              },
+              {
+                "initialValue": true,
+                "description": "Se este plano deve ser exibido na página da unidade",
+                "name": "exibir",
+                "type": "boolean",
+                "title": "Exibir na Página"
+              },
+              {
+                "initialValue": 0,
+                "description": "Ordem de exibição (menor número aparece primeiro)",
+                "name": "ordem",
+                "type": "number",
+                "title": "Ordem de Exibição"
+              },
+              {
+                "initialValue": false,
+                "description": "Se este plano deve aparecer em destaque",
+                "name": "destaque",
+                "type": "boolean",
+                "title": "Plano em Destaque"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Mais vendido",
+                      "value": "MAIS VENDIDO"
+                    },
+                    {
+                      "title": "Recomendado",
+                      "value": "RECOMENDADO"
+                    },
+                    {
+                      "title": "Novidade",
+                      "value": "NOVIDADE"
+                    },
+                    {
+                      "title": "Oferta",
+                      "value": "OFERTA"
+                    },
+                    {
+                      "title": "Promoção",
+                      "value": "PROMOÇÃO"
+                    }
+                  ]
+                },
+                "description": "Badge opcional para destacar o plano",
+                "name": "badge",
+                "type": "string",
+                "title": "Badge Personalizada"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "planosPermitidos",
+        "type": "array",
+        "title": "Filtro de Planos da API"
+      },
+      {
+        "description": "Planos estáticos usados quando a API não estiver disponível",
         "of": [
           {
             "fields": [
@@ -2369,7 +2456,7 @@
         ],
         "name": "planos",
         "type": "array",
-        "title": "Planos da Unidade"
+        "title": "Planos Estáticos (Fallback)"
       }
     ],
     "name": "unit",
