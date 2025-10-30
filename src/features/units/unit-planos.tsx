@@ -41,19 +41,21 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
     setError(null)
     try {
       console.log(`[UnitPlanos] Carregando planos para unidade: ${slug}`)
+
+      // Buscar planos da API
       const res = await fetch(`/api/pacto-v3/planos/${slug}`, { cache: 'no-store' })
-      
+
       if (!res.ok) {
         const errorData = await res.json()
         console.error('[UnitPlanos] Erro na API:', errorData)
         throw new Error(errorData.error || `HTTP ${res.status}`)
       }
-      
+
       const json = await res.json()
       console.log(`[UnitPlanos] Resposta da API:`, json)
-      
+
       const fetched: DynamicPlano[] = json.planos || []
-      
+
       if (fetched.length === 0 && json.fallback) {
         console.log('[UnitPlanos] Usando dados de fallback')
         if (fallbackPlanos && fallbackPlanos.length) {
@@ -61,17 +63,31 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
           return
         }
       }
-      
-      console.log(`[UnitPlanos] Total de planos recebidos:`, fetched.length)
-      console.log(`[UnitPlanos] Filtros de planos do Sanity:`, planosPermitidos)
 
-      // Aplicar filtros do Sanity se existirem
+      // Buscar configuração do admin
+      let configAdmin: any[] = []
+      try {
+        const configRes = await fetch(`/api/admin/planos-config/${slug}`)
+        if (configRes.ok) {
+          const configData = await configRes.json()
+          configAdmin = configData.config || []
+          console.log(`[UnitPlanos] Configuração do admin:`, configAdmin)
+        }
+      } catch (configError) {
+        console.log('[UnitPlanos] Nenhuma configuração do admin encontrada, usando fallback')
+      }
+
+      console.log(`[UnitPlanos] Total de planos recebidos:`, fetched.length)
+
+      // Usar configuração do admin se existir, senão usar Sanity como fallback
+      const configFinal = configAdmin.length > 0 ? configAdmin : planosPermitidos
+
       let planosParaExibir = fetched
 
-      if (planosPermitidos && planosPermitidos.length > 0) {
+      if (configFinal && configFinal.length > 0) {
         // Filtrar apenas os planos permitidos que devem ser exibidos
-        const filtrosAtivos = planosPermitidos.filter(filtro => filtro.exibir !== false)
-        const codigosPermitidos = filtrosAtivos.map(filtro => filtro.codigo)
+        const filtrosAtivos = configFinal.filter((filtro: any) => filtro.exibir !== false)
+        const codigosPermitidos = filtrosAtivos.map((filtro: any) => filtro.codigo)
 
         planosParaExibir = fetched.filter(plano =>
           codigosPermitidos.includes(plano.codigo || 0)
@@ -80,10 +96,10 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
         console.log(`[UnitPlanos] Planos filtrados:`, planosParaExibir.length, 'de', fetched.length)
         console.log(`[UnitPlanos] Códigos permitidos:`, codigosPermitidos)
 
-        // Ordenar os planos de acordo com a ordem definida no Sanity
+        // Ordenar os planos de acordo com a ordem definida
         planosParaExibir.sort((a, b) => {
-          const filtroA = filtrosAtivos.find(f => f.codigo === a.codigo)
-          const filtroB = filtrosAtivos.find(f => f.codigo === b.codigo)
+          const filtroA = filtrosAtivos.find((f: any) => f.codigo === a.codigo)
+          const filtroB = filtrosAtivos.find((f: any) => f.codigo === b.codigo)
           const ordemA = filtroA?.ordem || 999
           const ordemB = filtroB?.ordem || 999
           return ordemA - ordemB
@@ -93,12 +109,12 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
         planosParaExibir = fetched.filter(plano =>
           plano.mensalidade && plano.mensalidade > 0
         )
-        console.log(`[UnitPlanos] Sem filtros do Sanity, exibindo planos com preço válido:`, planosParaExibir.length)
+        console.log(`[UnitPlanos] Sem configuração, exibindo planos com preço válido:`, planosParaExibir.length)
       }
 
       const mapped = planosParaExibir.map(p => {
-        // Buscar configurações personalizadas do Sanity
-        const filtroSanity = planosPermitidos?.find(filtro => filtro.codigo === p.codigo)
+        // Buscar configurações personalizadas
+        const filtroConfig = configFinal?.find((filtro: any) => filtro.codigo === p.codigo)
 
         return {
           name: p.nome,
@@ -108,22 +124,22 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
           fidelidade: p.fidelidade,
           regimeRecorrencia: p.regimeRecorrencia,
           modalidades: p.modalidades || [],
-          // Propriedades do Sanity
-          destaque: filtroSanity?.destaque || false,
-          badge: filtroSanity?.badge || undefined,
+          // Propriedades da configuração
+          destaque: filtroConfig?.destaque || false,
+          badge: filtroConfig?.badge || undefined,
         }
       })
 
       console.log(`[UnitPlanos] Planos finais para exibição:`, mapped)
       setPlanos(mapped)
-      
+
       if (json.source === 'static') {
         console.log('[UnitPlanos] Dados obtidos do fallback estático')
       }
     } catch (e: any) {
       console.error('[UnitPlanos] Falha ao carregar planos', e)
       setError(`Não foi possível carregar planos: ${e.message}`)
-      
+
       // Usar fallback se disponível
       if (fallbackPlanos && fallbackPlanos.length) {
         console.log('[UnitPlanos] Usando fallback após erro')
