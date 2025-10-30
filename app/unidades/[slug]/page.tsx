@@ -326,7 +326,21 @@ export default async function UnidadePage(props: PageProps) {
   const data = {
     ...unidadeData[unidade.type as keyof typeof unidadeData] || unidadeData.tradicional,
     // Override static photos with Sanity images if available
-    fotos: sanityUnit?.images?.map((img: any) => img.asset?.url).filter(Boolean) || unidadeData[unidade.type as keyof typeof unidadeData]?.fotos || unidadeData.tradicional.fotos
+    fotos: sanityUnit?.images?.map((img: any) => img.asset?.url).filter(Boolean) || unidadeData[unidade.type as keyof typeof unidadeData]?.fotos || unidadeData.tradicional.fotos,
+    // Override modalidades with Sanity data if available
+    modalidades: sanityUnit?.modalidades?.map((modalidade: any) => ({
+      nome: modalidade.name,
+      descricao: modalidade.description,
+      imagem: modalidade.image?.asset?.url || '/images/modalidades/default.jpg'
+    })) || unidadeData[unidade.type as keyof typeof unidadeData]?.modalidades || unidadeData.tradicional.modalidades,
+    // Override beneficios with Sanity data if available
+    beneficios: sanityUnit?.beneficios?.map((beneficio: any) => ({
+      titulo: beneficio.title,
+      descricao: beneficio.description,
+      imagem: beneficio.image?.asset?.url || '/images/beneficios/default.jpg'
+    })) || unidadeData[unidade.type as keyof typeof unidadeData]?.beneficios || unidadeData.tradicional.beneficios,
+    // Override hero background with Sanity data if available
+    heroBackground: sanityUnit?.heroBackground?.asset?.url || unidadeData[unidade.type as keyof typeof unidadeData]?.heroBackground || unidadeData.tradicional.heroBackground
   }
 
   return <UnidadeContent unidade={unidade} data={data} />
