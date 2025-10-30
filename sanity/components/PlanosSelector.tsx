@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useFormValue } from 'sanity'
-import { Button, Card, Flex, Stack, Text, Spinner } from '@sanity/ui'
 import type { ArrayOfObjectsInputProps } from 'sanity'
 
 interface Plano {
@@ -44,60 +43,97 @@ export function PlanosSelector(props: ArrayOfObjectsInputProps) {
   }
 
   return (
-    <Stack space={4}>
-      <Flex align="center" gap={3}>
-        <Text weight="semibold">Planos disponíveis da API</Text>
-        <Button
-          text="Buscar Planos"
-          tone="primary"
+    <div style={{ marginBottom: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+        <strong>Planos disponíveis da API</strong>
+        <button
           onClick={fetchPlanos}
           disabled={!slug || loading}
-        />
-      </Flex>
+          style={{
+            padding: '8px 16px',
+            backgroundColor: slug && !loading ? '#3b82f6' : '#6b7280',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: slug && !loading ? 'pointer' : 'not-allowed'
+          }}
+        >
+          {loading ? 'Carregando...' : 'Buscar Planos'}
+        </button>
+      </div>
 
       {!slug && (
-        <Card padding={3} tone="caution">
-          <Text size={1}>
-            Salve a unidade com um slug primeiro para buscar os planos
-          </Text>
-        </Card>
+        <div style={{
+          padding: '12px',
+          backgroundColor: '#fef3c7',
+          border: '1px solid #f59e0b',
+          borderRadius: '4px',
+          marginBottom: '16px'
+        }}>
+          <small>Salve a unidade com um slug primeiro para buscar os planos</small>
+        </div>
       )}
 
       {error && (
-        <Card padding={3} tone="critical">
-          <Text size={1}>{error}</Text>
-        </Card>
+        <div style={{
+          padding: '12px',
+          backgroundColor: '#fee2e2',
+          border: '1px solid #ef4444',
+          borderRadius: '4px',
+          marginBottom: '16px'
+        }}>
+          <small style={{ color: '#dc2626' }}>{error}</small>
+        </div>
       )}
 
       {loading && (
-        <Flex align="center" justify="center" padding={4}>
-          <Spinner />
-        </Flex>
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          <div>Carregando planos...</div>
+        </div>
       )}
 
       {planos.length > 0 && (
-        <Card padding={3} tone="primary">
-          <Stack space={3}>
-            <Text weight="medium">Planos encontrados na API:</Text>
-            {planos.map((plano) => (
-              <Flex key={plano.codigo} align="center" gap={3}>
-                <Text size={1} style={{ fontFamily: 'monospace' }}>
-                  #{plano.codigo}
-                </Text>
-                <Text size={1}>
-                  {plano.nome} - R$ {typeof plano.valor === 'number' ? plano.valor.toFixed(2) : plano.valor}
-                </Text>
-              </Flex>
-            ))}
-            <Text size={1} muted>
-              Use os códigos acima para configurar os planos na seção abaixo.
-            </Text>
-          </Stack>
-        </Card>
+        <div style={{
+          padding: '16px',
+          backgroundColor: '#dbeafe',
+          border: '1px solid #3b82f6',
+          borderRadius: '4px',
+          marginBottom: '16px'
+        }}>
+          <div style={{ marginBottom: '12px' }}>
+            <strong>Planos encontrados na API:</strong>
+          </div>
+          {planos.map((plano) => (
+            <div key={plano.codigo} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              marginBottom: '8px',
+              padding: '8px',
+              backgroundColor: 'white',
+              borderRadius: '4px'
+            }}>
+              <code style={{
+                backgroundColor: '#f3f4f6',
+                padding: '2px 6px',
+                borderRadius: '3px',
+                fontWeight: 'bold'
+              }}>
+                #{plano.codigo}
+              </code>
+              <span>
+                {plano.nome} - R$ {typeof plano.valor === 'number' ? plano.valor.toFixed(2) : plano.valor}
+              </span>
+            </div>
+          ))}
+          <small style={{ color: '#6b7280', fontStyle: 'italic' }}>
+            Use os códigos acima para configurar os planos na seção abaixo.
+          </small>
+        </div>
       )}
 
       {/* Renderizar o componente padrão do array */}
-      {React.cloneElement(props.renderDefault(props), props)}
-    </Stack>
+      {props.renderDefault(props)}
+    </div>
   )
 }
