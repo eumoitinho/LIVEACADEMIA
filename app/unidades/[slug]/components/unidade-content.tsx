@@ -219,7 +219,6 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                   slug={unidade.id}
                   unidadeName={unidade.name}
                   fallbackPlanos={unidade.planos}
-                  planosPermitidos={unidade.planosPermitidos}
                   onMatricular={handleMatricular}
                 />
               </motion.div>

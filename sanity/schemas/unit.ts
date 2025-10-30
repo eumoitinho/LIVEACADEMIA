@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { PlanosConfigInput } from '../components/planos-config'
 
 export const unitSchema = defineType({
   name: 'unit',
@@ -202,83 +203,19 @@ export const unitSchema = defineType({
       description: 'Imagem de fundo específica para a seção hero desta unidade',
     }),
     defineField({
-      name: 'planosPermitidos',
-      title: '🔗 Planos da API - Configuração de Exibição',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'codigo',
-              title: 'Código do Plano',
-              type: 'number',
-              validation: (Rule) => Rule.required(),
-              readOnly: true,
-            }),
-            defineField({
-              name: 'nome',
-              title: 'Nome do Plano',
-              type: 'string',
-              readOnly: true,
-            }),
-            defineField({
-              name: 'exibir',
-              title: 'Exibir na Página',
-              type: 'boolean',
-              initialValue: true,
-            }),
-            defineField({
-              name: 'ordem',
-              title: 'Ordem de Exibição',
-              type: 'number',
-              initialValue: 0,
-            }),
-            defineField({
-              name: 'destaque',
-              title: 'Plano em Destaque',
-              type: 'boolean',
-              initialValue: false,
-            }),
-            defineField({
-              name: 'badge',
-              title: 'Badge',
-              type: 'string',
-              options: {
-                list: [
-                  { title: 'Mais vendido', value: 'MAIS VENDIDO' },
-                  { title: 'Recomendado', value: 'RECOMENDADO' },
-                  { title: 'Novidade', value: 'NOVIDADE' },
-                  { title: 'Oferta', value: 'OFERTA' },
-                  { title: 'Promoção', value: 'PROMOÇÃO' },
-                ],
-              },
-            }),
-          ],
-          preview: {
-            select: {
-              title: 'nome',
-              subtitle: 'codigo',
-              destaque: 'destaque',
-              exibir: 'exibir',
-            },
-            prepare(selection) {
-              const { title, subtitle, destaque, exibir } = selection
-              const status = !exibir ? '🚫' : destaque ? '⭐' : '✅'
-              return {
-                title: title || `Plano #${subtitle}`,
-                subtitle: `Código: ${subtitle} ${status}`,
-              }
-            },
-          },
-        },
-      ],
-      description: '🔧 FERRAMENTA: Acesse /admin/planos para buscar planos da API e copiar as configurações. Cole os dados aqui usando "Add item".',
+      name: 'planosAPIConfig',
+      title: '🚀 Configuração de Planos da API',
+      type: 'text',
+      description: 'Ative planos da API e customize títulos, badges e textos dos cards',
+      components: {
+        input: PlanosConfigInput,
+      },
     }),
     defineField({
       name: 'planos',
       title: 'Planos Estáticos (Fallback)',
       type: 'array',
+      hidden: true,
       of: [
         {
           type: 'object',

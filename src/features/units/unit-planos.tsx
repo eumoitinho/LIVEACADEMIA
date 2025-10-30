@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import PlanosCards from '@/features/plans/planos-cards'
+import { getUnitPlanosConfig } from '@/src/lib/sanity'
 
 interface DynamicPlano {
   codigo: number | undefined
@@ -19,22 +20,14 @@ interface DynamicPlano {
 interface UnitPlanosProps {
   slug: string
   unidadeName: string
-  onMatricular: (plano: { name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }) => void
+  onMatricular: (plano: { name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]; tituloCustomizado?: string; descricaoCustomizada?: string; textoMatricular?: string; beneficiosCustomizados?: string[] }) => void
   fallbackPlanos?: Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }>
-  planosPermitidos?: Array<{
-    codigo: number
-    nome?: string
-    exibir?: boolean
-    ordem?: number
-    destaque?: boolean
-    badge?: string
-  }>
 }
 
-export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPlanos, planosPermitidos }: UnitPlanosProps) {
+export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPlanos }: UnitPlanosProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]; destaque?: boolean; badge?: string }>>([])
+  const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]; destaque?: boolean; badge?: string; tituloCustomizado?: string; descricaoCustomizada?: string; textoMatricular?: string; beneficiosCustomizados?: string[] }>>([])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -64,23 +57,25 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
         }
       }
 
-      // Buscar configuração do admin
-      let configAdmin: any[] = []
+      // Buscar configuração do Sanity Studio
+      let configSanity: any[] = []
       try {
-        const configRes = await fetch(`/api/admin/planos-config/${slug}`)
-        if (configRes.ok) {
-          const configData = await configRes.json()
-          configAdmin = configData.config || []
-          console.log(`[UnitPlanos] Configuração do admin:`, configAdmin)
-        }
-      } catch (configError) {
-        console.log('[UnitPlanos] Nenhuma configuração do admin encontrada, usando fallback')
+        configSanity = await getUnitPlanosConfig(slug)
+        console.log(`[UnitPlanos] Configuração do Sanity Studio:`, configSanity)
+      } catch (sanityError) {
+        console.log('[UnitPlanos] Nenhuma configuração do Sanity encontrada')
       }
 
       console.log(`[UnitPlanos] Total de planos recebidos:`, fetched.length)
 
-      // Usar configuração do admin se existir, senão usar Sanity como fallback
-      const configFinal = configAdmin.length > 0 ? configAdmin : planosPermitidos
+      // Usar apenas configuração do Sanity Studio
+      const configFinal = configSanity
+
+      console.log(`[UnitPlanos] Configuração do Sanity Studio:`, {
+        sanity: configSanity.length,
+        final: configFinal?.length || 0,
+        fonte: configSanity.length > 0 ? 'sanity-studio' : 'sem-configuracao'
+      })
 
       let planosParaExibir = fetched
 
@@ -127,6 +122,11 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
           // Propriedades da configuração
           destaque: filtroConfig?.destaque || false,
           badge: filtroConfig?.badge || undefined,
+          // Campos customizados do Sanity
+          tituloCustomizado: filtroConfig?.tituloCustomizado || undefined,
+          descricaoCustomizada: filtroConfig?.descricaoCustomizada || undefined,
+          textoMatricular: filtroConfig?.textoMatricular || undefined,
+          beneficiosCustomizados: filtroConfig?.beneficiosCustomizados || undefined,
         }
       })
 
@@ -149,7 +149,7 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
     } finally {
       setLoading(false)
     }
-  }, [slug, fallbackPlanos, planosPermitidos])
+  }, [slug, fallbackPlanos])
 
   useEffect(() => { load() }, [load])
 

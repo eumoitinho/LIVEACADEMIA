@@ -348,3 +348,28 @@ export async function getAppSectionData() {
     return null
   }
 }
+
+// Helper para buscar configuração de planos da API por unidade
+export async function getUnitPlanosConfig(slug: string) {
+  try {
+    const data = await client.fetch(`
+      *[_type == "unit" && slug.current == $slug][0] {
+        planosAPIConfig
+      }
+    `, { slug })
+
+    if (data?.planosAPIConfig) {
+      try {
+        return JSON.parse(data.planosAPIConfig)
+      } catch (parseError) {
+        console.error('Error parsing planosAPIConfig JSON:', parseError)
+        return []
+      }
+    }
+
+    return []
+  } catch (error) {
+    console.error('Error fetching unit planos config:', error)
+    return []
+  }
+}

@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Check, CreditCard, X, ChevronDown, Star, Crown } from "lucide-react"
+import { Check, CreditCard, X, ChevronDown, Star, Sparkles } from "lucide-react"
+import React from "react"
 
 interface PlanoItem {
   name: string
@@ -14,6 +15,11 @@ interface PlanoItem {
   modalidades?: string[]
   destaque?: boolean
   badge?: string
+  // Campos customizados do Sanity
+  tituloCustomizado?: string
+  descricaoCustomizada?: string
+  textoMatricular?: string
+  beneficiosCustomizados?: string[]
 }
 
 interface PlanosCardsProps {
@@ -59,104 +65,96 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
             <p className="text-white/70">Escolha o plano perfeito para sua jornada fitness</p>
           </div>
 
-          <div className={`grid ${planosDestacados.length === 1 ? 'md:grid-cols-1 max-w-2xl mx-auto' : 'md:grid-cols-2'} gap-6`}>
+          <div className={`grid ${planosDestacados.length === 1 ? 'md:grid-cols-1 max-w-2xl mx-auto' : 'md:grid-cols-2'} gap-8 max-w-5xl mx-auto`}>
             {planosDestacados.map((plano, index) => {
               const isPremium = isPremiumPlan(plano.name)
+              const displayTitle = plano.tituloCustomizado || plano.name
+              const displayDescription = plano.descricaoCustomizada || (isPremium
+                ? 'Experiência completa com máximo conforto e benefícios exclusivos'
+                : 'Tudo que você precisa para começar sua transformação')
+              const buttonText = plano.textoMatricular || 'Matricular'
+
+              // Determine gradient and icon
+              const gradient = isPremium ? "from-amber-500 to-yellow-600" : "from-zinc-700 to-zinc-900"
+              const IconComponent = isPremium ? Star : Check
 
               return (
                 <motion.div
                   key={plano.codigo || index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`rounded-2xl overflow-hidden shadow-xl ${
-                    isPremium
-                      ? 'bg-gradient-to-br from-live-yellow to-live-yellowLight transform md:scale-105'
-                      : 'bg-white border border-slate-200'
-                  }`}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className={`relative group ${isPremium ? 'md:-mt-4' : ''}`}
                 >
-                  <div className="p-6">
-                    {/* Badge personalizada */}
-                    {plano.badge && (
-                      <div className="flex justify-end mb-2">
-                        <span className={`${
-                          isPremium ? 'bg-black/20 text-black' : 'bg-live-yellow text-black'
-                        } text-xs px-3 py-1 rounded-full font-semibold flex items-center gap-1`}>
-                          {plano.badge === 'MAIS VENDIDO' && <Star className="w-3 h-3" />}
-                          {plano.badge === 'RECOMENDADO' && <Crown className="w-3 h-3" />}
-                          {plano.badge}
-                        </span>
+                  {/* Card Container */}
+                  <div className={`relative h-full rounded-3xl overflow-hidden border transition-all duration-500 ${
+                    isPremium
+                      ? 'border-yellow-500/50 shadow-2xl shadow-yellow-500/10 bg-zinc-900'
+                      : 'border-zinc-800/50 hover:border-zinc-700/50 bg-zinc-900'
+                  }`}>
+
+                    {/* Content */}
+                    <div className="relative z-10 p-8">
+                      {/* Header */}
+                      <div className="mb-8">
+                        <h3 className="text-2xl font-bold text-white mb-2">{displayTitle}</h3>
+                        <p className="text-zinc-400 text-sm leading-relaxed">{displayDescription}</p>
                       </div>
-                    )}
 
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className={`font-semibold text-xl ${isPremium ? 'text-black' : 'text-slate-800'}`}>
-                        {plano.name}
-                      </h3>
-                    </div>
-
-                    <div className="mb-6">
-                      <span className={`text-4xl font-bold ${isPremium ? 'text-black' : 'text-slate-800'}`}>
-                        R$ {plano.price}
-                      </span>
-                      <span className={isPremium ? 'text-black/70' : 'text-slate-500'}>/mês</span>
-
-                      {plano.adesao !== undefined && plano.adesao > 0 && (
-                        <div className={`mt-2 text-sm ${isPremium ? 'text-black/70' : 'text-slate-600'}`}>
-                          + Taxa de adesão: R$ {plano.adesao.toFixed(2)}
+                      {/* Price */}
+                      <div className="mb-8">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-zinc-400 text-lg">R$</span>
+                          <span className={`text-5xl font-bold ${
+                            isPremium
+                              ? 'bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent'
+                              : 'text-white'
+                          }`}>
+                            {plano.price}
+                          </span>
+                          <span className="text-zinc-400 text-lg">/mês</span>
                         </div>
-                      )}
 
-                      {plano.fidelidade !== undefined && plano.fidelidade > 0 && (
-                        <div className={`mt-1 text-sm ${isPremium ? 'text-black/70' : 'text-slate-600'}`}>
-                          Fidelidade: {plano.fidelidade} meses
-                        </div>
-                      )}
+                        {plano.adesao !== undefined && plano.adesao > 0 && (
+                          <p className="text-yellow-400 text-sm font-medium mt-2">
+                            + Taxa de adesão: R$ {plano.adesao.toFixed(2)}
+                          </p>
+                        )}
+
+                        {!plano.adesao && (
+                          <p className="text-yellow-400 text-sm font-medium mt-2">Oferta por tempo limitado</p>
+                        )}
+                      </div>
+
+                      {/* Benefits */}
+                      <ul className="space-y-4 mb-8">
+                        {(plano.beneficiosCustomizados && plano.beneficiosCustomizados.length > 0
+                          ? plano.beneficiosCustomizados
+                          : [
+                            'Sem taxa de matrícula',
+                            'Sem fidelidade obrigatória',
+                            'Acesso completo ao app',
+                            ...(isPremium ? ['Ambiente climatizado', 'Espaços exclusivos'] : [])
+                          ]
+                        ).map((beneficio: string, i: number) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <span className="text-zinc-300 text-sm leading-relaxed">• {beneficio}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* CTA Button */}
+                      <button
+                        onClick={() => onMatricular(plano)}
+                        className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+                          isPremium
+                            ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
+                            : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
+                        }`}
+                      >
+                        {buttonText.toUpperCase()}!
+                      </button>
                     </div>
-
-                    <p className={`text-sm mb-6 ${isPremium ? 'text-black/70' : 'text-slate-500'}`}>
-                      {isPremium
-                        ? 'Experiência completa com máximo conforto e benefícios exclusivos'
-                        : 'Tudo que você precisa para começar sua transformação'}
-                    </p>
-
-                    <ul className="space-y-3 mb-8">
-                      <li className={`flex items-center text-sm ${isPremium ? 'text-black' : 'text-slate-700'}`}>
-                        <Check className={`w-5 h-5 mr-2 ${isPremium ? 'text-black' : 'text-live-yellow'}`} />
-                        Sem taxa de matrícula
-                      </li>
-                      <li className={`flex items-center text-sm ${isPremium ? 'text-black' : 'text-slate-700'}`}>
-                        <Check className={`w-5 h-5 mr-2 ${isPremium ? 'text-black' : 'text-live-yellow'}`} />
-                        Sem fidelidade obrigatória
-                      </li>
-                      <li className={`flex items-center text-sm ${isPremium ? 'text-black' : 'text-slate-700'}`}>
-                        <Check className={`w-5 h-5 mr-2 ${isPremium ? 'text-black' : 'text-live-yellow'}`} />
-                        Acesso completo ao app
-                      </li>
-                      {isPremium && (
-                        <>
-                          <li className="flex items-center text-sm text-black">
-                            <Check className="w-5 h-5 mr-2 text-black" />
-                            Ambiente climatizado
-                          </li>
-                          <li className="flex items-center text-sm text-black">
-                            <Check className="w-5 h-5 mr-2 text-black" />
-                            Espaços exclusivos
-                          </li>
-                        </>
-                      )}
-                    </ul>
-
-                    <button
-                      onClick={() => onMatricular(plano)}
-                      className={`w-full py-3 px-4 font-medium rounded-xl transition ${
-                        isPremium
-                          ? 'bg-white hover:bg-white/90 text-black'
-                          : 'bg-live-yellow hover:bg-live-yellowLight text-black'
-                      }`}
-                    >
-                      Matricular-se
-                    </button>
                   </div>
                 </motion.div>
               )
