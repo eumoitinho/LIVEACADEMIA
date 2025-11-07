@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { locations } from '@/src/lib/config/locations'
-import { getUnits } from '@/lib/sanity'
+import { getUnits } from '@/src/lib/sanity'
 import UnidadeContent from "./components/unidade-content"
 import type { Unit } from '../../../types/sanity'
 import { unidadesMapData } from './utils/map-unidades-data'

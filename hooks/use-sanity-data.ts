@@ -21,6 +21,7 @@ import {
   getTestimonialSectionData,
   getPlanosPageData,
   getUnidadesPageData,
+  getUnidadesSectionData,
   getNavigationData
 } from '../lib/sanity'
 import type {
@@ -725,7 +726,75 @@ export function usePlanosPageData() {
   }, [])
 
   return { data, loading, error }
-}export function useUnidadesPageData() {
+}
+
+export function useUnidadesSectionData() {
+  const [data, setData] = useState<any | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const unidadesSectionData = await getUnidadesSectionData()
+        setData(unidadesSectionData || {
+          header: {
+            title: 'Encontre a Live mais perto de você',
+            description: 'Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.',
+          },
+          cta: {
+            text: 'VER TODAS AS UNIDADES',
+            url: '/unidades',
+          },
+          displaySettings: {
+            showOnHomepage: true,
+            layout: 'carousel',
+            maxUnits: 0,
+            showLocationButton: true,
+            locationButtonText: 'Encontrar unidade mais próxima de você',
+            autoPlay: true,
+            autoPlayInterval: 5000,
+            backgroundColor: '',
+          },
+        })
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching unidades section data:', err)
+        setError('Erro ao carregar dados da seção de unidades')
+        // Fallback data
+        setData({
+          header: {
+            title: 'Encontre a Live mais perto de você',
+            description: 'Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.',
+          },
+          cta: {
+            text: 'VER TODAS AS UNIDADES',
+            url: '/unidades',
+          },
+          displaySettings: {
+            showOnHomepage: true,
+            layout: 'carousel',
+            maxUnits: 0,
+            showLocationButton: true,
+            locationButtonText: 'Encontrar unidade mais próxima de você',
+            autoPlay: true,
+            autoPlayInterval: 5000,
+            backgroundColor: '',
+          },
+        })
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function useUnidadesPageData() {
   const [data, setData] = useState<any | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

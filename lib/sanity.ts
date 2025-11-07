@@ -855,6 +855,38 @@ export async function getPlanosPageData() {
   }
 }
 
+// Helper para buscar dados da seção de unidades (homepage)
+export async function getUnidadesSectionData() {
+  try {
+    const data = await client.fetch(`
+      *[_type == "unidadesSection"][0] {
+        header {
+          title,
+          description
+        },
+        cta {
+          text,
+          url
+        },
+        displaySettings {
+          showOnHomepage,
+          layout,
+          maxUnits,
+          showLocationButton,
+          locationButtonText,
+          autoPlay,
+          autoPlayInterval,
+          backgroundColor
+        }
+      }
+    `)
+    return data
+  } catch (error) {
+    console.error('Error fetching unidades section data:', error)
+    return null
+  }
+}
+
 // Helper para buscar dados da página de unidades
 export async function getUnidadesPageData() {
   try {

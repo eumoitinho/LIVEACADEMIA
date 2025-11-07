@@ -440,6 +440,15 @@
             "options": {
               "hotspot": true
             },
+            "description": "Imagem de fundo da seção hero (recomendado: 1920x1080px)",
+            "fields": [
+              {
+                "description": "Importante para SEO e acessibilidade",
+                "name": "alt",
+                "type": "string",
+                "title": "Texto alternativo"
+              }
+            ],
             "name": "backgroundImage",
             "type": "image",
             "title": "Imagem de Fundo"
@@ -3265,6 +3274,23 @@
         "name": "displaySettings",
         "type": "object",
         "title": "Configurações de Exibição"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Imagem de fundo da seção hero (recomendado: 1920x1080px)",
+        "fields": [
+          {
+            "description": "Importante para SEO e acessibilidade",
+            "name": "alt",
+            "type": "string",
+            "title": "Texto alternativo"
+          }
+        ],
+        "name": "backgroundImage",
+        "type": "image",
+        "title": "Imagem de Fundo"
       }
     ],
     "name": "heroSection",
@@ -5274,6 +5300,186 @@
     "name": "unidadesPage",
     "type": "document",
     "title": "Página de Unidades"
+  },
+  {
+    "fields": [
+      {
+        "fields": [
+          {
+            "initialValue": "Encontre a Live mais perto de você",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "title",
+            "type": "string",
+            "title": "Título Principal"
+          },
+          {
+            "initialValue": "Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.",
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "description",
+            "type": "text",
+            "title": "Descrição"
+          }
+        ],
+        "name": "header",
+        "type": "object",
+        "title": "Cabeçalho da Seção"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": "VER TODAS AS UNIDADES",
+            "name": "text",
+            "type": "string",
+            "title": "Texto do Botão"
+          },
+          {
+            "initialValue": "/unidades",
+            "name": "url",
+            "type": "string",
+            "title": "URL de Destino"
+          }
+        ],
+        "name": "cta",
+        "type": "object",
+        "title": "Call-to-Action"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "description": "Se esta seção deve aparecer na homepage",
+            "name": "showOnHomepage",
+            "type": "boolean",
+            "title": "Exibir na Homepage"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Carrossel",
+                  "value": "carousel"
+                },
+                {
+                  "title": "Grade",
+                  "value": "grid"
+                }
+              ]
+            },
+            "initialValue": "carousel",
+            "description": "Como as unidades serão exibidas",
+            "name": "layout",
+            "type": "string"
+          },
+          {
+            "initialValue": 0,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 0
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Quantas unidades mostrar (0 = todas)",
+            "name": "maxUnits",
+            "type": "number",
+            "title": "Máximo de Unidades"
+          },
+          {
+            "initialValue": true,
+            "description": "Mostrar botão para encontrar unidade mais próxima",
+            "name": "showLocationButton",
+            "type": "boolean",
+            "title": "Exibir Botão de Localização"
+          },
+          {
+            "initialValue": "Encontrar unidade mais próxima de você",
+            "name": "locationButtonText",
+            "type": "string",
+            "title": "Texto do Botão de Localização"
+          },
+          {
+            "initialValue": true,
+            "description": "Ativar rotação automática do carrossel",
+            "name": "autoPlay",
+            "type": "boolean",
+            "title": "Auto-play do Carrossel"
+          },
+          {
+            "initialValue": 5000,
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "min",
+                    "constraint": 1000
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "description": "Tempo entre slides em milissegundos",
+            "name": "autoPlayInterval",
+            "type": "number",
+            "title": "Intervalo do Auto-play (ms)"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Padrão (Preto)"
+                },
+                {
+                  "title": "Preto",
+                  "value": "bg-black"
+                },
+                {
+                  "title": "Cinza Escuro",
+                  "value": "bg-zinc-900"
+                },
+                {
+                  "title": "Transparente",
+                  "value": "bg-transparent"
+                }
+              ]
+            },
+            "description": "Classe CSS para cor de fundo (opcional)",
+            "name": "backgroundColor",
+            "type": "string",
+            "title": "Cor de Fundo"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "unidadesSection",
+    "type": "document",
+    "title": "Seção de Unidades (Homepage)"
   },
   {
     "fields": [

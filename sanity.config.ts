@@ -29,11 +29,13 @@ import { bioimpedanciaSectionSchema } from './sanity/schemas/bioimpedancia-secti
 import { planosSectionSchema } from './sanity/schemas/planos-section'
 import { planosPageSchema } from './sanity/schemas/planos-page'
 import { unidadesPageSchema } from './sanity/schemas/unidades-page'
+import { unidadesSectionSchema } from './sanity/schemas/unidades-section'
 import { navigationSchema } from './sanity/schemas/navigation'
 
 export default defineConfig({
   name: 'live-academia',
   title: 'Live Academia CMS',
+  basePath: '/studio',
 
   // Usar variáveis de ambiente para garantir sincronização entre Cloud e Local
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'c9pbklm2',
@@ -200,6 +202,13 @@ export default defineConfig({
                   .documentId('unidadesPage')
               ),
             S.listItem()
+              .title('📍 Seção Unidades (Homepage)')
+              .child(
+                S.document()
+                  .schemaType('unidadesSection')
+                  .documentId('unidadesSection')
+              ),
+            S.listItem()
               .title('🧭 Navegação')
               .child(
                 S.document()
@@ -246,6 +255,7 @@ export default defineConfig({
       // Páginas específicas
       planosPageSchema,
       unidadesPageSchema,
+      unidadesSectionSchema,
       navigationSchema,
     ],
   },

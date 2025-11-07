@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion, useInView, useReducedMotion } from "framer-motion"
 import { cn } from '@/lib/utils/utils'
+import { useUnidadesSectionData } from '@/hooks/use-sanity-data'
 
 // Função para calcular distância entre dois pontos (Haversine)
 function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -142,6 +143,7 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
 }
 
 export default function UnidadesCarousel() {
+  const { data: sectionData, loading: sectionLoading } = useUnidadesSectionData()
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null)
   const [sortedUnidades, setSortedUnidades] = useState<UnidadeComDistancia[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -149,6 +151,33 @@ export default function UnidadesCarousel() {
   const carouselViewportRef = useRef<HTMLDivElement>(null)
   const prefersReducedMotion = useReducedMotion()
   const visibleInView = useInView(carouselViewportRef, { amount: 0.25, once: false })
+
+  // Usar configurações do Sanity ou valores padrão
+  const displaySettings = sectionData?.displaySettings || {
+    showOnHomepage: true,
+    layout: 'carousel',
+    maxUnits: 0,
+    showLocationButton: true,
+    locationButtonText: 'Encontrar unidade mais próxima de você',
+    autoPlay: true,
+    autoPlayInterval: 5000,
+    backgroundColor: '',
+  }
+
+  const header = sectionData?.header || {
+    title: 'Encontre a Live mais perto de você',
+    description: 'Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.',
+  }
+
+  const cta = sectionData?.cta || {
+    text: 'VER TODAS AS UNIDADES',
+    url: '/unidades',
+  }
+
+  // Não exibir se showOnHomepage for false
+  if (displaySettings.showOnHomepage === false) {
+    return null
+  }
 
   // Carrega unidades da API com fallback estático
   useEffect(() => {
@@ -229,7 +258,10 @@ export default function UnidadesCarousel() {
         }))
         
         if (!cancelled && units.length > 0) {
-          setSortedUnidades(units)
+          // Limitar número de unidades se configurado
+          const maxUnits = sectionData?.displaySettings?.maxUnits || 0
+          const limitedUnits = maxUnits > 0 ? units.slice(0, maxUnits) : units
+          setSortedUnidades(limitedUnits)
         }
       } catch (e) {
         // Se API falhar, mantém o fallback
@@ -239,7 +271,7 @@ export default function UnidadesCarousel() {
     
     load()
     return () => { cancelled = true }
-  }, [])
+  }, [sectionData?.displaySettings?.maxUnits])
 
   // Calcula distâncias quando a localização é obtida
   useEffect(() => {
@@ -279,10 +311,10 @@ export default function UnidadesCarousel() {
   // Auto-play do carrossel
   // Auto-play com requestAnimationFrame + visibilidade + reduced motion
   useEffect(() => {
-    if (!isAutoPlaying || prefersReducedMotion || !visibleInView) return
+    if (!displaySettings.autoPlay || !isAutoPlaying || prefersReducedMotion || !visibleInView) return
     let frame: number
     let start: number | null = null
-    const interval = 5000
+    const interval = displaySettings.autoPlayInterval || 5000
     const loop = (ts: number) => {
       if (start === null) start = ts
       const elapsed = ts - start
@@ -294,7 +326,7 @@ export default function UnidadesCarousel() {
     }
     frame = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(frame)
-  }, [isAutoPlaying, prefersReducedMotion, visibleInView, sortedUnidades.length])
+  }, [displaySettings.autoPlay, displaySettings.autoPlayInterval, isAutoPlaying, prefersReducedMotion, visibleInView, sortedUnidades.length])
 
   const nextSlide = useCallback(() => {
     setIsAutoPlaying(false)
@@ -315,7 +347,7 @@ export default function UnidadesCarousel() {
   const translateX = sortedUnidades.length > 0 ? -(currentIndex * slideWidth) : 0
 
   return (
-    <section className="py-24 relative overflow-hidden bg-black">
+    <section className={`py-24 relative overflow-hidden ${displaySettings.backgroundColor || 'bg-black'}`}>
       {/* Background simples e rápido - Igual ao resto do site */}
       <div className="absolute inset-0 -z-10">
         {/* Gradiente de fundo preto */}
@@ -346,20 +378,20 @@ export default function UnidadesCarousel() {
         >
           {/* Título */}
           <h2 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-            Encontre a Live mais perto de você
+            {header.title}
           </h2>
 
           {/* Descrição */}
           <p className="text-lg lg:text-xl text-zinc-400 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Estamos presentes em diversos pontos de Manaus para facilitar seu acesso à atividade física.
+            {header.description}
           </p>
 
           {/* CTA */}
           <Link
-            href="/unidades"
+            href={cta.url}
             className="inline-flex items-center gap-2 px-8 py-4 bg-amber-400 text-black font-bold rounded-full hover:bg-amber-300 transition-colors duration-200"
           >
-            VER TODAS AS UNIDADES
+            {cta.text}
             <ChevronRight className="h-5 w-5" />
           </Link>
         </motion.div>
@@ -429,7 +461,7 @@ export default function UnidadesCarousel() {
         </div>
 
         {/* Botão de localização - Modernizado */}
-        {!userLocation && sortedUnidades.length > 0 && (
+        {displaySettings.showLocationButton && !userLocation && sortedUnidades.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -453,7 +485,7 @@ export default function UnidadesCarousel() {
               className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-yellow-400/10 to-amber-500/10 backdrop-blur-md border border-yellow-400/30 hover:border-yellow-400/60 hover:bg-yellow-400/20 transition-all duration-300 text-yellow-400 font-semibold group shadow-lg hover:shadow-[0_0_30px_rgba(250,204,21,0.3)]"
             >
               <Navigation className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-              Encontrar unidade mais próxima de você
+              {displaySettings.locationButtonText}
             </button>
             <p className="mt-4 text-sm text-zinc-500">
               Ative a localização para ver as academias ordenadas por distância

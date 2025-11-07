@@ -4,6 +4,8 @@
 
 Website moderno e responsivo para a Live Academia, a maior rede de academias de Manaus. O projeto foi desenvolvido com Next.js 15, TypeScript, Tailwind CSS e Framer Motion para criar uma experiência de usuário excepcional.
 > - **API V3 Implementation**: `docs/API-V3-IMPLEMENTATION.md`
+> - **Roteiro Tutorial Sanity**: `docs/ROTEIRO-TUTORIAL-SANITY.md`
+> - **Explicação API Pacto Filtros**: `docs/EXPLICACAO-API-PACTO-FILTROS.md`
 > - Plano de Tagueamento / Analytics: `docs/analytics-tracking-plan.md`
 > - Deployment & Infra: `docs/deployment.md`
 > - Contribuição / Git Workflow: `docs/contributing.md`

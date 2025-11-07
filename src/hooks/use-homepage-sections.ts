@@ -260,7 +260,7 @@ export function useModalidadesSection() {
         setLoading(true)
         setError(null)
 
-        const query = `*[_type == "modalidadesSection" && _id == "modalidadesSection"][0] {
+        const query = `*[_type == "modalidadesSection"][0] {
           header,
           featuredModalities[] {
             subtitle,
@@ -322,7 +322,7 @@ export function useWellhubSection() {
         setLoading(true)
         setError(null)
 
-        const query = `*[_type == "wellhubSection" && _id == "wellhubSection"][0] {
+        const query = `*[_type == "wellhubSection"][0] {
           header,
           benefits[] {
             icon,
@@ -388,7 +388,7 @@ export function useTestimonialSection() {
         setLoading(true)
         setError(null)
 
-        const query = `*[_type == "testimonialSection" && _id == "testimonialSection"][0] {
+        const query = `*[_type == "testimonialSection"][0] {
           header,
           featuredTestimonials[] {
             name,

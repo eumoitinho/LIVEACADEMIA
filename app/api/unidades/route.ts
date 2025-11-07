@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getUnits } from '@/lib/sanity'
+import { getUnits } from '@/src/lib/sanity'
 
 export async function GET() {
   try {
