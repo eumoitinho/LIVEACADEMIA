@@ -47,6 +47,10 @@ export default defineConfig({
 
   // Enable authentication
   token: process.env.SANITY_API_TOKEN,
+
+  // Configuração para permitir uso em múltiplos domínios
+  // O Sanity Studio embarcado funcionará em qualquer domínio onde a aplicação Next.js estiver rodando
+  // Não há necessidade de configurar CORS aqui, pois o Studio é servido pela própria aplicação Next.js
   
   plugins: [
     structureTool({

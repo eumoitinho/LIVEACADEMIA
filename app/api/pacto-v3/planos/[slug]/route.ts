@@ -2,18 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import { rateLimiter } from '@/src/lib/utils/rate-limiter'
 import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
 import { getSecretKeyEnvName, getSecretKeyDevEnvName, getPublicUnitCodeEnvName, getEnvKey } from '@/lib/utils/env-keys'
+import { addCorsHeaders, handleOptionsRequest } from '@/src/lib/utils/cors'
 import axios from 'axios'
 
 // GET /api/pacto-v3/planos/:slug
 // Busca planos usando API V3 da Pacto com cache e rate limiting
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
+  const origin = req.headers.get('origin')
 
   // Rate limiting: 50 requisições por 15 minutos
   const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '127.0.0.1'
   if (!rateLimiter.check(clientIP, 50, 15 * 60 * 1000)) {
     const info = rateLimiter.getInfo(clientIP)
-    return NextResponse.json(
+    const response = NextResponse.json(
       { 
         error: 'Rate limit exceeded. Too many requests for planos.', 
         rateLimitInfo: {
@@ -31,6 +33,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
         }
       }
     )
+    return addCorsHeaders(response, origin)
   }
 
   // Verificar cache primeiro (30 minutos)
@@ -38,7 +41,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
   const cached = cacheManager.get(cacheKey)
   if (cached) {
     console.log(`[Cache] Planos encontrados no cache para ${slug}`)
-    return NextResponse.json({ planos: cached, fallback: false, source: 'cache' })
+    const response = NextResponse.json({ planos: cached, fallback: false, source: 'cache' })
+    return addCorsHeaders(response, origin)
   }
 
   try {
@@ -62,7 +66,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 
 
     
-    const response = await axios.get('https://apigw.pactosolucoes.com.br/planos', {
+    const axiosResponse = await axios.get('https://apigw.pactosolucoes.com.br/planos', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${chaveSecret}`, // Header de autenticação correto
@@ -74,7 +78,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
       timeout: 30000
     })
 
-    const content = response.data.content || []
+    const content = axiosResponse.data.content || []
     
     // Mapear os dados da API V3 para o formato esperado
     const planos = content.map((plano: any) => ({
@@ -91,13 +95,14 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     cacheManager.set(cacheKey, planos, 30 * 60 * 1000)
     console.log(`[Cache] ${planos.length} planos armazenados no cache para ${slug}`)
 
-    return NextResponse.json({ 
+    const response = NextResponse.json({ 
       planos, 
       fallback: false, 
       source: 'api',
       unidade: slug,
       total: planos.length
     })
+    return addCorsHeaders(response, origin)
   } catch (error: any) {
     console.error('[GET /api/pacto-v3/planos V3]', error)
 
@@ -107,11 +112,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
       { codigo: 2, nome: "Plano Premium", mensalidade: 149.90, adesao: 0, fidelidade: 12 }
     ]
 
-    return NextResponse.json({ 
+    const response = NextResponse.json({ 
       planos: fallbackPlanos, 
       fallback: true, 
       source: 'static', 
       error: error.message 
     })
+    return addCorsHeaders(response, origin)
   }
 }

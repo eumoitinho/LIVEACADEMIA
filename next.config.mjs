@@ -52,6 +52,29 @@ const nextConfig = {
       },
     ]
   },
+
+  async headers() {
+    return [
+      {
+        // Aplicar headers CORS em todas as rotas de API
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Credentials',
+            value: 'true',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, PUT, DELETE, OPTIONS',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type, Authorization, x-empresa, x-chave-api, x-chave-publica',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 export default nextConfig

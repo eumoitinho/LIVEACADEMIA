@@ -1,7 +1,14 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getUnits } from '@/src/lib/sanity'
+import { addCorsHeaders, handleOptionsRequest } from '@/src/lib/utils/cors'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Lidar com preflight OPTIONS
+  if (request.method === 'OPTIONS') {
+    const origin = request.headers.get('origin')
+    return handleOptionsRequest(origin)
+  }
+
   try {
     const units = await getUnits()
     
@@ -17,12 +24,16 @@ export async function GET() {
       estado: unit.state || 'AM',
     }))
 
-    return NextResponse.json({ units: formattedUnits })
+    const origin = request.headers.get('origin')
+    const response = NextResponse.json({ units: formattedUnits })
+    return addCorsHeaders(response, origin)
   } catch (error) {
     console.error('Error fetching units from Sanity:', error)
-    return NextResponse.json(
+    const origin = request.headers.get('origin')
+    const response = NextResponse.json(
       { error: 'Failed to fetch units', units: [] },
       { status: 500 }
     )
+    return addCorsHeaders(response, origin)
   }
 }

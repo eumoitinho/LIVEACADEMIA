@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import type { VendasConfig } from '@/lib/api/pacto-checkout-types'
 import { getPublicUnitCodeEnvName, getEnvKey } from '@/lib/utils/env-keys'
+import { addCorsHeaders } from '@/src/lib/utils/cors'
 
 // Schema for params validation
 const paramsSchema = z.object({
@@ -23,11 +24,12 @@ export async function GET(
     // Check cache
     const cached = configCache.get(slug)
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-      return NextResponse.json({
+      const cachedResponse = NextResponse.json({
         success: true,
         data: cached.data,
         source: 'cache'
       })
+      return addCorsHeaders(cachedResponse, origin)
     }
 
     // Get Pacto API URL from environment
@@ -44,7 +46,7 @@ export async function GET(
     console.log(`[vendas/configs] Using unit code from env: ${envVarName}=${codigoUnidade}`)
 
     // Fetch config from Pacto API with unit-specific headers
-    const response = await fetch(
+    const fetchResponse = await fetch(
       `${pactoUrl}/psec/vendas/configs`,
       {
         method: 'GET',
@@ -57,7 +59,7 @@ export async function GET(
       }
     )
 
-    if (!response.ok) {
+    if (!fetchResponse.ok) {
       // Return default config on error
       const defaultConfig: VendasConfig = {
         habilitarAgendamentoAulaExperimentalLinkVisitante: false,
@@ -123,14 +125,15 @@ export async function GET(
         titulocheckout: "Bora treinar?"
       }
 
-      return NextResponse.json({
+      const defaultResponse = NextResponse.json({
         success: true,
         data: defaultConfig,
         source: 'default'
       })
+      return addCorsHeaders(defaultResponse, origin)
     }
 
-    const data = await response.json()
+    const data = await fetchResponse.json()
     const config = data.return || data
 
     // Cache the config
@@ -139,14 +142,16 @@ export async function GET(
       timestamp: Date.now()
     })
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: config,
       source: 'api'
     })
+    return addCorsHeaders(response, origin)
 
   } catch (error) {
     console.error('Error fetching vendas config:', error)
+    const origin = request.headers.get('origin')
 
     // Return minimal default config on error
     const fallbackConfig: VendasConfig = {
@@ -212,11 +217,12 @@ export async function GET(
       titulocheckout: "Bora treinar?"
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: fallbackConfig,
       source: 'fallback',
       warning: 'Usando configuração padrão devido a erro na API'
     })
+    return addCorsHeaders(response, origin)
   }
 }
