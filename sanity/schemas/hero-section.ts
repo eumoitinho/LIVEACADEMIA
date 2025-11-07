@@ -115,6 +115,23 @@ export const heroSectionSchema = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'backgroundImage',
+      title: 'Imagem de Fundo',
+      type: 'image',
+      description: 'Imagem de fundo da seção hero (recomendado: 1920x1080px)',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Texto alternativo',
+          type: 'string',
+          description: 'Importante para SEO e acessibilidade',
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {

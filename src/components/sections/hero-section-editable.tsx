@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import Link from "next/link"
 import { ArrowRight, Star } from "lucide-react"
 import { urlFor } from '../../../lib/sanity'
+import Image from 'next/image'
 import type { HeroSection } from '../../../types/sanity'
 
 declare global {
@@ -57,8 +58,47 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
 
   if (!data) return null
 
+  // Obter URL da imagem de background usando o helper urlFor para garantir URL correta
+  const backgroundImageUrl = data.backgroundImage?.asset?.url 
+    ? urlFor(data.backgroundImage).width(1920).height(1080).quality(90).url() 
+    : '/hero.jpg'
+  const backgroundImageAlt = data.backgroundImage?.alt || 'Live Academia'
+
+  // Efeito para ocultar o background do layout quando há imagem do Sanity
+  useEffect(() => {
+    if (!data.backgroundImage?.asset?.url) return
+
+    // Encontrar e ocultar o background do layout
+    const layoutBackground = document.querySelector('div[style*="hero.jpg"]')
+    if (layoutBackground) {
+      ;(layoutBackground as HTMLElement).style.display = 'none'
+    }
+
+    return () => {
+      // Restaurar ao desmontar
+      if (layoutBackground) {
+        ;(layoutBackground as HTMLElement).style.display = ''
+      }
+    }
+  }, [data.backgroundImage?.asset?.url])
+
   return (
     <section className="relative z-20 flex min-h-[100vh] items-end">
+      {/* Background Image - Substitui o background do layout quando há imagem no Sanity */}
+      {data.backgroundImage?.asset?.url && (
+        <div className="fixed inset-0 w-full h-screen" style={{ zIndex: -9 }}>
+          <Image
+            src={backgroundImageUrl}
+            alt={backgroundImageAlt}
+            fill
+            priority
+            quality={90}
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+        </div>
+      )}
+      
       {/* Overlay para melhorar a legibilidade apenas na hero */}
       <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
       

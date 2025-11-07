@@ -4,9 +4,15 @@ import imageUrlBuilder from '@sanity/image-url'
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  useCdn: process.env.NODE_ENV === 'production',
-  apiVersion: '2024-01-01',
+  // Desabilitar CDN em desenvolvimento para ver mudanças imediatamente
+  useCdn: process.env.NODE_ENV === 'production' && process.env.SANITY_USE_CDN !== 'false',
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
   token: process.env.SANITY_API_TOKEN,
+  // Adicionar configurações para evitar cache excessivo
+  perspective: 'published',
+  stega: {
+    enabled: false,
+  },
 })
 
 // Helper para construir URLs de imagens
@@ -23,7 +29,19 @@ export async function getHomepageData() {
       *[_type == "homepage"][0] {
         seo,
         hero {
-          backgroundImage,
+          backgroundImage {
+            asset-> {
+              _id,
+              url,
+              metadata {
+                dimensions {
+                  width,
+                  height
+                }
+              }
+            },
+            alt
+          },
           title,
           subtitle,
           thirdTitle,
