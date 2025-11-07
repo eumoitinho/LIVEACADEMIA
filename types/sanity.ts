@@ -79,7 +79,18 @@ export interface BeneficiosSection {
         url: string
       }
     }
+    order?: number
   }>
+  displaySettings?: {
+    showOnHomepage?: boolean
+    backgroundColor?: string
+    overlayGradient?: {
+      enabled?: boolean
+      colorFrom?: string
+      colorVia?: string
+      blendMode?: string
+    }
+  }
 }
 
 export interface Plano {

@@ -438,6 +438,17 @@ export async function getBeneficiosSectionData() {
               _id,
               url
             }
+          },
+          order
+        },
+        displaySettings {
+          showOnHomepage,
+          backgroundColor,
+          overlayGradient {
+            enabled,
+            colorFrom,
+            colorVia,
+            blendMode
           }
         }
       }

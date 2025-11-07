@@ -52,16 +52,56 @@ export default function BeneficiosSectionEditable() {
 
   // Usar dados do Sanity ou fallback
   const beneficios = data?.items && data.items.length > 0
-    ? data.items.map(item => ({
-        icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck,
-        title: item.title,
-        description: item.description,
-        color: item.color,
-        image: item.image?.asset?.url || '/images/academia-1.webp'
-      }))
+    ? data.items
+        .map(item => ({
+          icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck,
+          title: item.title,
+          description: item.description,
+          color: item.color,
+          image: item.image?.asset?.url || '/images/academia-1.webp',
+          order: item.order || 0
+        }))
+        .sort((a, b) => (a.order || 0) - (b.order || 0))
     : defaultBeneficios
 
   const sectionTitle = data?.title || "Mais do que treino, uma experiência completa"
+  
+  // Configurações de display
+  const displaySettings = data?.displaySettings || {}
+  const overlayGradient = displaySettings?.overlayGradient || {
+    enabled: true,
+    colorFrom: 'yellow-400/15',
+    colorVia: 'amber-500/10',
+    blendMode: 'mix-blend-overlay'
+  }
+  
+  // Não exibir se showOnHomepage for false
+  if (displaySettings.showOnHomepage === false) {
+    return null
+  }
+  
+  // Função para converter cor/opacidade do Sanity para RGBA
+  const parseColor = (colorStr: string): string => {
+    // Mapeamento de cores Tailwind para valores RGB
+    const colorMap: Record<string, string> = {
+      'yellow-400': '251, 191, 36',
+      'amber-500': '245, 158, 11',
+    }
+    
+    const [color, opacity] = colorStr.split('/')
+    const rgb = colorMap[color] || '251, 191, 36'
+    const op = opacity ? parseFloat(opacity) / 100 : 0.15
+    
+    return `rgba(${rgb}, ${op})`
+  }
+  
+  // Construir estilo inline para o gradiente (permite valores dinâmicos do Sanity)
+  const overlayGradientStyle = overlayGradient.enabled
+    ? {
+        background: `linear-gradient(to bottom right, ${parseColor(overlayGradient.colorFrom || 'yellow-400/15')}, ${parseColor(overlayGradient.colorVia || 'amber-500/10')}, transparent)`,
+        mixBlendMode: overlayGradient.blendMode?.replace('mix-blend-', '') || 'overlay',
+      }
+    : {}
 
   const easing = [0.16, 1, 0.3, 1] as const
   const [active, setActive] = useState(0)
@@ -70,7 +110,7 @@ export default function BeneficiosSectionEditable() {
   }, [])
 
   return (
-    <section id="beneficios" className="relative py-24 px-4 lg:px-10 overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">
+    <section id="beneficios" className={`relative py-24 px-4 lg:px-10 overflow-hidden ${displaySettings.backgroundColor || 'bg-gradient-to-b from-black via-zinc-950 to-black'}`}>
       {/* Ambient background accents */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-32 left-1/3 w-[540px] h-[540px] bg-yellow-500/10 rounded-full blur-3xl" />
@@ -131,8 +171,11 @@ export default function BeneficiosSectionEditable() {
                     priority={idx === 0}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  {isActive && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/15 via-amber-500/10 to-transparent mix-blend-overlay" />
+                  {isActive && overlayGradient.enabled && (
+                    <div 
+                      className="absolute inset-0"
+                      style={overlayGradientStyle}
+                    />
                   )}
                 </div>
 

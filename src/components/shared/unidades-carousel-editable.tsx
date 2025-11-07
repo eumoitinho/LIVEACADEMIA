@@ -6,7 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion, useInView, useReducedMotion } from "framer-motion"
 import { cn } from '@/lib/utils/utils'
-import { useUnidadesSectionData } from '@/hooks/use-sanity-data'
+import { useUnidadesSectionData } from '../../../hooks/use-sanity-data'
 
 // Função para calcular distância entre dois pontos (Haversine)
 function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {

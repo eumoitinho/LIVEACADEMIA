@@ -26,6 +26,7 @@ import { wellhubSectionSchema } from './sanity/schemas/wellhub-section'
 import { testimonialSectionSchema } from './sanity/schemas/testimonial-section'
 import { estruturaSectionSchema } from './sanity/schemas/estrutura-section'
 import { bioimpedanciaSectionSchema } from './sanity/schemas/bioimpedancia-section'
+import { beneficiosSectionSchema } from './sanity/schemas/beneficios-section'
 import { planosSectionSchema } from './sanity/schemas/planos-section'
 import { planosPageSchema } from './sanity/schemas/planos-page'
 import { unidadesPageSchema } from './sanity/schemas/unidades-page'
@@ -178,6 +179,13 @@ export default defineConfig({
                   .documentId('bioimpedanciaSection')
               ),
             S.listItem()
+              .title('🌟 Seção Benefícios')
+              .child(
+                S.document()
+                  .schemaType('beneficiosSection')
+                  .documentId('beneficiosSection')
+              ),
+            S.listItem()
               .title('💎 Seção Planos')
               .child(
                 S.document()
@@ -250,6 +258,7 @@ export default defineConfig({
       testimonialSectionSchema,
       estruturaSectionSchema,
       bioimpedanciaSectionSchema,
+      beneficiosSectionSchema,
       planosSectionSchema,
 
       // Páginas específicas
