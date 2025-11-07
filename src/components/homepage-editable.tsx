@@ -25,7 +25,10 @@ export default function HomepageEditable() {
       {/* Hero Section */}
       {homepageData?.hero && (
         <HeroSectionEditable data={homepageData.hero} />
+        
       )}
+      console.log(homepageData.hero)
+      console.log(homepageData.hero)
 
       {/* About Section */}
       <AboutSectionEditable data={homepageData?.about || { badge: "Sobre a Live Academia", title: "Seu treino, suas regras", description: "A Live Academia está presente em Manaus há mais de 10 anos, oferecendo estrutura moderna, equipamentos de última geração e profissionais altamente qualificados para te ajudar a alcançar seus objetivos.", stats: [], highlights: [] }} />
