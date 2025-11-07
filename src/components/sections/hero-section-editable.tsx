@@ -59,8 +59,9 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
   if (!data) return null
 
   // Obter URL da imagem de background usando o helper urlFor para garantir URL correta
-  const backgroundImageUrl = data.backgroundImage?.asset?.url 
-    ? urlFor(data.backgroundImage).width(1920).height(1080).quality(90).url() 
+  const hasSanityImage = Boolean(data.backgroundImage?.asset)
+  const backgroundImageUrl = hasSanityImage
+    ? urlFor(data.backgroundImage).width(1920).height(1080).quality(90).url()
     : '/hero.jpg'
   const backgroundImageAlt = data.backgroundImage?.alt || 'Live Academia'
 
@@ -69,7 +70,7 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
   return (
     <section className="relative z-20 flex min-h-[100vh] items-end overflow-hidden">
       {/* Background Image - Apenas na seção hero, contida dentro da section */}
-      {data.backgroundImage?.asset?.url && (
+      {hasSanityImage && (
         <div className="absolute inset-0 w-full h-full z-0">
           <Image
             src={backgroundImageUrl}

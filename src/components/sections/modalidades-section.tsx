@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useModalidadesSection } from "../../hooks/use-homepage-sections"
+import { urlFor } from "../../lib/sanity"
 
 export default function ModalidadesSection() {
   const { data: sectionData, loading } = useModalidadesSection()
@@ -72,9 +73,9 @@ export default function ModalidadesSection() {
                 </div>
 
                 {/* Imagem de fundo */}
-                {modalidade.image?.asset?.url ? (
+                {modalidade.image?.asset ? (
                   <Image
-                    src={modalidade.image.asset.url}
+                    src={urlFor(modalidade.image).width(1200).height(900).quality(90).url()}
                     alt={modalidade.image.alt || modalidade.title}
                     fill
                     className="z-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { Award, Gift, Users, Star, ArrowRight, CheckCircle, Calendar, Shield } from "lucide-react"
 import Image from "next/image"
+import { urlFor } from "../../lib/sanity"
 import { useWellhubSection } from "../../hooks/use-homepage-sections"
 
 export default function WellhubSection() {
@@ -159,10 +160,10 @@ export default function WellhubSection() {
             className="bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 rounded-3xl p-8 lg:p-12 backdrop-blur-xl text-center"
           >
             <div className="max-w-3xl mx-auto">
-              {banner.image?.asset?.url && (
+              {banner.image?.asset && (
                 <div className="mb-6">
                   <Image
-                    src={banner.image.asset.url}
+                    src={urlFor(banner.image).width(400).height(160).quality(90).url()}
                     alt={banner.image.alt || "Wellhub"}
                     width={200}
                     height={80}

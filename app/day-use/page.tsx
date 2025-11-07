@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Check, Clock, MapPin, Zap, Star, ArrowRight, Users, Dumbbell } from "lucide-react"
 import Link from "next/link"
 import { useDayUseData } from "@/hooks/use-day-use-data"
+import { urlFor } from "@/lib/sanity"
 
 const beneficios = [
   {
@@ -125,8 +126,8 @@ export default function DayUse() {
         <div 
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: pageData.heroImage?.asset?.url 
-              ? `url('${pageData.heroImage.asset.url}')` 
+            backgroundImage: pageData.heroImage?.asset 
+              ? `url('${urlFor(pageData.heroImage).width(1920).height(1080).quality(85).url()}')` 
               : "url('/images/fachada.jpg')",
             backgroundPosition: "center center"
           }}
