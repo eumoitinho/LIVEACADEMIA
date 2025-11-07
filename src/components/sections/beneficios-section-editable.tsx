@@ -1,9 +1,9 @@
 "use client"
 
+import React, { useState, useCallback } from "react"
 import { motion } from "framer-motion"
 import { ShieldCheck, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
 import Image from "next/image"
-import { useState, useCallback } from "react"
 import { useBeneficiosSectionData } from "../../../hooks/use-sanity-data"
 
 const defaultBeneficios = [
@@ -95,11 +95,25 @@ export default function BeneficiosSectionEditable() {
     return `rgba(${rgb}, ${op})`
   }
   
+  // Mapear modo de mistura para tipos válidos do React
+  const getMixBlendMode = (blendMode: string | undefined): React.CSSProperties['mixBlendMode'] => {
+    const modeMap: Record<string, React.CSSProperties['mixBlendMode']> = {
+      'overlay': 'overlay',
+      'soft-light': 'soft-light',
+      'screen': 'screen',
+      'multiply': 'multiply',
+      'normal': 'normal',
+    }
+    
+    const mode = blendMode?.replace('mix-blend-', '') || 'overlay'
+    return modeMap[mode] || 'overlay'
+  }
+  
   // Construir estilo inline para o gradiente (permite valores dinâmicos do Sanity)
-  const overlayGradientStyle = overlayGradient.enabled
+  const overlayGradientStyle: React.CSSProperties = overlayGradient.enabled
     ? {
         background: `linear-gradient(to bottom right, ${parseColor(overlayGradient.colorFrom || 'yellow-400/15')}, ${parseColor(overlayGradient.colorVia || 'amber-500/10')}, transparent)`,
-        mixBlendMode: overlayGradient.blendMode?.replace('mix-blend-', '') || 'overlay',
+        mixBlendMode: getMixBlendMode(overlayGradient.blendMode),
       }
     : {}
 
