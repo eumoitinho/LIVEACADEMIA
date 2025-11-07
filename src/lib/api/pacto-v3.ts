@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import { getSecretKeyEnvName, getSecretKeyDevEnvName, getEnvKey } from '@/lib/utils/env-keys'
 
 // ============================================
 // INTERFACES PARA API V3
@@ -293,24 +294,21 @@ class PactoV3API {
    */
   private async getChaveSecretaUnidade(slug: string): Promise<string | null> {
     try {
-      // Convert hyphens to underscores for env var name
-      const envSlug = slug.toUpperCase().replace(/-/g, '_')
-
-      const chaveVercel = process.env[`PACTO_SECRET_KEY_${envSlug}`]
+      const chaveVercel = getEnvKey(slug, 'secret')
       if (chaveVercel) {
         console.log(`[PactoV3] Chave SECRETA da unidade ${slug} carregada via Vercel`)
         return chaveVercel
       }
 
-
-      const chaveDev = process.env[`PACTO_SECRET_KEY_DEV_${envSlug}`]
+      const chaveDev = getEnvKey(slug, 'secret-dev')
       if (chaveDev) {
         console.log(`[PactoV3] Chave SECRETA da unidade ${slug} carregada via dev env`)
         return chaveDev
       }
 
+      const envKeyName = getSecretKeyEnvName(slug)
       console.error(`[PactoV3] Chave SECRETA da unidade ${slug} não encontrada`)
-      console.error(`[PactoV3] Procurando por: PACTO_SECRET_KEY_${envSlug}`)
+      console.error(`[PactoV3] Procurando por: ${envKeyName} ou ${getSecretKeyDevEnvName(slug)}`)
       return null
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'

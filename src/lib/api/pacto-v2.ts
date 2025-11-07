@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import { getSecretKeyEnvName, getSecretKeyDevEnvName, getEnvKey } from '@/lib/utils/env-keys'
 import { NextRequest } from 'next/server'
 import { tokenizeCard, detokenizeCard, EncryptedCardData } from '@/src/lib/utils/card-tokenization'
 import { getUnidadeConfig } from '@/src/config/unidades-chaves'
@@ -247,20 +248,21 @@ class PactoV2API {
   private async getChaveUnidade(slug: string): Promise<string | null> {
     try {
       // 1. Vercel Environment Variables (produção) - TEXTO PLANO
-      const chaveVercel = process.env[`PACTO_SECRET_KEY_${slug.toUpperCase()}`]
+      const chaveVercel = getEnvKey(slug, 'secret')
       if (chaveVercel) {
         console.log(`[PactoV2] Chave privada da unidade ${slug} carregada via Vercel`)
         return chaveVercel
       }
 
       // 2. Desenvolvimento (.env.local) - TEXTO PLANO
-      const chaveDev = process.env[`PACTO_SECRET_KEY_DEV_${slug.toUpperCase()}`]
+      const chaveDev = getEnvKey(slug, 'secret-dev')
       if (chaveDev) {
         console.log(`[PactoV2] Chave privada da unidade ${slug} carregada via dev env`)
         return chaveDev
       }
 
       console.error(`[PactoV2] Chave privada da unidade ${slug} não encontrada`)
+      console.error(`[PactoV2] Procurando por: ${getSecretKeyEnvName(slug)} ou ${getSecretKeyDevEnvName(slug)}`)
       return null
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'

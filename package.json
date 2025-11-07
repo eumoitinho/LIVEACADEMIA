@@ -14,7 +14,8 @@
     "sanity:seed": "node scripts/seed-sanity.js",
     "sanity:seed-units": "tsx scripts/seed-sanity-units.ts",
     "sanity:studio": "sanity dev",
-    "sanity:deploy": "sanity deploy"
+    "sanity:deploy": "sanity deploy",
+    "sanity:check": "node scripts/check-sanity-config.js"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",

@@ -2,8 +2,9 @@ import {defineCliConfig} from 'sanity/cli'
 
 export default defineCliConfig({
   api: {
-    projectId: 'c9pbklm2',
-    dataset: 'production'
+    // Usar variáveis de ambiente para garantir sincronização
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'c9pbklm2',
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
   },
   deployment: {
     appId: 'rpg83gvhhsfs8sb6yu013emv',

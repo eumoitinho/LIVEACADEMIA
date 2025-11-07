@@ -35,11 +35,12 @@ export default defineConfig({
   name: 'live-academia',
   title: 'Live Academia CMS',
 
-  projectId: 'c9pbklm2',
-  dataset: 'production',
+  // Usar variáveis de ambiente para garantir sincronização entre Cloud e Local
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'c9pbklm2',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
 
   // API version
-  apiVersion: '2024-01-01',
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
 
   // Enable authentication
   token: process.env.SANITY_API_TOKEN,

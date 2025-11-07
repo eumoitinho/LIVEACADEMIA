@@ -3,6 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { MapPin, Eye, Heart, Dumbbell } from "lucide-react"
+import { useUnitBestPlan } from "../../hooks/use-unit-best-plan"
 
 interface UnidadeCardModernProps {
   location: {
@@ -20,6 +21,9 @@ interface UnidadeCardModernProps {
 
 export function UnidadeCardModern({ location }: UnidadeCardModernProps) {
   const isInauguracao = location.type === 'inauguracao'
+  
+  // Buscar o melhor plano dinamicamente da API
+  const { bestPlan, loading: loadingPlan } = useUnitBestPlan(isInauguracao ? null : location.id)
 
   const typeConfig = {
     diamante: {
@@ -42,8 +46,10 @@ export function UnidadeCardModern({ location }: UnidadeCardModernProps) {
 
   // Ensure we have a valid config with fallback
   const config = typeConfig[location.type as keyof typeof typeConfig] || typeConfig.tradicional
-  const hasPlanos = location.planos && location.planos.length > 0
-  const priceValue = hasPlanos && location.planos ? location.planos[0].price : null
+  
+  // Priorizar plano da API, depois fallback dos dados estáticos
+  const priceValue = bestPlan?.price || (location.planos && location.planos.length > 0 ? location.planos[0].price : null)
+  const hasPlanos = !!priceValue || (location.planos && location.planos.length > 0)
   const featuresCount = location.features.length
 
   // Get image from location.photo (which may already be from Sanity)
@@ -115,7 +121,9 @@ export function UnidadeCardModern({ location }: UnidadeCardModernProps) {
               </p>
             </div>
             <div className="text-right">
-              {hasPlanos && priceValue ? (
+              {loadingPlan ? (
+                <div className="text-sm text-neutral-400 font-geist">Carregando...</div>
+              ) : hasPlanos && priceValue ? (
                 <>
                   <div className="text-lg font-semibold text-amber-400 font-geist">R$ {priceValue}</div>
                   <div className="text-[11px] text-neutral-400 font-geist">por mês</div>

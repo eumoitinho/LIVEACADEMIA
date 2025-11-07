@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server'
+import { getApiKeyEnvName, getEnvKey } from '@/lib/utils/env-keys'
 
 export async function GET() {
   const slug = 'centro'
-  const envKeyName = `PACTO_API_KEY_${slug.toUpperCase().replace(/-/g, '_')}`
-  const hasKey = !!process.env[envKeyName]
-  const keyPreview = process.env[envKeyName]?.substring(0, 10)
+  const envKeyName = getApiKeyEnvName(slug)
+  const key = getEnvKey(slug, 'api')
+  const hasKey = !!key
+  const keyPreview = key?.substring(0, 10)
 
   return NextResponse.json({
     envKeyName,

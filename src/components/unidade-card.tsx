@@ -3,6 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { MapPin, Clock, Star, ArrowRight } from "lucide-react"
+import { useUnitBestPlan } from "../../hooks/use-unit-best-plan"
 
 interface UnidadeCardProps {
   location: {
@@ -20,6 +21,9 @@ interface UnidadeCardProps {
 
 export function UnidadeCard({ location }: UnidadeCardProps) {
   const isInauguracao = location.type === 'inauguracao'
+  
+  // Buscar o melhor plano dinamicamente da API
+  const { bestPlan, loading: loadingPlan } = useUnitBestPlan(isInauguracao ? null : location.id)
 
   const typeConfig = {
     diamante: {
@@ -37,8 +41,10 @@ export function UnidadeCard({ location }: UnidadeCardProps) {
   }
 
   const config = typeConfig[location.type]
-  const hasPlanos = location.planos && location.planos.length > 0
-  const priceValue = hasPlanos && location.planos ? location.planos[0].price : null
+  
+  // Priorizar plano da API, depois fallback dos dados estáticos
+  const priceValue = bestPlan?.price || (location.planos && location.planos.length > 0 ? location.planos[0].price : null)
+  const hasPlanos = !!priceValue || (location.planos && location.planos.length > 0)
 
   if (isInauguracao) {
     return (
@@ -135,14 +141,18 @@ export function UnidadeCard({ location }: UnidadeCardProps) {
               </div>
             </div>
 
-            {hasPlanos && priceValue && (
+            {loadingPlan ? (
+              <div className="text-right flex-shrink-0">
+                <div className="text-sm text-amber-400/60">Carregando...</div>
+              </div>
+            ) : hasPlanos && priceValue ? (
               <div className="text-right flex-shrink-0">
                 <div className="text-2xl font-bold text-amber-300 drop-shadow-[0_2px_8px_rgba(251,191,36,0.4)]">
                   R$ {priceValue}
                 </div>
                 <p className="text-xs text-amber-400/80 font-semibold">por mês</p>
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* Address */}

@@ -1,5 +1,6 @@
 import { supabaseAdmin } from './supabase'
 import { encrypt, decrypt, safeHash } from '@/lib/utils/crypto'
+import { getApiKeyEnvName, getEnvKey } from '@/lib/utils/env-keys'
 
 /**
  * Novo contrato de persistência baseado em tabela única `units`.
@@ -119,8 +120,8 @@ export async function getUnitBySlug(slug: string) {
 
   // Priorizar env var PACTO_API_KEY_{SLUG} (descriptografada) sobre banco (criptografada)
   let apiKeyPlain: string | undefined
-  const envKeyName = `PACTO_API_KEY_${slug.toUpperCase().replace(/-/g, '_')}`
-  const envKey = process.env[envKeyName]
+  const envKeyName = getApiKeyEnvName(slug)
+  const envKey = getEnvKey(slug, 'api')
 
   if (envKey) {
     console.log(`[getUnitBySlug] Using API key from env var: ${envKeyName}`)

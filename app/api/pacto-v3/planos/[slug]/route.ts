@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { rateLimiter } from '@/src/lib/utils/rate-limiter'
 import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
+import { getSecretKeyEnvName, getSecretKeyDevEnvName, getPublicUnitCodeEnvName, getEnvKey } from '@/lib/utils/env-keys'
 import axios from 'axios'
 
 // GET /api/pacto-v3/planos/:slug
@@ -41,20 +42,21 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
   }
 
   try {
-    // Buscar chave secreta da unidade
-    const envSlug = slug.toUpperCase().replace(/-/g, '_')
-    const chaveSecret = process.env[`PACTO_SECRET_KEY_${envSlug}`] || process.env[`PACTO_SECRET_KEY_DEV_${envSlug}`]
+    // Buscar chave secreta da unidade usando helper functions (que respeitam o mapeamento)
+    const chaveSecret = getEnvKey(slug, 'secret') || getEnvKey(slug, 'secret-dev')
     
     if (!chaveSecret) {
       console.error(`[PactoV3] Chave secreta não encontrada para unidade ${slug}`)
+      console.error(`[PactoV3] Procurando por: ${getSecretKeyEnvName(slug)} ou ${getSecretKeyDevEnvName(slug)}`)
       throw new Error(`Chave da unidade ${slug} não configurada`)
     }
 
-    // Buscar empresa ID da unidade
-    const empresaId = process.env[`NEXT_PUBLIC_UNIDADE_${envSlug}`]
+    // Buscar empresa ID da unidade usando helper function
+    const empresaId = getEnvKey(slug, 'public-code')
     
     if (!empresaId) {
       console.error(`[PactoV3] Código da empresa não encontrado para unidade ${slug}`)
+      console.error(`[PactoV3] Procurando por: ${getPublicUnitCodeEnvName(slug)}`)
       throw new Error(`Código da empresa ${slug} não configurado`)
     }
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import type { VendasConfig } from '@/lib/api/pacto-checkout-types'
+import { getPublicUnitCodeEnvName, getEnvKey } from '@/lib/utils/env-keys'
 
 // Schema for params validation
 const paramsSchema = z.object({
@@ -34,10 +35,8 @@ export async function GET(
 
     // Get unit data from environment variables
     // Format: NEXT_PUBLIC_UNIDADE_TORRES={codigo_unidade}
-    // Convert hyphens to underscores for env var name (e.g., "dom-pedro" -> "DOM_PEDRO")
-    const envSlug = slug.toUpperCase().replace(/-/g, '_')
-    const envVarName = `NEXT_PUBLIC_UNIDADE_${envSlug}`
-    const codigoUnidade = process.env[envVarName] || '1'
+    const envVarName = getPublicUnitCodeEnvName(slug)
+    const codigoUnidade = getEnvKey(slug, 'public-code') || '1'
 
     // Get the secret key from environment
     const secretKey = process.env.PACTO_SECRET_KEY || ''
