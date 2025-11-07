@@ -64,29 +64,13 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
     : '/hero.jpg'
   const backgroundImageAlt = data.backgroundImage?.alt || 'Live Academia'
 
-  // Efeito para ocultar o background do layout quando há imagem do Sanity
-  useEffect(() => {
-    if (!data.backgroundImage?.asset?.url) return
-
-    // Encontrar e ocultar o background do layout
-    const layoutBackground = document.querySelector('div[style*="hero.jpg"]')
-    if (layoutBackground) {
-      ;(layoutBackground as HTMLElement).style.display = 'none'
-    }
-
-    return () => {
-      // Restaurar ao desmontar
-      if (layoutBackground) {
-        ;(layoutBackground as HTMLElement).style.display = ''
-      }
-    }
-  }, [data.backgroundImage?.asset?.url])
+  // Não precisamos mais ocultar o background do layout pois a imagem está contida na seção
 
   return (
-    <section className="relative z-20 flex min-h-[100vh] items-end">
-      {/* Background Image - Substitui o background do layout quando há imagem no Sanity */}
+    <section className="relative z-20 flex min-h-[100vh] items-end overflow-hidden">
+      {/* Background Image - Apenas na seção hero, contida dentro da section */}
       {data.backgroundImage?.asset?.url && (
-        <div className="fixed inset-0 w-full h-screen" style={{ zIndex: -9 }}>
+        <div className="absolute inset-0 w-full h-full z-0">
           <Image
             src={backgroundImageUrl}
             alt={backgroundImageAlt}
@@ -95,14 +79,15 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
             quality={90}
             className="object-cover object-center"
             sizes="100vw"
+            style={{ objectPosition: 'center center' }}
           />
         </div>
       )}
       
       {/* Overlay para melhorar a legibilidade apenas na hero */}
-      <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
+      <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/70 via-black/50 to-black/30 z-[1]" />
       
-      <div className="lg:px-8 max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10">
+      <div className="lg:px-8 max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-[2] w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center opacity-0 animate-[fadeInUp_1s_ease-out_0.2s_forwards]">
           {/* Left Column - Heading */}
           <div className="order-1 opacity-0 animate-[slideInBlur_1.2s_ease-out_0.4s_forwards]" style={{transform: "translateY(30px)", filter: "blur(10px)"}}>
