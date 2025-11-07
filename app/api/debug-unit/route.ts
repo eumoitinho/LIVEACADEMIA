@@ -23,10 +23,7 @@ export async function GET(req: Request) {
       })
     }
 
-    return NextResponse.json({
-      slug,
-      ...unit,
-    })
+    return NextResponse.json(unit)
   } catch (error) {
     console.error('[DEBUG] Error in debug-unit route:', error)
     return NextResponse.json(
