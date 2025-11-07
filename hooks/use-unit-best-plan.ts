@@ -42,7 +42,7 @@ export function useUnitBestPlan(slug: string | null) {
         }
 
         const data = await response.json()
-        const planos: Plan[] = data.planos || []
+        const planos: Plan[] = Array.isArray(data.planos) ? data.planos : []
 
         if (planos.length === 0) {
           // Se não houver planos da API, retornar null para usar fallback
@@ -51,10 +51,15 @@ export function useUnitBestPlan(slug: string | null) {
         }
 
         // Encontrar o plano com menor mensalidade válida (> 0)
-        let menorPlano: Plan | null = null
+        let menorPlano: { nome: string; mensalidade: number } | null = null
         let menorPreco = Infinity
 
-        planos.forEach((plano) => {
+        for (const plano of planos) {
+          // Verificar se o plano tem nome válido
+          if (!plano.nome || typeof plano.nome !== 'string') {
+            continue
+          }
+
           let preco: number = 0
 
           // Tentar obter o preço de diferentes campos
@@ -72,9 +77,12 @@ export function useUnitBestPlan(slug: string | null) {
           // Considerar apenas planos com preço válido e maior que zero
           if (preco > 0 && preco < menorPreco) {
             menorPreco = preco
-            menorPlano = plano
+            menorPlano = {
+              nome: plano.nome,
+              mensalidade: preco,
+            }
           }
-        })
+        }
 
         if (menorPlano && menorPreco < Infinity) {
           // Formatar preço para exibição (ex: "119,90")
