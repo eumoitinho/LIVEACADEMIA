@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import ConditionalHeader from '@/src/components/layout/conditional-header'
 import Footer from '@/components/layout/footer'
 import { UnitProvider } from "@/contexts/unit-context"
 import GTM from '@/src/components/analytics/gtm'
@@ -78,7 +79,7 @@ export default function RootLayout({
                 />
             
             <div className="relative z-20 min-h-screen flex flex-col">
-              {/* Header removido conforme solicitação */}
+              <ConditionalHeader />
               <div className="flex-grow">{children}</div>
               <Footer />
             </div>
