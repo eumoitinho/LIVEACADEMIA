@@ -283,7 +283,14 @@ export default async function UnidadePage(props: PageProps) {
   // Fallback to static locations
   const staticUnidade = locations.find(loc => loc.id === slug)
 
+  // Se a unidade está no Sanity e está ativa, permitir acesso mesmo que não esteja em locations
+  // Se não está no Sanity, verificar se está em locations e não é inauguração
   if (!sanityUnit && (!staticUnidade || staticUnidade.type === "inauguracao")) {
+    notFound()
+  }
+
+  // Se está no Sanity mas não está ativa, não permitir acesso
+  if (sanityUnit && !sanityUnit.active) {
     notFound()
   }
 
@@ -358,10 +365,32 @@ export default async function UnidadePage(props: PageProps) {
 export const dynamic = 'force-dynamic'
 
 export async function generateStaticParams() {
-  // Gerar apenas para unidades ativas (não em inauguração)
-  return locations
-    .filter(location => location.type !== "inauguracao")
-    .map((location) => ({
-      slug: location.id,
+  try {
+    // Buscar unidades do Sanity que estão ativas
+    const sanityUnits = await getUnits()
+    const sanitySlugs = sanityUnits
+      .filter((unit: Unit) => unit.active && unit.slug && typeof unit.slug === 'string')
+      .map((unit: Unit) => unit.slug as string)
+
+    // Também incluir unidades estáticas (não em inauguração) que não estão no Sanity
+    const staticSlugs = locations
+      .filter(location => location.type !== "inauguracao" && location.id && typeof location.id === 'string')
+      .map((location) => location.id as string)
+
+    // Combinar e remover duplicatas
+    const allSlugs = [...sanitySlugs, ...staticSlugs]
+    const uniqueSlugs = Array.from(new Set(allSlugs.filter(slug => typeof slug === 'string')))
+
+    return uniqueSlugs.map((slug: string) => ({
+      slug: String(slug),
     }))
+  } catch (error) {
+    console.error('Error generating static params for unidades:', error)
+    // Fallback para apenas unidades estáticas
+    return locations
+      .filter(location => location.type !== "inauguracao")
+      .map((location) => ({
+        slug: String(location.id),
+      }))
+  }
 }
