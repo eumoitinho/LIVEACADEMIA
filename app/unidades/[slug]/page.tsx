@@ -283,14 +283,16 @@ export default async function UnidadePage(props: PageProps) {
   // Fallback to static locations
   const staticUnidade = locations.find(loc => loc.id === slug)
 
-  // Se a unidade está no Sanity e está ativa, permitir acesso mesmo que não esteja em locations
-  // Se não está no Sanity, verificar se está em locations e não é inauguração
-  if (!sanityUnit && (!staticUnidade || staticUnidade.type === "inauguracao")) {
+  // PRIORIDADE 1: Se está no Sanity e está ativa, SEMPRE permitir acesso (ignora tipo em locations)
+  if (sanityUnit && sanityUnit.active) {
+    // Unidade ativa no Sanity - permitir acesso
+  } 
+  // PRIORIDADE 2: Se não está no Sanity, verificar se está em locations e não é inauguração
+  else if (!sanityUnit && (!staticUnidade || staticUnidade.type === "inauguracao")) {
     notFound()
   }
-
-  // Se está no Sanity mas não está ativa, não permitir acesso
-  if (sanityUnit && !sanityUnit.active) {
+  // PRIORIDADE 3: Se está no Sanity mas não está ativa, não permitir acesso
+  else if (sanityUnit && !sanityUnit.active) {
     notFound()
   }
 
