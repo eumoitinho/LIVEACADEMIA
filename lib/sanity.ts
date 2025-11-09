@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DEBUG === 
   console.log('[Sanity Config]', {
     projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-    useCdn: process.env.NODE_ENV === 'production' && process.env.SANITY_USE_CDN !== 'false',
+    useCdn: false, // Em desenvolvimento, CDN está sempre desabilitado
     cdnDisabled: process.env.SANITY_USE_CDN === 'false',
   })
 }
