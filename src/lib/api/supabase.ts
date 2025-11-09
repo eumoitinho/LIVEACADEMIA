@@ -15,23 +15,12 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-if (!supabaseUrl) {
-  throw new Error(
-    '❌ NEXT_PUBLIC_SUPABASE_URL não definida!\n' +
-    'Defina no arquivo .env.local:\n' +
-    'NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co'
-  )
-}
+// Supabase é opcional - se não estiver configurado, retorna null
+export const supabaseAdmin = supabaseUrl && serviceKey
+  ? createClient(supabaseUrl, serviceKey, {
+      auth: { persistSession: false },
+    })
+  : null
 
-if (!serviceKey) {
-  throw new Error(
-    '❌ SUPABASE_SERVICE_ROLE_KEY não definida!\n' +
-    'Defina no arquivo .env.local:\n' +
-    'SUPABASE_SERVICE_ROLE_KEY=sua-service-role-key\n' +
-    'Obtenha em: Supabase Dashboard > Settings > API > service_role'
-  )
-}
-
-export const supabaseAdmin = createClient(supabaseUrl, serviceKey, {
-  auth: { persistSession: false },
-})
+// Helper para verificar se Supabase está disponível
+export const isSupabaseAvailable = () => !!supabaseAdmin

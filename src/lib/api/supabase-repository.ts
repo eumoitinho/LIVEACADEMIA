@@ -1,4 +1,4 @@
-import { supabaseAdmin } from './supabase'
+import { supabaseAdmin, isSupabaseAvailable } from './supabase'
 import { encrypt, decrypt, safeHash } from '@/lib/utils/crypto'
 
 /**
@@ -33,8 +33,12 @@ export interface UpsertUnitInput {
 }
 
 export async function upsertUnit(input: UpsertUnitInput) {
+  if (!isSupabaseAvailable()) {
+    throw new Error('Supabase não está configurado. Defina NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY')
+  }
+  
   // Verifica existência
-  const { data: existing, error: findErr } = await supabaseAdmin
+  const { data: existing, error: findErr } = await supabaseAdmin!
     .from('units')
     .select('id,chave_api,slug')
     .eq('slug', input.slug)
@@ -82,7 +86,7 @@ export async function upsertUnit(input: UpsertUnitInput) {
   if (existing) {
     const updatePayload: any = { ...basePayload }
     if (encryptedKey) updatePayload.chave_api = encryptedKey
-    const { data: updated, error: updErr } = await supabaseAdmin
+    const { data: updated, error: updErr } = await supabaseAdmin!
       .from('units')
       .update(updatePayload)
       .eq('id', existing.id)
@@ -97,7 +101,7 @@ export async function upsertUnit(input: UpsertUnitInput) {
       created_at: new Date().toISOString(),
       ...basePayload,
     }
-    const { data: inserted, error: insErr } = await supabaseAdmin
+    const { data: inserted, error: insErr } = await supabaseAdmin!
       .from('units')
       .insert(insertPayload)
       .select('id,slug,nome,codigo_unidade,chave_api')
@@ -108,8 +112,13 @@ export async function upsertUnit(input: UpsertUnitInput) {
 }
 
 export async function getUnitBySlug(slug: string) {
+  if (!isSupabaseAvailable()) {
+    console.warn('[getUnitBySlug] Supabase não está configurado, retornando null')
+    return null
+  }
+  
   console.log(`[getUnitBySlug] Querying slug: "${slug}" (type: ${typeof slug})`)
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabaseAdmin!
     .from('units')
     .select('id,slug,nome,codigo_unidade,chave_api,chave_publica,cidade,estado,cep,endereco,complemento,latitude,longitude,telefone,email,locale,logo,imagens,moeda,usarsistemainternacional,created_at,updated_at')
     .eq('slug', slug)
@@ -140,12 +149,17 @@ export async function getUnitBySlug(slug: string) {
 export const getUnidadeBySlug = getUnitBySlug
 
 export async function logApi(params: { unidadeSlug?: string; direction: 'OUTBOUND' | 'INBOUND'; method: string; endpoint: string; statusCode?: number; latencyMs?: number; error?: string; requestBody?: any }) {
+  if (!isSupabaseAvailable()) {
+    console.warn('[logApi] Supabase não está configurado, pulando log')
+    return
+  }
+  
   let unidadeId: string | undefined
   if (params.unidadeSlug) {
-    const { data } = await supabaseAdmin.from('units').select('id').eq('slug', params.unidadeSlug).maybeSingle()
+    const { data } = await supabaseAdmin!.from('units').select('id').eq('slug', params.unidadeSlug).maybeSingle()
     unidadeId = data?.id
   }
-  const { error } = await supabaseAdmin.from('api_log').insert({
+  const { error } = await supabaseAdmin!.from('api_log').insert({
     unidade_id: unidadeId,
     direction: params.direction,
     method: params.method,
@@ -160,7 +174,12 @@ export async function logApi(params: { unidadeSlug?: string; direction: 'OUTBOUN
 
 // Utilitário simples para listar units (pode ser útil em futuros scripts)
 export async function listUnits(limit = 50) {
-  const { data, error } = await supabaseAdmin.from('units').select('id,slug,nome').limit(limit)
+  if (!isSupabaseAvailable()) {
+    console.warn('[listUnits] Supabase não está configurado, retornando array vazio')
+    return []
+  }
+  
+  const { data, error } = await supabaseAdmin!.from('units').select('id,slug,nome').limit(limit)
   if (error) throw error
   return data
 }
