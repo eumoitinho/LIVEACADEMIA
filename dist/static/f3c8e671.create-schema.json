@@ -4345,6 +4345,338 @@
   {
     "fields": [
       {
+        "description": "Texto do badge (opcional)",
+        "name": "badge",
+        "type": "string"
+      },
+      {
+        "initialValue": "Mais do que treino, uma experiência completa",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "Título da Seção"
+      },
+      {
+        "description": "Descrição geral da seção (opcional)",
+        "name": "description",
+        "type": "text",
+        "title": "Descrição"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 6
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Shield Check",
+                      "value": "ShieldCheck"
+                    },
+                    {
+                      "title": "Star",
+                      "value": "Star"
+                    },
+                    {
+                      "title": "Users",
+                      "value": "Users"
+                    },
+                    {
+                      "title": "Snowflake",
+                      "value": "Snowflake"
+                    },
+                    {
+                      "title": "Zap",
+                      "value": "Zap"
+                    },
+                    {
+                      "title": "Check Circle",
+                      "value": "CheckCircle"
+                    }
+                  ]
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "valid",
+                        "constraint": [
+                          "ShieldCheck",
+                          "Star",
+                          "Users",
+                          "Snowflake",
+                          "Zap",
+                          "CheckCircle"
+                        ]
+                      },
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "icon",
+                "type": "string",
+                "title": "Ícone"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "title",
+                "type": "string",
+                "title": "Título"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "description",
+                "type": "text",
+                "title": "Descrição"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Amarelo/Âmbar",
+                      "value": "from-yellow-400 to-amber-500"
+                    },
+                    {
+                      "title": "Âmbar/Amarelo Escuro",
+                      "value": "from-amber-500 to-yellow-600"
+                    },
+                    {
+                      "title": "Amarelo/Âmbar Escuro",
+                      "value": "from-yellow-500 to-amber-600"
+                    }
+                  ]
+                },
+                "initialValue": "from-yellow-400 to-amber-500",
+                "description": "Classe CSS do gradiente (ex: from-yellow-400 to-amber-500)",
+                "name": "color",
+                "type": "string",
+                "title": "Cor do Gradiente"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "image",
+                "type": "image",
+                "title": "Imagem de Fundo"
+              },
+              {
+                "initialValue": 0,
+                "description": "Ordem de exibição",
+                "name": "order",
+                "type": "number",
+                "title": "Ordem"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "items",
+        "type": "array",
+        "title": "Itens de Benefícios"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": true,
+            "description": "Se esta seção deve aparecer na homepage",
+            "name": "showOnHomepage",
+            "type": "boolean",
+            "title": "Exibir na Homepage"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Padrão (Preto/Gradiente)"
+                },
+                {
+                  "title": "Preto",
+                  "value": "bg-black"
+                },
+                {
+                  "title": "Cinza Escuro",
+                  "value": "bg-zinc-900"
+                }
+              ]
+            },
+            "description": "Classe CSS para cor de fundo da seção",
+            "name": "backgroundColor",
+            "type": "string",
+            "title": "Cor de Fundo"
+          },
+          {
+            "description": "Gradiente aplicado quando um item está ativo",
+            "fields": [
+              {
+                "initialValue": true,
+                "description": "Aplicar gradiente amarelo/âmbar sobre o item ativo",
+                "name": "enabled",
+                "type": "boolean",
+                "title": "Habilitar Gradiente de Overlay"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Amarelo 15%",
+                      "value": "yellow-400/15"
+                    },
+                    {
+                      "title": "Amarelo 20%",
+                      "value": "yellow-400/20"
+                    },
+                    {
+                      "title": "Amarelo 25%",
+                      "value": "yellow-400/25"
+                    },
+                    {
+                      "title": "Âmbar 15%",
+                      "value": "amber-500/15"
+                    },
+                    {
+                      "title": "Âmbar 20%",
+                      "value": "amber-500/20"
+                    }
+                  ]
+                },
+                "initialValue": "yellow-400/15",
+                "description": "Cor inicial do gradiente (opacidade incluída)",
+                "name": "colorFrom",
+                "type": "string",
+                "title": "Cor Inicial"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Âmbar 10%",
+                      "value": "amber-500/10"
+                    },
+                    {
+                      "title": "Âmbar 15%",
+                      "value": "amber-500/15"
+                    },
+                    {
+                      "title": "Amarelo 10%",
+                      "value": "yellow-400/10"
+                    }
+                  ]
+                },
+                "initialValue": "amber-500/10",
+                "description": "Cor intermediária do gradiente",
+                "name": "colorVia",
+                "type": "string",
+                "title": "Cor Intermediária"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Overlay",
+                      "value": "mix-blend-overlay"
+                    },
+                    {
+                      "title": "Soft Light",
+                      "value": "mix-blend-soft-light"
+                    },
+                    {
+                      "title": "Screen",
+                      "value": "mix-blend-screen"
+                    },
+                    {
+                      "title": "Multiply",
+                      "value": "mix-blend-multiply"
+                    },
+                    {
+                      "title": "Normal"
+                    }
+                  ]
+                },
+                "initialValue": "mix-blend-overlay",
+                "description": "Modo de mistura CSS (blend mode)",
+                "name": "blendMode",
+                "type": "string",
+                "title": "Modo de Mistura"
+              }
+            ],
+            "name": "overlayGradient",
+            "type": "object",
+            "title": "Gradiente de Overlay (Item Ativo)"
+          }
+        ],
+        "name": "displaySettings",
+        "type": "object",
+        "title": "Configurações de Exibição"
+      }
+    ],
+    "name": "beneficiosSection",
+    "type": "document",
+    "title": "Seção de Benefícios"
+  },
+  {
+    "fields": [
+      {
         "fields": [
           {
             "initialValue": "Conheça nossos planos",
