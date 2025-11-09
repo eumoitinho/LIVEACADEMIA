@@ -4,16 +4,27 @@ import imageUrlBuilder from '@sanity/image-url'
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  // Desabilitar CDN em desenvolvimento para ver mudanças imediatamente
+  // CDN pode causar cache de até 60s em produção
+  // Para desabilitar: defina SANITY_USE_CDN=false nas variáveis de ambiente
   useCdn: process.env.NODE_ENV === 'production' && process.env.SANITY_USE_CDN !== 'false',
   apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
   token: process.env.SANITY_API_TOKEN,
-  // Adicionar revalidação para evitar cache excessivo
+  // Usar 'published' para dados publicados, 'previewDrafts' para rascunhos
   perspective: 'published',
   stega: {
     enabled: false,
   },
 })
+
+// Log de configuração em desenvolvimento para debug
+if (process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DEBUG === 'true') {
+  console.log('[Sanity Config]', {
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+    useCdn: process.env.NODE_ENV === 'production' && process.env.SANITY_USE_CDN !== 'false',
+    cdnDisabled: process.env.SANITY_USE_CDN === 'false',
+  })
+}
 
 // Helper para construir URLs de imagens
 const builder = imageUrlBuilder(client)
@@ -27,7 +38,11 @@ export async function getHomepageData() {
   try {
     const data = await client.fetch(`
       *[_type == "homepage"][0] {
-        seo,
+        seo {
+          title,
+          description,
+          keywords
+        },
         hero {
           backgroundImage {
             asset-> {
@@ -65,7 +80,19 @@ export async function getHomepageData() {
           badge,
           title,
           description,
-          image,
+          image {
+            asset-> {
+              _id,
+              url,
+              metadata {
+                dimensions {
+                  width,
+                  height
+                }
+              }
+            },
+            alt
+          },
           stats[] {
             value,
             label
@@ -143,10 +170,17 @@ export async function getUnits() {
         name,
         "slug": slug.current,
         address,
+        city,
+        state,
+        zipCode,
+        phone,
+        whatsapp,
+        email,
         latitude,
         longitude,
         type,
         services,
+        description,
         photo {
           asset-> {
             url
@@ -200,6 +234,7 @@ export async function getUnits() {
         order,
         active,
         featured,
+        planosAPIConfig,
         planos[] {
           nome,
           preco,
@@ -256,7 +291,19 @@ export async function getBenefits() {
         title,
         description,
         icon,
-        image,
+        image {
+          asset-> {
+            _id,
+            url,
+            metadata {
+              dimensions {
+                width,
+                height
+              }
+            }
+          },
+          alt
+        },
         order,
         active
       }
@@ -277,7 +324,19 @@ export async function getTestimonials() {
         name,
         role,
         content,
-        avatar,
+        avatar {
+          asset-> {
+            _id,
+            url,
+            metadata {
+              dimensions {
+                width,
+                height
+              }
+            }
+          },
+          alt
+        },
         rating,
         order,
         active
@@ -318,7 +377,19 @@ export async function getModalities() {
         _id,
         name,
         description,
-        image,
+        image {
+          asset-> {
+            _id,
+            url,
+            metadata {
+              dimensions {
+                width,
+                height
+              }
+            }
+          },
+          alt
+        },
         duration,
         difficulty,
         instructor,
@@ -343,7 +414,19 @@ export async function getStructureFeatures() {
         title,
         description,
         icon,
-        image,
+        image {
+          asset-> {
+            _id,
+            url,
+            metadata {
+              dimensions {
+                width,
+                height
+              }
+            }
+          },
+          alt
+        },
         order,
         active
       }
@@ -384,7 +467,19 @@ export async function getBioimpedanciaFeatures() {
         title,
         description,
         benefits,
-        image,
+        image {
+          asset-> {
+            _id,
+            url,
+            metadata {
+              dimensions {
+                width,
+                height
+              }
+            }
+          },
+          alt
+        },
         order,
         active
       }
@@ -616,13 +711,7 @@ export async function getGlobalSettings() {
         contact {
           email,
           phone,
-          whatsapp,
-          address {
-            street,
-            city,
-            state,
-            zipCode
-          }
+          whatsapp
         },
         socialMedia {
           facebook,
@@ -632,36 +721,28 @@ export async function getGlobalSettings() {
           tiktok
         },
         appUrls {
-          appStore {
-            appLive,
-            appTreino
-          },
-          googlePlay {
-            appLive,
-            appTreino
-          }
+          appStoreUrl,
+          playStoreUrl
         },
-        globalCtas {
-          primaryCta {
-            text,
-            url,
-            style
-          },
-          secondaryCta {
-            text,
-            url,
-            style
-          }
+        globalCTAs {
+          primaryCTA,
+          secondaryCTA,
+          plansCTA,
+          consultorCTA
         },
         floatingButtons[] {
-          icon,
-          text,
+          label,
+          type,
           url,
-          backgroundColor,
-          textColor,
-          position,
+          icon,
           order,
           active
+        },
+        general {
+          companyName,
+          tagline,
+          address,
+          workingHours
         }
       }
     `)
@@ -700,7 +781,8 @@ export async function getModalidadesSectionData() {
         },
         displaySettings {
           showOnHomepage,
-          maxModalitiesShow
+          maxModalitiesShow,
+          backgroundColor
         }
       }
     `)
@@ -737,16 +819,23 @@ export async function getWellhubSectionData() {
           url
         },
         banner {
+          title,
+          description,
           image {
             asset-> {
               url
             }
           },
-          altText
+          altText,
+          cta {
+            text,
+            url
+          }
         },
         displaySettings {
           showOnHomepage,
-          showBanner
+          showBanner,
+          backgroundColor
         }
       }
     `)
@@ -778,7 +867,8 @@ export async function getTestimonialSectionData() {
             }
           },
           rating,
-          order
+          order,
+          featured
         },
         linkedTestimonials[]-> {
           name,
@@ -801,7 +891,8 @@ export async function getTestimonialSectionData() {
         displaySettings {
           showOnHomepage,
           showStatistics,
-          backgroundColor
+          backgroundColor,
+          maxTestimonials
         }
       }
     `)

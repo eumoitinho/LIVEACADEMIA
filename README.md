@@ -6,6 +6,9 @@ Website moderno e responsivo para a Live Academia, a maior rede de academias de 
 > - **API V3 Implementation**: `docs/API-V3-IMPLEMENTATION.md`
 > - **Roteiro Tutorial Sanity**: `docs/ROTEIRO-TUTORIAL-SANITY.md`
 > - **Explicação API Pacto Filtros**: `docs/EXPLICACAO-API-PACTO-FILTROS.md`
+> - **Troubleshooting Cache Sanity**: `docs/SANITY-CACHE-TROUBLESHOOTING.md`
+> - **Campos Sanity Não Utilizados**: `docs/SANITY-CAMPOS-NAO-UTILIZADOS.md`
+> - **Correções Sanity Queries**: `docs/CORRECOES-SANITY-QUERIES.md`
 > - Plano de Tagueamento / Analytics: `docs/analytics-tracking-plan.md`
 > - Deployment & Infra: `docs/deployment.md`
 > - Contribuição / Git Workflow: `docs/contributing.md`

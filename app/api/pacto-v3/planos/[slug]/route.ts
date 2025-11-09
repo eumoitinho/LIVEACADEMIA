@@ -47,11 +47,36 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
 
   try {
     // Buscar chave secreta da unidade usando helper functions (que respeitam o mapeamento)
+    const secretKeyName = getSecretKeyEnvName(slug)
+    const secretDevKeyName = getSecretKeyDevEnvName(slug)
+    const publicCodeName = getPublicUnitCodeEnvName(slug)
+    
     const chaveSecret = getEnvKey(slug, 'secret') || getEnvKey(slug, 'secret-dev')
     
+    // Log detalhado para debug (sem expor valores completos)
+    console.log(`[PactoV3] Buscando planos para unidade: ${slug}`)
+    console.log(`[PactoV3] Variáveis esperadas:`)
+    console.log(`[PactoV3]   - ${secretKeyName}: ${!!getEnvKey(slug, 'secret') ? '✓ encontrada' : '✗ não encontrada'}`)
+    console.log(`[PactoV3]   - ${secretDevKeyName}: ${!!getEnvKey(slug, 'secret-dev') ? '✓ encontrada' : '✗ não encontrada'}`)
+    console.log(`[PactoV3]   - ${publicCodeName}: ${!!getEnvKey(slug, 'public-code') ? '✓ encontrada' : '✗ não encontrada'}`)
+    
+    // Verificar se alguma variável de ambiente existe (mesmo que vazia)
+    const secretKeyExists = process.env[secretKeyName] !== undefined
+    const secretDevKeyExists = process.env[secretDevKeyName] !== undefined
+    const publicCodeExists = process.env[publicCodeName] !== undefined
+    
     if (!chaveSecret) {
-      console.error(`[PactoV3] Chave secreta não encontrada para unidade ${slug}`)
-      console.error(`[PactoV3] Procurando por: ${getSecretKeyEnvName(slug)} ou ${getSecretKeyDevEnvName(slug)}`)
+      console.error(`[PactoV3] ❌ Chave secreta não encontrada para unidade ${slug}`)
+      console.error(`[PactoV3] Variáveis verificadas no process.env:`)
+      console.error(`[PactoV3]   - ${secretKeyName}: exists=${secretKeyExists}, hasValue=${!!process.env[secretKeyName] && process.env[secretKeyName]!.length > 0}`)
+      console.error(`[PactoV3]   - ${secretDevKeyName}: exists=${secretDevKeyExists}, hasValue=${!!process.env[secretDevKeyName] && process.env[secretDevKeyName]!.length > 0}`)
+      
+      // Listar todas as variáveis disponíveis para ajudar no debug
+      const availableKeys = Object.keys(process.env)
+        .filter(k => k.includes('PACTO_SECRET') || k.includes(slug.toUpperCase().replace(/-/g, '_')))
+        .slice(0, 10) // Limitar a 10 para não poluir logs
+      console.error(`[PactoV3] Variáveis relacionadas encontradas:`, availableKeys)
+      
       throw new Error(`Chave da unidade ${slug} não configurada`)
     }
 
@@ -59,10 +84,13 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     const empresaId = getEnvKey(slug, 'public-code')
     
     if (!empresaId) {
-      console.error(`[PactoV3] Código da empresa não encontrado para unidade ${slug}`)
-      console.error(`[PactoV3] Procurando por: ${getPublicUnitCodeEnvName(slug)}`)
+      console.error(`[PactoV3] ❌ Código da empresa não encontrado para unidade ${slug}`)
+      console.error(`[PactoV3] Variável verificada: ${publicCodeName}`)
+      console.error(`[PactoV3]   - exists=${publicCodeExists}, hasValue=${!!process.env[publicCodeName] && process.env[publicCodeName]!.length > 0}`)
       throw new Error(`Código da empresa ${slug} não configurado`)
     }
+    
+    console.log(`[PactoV3] ✅ Chaves encontradas para ${slug}, buscando planos...`)
 
 
     
