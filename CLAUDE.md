@@ -9,8 +9,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Transparent checkout integration with Pacto Soluções API (payment processing)
 - Multi-unit support with dynamic plan fetching
 - Analytics tracking (GA4, Meta Pixel via GTM dataLayer)
+- **Sanity CMS** with automatic revalidation webhooks for instant content updates
 
-**Tech Stack**: Next.js 15, TypeScript, Tailwind CSS, Radix UI/shadcn, Framer Motion, Supabase (Postgres), React Hook Form, Zod
+**Tech Stack**: Next.js 15, TypeScript, Tailwind CSS, Radix UI/shadcn, Framer Motion, Supabase (Postgres), Sanity CMS, React Hook Form, Zod
 
 ## Development Commands
 
@@ -125,6 +126,25 @@ scripts/
   - Scripts `lib/repository.ts` and `scripts/seed-supabase.ts` need updating to match new schema
   - DO NOT use old references to `rede.encrypted_api_key` or `unidade.encrypted_unit_key`
 
+## Sanity CMS Integration
+
+**Content Management**: All site content (homepage, units, plans, testimonials, etc.) is managed via Sanity Studio.
+
+**Automatic Sync**: Webhooks configured to revalidate pages instantly when content changes in Sanity.
+
+**How it works**:
+1. User publishes changes in Sanity Studio
+2. Sanity sends webhook to `/api/revalidate`
+3. Next.js revalidates affected pages and cache tags
+4. Changes appear on site within seconds (no manual rebuild needed!)
+
+**Configuration**: See `docs/SANITY-WEBHOOK-SETUP.md` for complete webhook setup instructions.
+
+**Important files**:
+- `app/api/revalidate/route.ts` - Webhook endpoint with revalidation logic
+- `lib/sanity.ts` - Sanity client + data fetching functions (all with cache tags)
+- `sanity.config.ts` - Sanity Studio configuration
+
 ## Environment Variables
 
 Required variables (create `.env.local` from `.env.example`):
@@ -136,6 +156,13 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 # Encryption (32+ chars, NEVER commit)
 ENCRYPTION_SECRET=your-strong-secret-here
+
+# Sanity CMS
+NEXT_PUBLIC_SANITY_PROJECT_ID=c9pbklm2
+NEXT_PUBLIC_SANITY_DATASET=production
+SANITY_API_TOKEN=your-sanity-api-token
+SANITY_REVALIDATE_SECRET=your-webhook-token  # for webhook authentication
+SANITY_WEBHOOK_SECRET=your-webhook-secret    # optional, for signature validation
 
 # Pacto API
 PACTO_API_URL=https://apigw.pactosolucoes.com.br  # optional, has default
@@ -265,6 +292,27 @@ Push to `window.dataLayer` for GTM consumption (GA4 + Meta Pixel configured in G
 - ✅ CPF/phone sanitized before sending (remove formatting)
 - ❌ TODO: Add CSP headers + Referrer-Policy
 - ❌ TODO: Remove `ignoreBuildErrors` from `next.config.js`
+
+## Content Updates (Sanity CMS)
+
+**How to update site content**:
+
+1. Access Sanity Studio: `http://localhost:3000/studio` (dev) or `https://liveacademia.com.br/studio` (prod)
+2. Make changes (edit text, swap images, reorder items, etc.)
+3. Click **Publish**
+4. Changes appear on site within seconds automatically via webhook
+
+**What can be edited**:
+- Homepage sections (hero, about, benefits, plans)
+- Units (name, address, photos, gallery)
+- Plans (name, price, features)
+- Testimonials
+- Modalities
+- App section
+- Contact/About pages
+- All images and text content
+
+**No code changes needed** - everything is managed via Sanity Studio!
 
 ## Known Issues / Technical Debt
 
