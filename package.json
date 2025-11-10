@@ -19,7 +19,8 @@
     "strapi:dev": "cd cms && npm run develop",
     "strapi:build": "cd cms && npm run build",
     "strapi:start": "cd cms && npm run start",
-    "strapi:migrate": "tsx scripts/migrate-sanity-to-strapi.ts"
+    "strapi:migrate": "tsx scripts/migrate-sanity-to-strapi.ts",
+    "strapi:rebuild": "cd cms && npm rebuild"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
