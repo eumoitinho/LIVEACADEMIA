@@ -14,10 +14,4 @@ export default defineCliConfig({
      */
     autoUpdates: false, // Desabilitado para evitar problemas de conexão durante build
   },
-  /**
-   * Configurações de rede para evitar problemas de conexão
-   */
-  http: {
-    timeout: 60000, // 60 segundos de timeout
-  },
 })

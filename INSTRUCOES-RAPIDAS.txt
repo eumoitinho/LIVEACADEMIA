@@ -1,0 +1,17 @@
+🚀 INSTRUÇÕES RÁPIDAS: Criar Homepage Editável no Sanity
+
+PROBLEMA: Documento aparece como deletado e "Restore" não funciona
+
+SOLUÇÃO RÁPIDA (5 minutos):
+
+1. No Sanity Studio, clique em "Create" ou "+"
+2. Selecione "Homepage"
+3. Preencha campos básicos:
+   - SEO Title: Live Academia | Rede de Academias em Manaus
+   - Hero Title: Transforme.
+   - Hero Subtitle: Evolua.
+   - Hero Third Title: Viva.
+4. Clique em "Publish"
+5. PRONTO! Documento estará editável
+
+📚 Guia completo: docs/SOLUCAO-RESTORE-NAO-FUNCIONA.md
