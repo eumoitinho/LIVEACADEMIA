@@ -1,8 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useBioimpedanciaFeaturesData } from "../../../hooks/use-sanity-data"
-import { urlFor } from "../../../lib/sanity"
+import { useBioimpedanciaFeaturesData } from "@/hooks/use-sanity-data"
+import { urlFor } from "@/lib/sanity"
 
 const easing = [0.16, 1, 0.3, 1] as const
 

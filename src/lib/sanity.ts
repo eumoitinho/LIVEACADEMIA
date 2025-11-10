@@ -7,6 +7,9 @@ export const client = createClient({
   useCdn: process.env.NODE_ENV === 'production',
   apiVersion: '2024-01-01',
   token: process.env.SANITY_API_TOKEN,
+  stega: {
+    studioUrl: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL || '/studio',
+  },
 })
 
 // Helper para construir URLs de imagens
@@ -106,43 +109,62 @@ export async function getHomepageData() {
   }
 }
 
+// Cache para unidades - DESABILITADO para desenvolvimento
+let unitsCache: any[] | null = null
+let cacheTimestamp = 0
+const CACHE_DURATION = 0 // 0 = sem cache
+
 // Helper para buscar unidades
 export async function getUnits() {
   try {
+    // Verificar cache
+    if (unitsCache && Date.now() - cacheTimestamp < CACHE_DURATION) {
+      return unitsCache
+    }
+
     const data = await client.fetch(`
       *[_type == "unit" && active == true] | order(order asc) {
         _id,
         name,
-        slug,
+        "slug": slug.current,
         address,
-        city,
-        state,
-        zipCode,
-        phone,
-        whatsapp,
-        email,
         latitude,
         longitude,
         type,
         services,
-        images,
         photo {
-          asset->{
+          asset-> {
             url
           }
         },
         backgroundImage {
-          asset->{
+          asset-> {
             url
           }
         },
-        description,
+        images[] {
+          asset-> {
+            url
+          }
+        },
         openingHours,
         order,
         active,
-        featured
+        featured,
+        planos[] {
+          nome,
+          preco,
+          periodo,
+          destaque,
+          badge
+        }
       }
     `)
+    
+    // Atualizar cache
+    unitsCache = data
+    cacheTimestamp = Date.now()
+    
     return data
   } catch (error) {
     console.error('Error fetching units:', error)
@@ -162,6 +184,7 @@ export async function getPlans() {
         priceLabel,
         features,
         cta,
+        ctaUrl,
         highlight,
         badge,
         order,
@@ -345,6 +368,34 @@ export async function getAppSectionData() {
     return data
   } catch (error) {
     console.error('Error fetching app section data:', error)
+    return null
+  }
+}
+
+export async function getBeneficiosSectionData() {
+  try {
+    const data = await client.fetch(`
+      *[_type == "beneficiosSection"][0] {
+        badge,
+        title,
+        description,
+        items[] {
+          icon,
+          title,
+          description,
+          color,
+          image {
+            asset-> {
+              _id,
+              url
+            }
+          }
+        }
+      }
+    `)
+    return data
+  } catch (error) {
+    console.error('Error fetching beneficios section data:', error)
     return null
   }
 }

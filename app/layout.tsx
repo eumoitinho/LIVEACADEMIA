@@ -6,6 +6,10 @@ import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import { UnitProvider } from "@/contexts/unit-context"
 import GTM from '@/src/components/analytics/gtm'
+import { VisualEditing } from "next-sanity/visual-editing"
+import { DisableDraftMode } from "@/components/DisableDraftMode"
+import { SanityLive } from "@/lib/sanity-live"
+import { draftMode } from "next/headers"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -15,7 +19,7 @@ export const metadata: Metadata = {
     "Transforme seu corpo e sua vida na maior rede de academias de Manaus. Sem fidelidade, sem anuidade, sem pegadinha.",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -97,6 +101,13 @@ export default function RootLayout({
               <Footer />
             </div>
           </UnitProvider>
+          <SanityLive />
+          {(await draftMode()).isEnabled && (
+            <>
+              <VisualEditing />
+              <DisableDraftMode />
+            </>
+          )}
         </body>
       </html>
     )

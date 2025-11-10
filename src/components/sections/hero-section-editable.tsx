@@ -3,8 +3,8 @@
 import { useEffect } from "react"
 import Link from "next/link"
 import { ArrowRight, Star } from "lucide-react"
-import { urlFor } from '../../../lib/sanity'
-import type { HeroSection } from '../../../types/sanity'
+import { urlFor } from '@/lib/sanity'
+import type { HeroSection } from '@/types/sanity'
 
 declare global {
   interface Window {

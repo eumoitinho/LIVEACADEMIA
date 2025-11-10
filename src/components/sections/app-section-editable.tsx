@@ -3,9 +3,9 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { CheckCircle } from "lucide-react"
-import { useAppSectionData } from "../../../hooks/use-sanity-data"
-import { urlFor } from "../../../lib/sanity"
-import type { AppSectionData } from "../../../types/sanity"
+import { useAppSectionData } from "@/hooks/use-sanity-data"
+import { urlFor } from "@/lib/sanity"
+import type { AppSectionData } from "@/types/sanity"
 
 export default function AppSectionEditable() {
   const { data, loading } = useAppSectionData()
