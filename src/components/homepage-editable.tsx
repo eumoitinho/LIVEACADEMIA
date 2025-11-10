@@ -76,7 +76,7 @@ export default function HomepageEditable() {
       <UnidadesCarouselEditable />
 
       {/* Plans Section */}
-      <PlanosSectionEditable data={homepageData?.planos || { badge: "Planos", title: "Escolha o plano ideal para você", description: "Planos flexíveis sem fidelidade. Cancele quando quiser, sem multas ou taxas.", plans: [] }} />
+      <PlanosSectionEditable data={homepageData?.planos || defaultPlanos} />
 
       {/* Benefits Section */}
       <BeneficiosSectionEditable />
