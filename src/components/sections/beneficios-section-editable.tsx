@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { ShieldCheck, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
 import Image from "next/image"
 import { useState, useCallback } from "react"
-import { useBeneficiosSectionData } from "../../../hooks/use-sanity-data"
+import { useBeneficiosSectionData } from "@/hooks/use-sanity-data"
 
 const defaultBeneficios = [
   {

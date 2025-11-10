@@ -1,6 +1,6 @@
 "use client"
 
-import { useHomepageData, useUnitsData } from "../../hooks/use-sanity-data"
+import { useHomepageData, useUnitsData } from "@/hooks/use-sanity-data"
 import HeroSectionEditable from "@/components/sections/hero-section-editable"
 import AboutSectionEditable from "@/components/sections/about-section-editable"
 import BeneficiosSectionEditable from "@/components/sections/beneficios-section-editable"
