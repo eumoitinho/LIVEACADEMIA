@@ -1,0 +1,71 @@
+{
+  "kind": "singleType",
+  "collectionName": "about_pages",
+  "info": {
+    "singularName": "about-page",
+    "pluralName": "about-pages",
+    "displayName": "About Page",
+    "description": "About/Sobre page content"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "seo.meta-data"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "contentSections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "content.content-section"
+    },
+    "values": {
+      "type": "component",
+      "repeatable": true,
+      "component": "about.value-item"
+    },
+    "mission": {
+      "type": "text"
+    },
+    "vision": {
+      "type": "text"
+    },
+    "history": {
+      "type": "richtext"
+    },
+    "stats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.stat"
+    },
+    "teamSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "about.team-section"
+    },
+    "cta": {
+      "type": "component",
+      "repeatable": false,
+      "component": "ui.cta"
+    }
+  }
+}

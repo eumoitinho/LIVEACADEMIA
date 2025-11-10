@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Multi-unit support with dynamic plan fetching
 - Analytics tracking (GA4, Meta Pixel via GTM dataLayer)
 
-**Tech Stack**: Next.js 15, TypeScript, Tailwind CSS, Radix UI/shadcn, Framer Motion, Supabase (Postgres), React Hook Form, Zod
+**Tech Stack**: Next.js 15, TypeScript, Tailwind CSS, Radix UI/shadcn, Framer Motion, Supabase (Postgres), Strapi CMS, React Hook Form, Zod
 
 ## Development Commands
 
@@ -18,6 +18,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Development
 pnpm dev              # Start dev server (Next.js)
 pnpm dev:fixed        # Alternative dev start via bash script
+pnpm dev:all          # Start both Next.js and Strapi
+
+# Strapi CMS
+pnpm strapi:dev       # Start Strapi in development mode
+pnpm strapi:build     # Build Strapi admin panel
+pnpm strapi:start     # Start Strapi in production mode
+pnpm strapi:migrate   # Migrate data from Sanity to Strapi
 
 # Build & Production
 pnpm build            # Production build
@@ -35,6 +42,15 @@ pnpm fetch:unit-keys  # Fetch unit API keys from external sources
 ## Architecture
 
 ### Core Concepts
+
+0. **Content Management (Strapi CMS)**: All website content is managed through Strapi:
+   - **Location**: `cms/` directory (separate Strapi installation)
+   - **Admin Panel**: `http://localhost:1337/admin`
+   - **Content Types**: Homepage, Units, Plans, Modalities, Benefits, Testimonials, Pages
+   - **Visual Editor**: WYSIWYG editing for all content
+   - **API**: REST API at `http://localhost:1337/api/`
+   - **Integration**: Next.js fetches content via `lib/strapi.ts`
+   - **Setup Guide**: See `STRAPI_SETUP.md` for detailed instructions
 
 1. **Multi-Unit System**: Each gym unit has its own:
    - Encrypted API key (`units.chave_api`) stored in Supabase
@@ -74,6 +90,7 @@ components/
 lib/
 ├── pacto-api.ts                # Pacto API wrapper (V3)
 ├── pacto-schemas.ts            # Zod schemas for API responses
+├── strapi.ts                   # Strapi CMS API client (NEW!)
 ├── locations.ts                # Static unit data (fallback)
 ├── repository.ts               # Supabase data access (units, logs)
 ├── crypto.ts                   # AES-256-GCM encryption for API keys
@@ -81,10 +98,34 @@ lib/
 └── env.ts                      # Environment variable validation
 contexts/
 └── unit-context.tsx            # React context for current unit (client)
+types/
+└── strapi.ts                   # TypeScript types for Strapi content (NEW!)
 supabase/
 └── schema.sql                  # Database schema (units, api_log)
 scripts/
 └── *.js                        # API key discovery tools (see README-API-DISCOVERY.md)
+cms/                            # Strapi CMS (NEW!)
+├── src/
+│   ├── api/                    # Strapi content types
+│   │   ├── homepage/           # Homepage singleton
+│   │   ├── unit/               # Unit collection
+│   │   ├── plan/               # Plan collection
+│   │   ├── modality/           # Modality collection
+│   │   ├── benefit/            # Benefit collection
+│   │   ├── testimonial/        # Testimonial collection
+│   │   ├── contact-page/       # Contact page singleton
+│   │   ├── about-page/         # About page singleton
+│   │   ├── trabalhe-conosco-page/  # Careers page singleton
+│   │   └── day-use-page/       # Day use page singleton
+│   └── components/             # Reusable Strapi components
+│       ├── homepage/           # Homepage sections
+│       ├── ui/                 # UI components (Button, Stat, etc.)
+│       ├── seo/                # SEO components
+│       ├── contact/            # Contact info components
+│       └── social/             # Social media components
+├── config/                     # Strapi configuration
+├── database/                   # SQLite database (dev)
+└── public/                     # Uploaded media
 ```
 
 ## Database (Supabase)
@@ -207,6 +248,84 @@ Push to `window.dataLayer` for GTM consumption (GA4 + Meta Pixel configured in G
 - Use `try/catch` + proper status codes
 - Log to `api_log` table via `logApi()` from `lib/repository.ts`
 - Never log sensitive data (mask CPF, never log card numbers)
+
+## Strapi CMS Integration
+
+**All website content is now managed through Strapi CMS** with visual editing capabilities.
+
+### Quick Start
+
+1. **Start Strapi**:
+   ```bash
+   pnpm strapi:dev
+   ```
+   - Admin panel: http://localhost:1337/admin
+   - API: http://localhost:1337/api/
+
+2. **Configure API Token**:
+   - Settings > API Tokens > Create new token
+   - Add to `.env.local`: `STRAPI_API_TOKEN=your-token`
+
+3. **Enable Public Permissions**:
+   - Settings > Roles > Public
+   - Enable `find` and `findOne` for all content types
+
+### Fetching Content from Strapi
+
+```typescript
+import { getHomepage, getStrapiMediaUrl } from '@/lib/strapi';
+
+// Fetch homepage data
+const response = await getHomepage();
+const homepage = response.data;
+
+// Get media URL
+const imageUrl = getStrapiMediaUrl(homepage.attributes.heroSection.backgroundImage.data.attributes.url);
+```
+
+### Available Fetch Functions
+
+- `getGlobalSettings()` - Site-wide settings
+- `getHomepage()` - Homepage content
+- `getUnits()` - All gym units
+- `getUnitBySlug(slug)` - Single unit
+- `getPlans()` - All plans
+- `getModalities()` - All modalities
+- `getBenefits()` - All benefits
+- `getTestimonials()` - All testimonials
+- `getContactPage()` - Contact page
+- `getAboutPage()` - About page
+- `getTrabalheConoscoPage()` - Careers page
+- `getDayUsePage()` - Day use page
+
+### Content Structure
+
+**Singletons** (single pages):
+- Global Settings - Logo, SEO, contact info
+- Homepage - All sections
+- Contact Page, About Page, etc.
+
+**Collections** (multiple items):
+- Units - 35+ gym locations
+- Plans - Membership plans
+- Modalities - Class types
+- Benefits - Gym benefits
+- Testimonials - Customer reviews
+
+### Adding New Content
+
+**Via Strapi Admin**:
+1. Navigate to Content Manager
+2. Select content type
+3. Click "Create new entry"
+4. Fill in fields using visual editor
+5. Save and Publish
+
+**See Also**:
+- `STRAPI_SETUP.md` - Complete setup guide
+- `STRAPI_MIGRATION_GUIDE.md` - Migration from Sanity
+- `/app/strapi-example/page.tsx` - Example implementation
+- `types/strapi.ts` - TypeScript type definitions
 
 ## Common Workflows
 

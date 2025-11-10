@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_analytics_tracking_codes",
+  "info": {
+    "displayName": "Analytics Tracking Codes",
+    "icon": "chartLine",
+    "description": "Analytics and tracking IDs"
+  },
+  "options": {},
+  "attributes": {
+    "ga4Id": {
+      "type": "string"
+    },
+    "gtmId": {
+      "type": "string"
+    },
+    "metaPixelId": {
+      "type": "string"
+    }
+  }
+}

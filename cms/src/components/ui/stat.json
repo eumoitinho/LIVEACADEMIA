@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_ui_stats",
+  "info": {
+    "displayName": "Stat",
+    "icon": "chartLine",
+    "description": "Statistic component"
+  },
+  "options": {},
+  "attributes": {
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

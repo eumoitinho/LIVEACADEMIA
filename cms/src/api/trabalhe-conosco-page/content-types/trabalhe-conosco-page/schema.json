@@ -1,0 +1,62 @@
+{
+  "kind": "singleType",
+  "collectionName": "trabalhe_conosco_pages",
+  "info": {
+    "singularName": "trabalhe-conosco-page",
+    "pluralName": "trabalhe-conosco-pages",
+    "displayName": "Trabalhe Conosco Page",
+    "description": "Trabalhe Conosco/Careers page content"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "seo.meta-data"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "benefits": {
+      "type": "component",
+      "repeatable": true,
+      "component": "careers.career-benefit"
+    },
+    "positions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "careers.job-position"
+    },
+    "formTitle": {
+      "type": "string"
+    },
+    "formDescription": {
+      "type": "text"
+    },
+    "ctaButtonText": {
+      "type": "string",
+      "default": "Enviar candidatura"
+    },
+    "contactInfo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "contact.contact-info"
+    }
+  }
+}

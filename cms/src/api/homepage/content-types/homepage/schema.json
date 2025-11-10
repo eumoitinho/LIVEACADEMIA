@@ -1,0 +1,71 @@
+{
+  "kind": "singleType",
+  "collectionName": "homepages",
+  "info": {
+    "singularName": "homepage",
+    "pluralName": "homepages",
+    "displayName": "Homepage",
+    "description": "Homepage content and sections"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "seo.meta-data"
+    },
+    "heroSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.hero-section"
+    },
+    "aboutSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.about-section"
+    },
+    "benefitsSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.benefits-section"
+    },
+    "structureSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.structure-section"
+    },
+    "modalitiesSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.modalities-section"
+    },
+    "plansSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.plans-section"
+    },
+    "appSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.app-section"
+    },
+    "wellhubSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.wellhub-section"
+    },
+    "bioimpedanciaSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.bioimpedancia-section"
+    },
+    "testimonialsSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "homepage.testimonials-section"
+    }
+  }
+}

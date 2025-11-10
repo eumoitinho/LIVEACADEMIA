@@ -1,0 +1,38 @@
+{
+  "collectionName": "components_homepage_wellhub_sections",
+  "info": {
+    "displayName": "Wellhub Section",
+    "icon": "heart",
+    "description": "Homepage Wellhub section"
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string",
+      "default": "WELLHUB"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "benefits": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.highlight"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "ctaButton": {
+      "type": "component",
+      "repeatable": false,
+      "component": "ui.button"
+    }
+  }
+}

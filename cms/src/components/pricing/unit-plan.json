@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_pricing_unit_plans",
+  "info": {
+    "displayName": "Unit Plan",
+    "icon": "priceTag",
+    "description": "Plan available at specific unit"
+  },
+  "options": {},
+  "attributes": {
+    "planName": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "period": {
+      "type": "string",
+      "default": "mês"
+    },
+    "highlight": {
+      "type": "boolean",
+      "default": false
+    },
+    "badge": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_ui_highlights",
+  "info": {
+    "displayName": "Highlight",
+    "icon": "check",
+    "description": "Highlight/feature item"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}

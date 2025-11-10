@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_homepage_structure_sections",
+  "info": {
+    "displayName": "Structure Section",
+    "icon": "building",
+    "description": "Homepage structure section"
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string",
+      "default": "ESTRUTURA"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "features": {
+      "type": "component",
+      "repeatable": true,
+      "component": "features.structure-feature"
+    }
+  }
+}

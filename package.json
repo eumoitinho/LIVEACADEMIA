@@ -6,6 +6,7 @@
     "build": "next build",
     "dev": "next dev",
     "dev:fixed": "bash scripts/dev.sh",
+    "dev:all": "concurrently \"pnpm dev\" \"pnpm strapi:dev\"",
     "lint": "next lint",
     "start": "next start",
     "fetch:unit-keys": "node scripts/fetch-unit-keys.js",
@@ -14,7 +15,11 @@
     "sanity:seed": "node scripts/seed-sanity.js",
     "sanity:seed-units": "tsx scripts/seed-sanity-units.ts",
     "sanity:studio": "sanity dev",
-    "sanity:deploy": "sanity deploy"
+    "sanity:deploy": "sanity deploy",
+    "strapi:dev": "cd cms && npm run develop",
+    "strapi:build": "cd cms && npm run build",
+    "strapi:start": "cd cms && npm run start",
+    "strapi:migrate": "tsx scripts/migrate-sanity-to-strapi.ts"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",

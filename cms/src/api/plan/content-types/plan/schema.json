@@ -1,0 +1,79 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plans",
+  "info": {
+    "singularName": "plan",
+    "pluralName": "plans",
+    "displayName": "Plan",
+    "description": "Membership plans"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "planId": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "priceLabel": {
+      "type": "string",
+      "default": "mês"
+    },
+    "period": {
+      "type": "string"
+    },
+    "features": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.highlight"
+    },
+    "ctaText": {
+      "type": "string",
+      "default": "Matricular"
+    },
+    "ctaUrl": {
+      "type": "string"
+    },
+    "highlight": {
+      "type": "boolean",
+      "default": false
+    },
+    "popular": {
+      "type": "boolean",
+      "default": false
+    },
+    "badge": {
+      "type": "string"
+    },
+    "gradientFrom": {
+      "type": "string"
+    },
+    "gradientTo": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

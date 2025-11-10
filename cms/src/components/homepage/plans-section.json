@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_homepage_plans_sections",
+  "info": {
+    "displayName": "Plans Section",
+    "icon": "priceTag",
+    "description": "Homepage plans section"
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string",
+      "default": "PLANOS"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "plans": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::plan.plan"
+    }
+  }
+}

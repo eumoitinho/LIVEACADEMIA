@@ -1,0 +1,58 @@
+{
+  "kind": "singleType",
+  "collectionName": "day_use_pages",
+  "info": {
+    "singularName": "day-use-page",
+    "pluralName": "day-use-pages",
+    "displayName": "Day Use Page",
+    "description": "Day Use page content"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "seo.meta-data"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "benefits": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.highlight"
+    },
+    "packages": {
+      "type": "component",
+      "repeatable": true,
+      "component": "pricing.day-use-package"
+    },
+    "faqs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.faq"
+    },
+    "ctaTitle": {
+      "type": "string"
+    },
+    "ctaDescription": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "collectionName": "components_homepage_bioimpedancia_sections",
+  "info": {
+    "displayName": "Bioimpedância Section",
+    "icon": "chartBar",
+    "description": "Homepage bioimpedância section"
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string",
+      "default": "BIOIMPEDÂNCIA"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "features": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.highlight"
+    },
+    "ctaButton": {
+      "type": "component",
+      "repeatable": false,
+      "component": "ui.button"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

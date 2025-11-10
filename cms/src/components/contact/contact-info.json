@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_contact_contact_info",
+  "info": {
+    "displayName": "Contact Info",
+    "icon": "phone",
+    "description": "Contact information"
+  },
+  "options": {},
+  "attributes": {
+    "phone": {
+      "type": "string"
+    },
+    "whatsapp": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "address": {
+      "type": "text"
+    }
+  }
+}
