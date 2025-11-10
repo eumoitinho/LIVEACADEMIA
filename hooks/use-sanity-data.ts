@@ -12,7 +12,7 @@ import {
   getBioimpedanciaFeatures,
   getAppSectionData,
   getBeneficiosSectionData
-} from '../lib/sanity'
+} from '@/lib/sanity'
 import type {
   HomepageContent,
   Unit,
@@ -26,7 +26,7 @@ import type {
   BioimpedanciaFeature,
   AppSectionData,
   BeneficiosSection
-} from '../types/sanity'
+} from '@/types/sanity'
 
 export function useHomepageData() {
   const [data, setData] = useState<HomepageContent | null>(null)
