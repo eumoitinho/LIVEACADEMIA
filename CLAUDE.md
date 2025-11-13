@@ -20,7 +20,12 @@ pnpm dev              # Start dev server (Next.js)
 pnpm dev:fixed        # Alternative dev start via bash script
 pnpm dev:all          # Start both Next.js and Strapi
 
-# Strapi CMS
+# Sanity CMS (Current)
+pnpm sanity:studio    # Start Sanity Studio (http://localhost:3333)
+pnpm sanity:restore:dry-run  # Test content restoration (dry run)
+pnpm sanity:restore   # Restore Sanity content from 2 weeks ago
+
+# Strapi CMS (New - Optional)
 pnpm strapi:dev       # Start Strapi in development mode
 pnpm strapi:build     # Build Strapi admin panel
 pnpm strapi:start     # Start Strapi in production mode
