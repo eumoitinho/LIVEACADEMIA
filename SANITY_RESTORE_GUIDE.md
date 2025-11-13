@@ -24,7 +24,16 @@ Adicione o token no arquivo `.env.local`:
 SANITY_API_TOKEN=seu-token-aqui
 ```
 
-**⚠️ IMPORTANTE:** Nunca commite o arquivo `.env.local` com o token!
+**⚠️ IMPORTANTE:**
+- Nunca commite o arquivo `.env.local` com o token!
+- O token DEVE ser do projeto **Live Academia (c9pbklm2)**
+- O erro "Session does not match project host" significa que o token é de outro projeto
+
+**Como verificar se o token é correto:**
+```bash
+# O script agora mostra informações do token e testa a conexão antes de começar
+pnpm sanity:restore:dry-run
+```
 
 ---
 
@@ -215,6 +224,23 @@ Acesse http://localhost:3000 e confirme que:
 ---
 
 ## 🛟 Solução de Problemas
+
+### Erro: "Session does not match project host"
+
+**Causa:** O token não pertence ao projeto c9pbklm2
+
+**Solução:**
+1. Acesse https://www.sanity.io/manage
+2. **CERTIFIQUE-SE** de selecionar o projeto **Live Academia (c9pbklm2)**
+3. Vá em **API > Tokens**
+4. Crie um NOVO token **neste projeto específico**
+5. Copie o token e adicione no `.env.local`:
+   ```bash
+   SANITY_API_TOKEN=seu-novo-token-aqui
+   ```
+6. Teste novamente: `pnpm sanity:restore:dry-run`
+
+**Dica:** O script agora mostra informações sobre o token e testa a conexão primeiro!
 
 ### Erro: "SANITY_API_TOKEN não encontrado"
 

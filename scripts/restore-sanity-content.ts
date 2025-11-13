@@ -11,13 +11,23 @@ import * as dotenv from 'dotenv';
 // Carregar variáveis de ambiente
 dotenv.config({ path: '.env.local' });
 
+// Verificar se o token existe
+const SANITY_TOKEN = process.env.SANITY_API_TOKEN || process.env.NEXT_PUBLIC_SANITY_TOKEN;
+
+if (!SANITY_TOKEN) {
+  console.error('❌ ERRO: Token do Sanity não encontrado!');
+  console.error('   Adicione SANITY_API_TOKEN no arquivo .env.local');
+  process.exit(1);
+}
+
 // Configuração do cliente Sanity
 const client = createClient({
   projectId: 'c9pbklm2',
   dataset: 'production',
   apiVersion: '2024-01-01',
-  token: process.env.SANITY_API_TOKEN,
+  token: SANITY_TOKEN,
   useCdn: false,
+  withCredentials: true,
 });
 
 // Tipos de documentos do Sanity (todos os schemas)
@@ -240,12 +250,42 @@ async function main() {
   console.log('║   RESTAURAÇÃO DE CONTEÚDO DO SANITY                        ║');
   console.log('╚════════════════════════════════════════════════════════════╝\n');
 
-  // Verificar token
-  if (!process.env.SANITY_API_TOKEN) {
-    console.error('❌ ERRO: SANITY_API_TOKEN não encontrado no .env.local');
-    console.error('   Configure o token em .env.local antes de continuar.');
+  // Mostrar informações de configuração
+  console.log('🔧 Configuração:');
+  console.log(`   Project ID: c9pbklm2`);
+  console.log(`   Dataset: production`);
+  console.log(`   API Version: 2024-01-01`);
+
+  if (SANITY_TOKEN) {
+    const tokenPreview = SANITY_TOKEN.substring(0, 8) + '...' + SANITY_TOKEN.substring(SANITY_TOKEN.length - 4);
+    console.log(`   Token: ${tokenPreview} (${SANITY_TOKEN.length} caracteres)`);
+  }
+  console.log('');
+
+  // Testar conexão com Sanity
+  console.log('🔌 Testando conexão com Sanity...');
+  try {
+    const testQuery = await client.fetch('*[_type == "homepage"][0]{_id, _type}');
+    console.log(`   ✓ Conexão bem-sucedida!`);
+    if (testQuery) {
+      console.log(`   ✓ Documento de teste encontrado: ${testQuery._type}`);
+    }
+  } catch (error: any) {
+    console.error('\n❌ ERRO ao conectar com Sanity:');
+    console.error(`   ${error.message}`);
+    console.error('\n💡 Possíveis causas:');
+    console.error('   1. Token inválido ou expirado');
+    console.error('   2. Token não pertence ao projeto c9pbklm2');
+    console.error('   3. Token sem permissões de leitura');
+    console.error('\n📝 Como obter um token válido:');
+    console.error('   1. Acesse: https://www.sanity.io/manage');
+    console.error('   2. Selecione o projeto: Live Academia (c9pbklm2)');
+    console.error('   3. Vá em: API > Tokens');
+    console.error('   4. Crie um token com permissões de Editor');
+    console.error('   5. Adicione no .env.local: SANITY_API_TOKEN=seu-token\n');
     process.exit(1);
   }
+  console.log('');
 
   // Configuração
   const WEEKS_AGO = 2;
