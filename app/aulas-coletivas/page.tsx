@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { useModalitiesData } from "../../hooks/use-sanity-data"
+import { useModalitiesData } from "@/hooks/use-sanity-data"
 import { urlFor } from "../../lib/sanity"
 
 const easing = [0.16, 1, 0.3, 1] as const
