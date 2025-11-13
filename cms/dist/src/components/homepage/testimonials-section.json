@@ -1,0 +1,27 @@
+{
+    "collectionName": "components_homepage_testimonials_sections",
+    "info": {
+        "displayName": "Testimonials Section",
+        "icon": "quote",
+        "description": "Homepage testimonials section"
+    },
+    "options": {},
+    "attributes": {
+        "badge": {
+            "type": "string",
+            "default": "DEPOIMENTOS"
+        },
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "text"
+        },
+        "testimonials": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::testimonial.testimonial"
+        }
+    }
+}

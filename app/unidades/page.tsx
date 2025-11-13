@@ -7,8 +7,8 @@ import Link from "next/link"
 import { locations } from '@/src/lib/config/locations'
 import { UnidadeCard } from '@/src/components/unidade-card'
 import { UnidadeCardModern } from '@/src/components/unidade-card-modern'
-import { useUnitsData } from '../../hooks/use-sanity-data'
-import type { Unit } from '../../types/sanity'
+import { useUnitsData } from '@/hooks/use-sanity-data'
+import type { Unit } from '@/types/sanity'
 
 export default function Unidades() {
   const { data: sanityUnits, loading: loadingSanity } = useUnitsData()

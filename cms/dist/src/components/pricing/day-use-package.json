@@ -1,0 +1,31 @@
+{
+    "collectionName": "components_pricing_day_use_packages",
+    "info": {
+        "displayName": "Day Use Package",
+        "icon": "priceTag",
+        "description": "Day use pricing package"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "price": {
+            "type": "decimal",
+            "required": true
+        },
+        "description": {
+            "type": "text"
+        },
+        "popular": {
+            "type": "boolean",
+            "default": false
+        },
+        "benefits": {
+            "type": "component",
+            "repeatable": true,
+            "component": "ui.highlight"
+        }
+    }
+}

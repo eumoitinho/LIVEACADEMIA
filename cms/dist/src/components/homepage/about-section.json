@@ -1,0 +1,39 @@
+{
+    "collectionName": "components_homepage_about_sections",
+    "info": {
+        "displayName": "About Section",
+        "icon": "information",
+        "description": "Homepage about section"
+    },
+    "options": {},
+    "attributes": {
+        "badge": {
+            "type": "string",
+            "default": "SOBRE NÓS"
+        },
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "text",
+            "required": true
+        },
+        "image": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "stats": {
+            "type": "component",
+            "repeatable": true,
+            "component": "ui.stat"
+        },
+        "highlights": {
+            "type": "component",
+            "repeatable": true,
+            "component": "ui.highlight"
+        }
+    }
+}

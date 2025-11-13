@@ -1,0 +1,32 @@
+{
+    "collectionName": "components_seo_meta_data",
+    "info": {
+        "displayName": "SEO Meta Data",
+        "icon": "search",
+        "description": "SEO metadata fields"
+    },
+    "options": {},
+    "attributes": {
+        "metaTitle": {
+            "type": "string",
+            "required": true
+        },
+        "metaDescription": {
+            "type": "text",
+            "required": true,
+            "maxLength": 160
+        },
+        "keywords": {
+            "type": "string"
+        },
+        "ogImage": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "canonicalURL": {
+            "type": "string"
+        }
+    }
+}

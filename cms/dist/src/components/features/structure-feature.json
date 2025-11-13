@@ -1,0 +1,31 @@
+{
+    "collectionName": "components_features_structure_features",
+    "info": {
+        "displayName": "Structure Feature",
+        "icon": "cog",
+        "description": "Structure feature item"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "text"
+        },
+        "icon": {
+            "type": "string"
+        },
+        "image": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "order": {
+            "type": "integer",
+            "default": 0
+        }
+    }
+}

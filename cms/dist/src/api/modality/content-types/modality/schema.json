@@ -1,0 +1,57 @@
+{
+    "kind": "collectionType",
+    "collectionName": "modalities",
+    "info": {
+        "singularName": "modality",
+        "pluralName": "modalities",
+        "displayName": "Modality",
+        "description": "Class modalities/Aulas Coletivas"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "name": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "richtext"
+        },
+        "image": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "duration": {
+            "type": "string"
+        },
+        "difficultyLevel": {
+            "type": "enumeration",
+            "enum": ["iniciante", "intermediario", "avancado"],
+            "default": "intermediario"
+        },
+        "instructor": {
+            "type": "string"
+        },
+        "schedule": {
+            "type": "text"
+        },
+        "icon": {
+            "type": "string"
+        },
+        "color": {
+            "type": "string"
+        },
+        "order": {
+            "type": "integer",
+            "default": 0
+        },
+        "active": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}

@@ -1,0 +1,46 @@
+{
+    "collectionName": "components_careers_job_positions",
+    "info": {
+        "displayName": "Job Position",
+        "icon": "briefcase",
+        "description": "Job position/opening"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "department": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "type": {
+            "type": "enumeration",
+            "enum": ["full-time", "part-time", "contract", "internship"],
+            "default": "full-time"
+        },
+        "description": {
+            "type": "richtext"
+        },
+        "requirements": {
+            "type": "component",
+            "repeatable": true,
+            "component": "ui.highlight"
+        },
+        "benefits": {
+            "type": "component",
+            "repeatable": true,
+            "component": "ui.highlight"
+        },
+        "salary": {
+            "type": "string"
+        },
+        "active": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}

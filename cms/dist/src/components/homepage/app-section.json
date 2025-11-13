@@ -1,0 +1,51 @@
+{
+    "collectionName": "components_homepage_app_sections",
+    "info": {
+        "displayName": "App Section",
+        "icon": "mobile",
+        "description": "Homepage app section"
+    },
+    "options": {},
+    "attributes": {
+        "badge": {
+            "type": "string",
+            "default": "APLICATIVO"
+        },
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "highlightedText": {
+            "type": "string"
+        },
+        "description": {
+            "type": "text"
+        },
+        "subtitle": {
+            "type": "string"
+        },
+        "benefits": {
+            "type": "component",
+            "repeatable": true,
+            "component": "ui.highlight"
+        },
+        "appImage": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "appLiveUrl": {
+            "type": "string"
+        },
+        "appTreinoUrl": {
+            "type": "string"
+        },
+        "playStoreLiveUrl": {
+            "type": "string"
+        },
+        "playStoreTreinoUrl": {
+            "type": "string"
+        }
+    }
+}

@@ -5,7 +5,7 @@ import { Check, Crown, Sparkles, ChevronDown, MapPin, ChevronRight } from "lucid
 import React, { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { usePlansData } from "../../hooks/use-sanity-data"
+import { usePlansData } from "@/hooks/use-sanity-data"
 
 const planos = [
   {

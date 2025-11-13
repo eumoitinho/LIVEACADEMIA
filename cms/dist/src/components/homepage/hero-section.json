@@ -1,0 +1,60 @@
+{
+    "collectionName": "components_homepage_hero_sections",
+    "info": {
+        "displayName": "Hero Section",
+        "icon": "star",
+        "description": "Homepage hero section"
+    },
+    "options": {},
+    "attributes": {
+        "backgroundImage": {
+            "type": "media",
+            "multiple": false,
+            "required": true,
+            "allowedTypes": ["images"]
+        },
+        "title1": {
+            "type": "string",
+            "required": true,
+            "default": "Transforme."
+        },
+        "title2": {
+            "type": "string",
+            "required": true,
+            "default": "Evolua."
+        },
+        "title3": {
+            "type": "string",
+            "required": true,
+            "default": "Viva."
+        },
+        "description": {
+            "type": "text"
+        },
+        "rating": {
+            "type": "decimal",
+            "default": 4.9
+        },
+        "ratingLabel": {
+            "type": "string",
+            "default": "excelente"
+        },
+        "subscribersCount": {
+            "type": "string",
+            "default": "35 mil alunos"
+        },
+        "primaryCta": {
+            "type": "component",
+            "repeatable": false,
+            "component": "ui.button"
+        },
+        "secondaryCta": {
+            "type": "component",
+            "repeatable": false,
+            "component": "ui.button"
+        },
+        "footerText": {
+            "type": "string"
+        }
+    }
+}

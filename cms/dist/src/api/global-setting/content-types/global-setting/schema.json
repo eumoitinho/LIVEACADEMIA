@@ -1,0 +1,70 @@
+{
+    "kind": "singleType",
+    "collectionName": "global_settings",
+    "info": {
+        "singularName": "global-setting",
+        "pluralName": "global-settings",
+        "displayName": "Global Settings",
+        "description": "Global site configuration"
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "siteName": {
+            "type": "string",
+            "required": true,
+            "default": "Live Academia"
+        },
+        "siteTagline": {
+            "type": "string"
+        },
+        "logo": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "logoDark": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "favicon": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": ["images"]
+        },
+        "primaryColor": {
+            "type": "string",
+            "default": "#FF6B00"
+        },
+        "accentColor": {
+            "type": "string",
+            "default": "#FF8C42"
+        },
+        "defaultSeo": {
+            "type": "component",
+            "repeatable": false,
+            "component": "seo.meta-data"
+        },
+        "contactInfo": {
+            "type": "component",
+            "repeatable": false,
+            "component": "contact.contact-info"
+        },
+        "socialMedia": {
+            "type": "component",
+            "repeatable": false,
+            "component": "social.social-links"
+        },
+        "analytics": {
+            "type": "component",
+            "repeatable": false,
+            "component": "analytics.tracking-codes"
+        }
+    }
+}

@@ -7,7 +7,7 @@ import Link from "next/link"
 import UnitPlanos from '@/features/units/unit-planos'
 import CheckoutModal from '@/components/checkout/checkout-modal'
 import { useUnit } from "@/contexts/unit-context"
-import { useUnitsData } from '../../../../hooks/use-sanity-data'  
+import { useUnitsData } from '@/hooks/use-sanity-data'  
 
 interface UnidadeContentProps {
   unidade: {

@@ -1,0 +1,27 @@
+{
+    "collectionName": "components_homepage_modalities_sections",
+    "info": {
+        "displayName": "Modalities Section",
+        "icon": "star",
+        "description": "Homepage modalities section"
+    },
+    "options": {},
+    "attributes": {
+        "badge": {
+            "type": "string",
+            "default": "AULAS COLETIVAS"
+        },
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "text"
+        },
+        "modalities": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::modality.modality"
+        }
+    }
+}

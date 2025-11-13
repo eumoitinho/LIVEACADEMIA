@@ -1,0 +1,24 @@
+{
+    "collectionName": "components_careers_career_benefits",
+    "info": {
+        "displayName": "Career Benefit",
+        "icon": "gift",
+        "description": "Career benefit item"
+    },
+    "options": {},
+    "attributes": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "text"
+        },
+        "icon": {
+            "type": "string"
+        },
+        "colorGradient": {
+            "type": "string"
+        }
+    }
+}

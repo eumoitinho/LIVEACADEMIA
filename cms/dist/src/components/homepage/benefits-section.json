@@ -1,0 +1,27 @@
+{
+    "collectionName": "components_homepage_benefits_sections",
+    "info": {
+        "displayName": "Benefits Section",
+        "icon": "gift",
+        "description": "Homepage benefits section"
+    },
+    "options": {},
+    "attributes": {
+        "badge": {
+            "type": "string",
+            "default": "BENEFÍCIOS"
+        },
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "description": {
+            "type": "text"
+        },
+        "benefits": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::benefit.benefit"
+        }
+    }
+}
