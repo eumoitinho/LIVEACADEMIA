@@ -1,4 +1,4 @@
-import { supabaseAdmin } from './supabase'
+import { supabaseAdmin, isSupabaseConfigured } from './supabase'
 import { encrypt, decrypt, safeHash } from '@/lib/utils/crypto'
 
 /**
@@ -33,6 +33,10 @@ export interface UpsertUnitInput {
 }
 
 export async function upsertUnit(input: UpsertUnitInput) {
+  if (!supabaseAdmin || !isSupabaseConfigured()) {
+    throw new Error('Supabase não está configurado. Configure NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY')
+  }
+
   // Verifica existência
   const { data: existing, error: findErr } = await supabaseAdmin
     .from('units')
@@ -108,6 +112,11 @@ export async function upsertUnit(input: UpsertUnitInput) {
 }
 
 export async function getUnitBySlug(slug: string) {
+  if (!supabaseAdmin || !isSupabaseConfigured()) {
+    console.log(`[getUnitBySlug] Supabase não configurado, retornando null`)
+    return null
+  }
+
   console.log(`[getUnitBySlug] Querying slug: "${slug}" (type: ${typeof slug})`)
   const { data, error } = await supabaseAdmin
     .from('units')
@@ -140,6 +149,11 @@ export async function getUnitBySlug(slug: string) {
 export const getUnidadeBySlug = getUnitBySlug
 
 export async function logApi(params: { unidadeSlug?: string; direction: 'OUTBOUND' | 'INBOUND'; method: string; endpoint: string; statusCode?: number; latencyMs?: number; error?: string; requestBody?: any }) {
+  if (!supabaseAdmin || !isSupabaseConfigured()) {
+    console.log('[logApi] Supabase não configurado, pulando log')
+    return
+  }
+
   let unidadeId: string | undefined
   if (params.unidadeSlug) {
     const { data } = await supabaseAdmin.from('units').select('id').eq('slug', params.unidadeSlug).maybeSingle()
@@ -160,6 +174,10 @@ export async function logApi(params: { unidadeSlug?: string; direction: 'OUTBOUN
 
 // Utilitário simples para listar units (pode ser útil em futuros scripts)
 export async function listUnits(limit = 50) {
+  if (!supabaseAdmin || !isSupabaseConfigured()) {
+    throw new Error('Supabase não está configurado. Configure NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY')
+  }
+
   const { data, error } = await supabaseAdmin.from('units').select('id,slug,nome').limit(limit)
   if (error) throw error
   return data
