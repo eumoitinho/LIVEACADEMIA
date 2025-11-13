@@ -28,6 +28,18 @@ interface StrapiResponse<T> {
 }
 
 /**
+ * Check if preview mode is enabled
+ */
+export function isPreviewMode(): boolean {
+  if (typeof window !== 'undefined') {
+    // Client-side: check cookies
+    return document.cookie.includes('__prerender_bypass=true');
+  }
+  // Server-side: this will be handled by reading cookies in the request
+  return false;
+}
+
+/**
  * Fetch data from Strapi API
  */
 export async function fetchStrapi<T = any>({
@@ -35,7 +47,8 @@ export async function fetchStrapi<T = any>({
   query = {},
   cache = 'force-cache',
   next,
-}: StrapiRequestOptions): Promise<StrapiResponse<T>> {
+  preview = false,
+}: StrapiRequestOptions & { preview?: boolean }): Promise<StrapiResponse<T>> {
   const url = new URL(`/api/${endpoint}`, STRAPI_URL);
 
   // Add query parameters
@@ -44,6 +57,11 @@ export async function fetchStrapi<T = any>({
       url.searchParams.append(key, typeof value === 'object' ? JSON.stringify(value) : String(value));
     }
   });
+
+  // If preview mode is enabled, add publicationState parameter to fetch drafts
+  if (preview) {
+    url.searchParams.append('publicationState', 'preview');
+  }
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -56,7 +74,7 @@ export async function fetchStrapi<T = any>({
   try {
     const response = await fetch(url.toString(), {
       headers,
-      cache,
+      cache: preview ? 'no-store' : cache, // Disable cache in preview mode
       next,
     });
 
@@ -96,9 +114,10 @@ export function buildPopulateQuery(fields: string[]): string {
 /**
  * Fetch global settings
  */
-export async function getGlobalSettings() {
+export async function getGlobalSettings(preview = false) {
   return fetchStrapi({
     endpoint: 'global-setting',
+    preview,
     query: {
       populate: {
         logo: true,
@@ -118,9 +137,10 @@ export async function getGlobalSettings() {
 /**
  * Fetch homepage data
  */
-export async function getHomepage() {
+export async function getHomepage(preview = false) {
   return fetchStrapi({
     endpoint: 'homepage',
+    preview,
     query: {
       populate: {
         seo: {
@@ -184,9 +204,10 @@ export async function getHomepage() {
 /**
  * Fetch all units
  */
-export async function getUnits() {
+export async function getUnits(preview = false) {
   return fetchStrapi({
     endpoint: 'units',
+    preview,
     query: {
       populate: {
         mainPhoto: true,
@@ -206,9 +227,10 @@ export async function getUnits() {
 /**
  * Fetch a single unit by slug
  */
-export async function getUnitBySlug(slug: string) {
+export async function getUnitBySlug(slug: string, preview = false) {
   return fetchStrapi({
     endpoint: 'units',
+    preview,
     query: {
       populate: {
         mainPhoto: true,
@@ -232,9 +254,10 @@ export async function getUnitBySlug(slug: string) {
 /**
  * Fetch all plans
  */
-export async function getPlans() {
+export async function getPlans(preview = false) {
   return fetchStrapi({
     endpoint: 'plans',
+    preview,
     query: {
       populate: {
         features: true,
@@ -250,9 +273,10 @@ export async function getPlans() {
 /**
  * Fetch all modalities
  */
-export async function getModalities() {
+export async function getModalities(preview = false) {
   return fetchStrapi({
     endpoint: 'modalities',
+    preview,
     query: {
       populate: {
         image: true,
@@ -268,9 +292,10 @@ export async function getModalities() {
 /**
  * Fetch all benefits
  */
-export async function getBenefits() {
+export async function getBenefits(preview = false) {
   return fetchStrapi({
     endpoint: 'benefits',
+    preview,
     query: {
       populate: {
         image: true,
@@ -286,9 +311,10 @@ export async function getBenefits() {
 /**
  * Fetch all testimonials
  */
-export async function getTestimonials() {
+export async function getTestimonials(preview = false) {
   return fetchStrapi({
     endpoint: 'testimonials',
+    preview,
     query: {
       populate: {
         avatar: true,
@@ -307,9 +333,10 @@ export async function getTestimonials() {
 /**
  * Fetch contact page
  */
-export async function getContactPage() {
+export async function getContactPage(preview = false) {
   return fetchStrapi({
     endpoint: 'contact-page',
+    preview,
     query: {
       populate: {
         seo: {
@@ -326,9 +353,10 @@ export async function getContactPage() {
 /**
  * Fetch about page
  */
-export async function getAboutPage() {
+export async function getAboutPage(preview = false) {
   return fetchStrapi({
     endpoint: 'about-page',
+    preview,
     query: {
       populate: {
         seo: {
@@ -356,9 +384,10 @@ export async function getAboutPage() {
 /**
  * Fetch trabalhe conosco page
  */
-export async function getTrabalheConoscoPage() {
+export async function getTrabalheConoscoPage(preview = false) {
   return fetchStrapi({
     endpoint: 'trabalhe-conosco-page',
+    preview,
     query: {
       populate: {
         seo: {
@@ -378,9 +407,10 @@ export async function getTrabalheConoscoPage() {
 /**
  * Fetch day use page
  */
-export async function getDayUsePage() {
+export async function getDayUsePage(preview = false) {
   return fetchStrapi({
     endpoint: 'day-use-page',
+    preview,
     query: {
       populate: {
         seo: {

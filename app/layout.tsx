@@ -6,6 +6,7 @@ import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import { UnitProvider } from "@/contexts/unit-context"
 import GTM from '@/src/components/analytics/gtm'
+import PreviewBanner from '@/src/components/preview/preview-banner'
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -92,6 +93,7 @@ export default function RootLayout({
                 />
             
             <div className="relative z-20 min-h-screen flex flex-col">
+              <PreviewBanner />
               <Header />
               <div className="flex-grow">{children}</div>
               <Footer />
