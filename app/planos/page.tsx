@@ -75,7 +75,29 @@ export default function Planos() {
   const [allLocations, setAllLocations] = useState<LocationUnit[]>([])
 
   // Use Sanity plans or fallback to hardcoded
-  const displayPlans = sanityPlans && sanityPlans.length > 0 ? sanityPlans : planos
+  // Normalizar planos do Sanity para garantir estrutura consistente
+  const displayPlans = useMemo(() => {
+    if (sanityPlans && sanityPlans.length > 0) {
+      // Normalizar planos do Sanity para ter a mesma estrutura dos planos hardcoded
+      return sanityPlans.map((plano: any) => ({
+        nome: plano.name || plano.nome || '',
+        preco: plano.price || plano.preco || '0,00',
+        periodo: plano.period || plano.periodo || 'mês',
+        descricao: plano.description || plano.descricao || '',
+        beneficios: Array.isArray(plano.features) 
+          ? plano.features 
+          : Array.isArray(plano.beneficios) 
+          ? plano.beneficios 
+          : [],
+        gradient: plano.gradient || 'from-zinc-700 to-zinc-900',
+        icone: plano.icon || Check,
+        popular: plano.highlight || plano.popular || false,
+        destaque: plano.highlight || plano.destaque || false,
+        badge: plano.badge || ''
+      }))
+    }
+    return planos
+  }, [sanityPlans])
 
   // Fetch units from Sanity
   useEffect(() => {
@@ -200,7 +222,7 @@ export default function Planos() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {displayPlans.map((plano, idx) => (
+            {Array.isArray(displayPlans) && displayPlans.length > 0 ? displayPlans.map((plano, idx) => (
               <motion.div
                 key={(plano as any).nome}
                 initial={{ opacity: 0, y: 20 }}
@@ -254,7 +276,8 @@ export default function Planos() {
 
                     {/* Benefits */}
                     <ul className="space-y-4 mb-8">
-                      {(plano as any).beneficios.map((beneficio: string, i: number) => (
+                      {Array.isArray((plano as any).beneficios) && (plano as any).beneficios.length > 0
+                        ? (plano as any).beneficios.map((beneficio: string, i: number) => (
                         <li key={i} className="flex items-start gap-3">
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
                             (plano as any).destaque
@@ -267,7 +290,9 @@ export default function Planos() {
                           </div>
                           <span className="text-zinc-300 text-sm leading-relaxed">{beneficio}</span>
                         </li>
-                      ))}
+                      ))
+                        : <li className="text-zinc-400 text-sm">Benefícios não disponíveis</li>
+                      }
                     </ul>
 
                     {/* CTA Button */}
@@ -285,7 +310,11 @@ export default function Planos() {
                   </div>
                 </div>
               </motion.div>
-            ))}
+            )) : (
+              <div className="col-span-2 text-center py-12 text-zinc-400">
+                <p>Carregando planos...</p>
+              </div>
+            )}
           </div>
 
           {/* ÚNICA Seção de Unidades - Aparece abaixo dos cards quando clicar em qualquer plano */}
