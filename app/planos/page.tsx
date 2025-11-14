@@ -145,33 +145,33 @@ export default function Planos() {
           return
         }
 
-        const merged = locations.map(staticLoc => {
-          if (!staticLoc) return null // Pular valores nulos
-          
-          const sanityUnit = Array.isArray(sanityUnits)
-            ? sanityUnits.find((unit: any) =>
-                unit?.slug?.current === staticLoc.id || unit?.slug === staticLoc.id
-              )
-            : null
+        const merged = locations
+          .filter((staticLoc): staticLoc is LocationUnit => staticLoc != null) // Filtrar valores nulos primeiro
+          .map(staticLoc => {
+            const sanityUnit = Array.isArray(sanityUnits)
+              ? sanityUnits.find((unit: any) =>
+                  unit?.slug?.current === staticLoc.id || unit?.slug === staticLoc.id
+                )
+              : null
 
-          if (sanityUnit) {
-            const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
-            return {
-              ...staticLoc,
-              name: sanityUnit.name || staticLoc.name,
-              address: sanityUnit.address || staticLoc.address,
-              type: sanityUnit.type || staticLoc.type,
-              photo: sanityUnit.images?.[0]?.asset?.url || staticLoc.photo,
-              features: Array.isArray(sanityUnit.services) ? sanityUnit.services : (Array.isArray(staticLoc.features) ? staticLoc.features : []),
-              hours: sanityUnit.openingHours || staticLoc.hours,
-              coordinates: hasCoordinates ? {
-                lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
-                lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
-              } : undefined
+            if (sanityUnit) {
+              const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
+              return {
+                ...staticLoc,
+                name: sanityUnit.name || staticLoc.name,
+                address: sanityUnit.address || staticLoc.address,
+                type: sanityUnit.type || staticLoc.type,
+                photo: sanityUnit.images?.[0]?.asset?.url || staticLoc.photo,
+                features: Array.isArray(sanityUnit.services) ? sanityUnit.services : (Array.isArray(staticLoc.features) ? staticLoc.features : []),
+                hours: sanityUnit.openingHours || staticLoc.hours,
+                coordinates: hasCoordinates ? {
+                  lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
+                  lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
+                } : undefined
+              } as LocationUnit
             }
-          }
-          return staticLoc
-        }).filter((loc): loc is LocationUnit => loc != null) // Filtrar valores nulos
+            return staticLoc
+          })
 
         setAllLocations(merged)
       } catch (error) {
