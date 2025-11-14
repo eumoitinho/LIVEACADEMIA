@@ -78,10 +78,17 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
           console.warn('Error using urlFor, trying direct asset:', urlForError)
           // Se urlFor falhar, tentar construir URL manualmente
           if (bgImage.asset?._id) {
-            const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'ocjqsglj'
-            const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
+            const projectId = typeof window !== 'undefined' 
+              ? (window as any).__ENV__?.NEXT_PUBLIC_SANITY_PROJECT_ID || 'ocjqsglj'
+              : 'ocjqsglj'
+            const dataset = typeof window !== 'undefined'
+              ? (window as any).__ENV__?.NEXT_PUBLIC_SANITY_DATASET || 'production'
+              : 'production'
             // Extrair ID da imagem do _id (formato: image-xxxxx-1920x1080-jpg)
-            const imageId = bgImage.asset._id.replace('image-', '').split('-')[0]
+            // O _id pode ser algo como "image-abc123-1920x1080-jpg" ou apenas a referência
+            const imageId = bgImage.asset._id.includes('-') 
+              ? bgImage.asset._id.split('-').slice(1, 2).join('-') || bgImage.asset._id
+              : bgImage.asset._id
             backgroundImageUrl = `https://cdn.sanity.io/images/${projectId}/${dataset}/${imageId}?w=1920&h=1080&q=90&auto=format`
           }
         }
