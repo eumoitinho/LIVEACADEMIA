@@ -105,7 +105,7 @@ export default function AppSectionEditable() {
             )}
 
             {/* Benefits */}
-            {sectionData.benefits && sectionData.benefits.length > 0 && (
+            {Array.isArray(sectionData.benefits) && sectionData.benefits.length > 0 && (
               <div className="space-y-4 mb-10">
                 {sectionData.benefits.map((beneficio, index) => (
                   <motion.div

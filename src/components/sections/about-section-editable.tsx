@@ -20,13 +20,15 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
   if (!data) return null
 
   // Provide defaults if data is incomplete
-  const highlights = data.highlights || []
-  const stats = data.stats || [
-    { value: "10K+", label: "Alunos ativos" },
-    { value: "35+", label: "Unidades" },
-    { value: "4.9", label: "Avaliação média" },
-    { value: "10+", label: "Anos de experiência" }
-  ]
+  const highlights = Array.isArray(data.highlights) ? data.highlights : []
+  const stats = Array.isArray(data.stats) && data.stats.length > 0
+    ? data.stats
+    : [
+        { value: "10K+", label: "Alunos ativos" },
+        { value: "35+", label: "Unidades" },
+        { value: "4.9", label: "Avaliação média" },
+        { value: "10+", label: "Anos de experiência" }
+      ]
 
   return (
     <section id="sobre" className="relative py-28 px-6 lg:px-12 overflow-hidden">
@@ -69,7 +71,7 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
           viewport={{ once: true }}
           className="grid grid-cols-2 gap-5 md:grid-cols-4"
         >
-          {stats.map(({ value, label }) => (
+          {Array.isArray(stats) && stats.length > 0 ? stats.map(({ value, label }) => (
             <div
               key={label}
               className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-zinc-900/90 to-black/85 px-6 py-7"
@@ -80,7 +82,7 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
                 {label}
               </p>
             </div>
-          ))}
+          )) : null}
         </motion.div>
       </div>
     </section>
