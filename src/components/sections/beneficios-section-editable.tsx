@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { ShieldCheck, Users, CheckCircle, Star, Zap, Snowflake } from "lucide-react"
 import Image from "next/image"
-import { useState, useCallback } from "react"
+import { useState, useCallback, useMemo } from "react"
 import { useBeneficiosSectionData } from "@/hooks/use-sanity-data"
 
 const defaultBeneficios = [
@@ -51,15 +51,27 @@ export default function BeneficiosSectionEditable() {
   }
 
   // Usar dados do Sanity ou fallback
-  const beneficios = data?.items && data.items.length > 0
-    ? data.items.map(item => ({
-        icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck,
-        title: item.title,
-        description: item.description,
-        color: item.color,
-        image: item.image?.asset?.url || '/images/academia-1.webp'
-      }))
-    : defaultBeneficios
+  const beneficios = useMemo(() => {
+    // Garantir que data.items é um array válido
+    if (!data || !data.items || !Array.isArray(data.items) || data.items.length === 0) {
+      return defaultBeneficios
+    }
+
+    try {
+      return data.items
+        .filter((item: any) => item != null) // Filtrar valores nulos/undefined
+        .map((item: any) => ({
+          icon: iconMap[item.icon as keyof typeof iconMap] || ShieldCheck,
+          title: item.title || '',
+          description: item.description || '',
+          color: item.color || 'blue',
+          image: item.image?.asset?.url || '/images/academia-1.webp'
+        }))
+    } catch (error) {
+      console.error('Error transforming beneficios data:', error)
+      return defaultBeneficios
+    }
+  }, [data])
 
   const sectionTitle = data?.title || "Mais do que treino, uma experiência completa"
 

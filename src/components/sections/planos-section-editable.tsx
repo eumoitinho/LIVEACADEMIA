@@ -3,6 +3,7 @@
 import { Check, Star, Crown, Sparkles } from "lucide-react"
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { useMemo } from "react"
 
 interface PlanosSectionProps {
   data: {
@@ -81,23 +82,37 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
   const easing = [0.16, 1, 0.3, 1] as const
 
   // Transform Sanity data to match original structure, or use defaults
-  const planos = data.plans && data.plans.length > 0
-    ? data.plans.map((plan, idx) => ({
-        nome: plan.name,
-        preco: (plan.price / 100).toFixed(2).replace('.', ','),
-        periodo: "mês",
-        descricao: plan.description,
-        beneficios: plan.features || [],
-        gradient: plan.highlight ? "from-amber-500 to-yellow-600" : "from-zinc-700 to-zinc-900",
-        icone: plan.highlight ? Crown : Check,
-        popular: plan.highlight,
-        destaque: plan.highlight,
-        badge: plan.badge === 'mais_vendido' ? 'O mais vendido' :
-               plan.badge === 'recomendado' ? 'Recomendado' :
-               plan.badge === 'novidade' ? 'Novidade' :
-               plan.badge === 'oferta' ? 'Oferta' : plan.badge
-      }))
-    : planosDefault
+  const planos = useMemo(() => {
+    // Garantir que data.plans é um array válido antes de processar
+    if (!data || !data.plans || !Array.isArray(data.plans) || data.plans.length === 0) {
+      return planosDefault
+    }
+
+    try {
+      return data.plans
+        .filter((plan: any) => plan != null) // Filtrar valores nulos/undefined
+        .map((plan: any, idx: number) => ({
+          nome: plan.name || `Plano ${idx + 1}`,
+          preco: typeof plan.price === 'number' 
+            ? (plan.price / 100).toFixed(2).replace('.', ',') 
+            : String(plan.price || '0,00'),
+          periodo: "mês",
+          descricao: plan.description || '',
+          beneficios: Array.isArray(plan.features) ? plan.features : [],
+          gradient: plan.highlight ? "from-amber-500 to-yellow-600" : "from-zinc-700 to-zinc-900",
+          icone: plan.highlight ? Crown : Check,
+          popular: plan.highlight || false,
+          destaque: plan.highlight || false,
+          badge: plan.badge === 'mais_vendido' ? 'O mais vendido' :
+                 plan.badge === 'recomendado' ? 'Recomendado' :
+                 plan.badge === 'novidade' ? 'Novidade' :
+                 plan.badge === 'oferta' ? 'Oferta' : plan.badge || ''
+        }))
+    } catch (error) {
+      console.error('Error transforming plans data:', error)
+      return planosDefault
+    }
+  }, [data])
 
   return (
     <section className="relative py-24 px-6 lg:px-12 overflow-hidden" id="planos">
@@ -128,7 +143,7 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {planos.map((plano, idx) => (
+          {Array.isArray(planos) && planos.length > 0 ? planos.map((plano, idx) => (
             <motion.div
               key={plano.nome}
               initial={{ opacity: 0, y: 20 }}
@@ -183,7 +198,7 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
 
                   {/* Benefits */}
                   <ul className="space-y-4 mb-8">
-                    {plano.beneficios.map((beneficio, i) => (
+                    {Array.isArray(plano.beneficios) && plano.beneficios.length > 0 ? plano.beneficios.map((beneficio: string, i: number) => (
                       <li key={i} className="flex items-start gap-3">
                         <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
                           plano.destaque 
@@ -196,7 +211,9 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
                         </div>
                         <span className="text-zinc-300 text-sm leading-relaxed">{beneficio}</span>
                       </li>
-                    ))}
+                    )) : (
+                      <li className="text-zinc-400 text-sm">Benefícios não disponíveis</li>
+                    )}
                   </ul>
 
                   {/* CTA Button */}
@@ -223,7 +240,11 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
                 </div>
               </div>
             </motion.div>
-          ))}
+          )) : (
+            <div className="col-span-2 text-center py-12 text-zinc-400">
+              <p>Carregando planos...</p>
+            </div>
+          )}
         </div>
 
         {/* Footnote */}
