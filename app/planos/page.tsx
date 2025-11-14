@@ -200,9 +200,9 @@ export default function Planos() {
     // Both plans exclude Morada do Sol and Alphaville
     return allLocations.filter((unit): unit is LocationUnit => {
       if (!unit || typeof unit !== 'object') return false
+      if (!unit.id || typeof unit.id !== 'string') return false
       return (
         unit.type !== 'inauguracao' &&
-        unit.id &&
         !unit.id.includes('morada') &&
         !unit.id.includes('alphaville')
       )
