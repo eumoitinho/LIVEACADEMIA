@@ -100,56 +100,9 @@ export default function Unidades() {
         const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
         const unitSlug = sanityUnit.slug || staticLoc.id
         
-        // Processar planos do Sanity (campo planos[])
-        let sanityPlanos: Array<{ name: string; price: string }> = []
-        if (Array.isArray(sanityUnit.planos) && sanityUnit.planos.length > 0) {
-          sanityPlanos = sanityUnit.planos
-            .filter((plano: any) => {
-              // Filtrar planos com valor > 89.90
-              // Sanity retorna preco em centavos
-              if (typeof plano.preco === 'number') {
-                const valorEmReais = plano.preco / 100 // Converter centavos para reais
-                return valorEmReais > 89.90
-              } else if (typeof plano.preco === 'string') {
-                // Se já vier como string, tentar extrair o valor numérico
-                const valorStr = plano.preco.replace(',', '.').replace(/[^\d.]/g, '')
-                const valorNumerico = parseFloat(valorStr)
-                return !isNaN(valorNumerico) && valorNumerico > 89.90
-              }
-              return false
-            })
-            .map((plano: any) => {
-              // Formatar preço: converter centavos para reais com vírgula
-              let precoFormatado = ''
-              if (typeof plano.preco === 'number') {
-                precoFormatado = (plano.preco / 100).toFixed(2).replace('.', ',')
-              } else if (typeof plano.preco === 'string') {
-                precoFormatado = plano.preco
-              } else {
-                precoFormatado = '0,00'
-              }
-              
-              return {
-                name: plano.nome || '',
-                price: precoFormatado
-              }
-            })
-        }
-
-        // Mesclar com planos da API Pacto se disponíveis
+        // Planos vêm da API Pacto (já filtrados por valor > 89.90 no useEffect)
+        // O Sanity pode ter configurações de filtro, mas os planos são da API
         const apiPlanos = unitsWithPlanos[unitSlug] || []
-        
-        // Combinar planos, priorizando Sanity mas incluindo API se não houver duplicatas
-        const combinedPlanos = [...sanityPlanos]
-        apiPlanos.forEach((apiPlano: { name: string; price: string }) => {
-          // Verificar se não existe um plano similar
-          const exists = combinedPlanos.some(
-            p => p.name === apiPlano.name || p.price === apiPlano.price
-          )
-          if (!exists) {
-            combinedPlanos.push(apiPlano)
-          }
-        })
 
         return {
           ...staticLoc,
@@ -159,7 +112,7 @@ export default function Unidades() {
           photo: sanityUnit.photo?.asset?.url || sanityUnit.images?.[0]?.asset?.url || staticLoc.photo || '/images/fachada.jpg',
           features: sanityUnit.services || staticLoc.features,
           hours: sanityUnit.openingHours || staticLoc.hours,
-          planos: combinedPlanos.length > 0 ? combinedPlanos : (staticLoc.planos || []),
+          planos: apiPlanos.length > 0 ? apiPlanos : (staticLoc.planos || []),
           coordinates: hasCoordinates ? {
             lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
             lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
