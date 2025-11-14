@@ -20,11 +20,13 @@ function getCorsHeaders(origin?: string | null) {
     origin.includes('admin.sanity.io') ||
     origin.includes('www.sanity.io') ||
     origin.includes('localhost:3000') ||
-    origin.includes('localhost:3333')
+    origin.includes('localhost:3333') ||
+    origin.includes('localhost:3001')
   )
   
-  // Retornar a origem se permitida, senão retornar a primeira da lista
-  const corsOrigin = isAllowed ? origin : allowedOrigins[0]
+  // Retornar a origem exata da requisição se permitida
+  // Isso é crítico para CORS funcionar corretamente
+  const corsOrigin = isAllowed ? origin : (allowedOrigins.includes(origin || '') ? origin : allowedOrigins[0])
   
   return {
     'Access-Control-Allow-Origin': corsOrigin || '*',
