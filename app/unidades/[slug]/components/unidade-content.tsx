@@ -244,7 +244,8 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                   </div>
                 </div>
               </motion.div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
