@@ -30,7 +30,15 @@ export interface Rating {
 }
 
 export interface HeroSection {
-  backgroundImage?: SanityImage
+  backgroundImage?: {
+    asset?: {
+      url?: string
+      _id?: string
+      _ref?: string
+      _type?: string
+    }
+    _type?: string
+  }
   title: string
   subtitle: string
   thirdTitle: string

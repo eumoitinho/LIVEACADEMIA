@@ -5,7 +5,11 @@ export const homepageQuery = groq`
     _id,
     _type,
     hero {
-      backgroundImage,
+      backgroundImage {
+        asset-> {
+          url
+        }
+      },
       badge,
       title,
       subtitle,

@@ -57,8 +57,23 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
 
   if (!data) return null
 
+  // Get background image URL
+  const backgroundImageUrl = data.backgroundImage?.asset?.url
+    ? urlFor(data.backgroundImage).url()
+    : '/images/hero.jpg' // fallback
+
   return (
     <section className="relative z-20 flex min-h-[100vh] items-end">
+      {/* Background Image */}
+      {backgroundImageUrl && (
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('${backgroundImageUrl}')`,
+            backgroundPosition: 'center center'
+          }}
+        />
+      )}
       {/* Overlay para melhorar a legibilidade apenas na hero */}
       <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
       

@@ -23,10 +23,14 @@ export function urlFor(source: any) {
 export async function getHomepageData() {
   try {
     const data = await client.fetch(`
-      *[_type == "homepage"][0] {
+      *[_type == "homepage" && !(_id in path("drafts.**"))][0] {
         seo,
         hero {
-          backgroundImage,
+          backgroundImage {
+            asset-> {
+              url
+            }
+          },
           title,
           subtitle,
           thirdTitle,
