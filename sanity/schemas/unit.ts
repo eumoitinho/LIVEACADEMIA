@@ -170,7 +170,7 @@ export const unitSchema = defineType({
     }),
     defineField({
       name: 'planos',
-      title: 'Planos da Unidade',
+      title: 'Planos da Unidade (Fallback/Override)',
       type: 'array',
       of: [
         {
@@ -224,7 +224,36 @@ export const unitSchema = defineType({
           },
         },
       ],
-      description: 'Planos específicos desta unidade (sobrescreve os planos globais)',
+      description: 'Planos de fallback (usados apenas se a API Pacto não retornar planos). Os planos principais vêm da API Pacto e são filtrados por preço mínimo (> 89,90).',
+    }),
+    defineField({
+      name: 'filtroPlanos',
+      title: 'Filtro de Planos da API',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'precoMinimo',
+          title: 'Preço Mínimo (R$)',
+          type: 'number',
+          initialValue: 89.90,
+          description: 'Valor mínimo em reais para exibir planos da API Pacto (padrão: 89,90)',
+        }),
+        defineField({
+          name: 'codigosPermitidos',
+          title: 'Códigos de Planos Permitidos',
+          type: 'array',
+          of: [{ type: 'string' }],
+          description: 'Lista de códigos de planos permitidos (opcional). Se vazio, mostra todos os planos acima do preço mínimo.',
+        }),
+        defineField({
+          name: 'usarPlanosSanity',
+          title: 'Usar Planos do Sanity em vez da API',
+          type: 'boolean',
+          initialValue: false,
+          description: 'Se marcado, usa apenas os planos configurados acima (campo "Planos da Unidade") em vez de buscar da API Pacto',
+        }),
+      ],
+      description: 'Configurações de filtro para os planos vindos da API Pacto',
     }),
   ],
   preview: {

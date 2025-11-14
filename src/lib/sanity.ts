@@ -164,6 +164,11 @@ export async function getUnits() {
           periodo,
           destaque,
           badge
+        },
+        filtroPlanos {
+          precoMinimo,
+          codigosPermitidos,
+          usarPlanosSanity
         }
       }
     `)

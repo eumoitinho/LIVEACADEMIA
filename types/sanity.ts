@@ -169,6 +169,11 @@ export interface Unit {
     destaque: boolean
     badge?: string
   }>
+  filtroPlanos?: {
+    precoMinimo?: number
+    codigosPermitidos?: string[]
+    usarPlanosSanity?: boolean
+  }
 }
 
 export interface HomepageContent {
