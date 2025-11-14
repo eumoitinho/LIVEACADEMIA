@@ -26,7 +26,7 @@ export default defineConfig({
   name: 'live-academia',
   title: 'Live Academia CMS',
 
-  projectId: 'ocjqsglj',
+  projectId: 'c9pbklm2',
   dataset: 'production',
 
   // API version

@@ -1,0 +1,238 @@
+{
+  "unidades": [
+    {
+      "id": "cachoeirinha",
+      "nome": "Cachoeirinha",
+      "endereco": "Av. Ajuricaba, 660, Cachoeirinha, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/09/1-300x228.png",
+      "hotsite": "https://cachoeirinha.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/CJSbpBvduqqwtUqv9"
+    },
+    {
+      "id": "camapua",
+      "nome": "Camapuã",
+      "endereco": "Av. Camapuã, 53, Cidade de Deus, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/09/6-300x228.png",
+      "hotsite": "https://livemcamapua.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/fZ9sGn8n2HoHsTSM7"
+    },
+    {
+      "id": "centro",
+      "nome": "Centro",
+      "endereco": "Av. Getúlio Vargas, 773, Centro, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/09/CENTRO-300x228.png",
+      "hotsite": "https://centro.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/Vms8fJVQFbn2XNtx9"
+    },
+    {
+      "id": "chapeu-goiano",
+      "nome": "Chapéu Goiano",
+      "endereco": "Rua Lirio do Mar, 15, Cidade Nova, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/09/37-300x228.png",
+      "hotsite": "https://livechapeugoiano.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/JZ7y9arDVtebH9EX7"
+    },
+    {
+      "id": "cidade-de-deus",
+      "nome": "Cidade de Deus",
+      "endereco": "Av. Nossa Sra. da Conceição, 830, Cidade de Deus, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/09/13-300x228.png",
+      "hotsite": "https://livecidadededeus.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/DLf1asqUsmJRQMSz5"
+    },
+    {
+      "id": "compensa",
+      "nome": "Compensa",
+      "endereco": "Av. Padre Agostinho Caballero Martin, 115, Compensa, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/09/8-300x228.png",
+      "hotsite": "https://compensa.hotsite.in/home",
+      "mapLink": "https://maps.app.goo.gl/ab23foNLjQYrZLXQ6"
+    },
+    {
+      "id": "dom-pedro",
+      "nome": "Dom Pedro",
+      "endereco": "Av. Dom Pedro I, 27, Dom Pedro, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/09/14-300x228.png",
+      "hotsite": "https://livedompedro.hotsite.in/",
+      "mapLink": "https://maps.app.goo.gl/21EYnddqV8PWYq3v7"
+    },
+    {
+      "id": "japiim",
+      "nome": "Japiim",
+      "endereco": "Rua Fernando de Cordoba, 597, Japiim, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/09/9-300x228.png",
+      "hotsite": "https://livejapiim.hotsite.in/home",
+      "mapLink": "https://maps.app.goo.gl/SeTgq9Lr5fmPuXk16"
+    },
+    {
+      "id": "silves",
+      "nome": "Silves",
+      "endereco": "Av. Silves, 187, Raiz, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/09/15-300x228.png",
+      "hotsite": "https://silves.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/yPkLiUN7SgcGBAM4A"
+    },
+    {
+      "id": "sumauma",
+      "nome": "Sumaúma",
+      "endereco": "Av. Bispo Pedro Massa, 306, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/10/10-300x228.png",
+      "hotsite": "https://livesumauma.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/fPr7KRcjLwmt6Juy7"
+    },
+    {
+      "id": "tiradentes",
+      "nome": "Tiradentes Climatizada",
+      "endereco": "Rua das Rosas, 107, Aleixo, Manaus, AM",
+      "tipo": "premium",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/10/11-300x228.png",
+      "hotsite": "https://livetiradentes.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/5rengWk3dygYPW7R7"
+    },
+    {
+      "id": "torquato-allegro",
+      "nome": "Torquato Allegro",
+      "endereco": "Av. Torquato Tapajós, 6950, Tarumã, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/10/16-300x228.png",
+      "hotsite": "https://allegro.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/dKNMMUbU2Ttrm6xY6"
+    },
+    {
+      "id": "torquato-bemol",
+      "nome": "Torquato Bemol Climatizada",
+      "endereco": "Av. Torquato Tapajós, 8160, Colônia Terra Nova, Manaus, AM",
+      "tipo": "premium",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/10/2-300x228.png",
+      "hotsite": "https://evo-totem.w12app.com.br/liveacademia/12/site/KKpgxGRZNJI%5BPLUS%5D%5BBAR%5DXC4KLnl5Q%5BEQUAL%5D%5BEQUAL%5D",
+      "mapLink": "https://maps.app.goo.gl/WUHoxxiqmJwwGN2c9"
+    },
+    {
+      "id": "torquato-santos-dumont",
+      "nome": "Torquato Santos Dumont",
+      "endereco": "Av. Torquato Tapajós, 5555, Da Paz, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/10/7-300x228.png",
+      "hotsite": "https://livetorquato1.hotsite.in/home",
+      "mapLink": "https://maps.app.goo.gl/fr4yv2Cz6enftDc99"
+    },
+    {
+      "id": "torres",
+      "nome": "Torres",
+      "endereco": "Rua Mitiko, 397, Parque Dez de Novembro, Manaus, AM",
+      "tipo": "tradicional",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/10/12-300x228.png",
+      "hotsite": "https://liveacademiastorres.hotsite.in/home",
+      "mapLink": "https://maps.app.goo.gl/V8a9D7bnWy6WHFgAA"
+    },
+    {
+      "id": "bom-prato-diamante",
+      "nome": "Bom Prato Diamante",
+      "endereco": "R. Santa Cecília, 165, Col. Santo Antônio, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2024/10/CIDADE-NOVA-DIAMANTE-1-300x300.jpg",
+      "hotsite": "https://bomprato.hotsite.in",
+      "mapLink": ""
+    },
+    {
+      "id": "ct-cidade-nova",
+      "nome": "CT Cidade Nova",
+      "endereco": "Av. Max Teixeira, 4066, Cidade Nova, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2024/10/CT-300x228.png",
+      "hotsite": "https://liveacademiacidadenova.hotsite.in/home",
+      "mapLink": ""
+    },
+    {
+      "id": "flores-diamante",
+      "nome": "Flores Diamante",
+      "endereco": "R. Visc. de Sepetiba, 220, Flores, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2024/06/27-300x228.png",
+      "hotsite": "https://liveacademiaflores.hotsite.in",
+      "mapLink": "https://g.co/kgs/QbPquLE"
+    },
+    {
+      "id": "margarita-diamante",
+      "nome": "Margarita Diamante",
+      "endereco": "Av. Margarita, 695, Nova Cidade, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://cdn1.pactorian.net/fcceacc50b1db2fc4e8872b06099c142/3ISnhfvjxox*ybUNrupT9B5qyII6ZIqjWg4AGh4Te6U=/jtGo7xfGreYfjucCmU7FZg==.jpg",
+      "hotsite": "https://livemargarita.hotsite.in/home",
+      "mapLink": ""
+    },
+    {
+      "id": "pedro-teixeira-diamante",
+      "nome": "Pedro Teixeira Diamante",
+      "endereco": "Av. Pedro Teixeira, 700, Dom Pedro, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2024/10/pedro-teixeira-300x228.png",
+      "hotsite": "https://pedroteixeira.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/gdYdzqCxZGafoith7"
+    },
+    {
+      "id": "planalto-diamante",
+      "nome": "Planalto Diamante",
+      "endereco": "Rua Salim Kahane, 3586, Planalto, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2024/03/31-300x228.png",
+      "hotsite": "https://liveplanalto.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/xX2g421gBKc8FHDC8"
+    },
+    {
+      "id": "rodrigues-grande-circular",
+      "nome": "Rodrigues Grande Circular Premium",
+      "endereco": "Av. Autaz Mirim, 7451, Tancredo Neves, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2024/04/21-300x228.png",
+      "hotsite": "https://liverodrigues.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/9Lwpp8SEuwn8Rn1fA"
+    },
+    {
+      "id": "torquato-santos-dumont-diamante",
+      "nome": "Torquato Santos Dumont Diamante",
+      "endereco": "Av. Torquato Tapajós, 5555, Da Paz, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/10/33-300x228.png",
+      "hotsite": "https://livetorquato1.hotsite.in/home",
+      "mapLink": "https://maps.app.goo.gl/qQh4yx98kHz7QQvd9"
+    },
+    {
+      "id": "torres-diamante",
+      "nome": "Torres Diamante",
+      "endereco": "Rua Mitiko, 397, Parque Dez de Novembro, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/10/34-1-300x228.png",
+      "hotsite": "https://liveacademiastorres.hotsite.in/home",
+      "mapLink": "https://maps.app.goo.gl/V8a9D7bnWy6WHFgAA"
+    },
+    {
+      "id": "vieiralves-diamante",
+      "nome": "Vieiralves Diamante",
+      "endereco": "Av. Djalma Batista, 450, Nossa Senhora das Graças, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://cdn1.pactorian.net/7724bf6109e5370177c8129aa431b922/3ISnhfvjxox*ybUNrupT9B5qyII6ZIqjWg4AGh4Te6U=/jtGo7xfGreYfjucCmU7FZg==.jpg",
+      "hotsite": "https://liveacademias.hotsite.in/home",
+      "mapLink": "https://maps.app.goo.gl/V8wACyPE9xaEWMXx9"
+    },
+    {
+      "id": "vitoria-coroado",
+      "nome": "Vitória Coroado Premium",
+      "endereco": "Av. Cosme Ferreira, 1620, Coroado I, Manaus, AM",
+      "tipo": "diamante",
+      "logo": "https://www.liveacademia.com.br/wp-content/uploads/2023/12/22-300x228.png",
+      "hotsite": "https://vitoriacoroado.hotsite.in",
+      "mapLink": "https://maps.app.goo.gl/ZaaU2WtH7JAQiFxo9"
+    }
+  ]
+}
