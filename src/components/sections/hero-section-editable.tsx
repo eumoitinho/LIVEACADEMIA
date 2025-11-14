@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import Link from "next/link"
 import { ArrowRight, Star } from "lucide-react"
-import { urlFor } from '@/lib/sanity'
+import { urlFor } from '@/src/lib/sanity'
 import type { HeroSection } from '@/types/sanity'
 
 declare global {
@@ -58,9 +58,47 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
   if (!data) return null
 
   // Get background image URL
-  const backgroundImageUrl = data.backgroundImage?.asset?.url
-    ? urlFor(data.backgroundImage).url()
-    : '/images/hero.jpg' // fallback
+  // urlFor precisa do objeto de imagem completo com asset._ref ou asset completo
+  let backgroundImageUrl: string | null = null
+  
+  if (data.backgroundImage) {
+    try {
+      // Verificar se temos os dados necessários
+      const bgImage = data.backgroundImage
+      
+      // Se já tem URL direta no asset, usar ela (mais confiável)
+      if (bgImage.asset?.url) {
+        backgroundImageUrl = bgImage.asset.url
+      } 
+      // Se tem _id no asset, usar urlFor para construir a URL otimizada
+      else if (bgImage.asset?._id) {
+        try {
+          backgroundImageUrl = urlFor(bgImage).width(1920).height(1080).quality(90).url()
+        } catch (urlForError) {
+          console.warn('Error using urlFor, trying direct asset:', urlForError)
+          // Se urlFor falhar, tentar construir URL manualmente
+          if (bgImage.asset?._id) {
+            const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'ocjqsglj'
+            const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
+            // Extrair ID da imagem do _id (formato: image-xxxxx-1920x1080-jpg)
+            const imageId = bgImage.asset._id.replace('image-', '').split('-')[0]
+            backgroundImageUrl = `https://cdn.sanity.io/images/${projectId}/${dataset}/${imageId}?w=1920&h=1080&q=90&auto=format`
+          }
+        }
+      }
+      // Se tem _ref, usar urlFor com referência
+      else if (bgImage.asset?._ref) {
+        backgroundImageUrl = urlFor(bgImage).width(1920).height(1080).quality(90).url()
+      }
+    } catch (error) {
+      console.error('Error building background image URL:', error, 'Image data:', data.backgroundImage)
+    }
+  }
+  
+  // Fallback se não conseguir construir a URL
+  if (!backgroundImageUrl) {
+    backgroundImageUrl = '/images/hero.jpg'
+  }
 
   return (
     <section className="relative z-20 flex min-h-[100vh] items-end">

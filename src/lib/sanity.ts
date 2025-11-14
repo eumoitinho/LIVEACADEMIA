@@ -25,12 +25,15 @@ export async function getHomepageData() {
     const data = await client.fetch(`
       *[_type == "homepage" && !(_id in path("drafts.**"))][0] {
         seo,
-        hero {
-          backgroundImage {
-            asset-> {
-              url
-            }
-          },
+          hero {
+            backgroundImage {
+              asset-> {
+                _id,
+                _type,
+                url
+              },
+              _type
+            },
           title,
           subtitle,
           thirdTitle,

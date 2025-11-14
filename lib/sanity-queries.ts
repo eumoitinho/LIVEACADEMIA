@@ -7,8 +7,11 @@ export const homepageQuery = groq`
     hero {
       backgroundImage {
         asset-> {
+          _id,
+          _type,
           url
-        }
+        },
+        _type
       },
       badge,
       title,
