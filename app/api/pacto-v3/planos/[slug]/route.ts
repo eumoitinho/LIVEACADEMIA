@@ -8,12 +8,22 @@ function getCorsHeaders(origin?: string | null) {
   const allowedOrigins = [
     'https://liveacademia.sanity.studio',
     'https://admin.sanity.io',
+    'https://www.sanity.io',
     'http://localhost:3000',
     'http://localhost:3333',
   ]
   
   // Verificar se a origem está na lista de permitidas
-  const isAllowed = origin && allowedOrigins.some(allowed => origin.includes(allowed))
+  // Aceita qualquer domínio .sanity.studio ou admin.sanity.io
+  const isAllowed = origin && (
+    origin.includes('sanity.studio') ||
+    origin.includes('admin.sanity.io') ||
+    origin.includes('www.sanity.io') ||
+    origin.includes('localhost:3000') ||
+    origin.includes('localhost:3333')
+  )
+  
+  // Retornar a origem se permitida, senão retornar a primeira da lista
   const corsOrigin = isAllowed ? origin : allowedOrigins[0]
   
   return {
@@ -21,6 +31,7 @@ function getCorsHeaders(origin?: string | null) {
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
+    'Access-Control-Allow-Credentials': 'true',
   }
 }
 
