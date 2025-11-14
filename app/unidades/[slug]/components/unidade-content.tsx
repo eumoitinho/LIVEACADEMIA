@@ -201,7 +201,11 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {(data?.modalidades || []).map((modalidade, index) => (
+            {(data?.modalidades || []).map((modalidade, index) => {
+              // Usar foto específica do array fotos, ou foto da unidade, ou fallback
+              const fotoModalidade = data?.fotos?.[index] || data?.fotos?.[index % (data?.fotos?.length || 1)] || unidade.photo || '/images/fachada.jpg'
+              
+              return (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -211,9 +215,9 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-yellow-400/30 transition-all duration-300"
               >
                 <div className="relative h-48">
-                  {/* Background Image */}
+                  {/* Background Image - Foto específica de cada modalidade */}
                   <img
-                    src={unidade.photo || '/images/fachada.jpg'}
+                    src={fotoModalidade}
                     alt={modalidade}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
@@ -270,7 +274,13 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(data?.beneficios || []).map((beneficio, index) => (
+              {(data?.beneficios || []).map((beneficio, index) => {
+                // Usar foto específica do array fotos, ou foto da unidade, ou fallback
+                // Para benefícios, vamos usar as fotos após as modalidades
+                const fotoIndex = (data?.modalidades?.length || 0) + index
+                const fotoBeneficio = data?.fotos?.[fotoIndex] || data?.fotos?.[fotoIndex % (data?.fotos?.length || 1)] || unidade.photo || '/images/fachada.jpg'
+                
+                return (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -280,27 +290,27 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-amber-400/30 transition-all duration-300"
               >
                 <div className="relative h-48">
-                  {/* Background Image */}
+                  {/* Background Image - Foto específica de cada benefício */}
                   <img
-                    src={unidade.photo || '/images/fachada.jpg'}
+                    src={fotoBeneficio}
                     alt={beneficio}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                   
-                  {/* Content */}
+                  {/* Content - Nome do benefício em destaque, "Benefício" embaixo */}
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-colors flex-shrink-0">
                         <Check className="w-5 h-5 text-amber-400" />
                       </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-amber-300 transition-colors">
-                          Benefício
-                        </h3>
-                        <p className="text-white/90 leading-relaxed text-sm">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white mb-1 group-hover:text-amber-300 transition-colors">
                           {beneficio}
+                        </h3>
+                        <p className="text-amber-400/80 text-xs font-medium uppercase tracking-wider">
+                          Benefício
                         </p>
                       </div>
                     </div>
@@ -314,7 +324,8 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                   </div>
                 </div>
               </motion.div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
