@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Check, Sparkles, Crown, CreditCard, X, ChevronDown } from "lucide-react"
+import { Check, Sparkles, Crown, ChevronDown } from "lucide-react"
 
 interface PlanoItem {
   name: string
@@ -21,7 +21,7 @@ interface PlanosCardsProps {
 }
 
 export default function PlanosCards({ planos, unidadeName, onMatricular }: PlanosCardsProps) {
-  const [showComparison, setShowComparison] = useState(false)
+  const [showMorePlanos, setShowMorePlanos] = useState(false)
 
   if (!planos || planos.length === 0) {
     return null
@@ -70,18 +70,24 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
     return 0
   })
 
+  // Planos para exibir: 2 inicialmente, todos se showMorePlanos for true
+  const displayedPlanos = showMorePlanos ? preparedPlanos : preparedPlanos.slice(0, 2)
+  const hasMorePlanos = preparedPlanos.length > 2
+
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Cards de Preço - Design da Home */}
-      <div className="grid md:grid-cols-2 gap-8">
-        {preparedPlanos.slice(0, 2).map((plano, idx) => (
-          <motion.div
-            key={plano.codigo || plano.nome}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: idx * 0.1 }}
-            className={`relative group ${plano.destaque ? 'md:-mt-4' : ''}`}
-          >
+      <div className={`grid gap-8 ${displayedPlanos.length === 1 ? 'md:grid-cols-1 max-w-2xl mx-auto' : displayedPlanos.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
+        <AnimatePresence mode="wait">
+          {displayedPlanos.map((plano, idx) => (
+            <motion.div
+              key={plano.codigo || plano.nome}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              className={`relative group ${plano.destaque && !showMorePlanos ? 'md:-mt-4' : ''}`}
+            >
             {/* Card Container */}
             <div className={`relative h-full rounded-3xl overflow-hidden border transition-all duration-500 ${
               plano.destaque 
@@ -175,33 +181,20 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
         ))}
       </div>
 
-      {/* Botão Comparar - Só aparece se houver 2 planos */}
-      {preparedPlanos.length >= 2 && (
+      {/* Botão Ver Mais Planos - Só aparece se houver mais de 2 planos */}
+      {hasMorePlanos && (
         <div className="text-center">
-          <button
-            onClick={() => setShowComparison(!showComparison)}
+          <motion.button
+            onClick={() => setShowMorePlanos(!showMorePlanos)}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
             className="px-6 py-3 rounded-xl border border-white/20 text-white hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
           >
-            {showComparison ? 'Ocultar comparação' : 'Comparar planos'}
-            <ChevronDown className={`h-4 w-4 transition-transform ${showComparison ? 'rotate-180' : ''}`} />
-          </button>
+            {showMorePlanos ? 'Ver menos planos' : `Ver mais planos (${preparedPlanos.length - 2} restantes)`}
+            <ChevronDown className={`h-4 w-4 transition-transform ${showMorePlanos ? 'rotate-180' : ''}`} />
+          </motion.button>
         </div>
-      )}
-
-      {/* Tabela de Comparação */}
-      {showComparison && preparedPlanos.length >= 2 && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <ComparisonTable
-            normalPlano={preparedPlanos.find(p => !p.destaque) || preparedPlanos[1]}
-            premiumPlano={preparedPlanos.find(p => p.destaque) || preparedPlanos[0]}
-            onMatricular={onMatricular}
-          />
-        </motion.div>
       )}
 
       {/* Footer Note */}
