@@ -108,7 +108,7 @@ export default function Planos() {
 
       const merged = locations.map(staticLoc => {
         const sanityUnit = sanityUnits.find((unit: any) =>
-          unit.slug?.current === staticLoc.id
+          unit.slug?.current === staticLoc.id || unit.slug === staticLoc.id
         )
 
         if (sanityUnit) {

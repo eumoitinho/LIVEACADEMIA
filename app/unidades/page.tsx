@@ -17,11 +17,78 @@ export default function Unidades() {
   const [radiusFilter, setRadiusFilter] = useState<number | null>(null)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [loadingLocation, setLoadingLocation] = useState(false)
+  const [unitsWithPlanos, setUnitsWithPlanos] = useState<Record<string, Array<{ name: string; price: string }>>>({})
+
+  // Fetch planos from API for each unit
+  useEffect(() => {
+    const fetchPlanosForUnits = async () => {
+      const planosMap: Record<string, Array<{ name: string; price: string }>> = {}
+      
+      // Buscar planos apenas para unidades que temos
+      const unitsToFetch = loadingSanity || sanityUnits.length === 0 
+        ? locations 
+        : locations.map(staticLoc => {
+            const sanityUnit = sanityUnits.find((unit: any) => unit.slug === staticLoc.id)
+            return sanityUnit ? { id: staticLoc.id, slug: sanityUnit.slug || staticLoc.id } : { id: staticLoc.id, slug: staticLoc.id }
+          })
+
+      // Buscar planos para cada unidade
+      const fetchPromises = unitsToFetch.map(async (unit: any) => {
+        try {
+          const response = await fetch(`/api/pacto-v3/planos/${unit.slug || unit.id}`, { cache: 'no-store' })
+          if (!response.ok) {
+            console.warn(`[Unidades] Erro ao buscar planos para ${unit.slug || unit.id}:`, response.status)
+            return { slug: unit.slug || unit.id, planos: [] }
+          }
+          
+          const data = await response.json()
+          const fetchedPlanos = data.planos || []
+          
+          // Filtrar planos com valor > 89.90
+          const filteredPlanos = fetchedPlanos
+            .filter((plano: any) => {
+              const valor = plano.mensalidade || plano.valor
+              const valorNumerico = typeof valor === 'number' ? valor : parseFloat(String(valor).replace(',', '.'))
+              return valorNumerico > 89.90
+            })
+            .map((plano: any) => ({
+              name: plano.nome || plano.name,
+              price: plano.mensalidade 
+                ? plano.mensalidade.toFixed(2).replace('.', ',')
+                : (typeof plano.valor === 'number' 
+                  ? plano.valor.toFixed(2).replace('.', ',')
+                  : String(plano.valor).replace('.', ','))
+            }))
+          
+          return { slug: unit.slug || unit.id, planos: filteredPlanos }
+        } catch (error) {
+          console.warn(`[Unidades] Erro ao buscar planos para ${unit.slug || unit.id}:`, error)
+          return { slug: unit.slug || unit.id, planos: [] }
+        }
+      })
+
+      const results = await Promise.all(fetchPromises)
+      results.forEach(({ slug, planos }) => {
+        if (planos.length > 0) {
+          planosMap[slug] = planos
+        }
+      })
+
+      setUnitsWithPlanos(planosMap)
+    }
+
+    if (!loadingSanity) {
+      fetchPlanosForUnits()
+    }
+  }, [sanityUnits, loadingSanity])
 
   // Merge Sanity units with static locations (Sanity takes precedence)
   const allLocations = useMemo(() => {
     if (loadingSanity || sanityUnits.length === 0) {
-      return locations
+      return locations.map(loc => ({
+        ...loc,
+        planos: unitsWithPlanos[loc.id] || []
+      }))
     }
 
     return locations.map(staticLoc => {
@@ -31,6 +98,7 @@ export default function Unidades() {
 
       if (sanityUnit) {
         const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
+        const unitSlug = sanityUnit.slug || staticLoc.id
         return {
           ...staticLoc,
           name: sanityUnit.name,
@@ -39,15 +107,19 @@ export default function Unidades() {
           photo: sanityUnit.photo?.asset?.url || sanityUnit.images?.[0]?.asset?.url || staticLoc.photo || '/images/fachada.jpg',
           features: sanityUnit.services || staticLoc.features,
           hours: sanityUnit.openingHours || staticLoc.hours,
+          planos: unitsWithPlanos[unitSlug] || [],
           coordinates: hasCoordinates ? {
             lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
             lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
           } : undefined
         }
       }
-      return staticLoc
+      return {
+        ...staticLoc,
+        planos: unitsWithPlanos[staticLoc.id] || []
+      }
     })
-  }, [sanityUnits, loadingSanity])
+  }, [sanityUnits, loadingSanity, unitsWithPlanos])
 
   // Função para calcular distância em km usando fórmula de Haversine
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
