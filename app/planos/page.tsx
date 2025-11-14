@@ -77,26 +77,35 @@ export default function Planos() {
   // Use Sanity plans or fallback to hardcoded
   // Normalizar planos do Sanity para garantir estrutura consistente
   const displayPlans = useMemo(() => {
-    if (sanityPlans && sanityPlans.length > 0) {
-      // Normalizar planos do Sanity para ter a mesma estrutura dos planos hardcoded
-      return sanityPlans.map((plano: any) => ({
-        nome: plano.name || plano.nome || '',
-        preco: plano.price || plano.preco || '0,00',
-        periodo: plano.period || plano.periodo || 'mês',
-        descricao: plano.description || plano.descricao || '',
-        beneficios: Array.isArray(plano.features) 
-          ? plano.features 
-          : Array.isArray(plano.beneficios) 
-          ? plano.beneficios 
-          : [],
-        gradient: plano.gradient || 'from-zinc-700 to-zinc-900',
-        icone: plano.icon || Check,
-        popular: plano.highlight || plano.popular || false,
-        destaque: plano.highlight || plano.destaque || false,
-        badge: plano.badge || ''
-      }))
+    // Garantir que sanityPlans é um array antes de processar
+    if (Array.isArray(sanityPlans) && sanityPlans.length > 0) {
+      try {
+        // Normalizar planos do Sanity para ter a mesma estrutura dos planos hardcoded
+        return sanityPlans
+          .filter((plano: any) => plano != null) // Filtrar valores nulos/undefined
+          .map((plano: any) => ({
+            nome: plano.name || plano.nome || '',
+            preco: plano.price || plano.preco || '0,00',
+            periodo: plano.period || plano.periodo || 'mês',
+            descricao: plano.description || plano.descricao || '',
+            beneficios: Array.isArray(plano.features) 
+              ? plano.features 
+              : Array.isArray(plano.beneficios) 
+              ? plano.beneficios 
+              : [],
+            gradient: plano.gradient || 'from-zinc-700 to-zinc-900',
+            icone: plano.icon || Check,
+            popular: plano.highlight || plano.popular || false,
+            destaque: plano.highlight || plano.destaque || false,
+            badge: plano.badge || ''
+          }))
+      } catch (error) {
+        console.error('Error normalizing sanity plans:', error)
+        return planos
+      }
     }
-    return planos
+    // Fallback para planos estáticos
+    return Array.isArray(planos) ? planos : []
   }, [sanityPlans])
 
   // Fetch units from Sanity
@@ -121,38 +130,54 @@ export default function Planos() {
   // Import static locations and merge with Sanity data
   useEffect(() => {
     const loadLocations = async () => {
-      const { locations } = await import('@/src/lib/config/locations')
+      try {
+        const { locations } = await import('@/src/lib/config/locations')
 
-      if (loadingSanity || sanityUnits.length === 0) {
-        setAllLocations(locations)
-        return
-      }
-
-      const merged = locations.map(staticLoc => {
-        const sanityUnit = sanityUnits.find((unit: any) =>
-          unit.slug?.current === staticLoc.id || unit.slug === staticLoc.id
-        )
-
-        if (sanityUnit) {
-          const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
-          return {
-            ...staticLoc,
-            name: sanityUnit.name,
-            address: sanityUnit.address,
-            type: sanityUnit.type,
-            photo: sanityUnit.images?.[0]?.asset?.url || staticLoc.photo,
-            features: sanityUnit.services || staticLoc.features,
-            hours: sanityUnit.openingHours || staticLoc.hours,
-            coordinates: hasCoordinates ? {
-              lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
-              lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
-            } : undefined
-          }
+        // Garantir que locations é um array
+        if (!Array.isArray(locations)) {
+          console.error('Locations não é um array:', locations)
+          setAllLocations([])
+          return
         }
-        return staticLoc
-      })
 
-      setAllLocations(merged)
+        if (loadingSanity || !Array.isArray(sanityUnits) || sanityUnits.length === 0) {
+          setAllLocations(locations)
+          return
+        }
+
+        const merged = locations.map(staticLoc => {
+          if (!staticLoc) return null // Pular valores nulos
+          
+          const sanityUnit = Array.isArray(sanityUnits)
+            ? sanityUnits.find((unit: any) =>
+                unit?.slug?.current === staticLoc.id || unit?.slug === staticLoc.id
+              )
+            : null
+
+          if (sanityUnit) {
+            const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
+            return {
+              ...staticLoc,
+              name: sanityUnit.name || staticLoc.name,
+              address: sanityUnit.address || staticLoc.address,
+              type: sanityUnit.type || staticLoc.type,
+              photo: sanityUnit.images?.[0]?.asset?.url || staticLoc.photo,
+              features: Array.isArray(sanityUnit.services) ? sanityUnit.services : (Array.isArray(staticLoc.features) ? staticLoc.features : []),
+              hours: sanityUnit.openingHours || staticLoc.hours,
+              coordinates: hasCoordinates ? {
+                lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
+                lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
+              } : undefined
+            }
+          }
+          return staticLoc
+        }).filter((loc): loc is LocationUnit => loc != null) // Filtrar valores nulos
+
+        setAllLocations(merged)
+      } catch (error) {
+        console.error('Error loading locations:', error)
+        setAllLocations([])
+      }
     }
 
     loadLocations()
@@ -166,12 +191,22 @@ export default function Planos() {
   const filteredUnits = useMemo(() => {
     if (!selectedPlan) return []
 
+    // Garantir que allLocations é um array antes de filtrar
+    if (!Array.isArray(allLocations)) {
+      console.warn('allLocations não é um array:', allLocations)
+      return []
+    }
+
     // Both plans exclude Morada do Sol and Alphaville
-    return allLocations.filter(unit =>
-      unit.type !== 'inauguracao' &&
-      !unit.id.includes('morada') &&
-      !unit.id.includes('alphaville')
-    )
+    return allLocations.filter((unit): unit is LocationUnit => {
+      if (!unit || typeof unit !== 'object') return false
+      return (
+        unit.type !== 'inauguracao' &&
+        unit.id &&
+        !unit.id.includes('morada') &&
+        !unit.id.includes('alphaville')
+      )
+    })
   }, [selectedPlan, allLocations])
 
   const comparisonFeatures = [
@@ -345,7 +380,7 @@ export default function Planos() {
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-2">
-                      {filteredUnits.map((unit) => (
+                      {Array.isArray(filteredUnits) && filteredUnits.length > 0 ? filteredUnits.map((unit) => (
                         <Link
                           key={unit.id}
                           href={`/unidades/${unit.id}`}
@@ -384,11 +419,15 @@ export default function Planos() {
                             </div>
                           </div>
                         </Link>
-                      ))}
+                      )) : (
+                        <div className="col-span-full text-center py-8 text-zinc-400">
+                          Nenhuma unidade disponível.
+                        </div>
+                      )}
                     </div>
                   )}
 
-                  {!loadingSanity && filteredUnits.length === 0 && (
+                  {!loadingSanity && Array.isArray(filteredUnits) && filteredUnits.length === 0 && (
                     <div className="text-center py-12 text-zinc-400">
                       Nenhuma unidade disponível para este plano.
                     </div>
