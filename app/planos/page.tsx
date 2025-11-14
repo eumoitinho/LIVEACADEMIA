@@ -83,9 +83,23 @@ export default function Planos() {
         // Normalizar planos do Sanity para ter a mesma estrutura dos planos hardcoded
         return sanityPlans
           .filter((plano: any) => plano != null) // Filtrar valores nulos/undefined
-          .map((plano: any) => ({
+          .map((plano: any) => {
+            // Formatar preço: Sanity retorna em centavos, converter para reais com vírgula
+            let precoFormatado = '0,00'
+            if (typeof plano.price === 'number') {
+              // Dividir por 100 (centavos para reais) e formatar com vírgula
+              precoFormatado = (plano.price / 100).toFixed(2).replace('.', ',')
+            } else if (typeof plano.preco === 'number') {
+              // Caso venha no campo preco (também em centavos)
+              precoFormatado = (plano.preco / 100).toFixed(2).replace('.', ',')
+            } else if (typeof plano.price === 'string' || typeof plano.preco === 'string') {
+              // Se já vier formatado como string, usar diretamente
+              precoFormatado = String(plano.price || plano.preco || '0,00')
+            }
+            
+            return {
             nome: plano.name || plano.nome || '',
-            preco: plano.price || plano.preco || '0,00',
+            preco: precoFormatado,
             periodo: plano.period || plano.periodo || 'mês',
             descricao: plano.description || plano.descricao || '',
             beneficios: Array.isArray(plano.features) 
@@ -98,7 +112,8 @@ export default function Planos() {
             popular: plano.highlight || plano.popular || false,
             destaque: plano.highlight || plano.destaque || false,
             badge: plano.badge || ''
-          }))
+          }
+          })
       } catch (error) {
         console.error('Error normalizing sanity plans:', error)
         return planos
