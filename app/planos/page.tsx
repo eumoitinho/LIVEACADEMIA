@@ -146,7 +146,7 @@ export default function Planos() {
         }
 
         const merged = locations
-          .filter((staticLoc): staticLoc is LocationUnit => staticLoc != null) // Filtrar valores nulos primeiro
+          .filter((staticLoc) => staticLoc != null) // Filtrar valores nulos primeiro
           .map(staticLoc => {
             const sanityUnit = Array.isArray(sanityUnits)
               ? sanityUnits.find((unit: any) =>
