@@ -168,7 +168,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                   slug={unidade.id}
                   unidadeName={unidade.name}
                   fallbackPlanos={unidade.planos}
-                  filters={unidade.filtroPlanos}
+                  filters={(unidade as any).filtroPlanos}
                   onMatricular={handleMatricular}
                 />
               </motion.div>
