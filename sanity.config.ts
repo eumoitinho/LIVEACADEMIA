@@ -2,7 +2,7 @@ import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 
-// Import schemas
+// Import schemas essenciais
 import { homepageSchema } from './sanity/schemas/homepage'
 import { unitSchema } from './sanity/schemas/unit'
 import { planoSchema } from './sanity/schemas/plano'
@@ -13,143 +13,263 @@ import { modalitySchema } from './sanity/schemas/modality'
 import { structureFeatureSchema } from './sanity/schemas/structure-feature'
 import { wellhubFeatureSchema } from './sanity/schemas/wellhub-feature'
 import { bioimpedanciaFeatureSchema } from './sanity/schemas/bioimpedancia-feature'
-import { appSectionSchema } from './sanity/schemas/app-section'
-import { beneficiosSectionSchema } from './sanity/schemas/beneficios-section'
 import { dayUse } from './sanity/schemas/day-use'
-import { sobreNosSchema } from './sanity/schemas/sobre-nos'
+import { sobreSchema } from './sanity/schemas/sobre'
 import { contatoSchema } from './sanity/schemas/contato'
 import { trabalheConoscoSchema } from './sanity/schemas/trabalhe-conosco'
-import { sobreSchema } from './sanity/schemas/sobre'
+import { globalSettingsSchema } from './sanity/schemas/global-settings'
+
+// Import seções
+import { heroSectionSchema } from './sanity/schemas/hero-section'
+import { modalidadesSectionSchema } from './sanity/schemas/modalidades-section'
+import { wellhubSectionSchema } from './sanity/schemas/wellhub-section'
+import { testimonialSectionSchema } from './sanity/schemas/testimonial-section'
+import { estruturaSectionSchema } from './sanity/schemas/estrutura-section'
+import { bioimpedanciaSectionSchema } from './sanity/schemas/bioimpedancia-section'
+import { beneficiosSectionSchema } from './sanity/schemas/beneficios-section'
+import { planosSectionSchema } from './sanity/schemas/planos-section'
+import { planosPageSchema } from './sanity/schemas/planos-page'
+import { unidadesPageSchema } from './sanity/schemas/unidades-page'
+import { unidadesSectionSchema } from './sanity/schemas/unidades-section'
+import { navigationSchema } from './sanity/schemas/navigation'
 
 export default defineConfig({
   name: 'live-academia',
   title: 'Live Academia CMS',
+  basePath: '/studio',
 
-  projectId: 'c9pbklm2',
-  dataset: 'production',
+  // Usar variáveis de ambiente para garantir sincronização entre Cloud e Local
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'c9pbklm2',
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
 
   // API version
-  apiVersion: '2024-01-01',
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
 
   // Enable authentication
   token: process.env.SANITY_API_TOKEN,
-  
+
+  // Configuração para permitir uso em múltiplos domínios
+  // O Sanity Studio embarcado funcionará em qualquer domínio onde a aplicação Next.js estiver rodando
+  // Não há necessidade de configurar CORS aqui, pois o Studio é servido pela própria aplicação Next.js
+
   plugins: [
     structureTool({
       structure: (S) =>
         S.list()
-          .title('Live Academia')
+          .title('Live Academia CMS')
           .items([
+            // Configurações principais
             S.listItem()
-              .title('Homepage')
+              .title('⚙️ Configurações Globais')
+              .child(
+                S.document()
+                  .schemaType('globalSettings')
+                  .documentId('globalSettings')
+              ),
+            S.listItem()
+              .title('🏠 Homepage')
               .child(
                 S.document()
                   .schemaType('homepage')
                   .documentId('homepage')
               ),
             S.divider(),
+
+            // Conteúdo principal
             S.listItem()
-              .title('Unidades')
+              .title('🏢 Unidades')
               .child(S.documentTypeList('unit')),
             S.listItem()
-              .title('Planos')
+              .title('💎 Planos')
               .child(S.documentTypeList('plano')),
             S.listItem()
-              .title('Benefícios')
+              .title('🌟 Benefícios')
               .child(S.documentTypeList('benefit')),
             S.listItem()
-              .title('Depoimentos')
+              .title('💬 Depoimentos')
               .child(S.documentTypeList('testimonial')),
             S.listItem()
-              .title('Recursos do App')
+              .title('🏃‍♀️ Modalidades')
+              .child(S.documentTypeList('modality')),
+            S.divider(),
+
+            // Features e recursos
+            S.listItem()
+              .title('📱 Recursos do App')
               .child(S.documentTypeList('appFeature')),
             S.listItem()
-              .title('Modalidades')
-              .child(S.documentTypeList('modality')),
-            S.listItem()
-              .title('Estrutura')
+              .title('🏗️ Estrutura')
               .child(S.documentTypeList('structureFeature')),
             S.listItem()
-              .title('Wellhub')
+              .title('💼 Wellhub')
               .child(S.documentTypeList('wellhubFeature')),
             S.listItem()
-              .title('Bioimpedância')
+              .title('⚖️ Bioimpedância')
               .child(S.documentTypeList('bioimpedanciaFeature')),
             S.divider(),
-            // Seções Singleton (documento único)
+
+            // Páginas especiais
             S.listItem()
-              .title('Seção do App')
-              .child(
-                S.document()
-                  .schemaType('appSection')
-                  .documentId('appSection')
-              ),
-            S.listItem()
-              .title('Seção de Benefícios')
-              .child(
-                S.document()
-                  .schemaType('beneficiosSection')
-                  .documentId('beneficiosSection')
-              ),
-            S.listItem()
-              .title('Day Use')
+              .title('🌅 Day Use')
               .child(
                 S.document()
                   .schemaType('dayUse')
                   .documentId('dayUse')
               ),
             S.listItem()
-              .title('Sobre Nós')
+              .title('📖 Sobre Nós')
               .child(
                 S.document()
-                  .schemaType('sobreNos')
-                  .documentId('sobreNos')
+                  .schemaType('sobre')
+                  .documentId('sobre')
               ),
             S.listItem()
-              .title('Contato')
+              .title('📞 Contato')
               .child(
                 S.document()
                   .schemaType('contato')
                   .documentId('contato')
               ),
             S.listItem()
-              .title('Trabalhe Conosco')
+              .title('💼 Trabalhe Conosco')
               .child(
                 S.document()
                   .schemaType('trabalheConosco')
                   .documentId('trabalheConosco')
               ),
+            S.divider(),
+
+            // Seções da Homepage
             S.listItem()
-              .title('Sobre')
+              .title('🦸‍♂️ Seção Hero')
               .child(
                 S.document()
-                  .schemaType('sobre')
-                  .documentId('sobre')
+                  .schemaType('heroSection')
+                  .documentId('heroSection')
+              ),
+            S.listItem()
+              .title('🏃‍♀️ Seção Modalidades')
+              .child(
+                S.document()
+                  .schemaType('modalidadesSection')
+                  .documentId('modalidadesSection')
+              ),
+            S.listItem()
+              .title('💼 Seção Wellhub')
+              .child(
+                S.document()
+                  .schemaType('wellhubSection')
+                  .documentId('wellhubSection')
+              ),
+            S.listItem()
+              .title('💬 Seção Depoimentos')
+              .child(
+                S.document()
+                  .schemaType('testimonialSection')
+                  .documentId('testimonialSection')
+              ),
+            S.listItem()
+              .title('🏗️ Seção Estrutura')
+              .child(
+                S.document()
+                  .schemaType('estruturaSection')
+                  .documentId('estruturaSection')
+              ),
+            S.listItem()
+              .title('⚖️ Seção Bioimpedância')
+              .child(
+                S.document()
+                  .schemaType('bioimpedanciaSection')
+                  .documentId('bioimpedanciaSection')
+              ),
+            S.listItem()
+              .title('🌟 Seção Benefícios')
+              .child(
+                S.document()
+                  .schemaType('beneficiosSection')
+                  .documentId('beneficiosSection')
+              ),
+            S.listItem()
+              .title('💎 Seção Planos')
+              .child(
+                S.document()
+                  .schemaType('planosSection')
+                  .documentId('planosSection')
+              ),
+            S.divider(),
+
+            // Páginas específicas
+            S.listItem()
+              .title('📄 Página Planos')
+              .child(
+                S.document()
+                  .schemaType('planosPage')
+                  .documentId('planosPage')
+              ),
+            S.listItem()
+              .title('📍 Página Unidades')
+              .child(
+                S.document()
+                  .schemaType('unidadesPage')
+                  .documentId('unidadesPage')
+              ),
+            S.listItem()
+              .title('📍 Seção Unidades (Homepage)')
+              .child(
+                S.document()
+                  .schemaType('unidadesSection')
+                  .documentId('unidadesSection')
+              ),
+            S.listItem()
+              .title('🧭 Navegação')
+              .child(
+                S.document()
+                  .schemaType('navigation')
+                  .documentId('navigation')
               ),
           ])
     }),
     visionTool()
   ],
-  
+
   schema: {
     types: [
+      // Configurações e páginas principais
+      globalSettingsSchema,
       homepageSchema,
+      sobreSchema,
+      contatoSchema,
+      trabalheConoscoSchema,
+      dayUse,
+
+      // Conteúdo principal
       unitSchema,
       planoSchema,
       benefitSchema,
       testimonialSchema,
-      appFeatureSchema,
       modalitySchema,
+
+      // Features e recursos
+      appFeatureSchema,
       structureFeatureSchema,
       wellhubFeatureSchema,
       bioimpedanciaFeatureSchema,
-      appSectionSchema,
+
+      // Seções da Homepage
+      heroSectionSchema,
+      modalidadesSectionSchema,
+      wellhubSectionSchema,
+      testimonialSectionSchema,
+      estruturaSectionSchema,
+      bioimpedanciaSectionSchema,
       beneficiosSectionSchema,
-      dayUse,
-      sobreNosSchema,
-      contatoSchema,
-      trabalheConoscoSchema,
-      sobreSchema,
+      planosSectionSchema,
+
+      // Páginas específicas
+      planosPageSchema,
+      unidadesPageSchema,
+      unidadesSectionSchema,
+      navigationSchema,
     ],
   },
 })
