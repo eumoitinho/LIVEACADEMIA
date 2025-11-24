@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "createdAt": "2025-11-24T18:55:02.581Z",
+  "createdAt": "2025-11-24T19:17:17.256Z",
   "workspaces": [
     {
       "name": "live-academia",
@@ -13,7 +13,7 @@
         "enabled": false
       },
       "schema": "06506339.create-schema.json",
-      "tools": "255c5cc9.create-tools.json"
+      "tools": "db50c055.create-tools.json"
     }
   ],
   "studioVersion": "4.18.0"

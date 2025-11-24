@@ -1,7 +1,6 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
-import { presentationTool } from 'sanity/presentation'
 
 // Import schemas
 import { homepageSchema } from './sanity/schemas/homepage'
@@ -128,14 +127,6 @@ export default defineConfig({
                   .documentId('sobre')
               ),
           ])
-    }),
-    presentationTool({
-      previewUrl: {
-        origin: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-        previewMode: {
-          enable: '/api/draft-mode/enable',
-        },
-      },
     }),
     visionTool()
   ],
