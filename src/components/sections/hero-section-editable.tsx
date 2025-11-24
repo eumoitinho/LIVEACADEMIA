@@ -120,7 +120,8 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
         />
       )}
       {/* Overlay para melhorar a legibilidade apenas na hero */}
-      <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
+      <div className="absolute inset-0 w-full h-full bg-black/70 mix-blend-multiply pointer-events-none" aria-hidden="true" />
+      <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-black/50 via-black/30 to-transparent pointer-events-none" aria-hidden="true" />
       
       <div className="lg:px-8 max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center opacity-0 animate-[fadeInUp_1s_ease-out_0.2s_forwards]">
@@ -139,7 +140,7 @@ export default function HeroSectionEditable({ data }: HeroSectionEditableProps) 
              
             </div>
 
-            <p className="section-description animate-[fadeInUp_0.8s_ease-out_0.8s_forwards] opacity-0 mb-8" style={{transform: "translateY(20px)", filter: "blur(5px)"}}>
+            <p className="section-description font-semibold text-white/90 animate-[fadeInUp_0.8s_ease-out_0.8s_forwards] opacity-0 mb-8" style={{transform: "translateY(20px)", filter: "blur(5px)"}}>
               {data.description || "A maior rede de academias de Manaus, com planos flexíveis e sem fidelidade para você treinar do seu jeito."}
             </p>
 

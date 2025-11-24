@@ -1,0 +1,192 @@
+import { defineConfig } from 'sanity'
+import { structureTool } from 'sanity/structure'
+import { visionTool } from '@sanity/vision'
+import { presentationTool } from 'sanity/presentation'
+
+// Import schemas
+import { homepageSchema } from './sanity/schemas/homepage'
+import { unitSchema } from './sanity/schemas/unit'
+import { planoSchema } from './sanity/schemas/plano'
+import { benefitSchema } from './sanity/schemas/benefit'
+import { testimonialSchema } from './sanity/schemas/testimonial'
+import { appFeatureSchema } from './sanity/schemas/app-feature'
+import { modalitySchema } from './sanity/schemas/modality'
+import { structureFeatureSchema } from './sanity/schemas/structure-feature'
+import { wellhubFeatureSchema } from './sanity/schemas/wellhub-feature'
+import { bioimpedanciaFeatureSchema } from './sanity/schemas/bioimpedancia-feature'
+import { appSectionSchema } from './sanity/schemas/app-section'
+import { beneficiosSectionSchema } from './sanity/schemas/beneficios-section'
+import { dayUse } from './sanity/schemas/day-use'
+import { sobreNosSchema } from './sanity/schemas/sobre-nos'
+import { contatoSchema } from './sanity/schemas/contato'
+import { trabalheConoscoSchema } from './sanity/schemas/trabalhe-conosco'
+import { sobreSchema } from './sanity/schemas/sobre'
+
+import { modalidadesPageSchema } from './sanity/schemas/modalidades-page'
+import { wellhubSectionSchema } from './sanity/schemas/wellhub-section'
+
+export default defineConfig({
+  name: 'live-academia',
+  title: 'Live Academia CMS',
+
+  projectId: 'c9pbklm2',
+  dataset: 'production',
+
+  basePath: '/studio',
+
+  // API version
+  apiVersion: '2024-01-01',
+
+  // Enable authentication
+  token: process.env.SANITY_API_TOKEN,
+  
+  plugins: [
+    structureTool({
+      structure: (S) =>
+        S.list()
+          .title('Live Academia CMS')
+          .items([
+            // Configurações Globais
+            S.listItem()
+              .title('🏠 Homepage')
+              .icon(() => '🏠')
+              .child(
+                S.document()
+                  .schemaType('homepage')
+                  .documentId('homepage')
+              ),
+
+            S.divider(),
+
+            // Conteúdo Principal
+            S.documentTypeListItem('unit').title('🏢 Unidades').icon(() => '🏢'),
+            S.documentTypeListItem('plano').title('💎 Planos').icon(() => '💎'),
+            S.documentTypeListItem('benefit').title('⭐ Benefícios').icon(() => '⭐'),
+            S.documentTypeListItem('testimonial').title('💬 Depoimentos').icon(() => '💬'),
+            S.documentTypeListItem('modality').title('🏃 Modalidades').icon(() => '🏃'),
+
+            S.divider(),
+
+            // Recursos e Funcionalidades
+            S.documentTypeListItem('appFeature').title('📱 Recursos do App').icon(() => '📱'),
+            S.documentTypeListItem('structureFeature').title('🏗 Estrutura').icon(() => '🏗'),
+            S.documentTypeListItem('wellhubFeature').title('💼 Wellhub').icon(() => '💼'),
+            S.documentTypeListItem('bioimpedanciaFeature').title('⚡ Bioimpedância').icon(() => '⚡'),
+
+            S.divider(),
+
+            // Páginas e Seções
+            S.listItem()
+              .title('🎯 Seção Modalidades')
+              .icon(() => '🎯')
+              .child(
+                S.document()
+                  .schemaType('modalidadesPage')
+                  .documentId('modalidadesPage')
+              ),
+            S.listItem()
+              .title('📱 Seção do App')
+              .icon(() => '📱')
+              .child(
+                S.document()
+                  .schemaType('appSection')
+                  .documentId('appSection')
+              ),
+            S.listItem()
+              .title('⭐ Seção de Benefícios')
+              .icon(() => '⭐')
+              .child(
+                S.document()
+                  .schemaType('beneficiosSection')
+                  .documentId('beneficiosSection')
+              ),
+            S.listItem()
+              .title('💼 Seção Wellhub')
+              .icon(() => '💼')
+              .child(
+                S.document()
+                  .schemaType('wellhubSection')
+                  .documentId('wellhubSection')
+              ),
+            S.listItem()
+              .title('☀️ Day Use')
+              .icon(() => '☀️')
+              .child(
+                S.document()
+                  .schemaType('dayUse')
+                  .documentId('dayUse')
+              ),
+
+            S.divider(),
+
+            // Páginas Institucionais
+            S.listItem()
+              .title('ℹ️ Sobre Nós')
+              .icon(() => 'ℹ️')
+              .child(
+                S.document()
+                  .schemaType('sobreNos')
+                  .documentId('sobreNos')
+              ),
+            S.listItem()
+              .title('📄 Sobre')
+              .icon(() => '📄')
+              .child(
+                S.document()
+                  .schemaType('sobre')
+                  .documentId('sobre')
+              ),
+            S.listItem()
+              .title('📧 Contato')
+              .icon(() => '📧')
+              .child(
+                S.document()
+                  .schemaType('contato')
+                  .documentId('contato')
+              ),
+            S.listItem()
+              .title('👔 Trabalhe Conosco')
+              .icon(() => '👔')
+              .child(
+                S.document()
+                  .schemaType('trabalheConosco')
+                  .documentId('trabalheConosco')
+              ),
+          ])
+    }),
+    presentationTool({
+      previewUrl: {
+        origin: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+        previewMode: {
+          enable: '/api/draft-mode/enable',
+        },
+      },
+    }),
+    visionTool()
+  ],
+  
+  schema: {
+    types: [
+      homepageSchema,
+      unitSchema,
+      planoSchema,
+      benefitSchema,
+      testimonialSchema,
+      appFeatureSchema,
+      modalitySchema,
+      structureFeatureSchema,
+      wellhubFeatureSchema,
+      bioimpedanciaFeatureSchema,
+      appSectionSchema,
+      beneficiosSectionSchema,
+      
+      dayUse,
+      sobreNosSchema,
+      contatoSchema,
+      trabalheConoscoSchema,
+      sobreSchema,
+      modalidadesPageSchema,
+      wellhubSectionSchema,
+    ],
+  },
+})

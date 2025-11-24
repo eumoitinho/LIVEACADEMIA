@@ -1,47 +1,87 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Download, Zap, Users, BarChart3, Calendar, MessageCircle } from "lucide-react"
+import Image from "next/image"
+import { Download, Zap, Users, BarChart3, Calendar, MessageCircle, CheckCircle } from "lucide-react"
+import { useAppPageData } from "@/hooks/use-app-page-data"
+import { useAppFeaturesData } from "@/hooks/use-sanity-data"
+import { urlFor } from "@/lib/sanity"
+
+const featureIconMap = {
+  Zap,
+  Users,
+  BarChart3,
+  Calendar,
+  MessageCircle,
+  Download,
+  CheckCircle
+}
+
+const fallbackPageData = {
+  hero: {
+    title: "App Live Academia",
+    highlight: "palma da mão",
+    description: "Tenha a academia na palma da sua mão. Baixe o app e transforme sua experiência fitness.",
+    subtitle: "Disponível no Google Play e na App Store.",
+    downloadBadges: [
+      { store: "playstore", label: "Disponível no", subLabel: "Google Play", url: "#" },
+      { store: "appstore", label: "Baixar na", subLabel: "App Store", url: "#" }
+    ],
+    ctaButtons: [
+      { text: "Baixar agora", href: "#", variant: "primary" },
+      { text: "Conhecer recursos", href: "#video", variant: "secondary" }
+    ]
+  },
+  videoSection: {
+    title: "Veja como funciona",
+    description: "Assista ao vídeo demonstrativo e conheça todas as funcionalidades do App Live Academia."
+  },
+  interfaceShowcase: {
+    title: "Conheça a interface",
+    description: "Uma experiência de usuário intuitiva e moderna para facilitar sua rotina.",
+    screenshots: ["/app.jpeg", "/app.jpeg", "/app.jpeg"]
+  },
+  ctaSection: {
+    title: "Baixe agora e transforme sua experiência fitness",
+    description: "Junte-se a milhares de alunos que já transformaram sua rotina com o App Live Academia.",
+    buttons: [
+      { text: "Google Play", href: "#" },
+      { text: "App Store", href: "#" }
+    ]
+  }
+}
+
+const fallbackFeatures = [
+  { title: "Check-in Facial", description: "Entre na academia sem carteirinha, apenas com reconhecimento facial.", icon: "Zap", color: "from-blue-500 to-blue-600" },
+  { title: "Treinos Personalizados", description: "Receba treinos personalizados diretamente no seu celular.", icon: "BarChart3", color: "from-green-500 to-green-600" },
+  { title: "Agendamento de Aulas", description: "Reserve sua vaga nas aulas coletivas com antecedência.", icon: "Calendar", color: "from-amber-500 to-yellow-600" },
+  { title: "Histórico de Treinos", description: "Acompanhe sua evolução e histórico completo de treinos.", icon: "BarChart3", color: "from-orange-500 to-orange-600" },
+  { title: "Avaliações Físicas", description: "Visualize os resultados das suas avaliações físicas.", icon: "Users", color: "from-red-500 to-red-600" },
+  { title: "Comunicação com Personal", description: "Chat direto com seu personal trainer para tirar dúvidas.", icon: "MessageCircle", color: "from-pink-500 to-pink-600" }
+]
 
 export default function AppPage() {
-  const features = [
-    {
-      title: "Check-in Facial",
-      description: "Entre na academia sem carteirinha, apenas com reconhecimento facial.",
-      icon: Zap,
-      color: "from-blue-500 to-blue-600",
-    },
-    {
-      title: "Treinos Personalizados",
-      description: "Receba treinos personalizados diretamente no seu celular.",
-      icon: BarChart3,
-      color: "from-green-500 to-green-600",
-    },
-    {
-      title: "Agendamento de Aulas",
-      description: "Reserve sua vaga nas aulas coletivas com antecedência.",
-      icon: Calendar,
-      color: "from-amber-500 to-yellow-600",
-    },
-    {
-      title: "Histórico de Treinos",
-      description: "Acompanhe sua evolução e histórico completo de treinos.",
-      icon: BarChart3,
-      color: "from-orange-500 to-orange-600",
-    },
-    {
-      title: "Avaliações Físicas",
-      description: "Visualize os resultados das suas avaliações físicas.",
-      icon: Users,
-      color: "from-red-500 to-red-600",
-    },
-    {
-      title: "Comunicação com Personal",
-      description: "Chat direto com seu personal trainer para tirar dúvidas.",
-      icon: MessageCircle,
-      color: "from-pink-500 to-pink-600",
-    },
-  ]
+  const { data: appPageData } = useAppPageData()
+  const { data: featuresData } = useAppFeaturesData()
+
+  const hero = appPageData?.hero ?? fallbackPageData.hero
+  const downloadBadges = hero.downloadBadges?.length ? hero.downloadBadges : fallbackPageData.hero.downloadBadges
+  const heroButtons = hero.ctaButtons?.length ? hero.ctaButtons : fallbackPageData.hero.ctaButtons
+  const videoSection = appPageData?.videoSection ?? fallbackPageData.videoSection
+  const interfaceSection = appPageData?.interfaceShowcase ?? fallbackPageData.interfaceShowcase
+  const ctaSection = appPageData?.ctaSection ?? fallbackPageData.ctaSection
+
+  const features = (featuresData?.filter((feature) => feature.active) ?? fallbackFeatures).map((feature, index) => ({
+    title: feature.title,
+    description: feature.description,
+    icon: feature.icon,
+    color: feature.color || fallbackFeatures[index % fallbackFeatures.length].color || "from-blue-500 to-blue-600"
+  }))
+
+  const heroImage = hero.image ? urlFor(hero.image).url() : "/images/app.jpeg"
+  const screenshots = interfaceSection?.screenshots?.length
+    ? interfaceSection.screenshots.map((shot) => (typeof shot === "string" ? shot : urlFor(shot).url()))
+    : fallbackPageData.interfaceShowcase.screenshots
 
   return (
     <main className="min-h-screen bg-live-bg text-live-textPrimary pt-20">
@@ -53,10 +93,11 @@ export default function AppPage() {
           className="text-center mb-16"
         >
           <h1 className="text-5xl font-bold mb-6">
-            App <span className="text-live-accent">Live Academia</span>
+            {hero.title?.replace(hero.highlight || "", "").trim()} {" "}
+            <span className="text-live-accent">{hero.highlight}</span>
           </h1>
           <p className="text-xl text-live-textSecondary max-w-3xl mx-auto">
-            Tenha a academia na palma da sua mão. Baixe o app e transforme sua experiência fitness.
+            {hero.description}
           </p>
         </motion.div>
 
@@ -68,58 +109,24 @@ export default function AppPage() {
             className="order-2 lg:order-1"
           >
             <div className="bg-live-border/10 p-8 rounded-2xl border border-live-border/30">
-              <h2 className="text-3xl font-bold text-live-textPrimary mb-6">Transforme sua experiência fitness</h2>
+              <h2 className="text-3xl font-bold text-live-textPrimary mb-6">{hero.title}</h2>
               <p className="text-live-textSecondary text-lg mb-8 leading-relaxed">
-                O App Live Academia foi desenvolvido para tornar sua jornada fitness mais simples, eficiente e
-                motivadora. Com uma interface intuitiva e recursos exclusivos, você terá tudo o que precisa para
-                alcançar seus objetivos.
+                {hero.subtitle}
               </p>
 
               <div className="flex flex-wrap gap-4 mb-8">
-                {/* Google Play Store SVG */}
-                <a href="#" className="hover:scale-105 transition-transform">
-                  <svg width="180" height="60" viewBox="0 0 180 60" className="rounded-lg">
-                    <rect width="180" height="60" rx="8" fill="#000000" />
-                    <rect width="180" height="60" rx="8" fill="none" stroke="#ffcb00" strokeWidth="1" />
-                    <g transform="translate(12, 12)">
-                      <path d="M3 3v30l7.5-7.5L3 3z" fill="#ffcb00" />
-                      <path d="M10.5 25.5L21 15l-10.5-10.5v21z" fill="#ffcb00" />
-                      <path d="M21 15l7.5-4.5L21 6v9z" fill="#ffcb00" />
-                      <path d="M21 15v9l7.5-4.5L21 15z" fill="#ffcb00" />
-                    </g>
-                    <text x="50" y="20" fill="white" fontSize="10" fontWeight="300">
-                      Disponível no
-                    </text>
-                    <text x="50" y="35" fill="white" fontSize="16" fontWeight="600">
-                      Google Play
-                    </text>
-                  </svg>
-                </a>
-
-                {/* Apple App Store SVG */}
-                <a href="#" className="hover:scale-105 transition-transform">
-                  <svg width="180" height="60" viewBox="0 0 180 60" className="rounded-lg">
-                    <rect width="180" height="60" rx="8" fill="#000000" />
-                    <rect width="180" height="60" rx="8" fill="none" stroke="#ffcb00" strokeWidth="1" />
-                    <g transform="translate(12, 12)">
-                      <path
-                        d="M20.5 10.5c-1.5 0-3.5-1.5-3.5-3.5s2-3.5 3.5-3.5 3.5 1.5 3.5 3.5-2 3.5-3.5 3.5zm-3 21c-2 0-4-2-4-4s2-4 4-4h6c2 0 4 2 4 4s-2 4-4 4h-6z"
-                        fill="#ffcb00"
-                      />
-                      <circle cx="20.5" cy="7" r="2" fill="#ffcb00" />
-                    </g>
-                    <text x="50" y="20" fill="white" fontSize="10" fontWeight="300">
-                      Baixar na
-                    </text>
-                    <text x="50" y="35" fill="white" fontSize="16" fontWeight="600">
-                      App Store
-                    </text>
-                  </svg>
-                </a>
+                {downloadBadges.map((badge, index) => (
+                  <a key={`${badge.store}-${index}`} href={badge.url || "#"} className="hover:scale-105 transition-transform">
+                    <div className="flex flex-col justify-center rounded-lg border border-live-accent/40 px-6 py-3 bg-black">
+                      <span className="text-xs text-live-textSecondary uppercase tracking-wide">{badge.label}</span>
+                      <span className="text-lg font-semibold text-white">{badge.subLabel}</span>
+                    </div>
+                  </a>
+                ))}
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="bg-live-border/10 p-4 w-24 h-24 rounded-2xl border border-live-border/30">
+              <div className="flex items-center flex-wrap gap-4">
+                <div className="bg-live-border/10 p-4 w-24 h-24 rounded-2xl border border-live-border/30 flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-live-accent mb-1">QR</div>
                     <div className="text-xs text-live-textTernary">Escaneie</div>
@@ -129,6 +136,22 @@ export default function AppPage() {
                   <p className="font-medium">Escaneie o QR Code para</p>
                   <p className="text-sm text-live-textTernary">baixar o aplicativo</p>
                 </div>
+              </div>
+
+              <div className="flex flex-wrap gap-4 mt-8">
+                {heroButtons.map((button, index) => (
+                  <a
+                    key={`${button.text}-${index}`}
+                    href={button.href || "#"}
+                    className={`px-6 py-3 rounded-full font-semibold transition ${
+                      button.variant === "secondary"
+                        ? "bg-white/10 border border-white/20 text-white hover:bg-white/20"
+                        : "bg-live-accent text-black hover:bg-yellow-400"
+                    }`}
+                  >
+                    {button.text}
+                  </a>
+                ))}
               </div>
             </div>
           </motion.div>
@@ -140,38 +163,41 @@ export default function AppPage() {
             className="order-1 lg:order-2 relative"
           >
             <div className="relative floating-element">
-              <div className="absolute -inset-8 bg-live-accent/10 rounded-3xl blur-2xl"></div>
+              <div className="absolute -inset-8 bg-live-accent/10 rounded-3xl blur-2xl" />
               <div className="relative bg-live-border/10 p-8 rounded-2xl border border-live-border/30">
-                <img
-                  src="/placeholder.svg?height=600&width=300"
+                <Image
+                  src={heroImage}
                   alt="App Live Academia"
-                  className="max-w-full rounded-2xl shadow-2xl mx-auto"
+                  width={300}
+                  height={600}
+                  className="rounded-2xl shadow-2xl mx-auto"
                 />
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Video Demo */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mb-20"
+          id="video"
         >
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">Veja como funciona</h2>
+            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">{videoSection?.title}</h2>
             <p className="text-live-textSecondary text-lg max-w-3xl mx-auto">
-              Assista ao vídeo demonstrativo e conheça todas as funcionalidades do App Live Academia.
+              {videoSection?.description}
             </p>
           </div>
 
           <div className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30">
             <div className="relative aspect-video rounded-2xl overflow-hidden">
-              <img
-                src="/placeholder.svg?height=720&width=1280"
+              <Image
+                src={videoSection?.thumbnail ? urlFor(videoSection.thumbnail).url() : "/images/app-video-placeholder.jpg"}
                 alt="Vídeo demonstrativo"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
               <div className="absolute inset-0 flex items-center justify-center">
                 <motion.button
@@ -207,7 +233,6 @@ export default function AppPage() {
           </div>
         </motion.div>
 
-        {/* Features */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -222,28 +247,31 @@ export default function AppPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30 group"
-              >
-                <div
-                  className={`w-12 h-12 rounded-xl bg-gradient-to-r ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+            {features.map((feature, index) => {
+              const IconComponent =
+                featureIconMap[feature.icon as keyof typeof featureIconMap] || Zap
+              return (
+                <motion.div
+                  key={`${feature.title}-${index}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30 group"
                 >
-                  <feature.icon className="w-6 h-6 text-live-textPrimary" />
-                </div>
-                <h3 className="text-xl font-bold text-live-textPrimary mb-2">{feature.title}</h3>
-                <p className="text-live-textSecondary leading-relaxed">{feature.description}</p>
-              </motion.div>
-            ))}
+                  <div
+                    className={`w-12 h-12 rounded-xl bg-gradient-to-r ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    <IconComponent className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-live-textPrimary mb-2">{feature.title}</h3>
+                  <p className="text-live-textSecondary leading-relaxed">{feature.description}</p>
+                </motion.div>
+              )
+            })}
           </div>
         </motion.div>
 
-        {/* App Screenshots */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -251,19 +279,23 @@ export default function AppPage() {
           className="mb-20"
         >
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">Conheça a interface</h2>
+            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">
+              {interfaceSection?.title || "Conheça a interface"}
+            </h2>
             <p className="text-live-textSecondary text-lg max-w-3xl mx-auto">
-              Uma experiência de usuário intuitiva e moderna para facilitar sua jornada fitness.
+              {interfaceSection?.description || "Uma experiência de usuário intuitiva e moderna para facilitar sua jornada fitness."}
             </p>
           </div>
 
           <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-hide">
-            {[1, 2, 3, 4, 5].map((item) => (
-              <div key={item} className="min-w-[250px] snap-center">
+            {screenshots?.map((shot, index) => (
+              <div key={`${shot}-${index}`} className="min-w-[250px] snap-center">
                 <div className="bg-live-border/10 p-4 rounded-2xl border border-live-border/30">
-                  <img
-                    src="/app.jpeg"
-                    alt={`Screenshot ${item}`}
+                  <Image
+                    src={shot}
+                    alt={`Screenshot ${index + 1}`}
+                    width={250}
+                    height={500}
                     className="rounded-2xl w-full"
                   />
                 </div>
@@ -272,7 +304,6 @@ export default function AppPage() {
           </div>
         </motion.div>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -280,48 +311,20 @@ export default function AppPage() {
           className="text-center"
         >
           <div className="bg-live-border/10 p-12 rounded-3xl border border-live-border/30">
-            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">Baixe agora e transforme sua experiência fitness</h2>
+            <h2 className="text-3xl font-bold text-live-textPrimary mb-4">{ctaSection?.title}</h2>
             <p className="text-live-textSecondary text-lg max-w-3xl mx-auto mb-8">
-              Junte-se a milhares de alunos que já transformaram sua rotina com o App Live Academia.
+              {ctaSection?.description}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <a href="#" className="hover:scale-105 transition-transform">
-                <svg width="180" height="60" viewBox="0 0 180 60" className="rounded-lg">
-                  <rect width="180" height="60" rx="8" fill="#000000" />
-                  <rect width="180" height="60" rx="8" fill="none" stroke="#ffcb00" strokeWidth="1" />
-                  <g transform="translate(12, 12)">
-                    <path d="M3 3v30l7.5-7.5L3 3z" fill="#ffcb00" />
-                    <path d="M10.5 25.5L21 15l-10.5-10.5v21z" fill="#ffcb00" />
-                    <path d="M21 15l7.5-4.5L21 6v9z" fill="#ffcb00" />
-                    <path d="M21 15v9l7.5-4.5L21 15z" fill="#ffcb00" />
-                  </g>
-                  <text x="50" y="20" fill="white" fontSize="10" fontWeight="300">
-                    Disponível no
-                  </text>
-                  <text x="50" y="35" fill="white" fontSize="16" fontWeight="600">
-                    Google Play
-                  </text>
-                </svg>
-              </a>
-              <a href="#" className="hover:scale-105 transition-transform">
-                <svg width="180" height="60" viewBox="0 0 180 60" className="rounded-lg">
-                  <rect width="180" height="60" rx="8" fill="#000000" />
-                  <rect width="180" height="60" rx="8" fill="none" stroke="#ffcb00" strokeWidth="1" />
-                  <g transform="translate(12, 12)">
-                    <path
-                      d="M20.5 10.5c-1.5 0-3.5-1.5-3.5-3.5s2-3.5 3.5-3.5 3.5 1.5 3.5 3.5-2 3.5-3.5 3.5zm-3 21c-2 0-4-2-4-4s2-4 4-4h6c2 0 4 2 4 4s-2 4-4 4h-6z"
-                      fill="#ffcb00"
-                    />
-                    <circle cx="20.5" cy="7" r="2" fill="#ffcb00" />
-                  </g>
-                  <text x="50" y="20" fill="white" fontSize="10" fontWeight="300">
-                    Baixar na
-                  </text>
-                  <text x="50" y="35" fill="white" fontSize="16" fontWeight="600">
-                    App Store
-                  </text>
-                </svg>
-              </a>
+              {(ctaSection?.buttons || fallbackPageData.ctaSection.buttons).map((button, index) => (
+                <a
+                  key={`${button.text}-${index}`}
+                  href={button.href || "#"}
+                  className="px-8 py-3 rounded-full bg-live-accent text-black font-semibold hover:bg-yellow-400 transition"
+                >
+                  {button.text}
+                </a>
+              ))}
             </div>
           </div>
         </motion.div>
@@ -329,6 +332,5 @@ export default function AppPage() {
     </main>
   )
 }
-
 
 export const dynamic = 'force-dynamic'

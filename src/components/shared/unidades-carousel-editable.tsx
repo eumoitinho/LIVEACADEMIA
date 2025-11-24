@@ -21,6 +21,18 @@ function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon
   return R * c
 }
 
+function formatUnitLabel(value?: string | null) {
+  if (!value) return ''
+  return value
+    .toString()
+    .replace(/live academia\s*-\s*/i, '')
+    .replace(/[-_]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toLocaleUpperCase('pt-BR') + word.slice(1).toLocaleLowerCase('pt-BR'))
+    .join(' ')
+}
+
 interface UnidadeBase {
   id: string
   slug: string
@@ -62,6 +74,9 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
         : `${unidade.distancia.toFixed(1)}km de você`
       : null
 
+  const normalizedBadge = formatUnitLabel(unidade.badge?.text || unidade.slug || 'Unidade')
+  const normalizedTitle = formatUnitLabel(unidade.nome)
+
   return (
     <Link href={`/unidades/${unidadeId}`} className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400/70 rounded-2xl">
       <div
@@ -97,13 +112,13 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
               {/* Badge sobre a imagem */}
               <div className="absolute left-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white ring-1 ring-white/20 backdrop-blur-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_0_2px_rgba(0,0,0,0.4)]" />
-                {unidade.badge?.text || unidade.slug || 'Unidade'}
+                {normalizedBadge}
               </div>
             </div>
           {/* Content */}
           <div className="flex flex-col gap-3">
             <h3 className="text-lg font-semibold text-white tracking-tight leading-snug">
-              {unidade.nome.replace('Live Academia - ', '')}
+              {normalizedTitle}
             </h3>
             <p className="text-sm text-zinc-300/90 line-clamp-2">
               {unidade.endereco}

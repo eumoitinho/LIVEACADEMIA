@@ -148,33 +148,41 @@ export default function BeneficiosSectionEditable() {
                   )}
                 </div>
 
-                {/* Icon (floating) */}
-                <div className="absolute top-4 left-4 z-10">
-                  <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br ${beneficio.color} shadow-lg shadow-yellow-500/20`}>
-                    <IconComponent className="w-6 h-6 text-black" />
+                {/* Content overlay - Vertical layout with icon on top */}
+                <div className="relative z-10 p-6 flex flex-col h-full">
+                  {/* Icon on top */}
+                  <div className="mb-auto">
+                    <div className={`w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br ${beneficio.color} shadow-lg shadow-yellow-500/20 mb-4`}>
+                      <IconComponent className="w-6 h-6 text-black" />
+                    </div>
                   </div>
-                </div>
 
-                {/* Content overlay */}
-                <div className="relative z-10 p-6 flex flex-col">
-                  <h3 className="text-white font-semibold tracking-tight text-lg md:text-xl mb-1">
-                    {beneficio.title}
-                  </h3>
-                  <p
-                    className={[
-                      'text-sm text-zinc-300 transition-opacity duration-300 max-w-md',
-                      isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                    ].join(' ')}
-                  >
-                    {beneficio.description}
-                  </p>
-                  <div
-                    className={[
-                      'mt-3 flex items-center gap-2 text-yellow-400 text-xs font-medium tracking-wide uppercase',
-                      isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
-                    ].join(' ')}
-                  >
-                    <CheckCircle className="w-4 h-4" /> Disponível agora
+                  {/* Text content at bottom */}
+                  <div className="flex flex-col gap-2">
+                    <h3 className={[
+                      'text-white font-semibold tracking-tight leading-tight mb-1 transition-all duration-300',
+                      isActive
+                        ? 'text-lg md:text-xl'
+                        : 'text-sm md:text-base line-clamp-2'
+                    ].join(' ')}>
+                      {beneficio.title}
+                    </h3>
+                    <p
+                      className={[
+                        'text-sm text-zinc-300 transition-opacity duration-300 max-w-md leading-relaxed',
+                        isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                      ].join(' ')}
+                    >
+                      {beneficio.description}
+                    </p>
+                    <div
+                      className={[
+                        'mt-1 flex items-center gap-2 text-yellow-400 text-xs font-medium tracking-wide uppercase transition-all duration-300',
+                        isActive ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'
+                      ].join(' ')}
+                    >
+                      <CheckCircle className="w-4 h-4" /> Disponível agora
+                    </div>
                   </div>
                 </div>
 

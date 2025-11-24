@@ -79,12 +79,6 @@ export default function EstruturaSection() {
                     </div>
                   </>
                 )}
-                {/* Badge de categoria */}
-                <div className="absolute top-4 right-4 z-10">
-                  <span className="bg-black/60 backdrop-blur-sm text-yellow-400 px-3 py-1 rounded-full text-xs font-semibold border border-yellow-400/30">
-                    Estrutura
-                  </span>
-                </div>
               </div>
 
               {/* Conteúdo do Card */}

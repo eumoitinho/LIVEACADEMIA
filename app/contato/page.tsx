@@ -6,62 +6,6 @@ import React, { useState } from "react"
 import Image from "next/image"
 import { useContatoData } from "@/hooks/use-contato-data"
 
-const contactInfo = [
-  {
-    icon: Phone,
-    title: "WhatsApp",
-    info: "(92) 3345-6789",
-    action: "Chamar agora",
-    highlight: true,
-    link: "https://wa.me/559233456789"
-  },
-  {
-    icon: Mail,
-    title: "Email",
-    info: "contato@liveacademia.com.br",
-    action: "Enviar email",
-    highlight: false,
-    link: "mailto:contato@liveacademia.com.br"
-  },
-  {
-    icon: MapPin,
-    title: "Unidades",
-    info: "5+ locais em Manaus",
-    action: "Ver no mapa",
-    highlight: false,
-    link: "/unidades"
-  },
-  {
-    icon: Clock,
-    title: "Horário",
-    info: "Seg-Dom: 6h às 23h",
-    action: "Ver horários",
-    highlight: false,
-    link: "#"
-  }
-]
-
-const socialMedia = [
-  {
-    name: "Instagram",
-    url: "https://www.instagram.com/liveacademiamanaus/",
-    icon: Instagram,
-    color: "from-amber-500 to-yellow-600"
-  },
-  {
-    name: "YouTube",
-    url: "https://www.youtube.com/@liveacademiaoficial",
-    icon: Youtube,
-    color: "from-red-500 to-red-600"
-  },
-  {
-    name: "Facebook",
-    url: "https://web.facebook.com/liveacademiamanaus",
-    icon: Facebook,
-    color: "from-blue-500 to-blue-600"
-  }
-]
-
 export default function ContatoPage() {
   const { data: contatoData, loading, error } = useContatoData()
   const [formData, setFormData] = useState({
@@ -71,6 +15,80 @@ export default function ContatoPage() {
     subject: '',
     message: ''
   })
+
+  const iconMap = {
+    phone: Phone,
+    whatsapp: MessageCircle,
+    map: MapPin,
+    mappin: MapPin,
+    location: MapPin,
+    clock: Clock,
+    horario: Clock,
+    email: Mail,
+    mail: Mail,
+    instagram: Instagram,
+    facebook: Facebook,
+    youtube: Youtube
+  }
+
+  const fallbackCards = [
+    {
+      title: "WhatsApp",
+      description: "(92) 3345-6789",
+      actionLabel: "Chamar agora",
+      actionUrl: "https://wa.me/559233456789",
+      icon: "whatsapp",
+      highlight: true
+    },
+    {
+      title: "Email",
+      description: "contato@liveacademia.com.br",
+      actionLabel: "Enviar email",
+      actionUrl: "mailto:contato@liveacademia.com.br",
+      icon: "mail"
+    },
+    {
+      title: "Unidades",
+      description: "5+ locais em Manaus",
+      actionLabel: "Ver no mapa",
+      actionUrl: "/unidades",
+      icon: "mapPin"
+    },
+    {
+      title: "Horário",
+      description: "Seg-Dom: 6h às 23h",
+      actionLabel: "Ver horários",
+      actionUrl: "#",
+      icon: "clock"
+    }
+  ]
+
+  const cards = contatoData?.cards?.length ? contatoData.cards : fallbackCards
+
+  const fallbackSocial = [
+    {
+      name: "Instagram",
+      url: "https://www.instagram.com/liveacademiamanaus/",
+      icon: "instagram",
+      color: "from-amber-500 to-yellow-600"
+    },
+    {
+      name: "YouTube",
+      url: "https://www.youtube.com/@liveacademiaoficial",
+      icon: "youtube",
+      color: "from-red-500 to-red-600"
+    },
+    {
+      name: "Facebook",
+      url: "https://web.facebook.com/liveacademiamanaus",
+      icon: "facebook",
+      color: "from-blue-500 to-blue-600"
+    }
+  ]
+
+  const socialLinks = contatoData?.socialNetworks?.length
+    ? contatoData.socialNetworks
+    : fallbackSocial
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -133,7 +151,10 @@ export default function ContatoPage() {
       <section className="relative py-8 px-4 lg:px-12 z-10">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {contactInfo.map((item, index) => (
+            {cards.map((item, index) => {
+              const IconComponent =
+                iconMap[item.icon?.toLowerCase() as keyof typeof iconMap] || Phone
+              return (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -152,25 +173,28 @@ export default function ContatoPage() {
                       ? 'bg-gradient-to-r from-yellow-400 to-amber-500' 
                       : 'bg-zinc-800 group-hover:bg-zinc-700'
                   } transition-colors`}>
-                    <item.icon className={`w-6 h-6 ${item.highlight ? 'text-black' : 'text-zinc-400'}`} />
+                    <IconComponent className={`w-6 h-6 ${item.highlight ? 'text-black' : 'text-zinc-400'}`} />
                   </div>
                   <h3 className="text-white font-semibold mb-1">{item.title}</h3>
                   <p className={`text-sm mb-3 ${item.highlight ? 'text-yellow-400' : 'text-zinc-400'}`}>
-                    {item.info}
+                    {item.description}
                   </p>
-                  <a 
-                    href={item.link}
-                    className={`text-sm font-medium ${
-                      item.highlight 
-                        ? 'text-yellow-400 hover:text-yellow-300' 
-                        : 'text-zinc-500 hover:text-white'
-                    } transition-colors`}
-                  >
-                    {item.action} →
-                  </a>
+                    {item.actionLabel && item.actionUrl && (
+                      <a 
+                        href={item.actionUrl}
+                        className={`text-sm font-medium ${
+                          item.highlight 
+                            ? 'text-yellow-400 hover:text-yellow-300' 
+                            : 'text-zinc-500 hover:text-white'
+                        } transition-colors`}
+                      >
+                        {item.actionLabel} →
+                      </a>
+                    )}
                 </div>
               </motion.div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
@@ -236,17 +260,21 @@ export default function ContatoPage() {
                 <div className="mt-8">
                   <p className="text-white font-medium mb-4">Siga-nos nas redes sociais</p>
                   <div className="flex gap-4">
-                    {(contatoData?.socialNetworks || socialMedia).map((social, index) => (
+                    {socialLinks.map((social, index) => {
+                      const IconComponent =
+                        iconMap[social.icon?.toLowerCase() as keyof typeof iconMap] || Instagram
+                      return (
                       <a
                         key={index}
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`w-12 h-12 rounded-xl bg-gradient-to-r ${(social as any).color || 'from-zinc-600 to-zinc-700'} flex items-center justify-center hover:scale-110 transition-transform`}
+                          className={`w-12 h-12 rounded-xl bg-gradient-to-r ${(social as any).color || 'from-zinc-600 to-zinc-700'} flex items-center justify-center hover:scale-110 transition-transform`}
                       >
-                        {(social as any).icon ? React.createElement((social as any).icon, { className: "w-6 h-6 text-white" }) : <Instagram className="w-6 h-6 text-white" />}
+                          <IconComponent className="w-6 h-6 text-white" />
                       </a>
-                    ))}
+                      )
+                    })}
                   </div>
                 </div>
               </div>

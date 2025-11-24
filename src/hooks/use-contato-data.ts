@@ -10,6 +10,14 @@ export interface ContatoData {
       url: string
     }
   }
+  cards?: Array<{
+    title: string
+    description?: string
+    actionLabel?: string
+    actionUrl?: string
+    icon?: string
+    highlight?: boolean
+  }>
   contactInfo?: {
     phone?: string
     whatsapp?: string

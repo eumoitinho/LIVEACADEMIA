@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import PlanosCards from '@/features/plans/planos-cards'
 
 interface DynamicPlano {
@@ -20,15 +20,47 @@ interface UnitPlanosProps {
   slug: string
   unidadeName: string
   onMatricular: (plano: { name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }) => void
-  fallbackPlanos?: Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }>
+  fallbackPlanos?: Array<{ nome?: string; name?: string; preco?: string; price?: string; periodo?: string; destaque?: boolean; badge?: string; codigo?: string }>
+  filters?: {
+    precoMinimo?: number
+    codigosPermitidos?: string[]
+    usarPlanosSanity?: boolean
+  }
 }
 
-export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPlanos }: UnitPlanosProps) {
+export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPlanos, filters }: UnitPlanosProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }>>([])
 
+  const formatPrice = (value: number | string | undefined) => {
+    if (typeof value === 'number') {
+      return value.toFixed(2)
+    }
+    if (!value) return '0.00'
+    const numeric = value.replace(/\./g, '').replace(',', '.')
+    const parsed = parseFloat(numeric)
+    return Number.isFinite(parsed) ? parsed.toFixed(2) : '0.00'
+  }
+
+  const normalizeFallbackPlanos = (planosFallback?: Array<{ nome?: string; name?: string; preco?: string; price?: string; codigo?: string }>) =>
+    (planosFallback || []).map((plano) => ({
+      name: plano.name || plano.nome || 'Plano',
+      price: formatPrice(plano.price || plano.preco),
+      codigo: plano.codigo
+    }))
+
+  const normalizedFallbackPlanos = useMemo(() => normalizeFallbackPlanos(fallbackPlanos), [fallbackPlanos])
+  const shouldUseSanityOnly = !!(filters?.usarPlanosSanity && normalizedFallbackPlanos.length)
+
   const load = useCallback(async () => {
+    if (shouldUseSanityOnly) {
+      setPlanos(normalizedFallbackPlanos)
+      setLoading(false)
+      setError(null)
+      return
+    }
+
     setLoading(true)
     setError(null)
     try {
@@ -46,27 +78,39 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
       
       const fetched: DynamicPlano[] = json.planos || []
       
-      if (fetched.length === 0 && json.fallback) {
+      if (fetched.length === 0 && json.fallback && normalizedFallbackPlanos.length) {
         console.log('[UnitPlanos] Usando dados de fallback')
-        if (fallbackPlanos && fallbackPlanos.length) {
-          setPlanos(fallbackPlanos)
-          return
-        }
+        setPlanos(normalizedFallbackPlanos)
+        return
       }
       
       // Usar todos os planos por enquanto para debug
       console.log(`[UnitPlanos] Total de planos recebidos:`, fetched.length)
       console.log(`[UnitPlanos] Primeiros 3 planos:`, fetched.slice(0, 3).map(p => ({ nome: p.nome, codigo: p.codigo })))
       
-      const mapped = fetched.map(p => ({
+      let mapped = fetched.map(p => ({
         name: p.nome,
-        price: p.mensalidade ? p.mensalidade.toFixed(2) : (typeof p.valor === 'number' ? p.valor.toFixed(2) : p.valor),
+        price: formatPrice(typeof p.mensalidade === 'number' ? p.mensalidade : p.valor),
         codigo: p.codigo?.toString(),
         adesao: p.adesao,
         fidelidade: p.fidelidade,
         regimeRecorrencia: p.regimeRecorrencia,
         modalidades: p.modalidades || [],
       }))
+
+      if (filters?.precoMinimo) {
+        mapped = mapped.filter(plano => parseFloat(plano.price) >= filters.precoMinimo!)
+      }
+
+      if (filters?.codigosPermitidos?.length) {
+        const allowed = filters.codigosPermitidos.map(String)
+        mapped = mapped.filter(plano => plano.codigo ? allowed.includes(plano.codigo) : true)
+      }
+
+      if (mapped.length === 0 && normalizedFallbackPlanos.length) {
+        setPlanos(normalizedFallbackPlanos)
+        return
+      }
       
       console.log(`[UnitPlanos] Planos mapeados:`, mapped)
       setPlanos(mapped)
@@ -79,10 +123,10 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
       setError(`Não foi possível carregar planos: ${e.message}`)
       
       // Usar fallback se disponível
-      if (fallbackPlanos && fallbackPlanos.length) {
+      if (normalizedFallbackPlanos.length) {
         console.log('[UnitPlanos] Usando fallback após erro')
-        setPlanos(fallbackPlanos)
-        setError(null) // Limpar erro se temos fallback
+        setPlanos(normalizedFallbackPlanos)
+        setError(null)
       }
     } finally {
       setLoading(false)

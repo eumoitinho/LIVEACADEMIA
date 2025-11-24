@@ -4,6 +4,7 @@ import { Check, Star, Crown, Sparkles } from "lucide-react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { useMemo } from "react"
+import { usePlansData } from "@/src/hooks/use-sanity-data"
 
 interface PlanosSectionProps {
   data: {
@@ -81,20 +82,29 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
 
   const easing = [0.16, 1, 0.3, 1] as const
 
+  // Fetch plans directly from Sanity collection (same as /planos page)
+  const { data: sanityPlans, loading: plansLoading } = usePlansData()
+
   // Transform Sanity data to match original structure, or use defaults
   const planos = useMemo(() => {
-    // Garantir que data.plans é um array válido antes de processar
-    if (!data || !data.plans || !Array.isArray(data.plans) || data.plans.length === 0) {
+    // Use Sanity plans collection first, fallback to data.plans, then to planosDefault
+    const sourcePlans = (Array.isArray(sanityPlans) && sanityPlans.length > 0)
+      ? sanityPlans
+      : (data?.plans && Array.isArray(data.plans) && data.plans.length > 0)
+        ? data.plans
+        : null
+
+    if (!sourcePlans) {
       return planosDefault
     }
 
     try {
-      return data.plans
+      return sourcePlans
         .filter((plan: any) => plan != null) // Filtrar valores nulos/undefined
         .map((plan: any, idx: number) => ({
           nome: plan.name || `Plano ${idx + 1}`,
-          preco: typeof plan.price === 'number' 
-            ? (plan.price / 100).toFixed(2).replace('.', ',') 
+          preco: typeof plan.price === 'number'
+            ? (plan.price / 100).toFixed(2).replace('.', ',')
             : String(plan.price || '0,00'),
           periodo: "mês",
           descricao: plan.description || '',
@@ -112,12 +122,20 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
       console.error('Error transforming plans data:', error)
       return planosDefault
     }
-  }, [data])
+  }, [sanityPlans, data])
 
   return (
-    <section className="relative py-24 px-6 lg:px-12 overflow-hidden" id="planos">
+    <section className="relative py-24 px-6 lg:px-12 overflow-hidden bg-black text-white" id="planos">
       {/* Background Effects */}
       <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-neutral-950 to-black opacity-95" />
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 20% 20%, rgba(253,224,71,0.2), transparent 45%), radial-gradient(circle at 80% 0%, rgba(249,115,22,0.15), transparent 40%)'
+          }}
+        />
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
       </div>
@@ -137,7 +155,7 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
               <>Conheça nossos <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">planos</span></>
             )}
           </h2>
-          <p className="text-lg text-zinc-400 max-w-3xl mx-auto">
+          <p className="text-lg text-white/90 font-semibold max-w-3xl mx-auto">
             {data.description || "Escolha o plano que cresce com você e se adapta às suas necessidades de treino."}
           </p>
         </motion.div>

@@ -33,7 +33,12 @@
       "Bash(pnpm dev)",
       "Bash(cat:*)",
       "Read(//home/moitinho/.config/sanity/**)",
-      "Bash(pnpm sanity:seed-units:*)"
+      "Bash(pnpm sanity:seed-units:*)",
+      "Bash(rm:*)",
+      "Bash(pnpm list:*)",
+      "Bash(xargs kill:*)",
+      "Bash(pnpm sanity:check-modalidades:*)",
+      "Bash(pnpm sanity:deploy:*)"
     ],
     "deny": []
   }

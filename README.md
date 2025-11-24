@@ -94,6 +94,7 @@ Website moderno e responsivo para a Live Academia, a maior rede de academias de 
 - **Aulas Coletivas** - Modalidades disponíveis com design moderno, cards amarelos e background dinâmico
 - **Day Use** - Serviço de uso diário
 - **Trabalhe Conosco** - Formulário de candidatura
+- **Login/Register** - Telas estáticas focadas em conversão rápida
 
 ### Página de Unidades
 - **Filtros** - Por tipo (Tradicional, Premium, Diamante, Em Inauguração)

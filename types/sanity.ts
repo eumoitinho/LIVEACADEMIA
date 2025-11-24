@@ -23,6 +23,58 @@ export interface CTALink {
   link: string
 }
 
+export interface CTAButton {
+  text: string
+  href?: string
+  variant?: 'primary' | 'secondary'
+}
+
+export interface ContactCard {
+  title: string
+  description?: string
+  actionLabel?: string
+  actionUrl?: string
+  icon?: string
+  highlight?: boolean
+}
+
+export interface AppPageData {
+  hero?: {
+    title?: string
+    highlight?: string
+    description?: string
+    subtitle?: string
+    image?: SanityImage
+    downloadBadges?: Array<{
+      store?: string
+      label?: string
+      subLabel?: string
+      url?: string
+    }>
+    ctaButtons?: CTAButton[]
+  }
+  intro?: {
+    title?: string
+    description?: string
+  }
+  videoSection?: {
+    title?: string
+    description?: string
+    videoUrl?: string
+    thumbnail?: SanityImage
+  }
+  interfaceShowcase?: {
+    title?: string
+    description?: string
+    screenshots?: SanityImage[]
+  }
+  ctaSection?: {
+    title?: string
+    description?: string
+    buttons?: CTAButton[]
+  }
+}
+
 export interface Rating {
   value: string
   label: string
@@ -190,6 +242,7 @@ export interface AppFeature {
   title: string
   description: string
   icon: string
+  color?: string
   order: number
   active: boolean
 }
@@ -210,6 +263,16 @@ export interface Modality {
   active: boolean
 }
 
+export interface ModalidadesLandingData {
+  badge?: string
+  title?: string
+  description?: string
+  ctaText?: string
+  ctaHref?: string
+  backgroundImage?: SanityImage
+  featuredModalidades?: Modality[]
+}
+
 export interface StructureFeature {
   _id: string
   title: string
@@ -227,6 +290,15 @@ export interface WellhubFeature {
   icon: string
   order: number
   active: boolean
+}
+
+export interface WellhubSectionData {
+  badge?: string
+  title?: string
+  description?: string
+  subtitle?: string
+  highlightedBenefits?: string[]
+  ctaButton?: CTAButton
 }
 
 export interface BioimpedanciaFeature {

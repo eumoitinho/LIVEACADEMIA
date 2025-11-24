@@ -190,6 +190,11 @@ export async function getPlans() {
     const data = await client.fetch(`
       *[_type == "plano" && active == true] | order(order asc) {
         _id,
+        pactoPlan {
+          pactoId,
+          nome,
+          valor
+        },
         name,
         description,
         price,
@@ -200,10 +205,22 @@ export async function getPlans() {
         highlight,
         badge,
         order,
-        active
+        active,
+        availableUnits[]-> {
+          _id,
+          name,
+          "slug": slug.current
+        }
       }
     `)
-    return data
+
+    // Normalizar dados: usar pactoPlan como fallback
+    return data.map((plan: any) => ({
+      ...plan,
+      name: plan.name || plan.pactoPlan?.nome || 'Plano',
+      price: plan.price || plan.pactoPlan?.valor || 0,
+      pactoId: plan.pactoPlan?.pactoId,
+    }))
   } catch (error) {
     console.error('Error fetching plans:', error)
     return []
