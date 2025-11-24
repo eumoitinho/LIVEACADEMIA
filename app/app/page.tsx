@@ -78,7 +78,7 @@ export default function AppPage() {
     color: feature.color || fallbackFeatures[index % fallbackFeatures.length].color || "from-blue-500 to-blue-600"
   }))
 
-  const heroImage = hero.image ? urlFor(hero.image).url() : "/images/app.jpeg"
+  const heroImage = (hero as any).image ? urlFor((hero as any).image).url() : "/images/app.jpeg"
   const screenshots = interfaceSection?.screenshots?.length
     ? interfaceSection.screenshots.map((shot) => (typeof shot === "string" ? shot : urlFor(shot).url()))
     : fallbackPageData.interfaceShowcase.screenshots

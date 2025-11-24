@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { getUnitBySlug } from '@/lib/repository'
-import * as pactoAPI from '@/lib/pacto-api'
+import { getUnitBySlug } from '@/lib/api/supabase-repository'
+import { pactoV2API } from '@/lib/api/pacto-v2'
 
 /**
  * GET /api/pacto/planos-disponiveis?unidade=slug
@@ -28,12 +28,8 @@ export async function GET(request: Request) {
       )
     }
 
-    // Buscar planos da API Pacto
-    const planos = await pactoAPI.getPlanosUnidade(
-      unidade.chave_api, // redeKey (chave privada descriptografada)
-      unidade.chave_publica, // publicKey
-      unidade.codigo_unidade // codigoUnidade
-    )
+    // Buscar planos da API Pacto V2
+    const planos = await pactoV2API.getPlanosUnidade(unidadeSlug)
 
     // Formatar resposta para o Sanity
     const planosFormatados = planos.map((plano: any) => ({
