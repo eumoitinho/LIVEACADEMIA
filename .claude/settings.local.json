@@ -38,7 +38,17 @@
       "Bash(pnpm list:*)",
       "Bash(xargs kill:*)",
       "Bash(pnpm sanity:check-modalidades:*)",
-      "Bash(pnpm sanity:deploy:*)"
+      "Bash(pnpm sanity:deploy:*)",
+      "Bash(/tmp/sanity-config-complete.ts)",
+      "Bash(sanity/schemas/hero-section.ts)",
+      "Bash(sanity/schemas/testimonial-section.ts)",
+      "Bash(sanity/schemas/estrutura-section.ts)",
+      "Bash(sanity/schemas/bioimpedancia-section.ts)",
+      "Bash(sanity/schemas/planos-section.ts)",
+      "Bash(sanity/schemas/planos-page.ts)",
+      "Bash(sanity/schemas/unidades-page.ts)",
+      "Bash(sanity/schemas/unidades-section.ts)",
+      "Bash(sanity/schemas/navigation.ts)"
     ],
     "deny": []
   }

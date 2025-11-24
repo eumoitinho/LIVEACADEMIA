@@ -1,18 +1,18 @@
 {
   "version": 3,
-  "createdAt": "2025-11-24T19:17:17.256Z",
+  "createdAt": "2025-11-24T20:45:02.826Z",
   "workspaces": [
     {
       "name": "live-academia",
       "title": "Live Academia CMS",
-      "basePath": "/",
+      "basePath": "/studio",
       "projectId": "c9pbklm2",
       "dataset": "production",
       "icon": "<style data-styled=\"true\" data-styled-version=\"6.1.19\">.hfXNsv{font-family:Inter,-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",\"Liberation Sans\",Helvetica,Arial,system-ui,sans-serif;font-weight:500;font-size:13px;transform:translateY(1px);}/*!sc*/\ndata-styled.g405[id=\"sc-gzpDuk\"]{content:\"hfXNsv,\"}/*!sc*/\n</style><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\"><rect width=\"32\" height=\"32\" rx=\"2\" fill=\"#f0709b\"></rect><text x=\"50%\" y=\"50%\" text-anchor=\"middle\" alignment-baseline=\"middle\" fill=\"hsla(340, 81%, 29%, 1)\" class=\"sc-gzpDuk hfXNsv\">LA</text></svg>",
       "mediaLibrary": {
         "enabled": false
       },
-      "schema": "06506339.create-schema.json",
+      "schema": "165d4c10.create-schema.json",
       "tools": "db50c055.create-tools.json"
     }
   ],
