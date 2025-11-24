@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Instagram, Facebook, Youtube, MapPin, Phone, Mail, BadgeCheck, Check, Send, Github, Twitter, Linkedin } from "lucide-react"
+import { Instagram, Facebook, Youtube, MapPin, Mail, BadgeCheck, Check, Send, Github, Twitter, Linkedin } from "lucide-react"
 import LiveLogo from "@/components/shared/live-logo"
 import ScrollToTopButton from '@/components/layout/scroll-to-top-button'
 
@@ -41,16 +41,10 @@ export default function Footer() {
                       </li>
                     </ul>
                     <div className="flex items-center gap-3 pt-2 text-sm">
-                      <a href="mailto:contato@liveacademia.com.br"
+                      <a href="mailto:atendimento@liveacademia.com.br"
                         className="inline-flex items-center gap-2 text-white hover:text-yellow-300 transition">
                         <Mail className="w-4 h-4" />
-                        contato@liveacademia.com.br
-                      </a>
-                      <span className="text-white/20">•</span>
-                      <a href="tel:+559233456789"
-                        className="inline-flex items-center gap-2 text-white hover:text-yellow-300 transition">
-                        <Phone className="w-4 h-4" />
-                        (92) 3345-6789
+                        atendimento@liveacademia.com.br
                       </a>
                     </div>
                   </div>
