@@ -69,8 +69,8 @@ export default function TrabalheConoscoPage() {
   const formFields =
     pageData.formFields && pageData.formFields.length > 0 ? pageData.formFields : fallbackData.formFields
 
-  const heroImage = pageData.heroImage?.asset?.url ?? "/bg.jpeg"
-  const ctaText = pageData.ctaButton?.text ?? fallbackData.ctaButton.text
+  const heroImage = (pageData as any).heroImage?.asset?.url ?? "/bg.jpeg"
+  const ctaText = (pageData as any).ctaButton?.text ?? fallbackData.ctaButton.text
   const heroTitle = pageData.title || fallbackData.title
   const titleParts = heroTitle.split(" ")
   const accentWord = titleParts.length > 1 ? titleParts.pop() : heroTitle
