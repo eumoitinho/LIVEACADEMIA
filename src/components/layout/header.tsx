@@ -44,15 +44,12 @@ export default function Header() {
             <Link href="/sobre-nos" className="hover:text-white/90 transition text-sm font-normal text-white/80">
               Sobre
             </Link>
-            <button 
-              onClick={() => {
-                const element = document.getElementById("beneficios")
-                if (element) element.scrollIntoView({ behavior: "smooth" })
-              }}
+            <Link
+              href="/#beneficios"
               className="hover:text-white/90 transition text-sm font-normal text-white/80"
             >
               Benefícios
-            </button>
+            </Link>
             <Link href="/unidades" className="hover:text-white/90 transition text-sm font-normal text-white/80">
               Unidades
             </Link>
@@ -116,16 +113,13 @@ export default function Header() {
                   >
                     Sobre
                   </Link>
-                  <button 
-                    onClick={() => {
-                      const element = document.getElementById("beneficios")
-                      if (element) element.scrollIntoView({ behavior: "smooth" })
-                      setIsMenuOpen(false)
-                    }}
-                    className="block w-full text-left hover:text-white transition text-2xl font-normal text-white/80"
+                  <Link
+                    href="/#beneficios"
+                    className="block hover:text-white transition text-2xl font-normal text-white/80"
+                    onClick={() => setIsMenuOpen(false)}
                   >
                     Benefícios
-                  </button>
+                  </Link>
                   <Link 
                     href="/unidades" 
                     className="block hover:text-white transition text-2xl font-normal text-white/80"
