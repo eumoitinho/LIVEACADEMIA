@@ -194,7 +194,7 @@ export default function AppPage() {
           <div className="bg-live-border/10 p-6 rounded-2xl border border-live-border/30">
             <div className="relative aspect-video rounded-2xl overflow-hidden">
               <Image
-                src={videoSection?.thumbnail ? urlFor(videoSection.thumbnail).url() : "/images/app-video-placeholder.jpg"}
+                src={(videoSection as any)?.thumbnail ? urlFor((videoSection as any).thumbnail).url() : "/images/app-video-placeholder.jpg"}
                 alt="Vídeo demonstrativo"
                 fill
                 className="object-cover"
