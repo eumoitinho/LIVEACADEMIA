@@ -24,9 +24,9 @@ export default function AboutSectionEditable({ data }: AboutSectionProps) {
   const stats = Array.isArray(data.stats) && data.stats.length > 0
     ? data.stats
     : [
-        { value: "10K+", label: "Alunos ativos" },
+        { value: "+60K", label: "Alunos ativos" },
         { value: "35+", label: "Unidades" },
-        { value: "4.9", label: "Avaliação média" },
+        { value: "5.0", label: "Avaliação média" },
         { value: "10+", label: "Anos de experiência" }
       ]
 

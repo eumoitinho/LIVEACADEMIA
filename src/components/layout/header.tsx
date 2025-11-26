@@ -29,14 +29,7 @@ export default function Header() {
           <div className="flex pt-5 pb-5 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="inline-flex items-center justify-center">
-            <div className="flex flex-col items-center gap-1">
-              <LiveLogo className="h-8 w-auto brightness-0 invert" />
-              {currentUnit && (
-                <span className="text-xs font-semibold text-white/80">
-                  {currentUnit.name}
-                </span>
-              )}
-            </div>
+            <LiveLogo className="h-8 w-auto brightness-0 invert" />
           </Link>
           
           {/* Desktop Navigation */}

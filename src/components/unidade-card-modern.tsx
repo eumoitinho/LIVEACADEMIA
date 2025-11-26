@@ -42,11 +42,7 @@ export function UnidadeCardModern({ location }: UnidadeCardModernProps) {
   // Ensure we have a valid config with fallback
   const config = typeConfig[location.type as keyof typeof typeConfig] || typeConfig.tradicional
   const hasPlanos = location.planos && location.planos.length > 0
-  const priceValue = hasPlanos && location.planos ? location.planos[0].price : null
   const featuresCount = location.features.length
-
-  // Get image from location.photo (which may already be from Sanity)
-  const imageUrl = location.photo
 
   if (isInauguracao) {
     return (
@@ -104,24 +100,12 @@ export function UnidadeCardModern({ location }: UnidadeCardModernProps) {
           </div>
         </div>
         <div className="p-4">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <h3 className="text-base font-semibold tracking-tight text-neutral-100 font-geist">{location.name}</h3>
-              <p className="text-xs text-neutral-400 mt-1 flex items-center gap-1 font-geist">
-                <MapPin className="w-3.5 h-3.5 stroke-[1.5]" />
-                {location.address.split(',')[0]}
-              </p>
-            </div>
-            <div className="text-right">
-              {hasPlanos && priceValue ? (
-                <>
-                  <div className="text-lg font-semibold text-amber-400 font-geist">R$ {priceValue}</div>
-                  <div className="text-[11px] text-neutral-400 font-geist">por mês</div>
-                </>
-              ) : (
-                <div className="text-sm text-neutral-400 font-geist">Consulte</div>
-              )}
-            </div>
+          <div>
+            <h3 className="text-base font-semibold tracking-tight text-neutral-100 font-geist">{location.name}</h3>
+            <p className="text-xs text-neutral-400 mt-1 flex items-center gap-1 font-geist">
+              <MapPin className="w-3.5 h-3.5 stroke-[1.5]" />
+              {location.address.split(',')[0]}
+            </p>
           </div>
 
           {/* Features count */}

@@ -171,17 +171,17 @@ export default function TestimonialSection() {
         >
           <div className="flex items-center gap-8 bg-zinc-900/60 border border-zinc-800 rounded-full px-10 py-6 backdrop-blur">
             <div>
-              <div className="text-2xl font-bold text-white">4.9</div>
+              <div className="text-2xl font-bold text-white">5.0</div>
               <div className="text-[10px] uppercase tracking-wide text-zinc-500">Avaliação média</div>
             </div>
             <div className="w-px h-10 bg-zinc-800" />
             <div>
-              <div className="text-2xl font-bold text-white">10K+</div>
+              <div className="text-2xl font-bold text-white">+60K</div>
               <div className="text-[10px] uppercase tracking-wide text-zinc-500">Alunos satisfeitos</div>
             </div>
             <div className="w-px h-10 bg-zinc-800" />
             <div>
-              <div className="text-2xl font-bold text-white">98%</div>
+              <div className="text-2xl font-bold text-white">100%</div>
               <div className="text-[10px] uppercase tracking-wide text-zinc-500">Recomendariam</div>
             </div>
           </div>

@@ -8,9 +8,9 @@ import HighlightImage from "@/components/shared/highlight-image"
 const easing = [0.16, 1, 0.3, 1] as const
 
 const stats = [
-  { number: "10K+", label: "Alunos ativos" },
+  { number: "+60K", label: "Alunos ativos" },
   { number: "35+", label: "Unidades" },
-  { number: "4.9", label: "Avaliação média" },
+  { number: "5.0", label: "Avaliação média" },
   { number: "10+", label: "Anos de experiência" }
 ]
 

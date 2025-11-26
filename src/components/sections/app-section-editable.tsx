@@ -15,19 +15,17 @@ export default function AppSectionEditable() {
     badge: undefined,
     title: "Seu treino na",
     highlightedText: "palma da mão",
-    description: "A Live Academia conta com dois aplicativos exclusivos (App Live e App Treino) para facilitar sua jornada fitness e melhorar sua experiência de treino – dentro e fora da academia!",
+    description: "A Live Academia conta com um aplicativo exclusivo para facilitar sua jornada fitness e melhorar sua experiência de treino – dentro e fora da academia!",
     subtitle: "Disponíveis para Google Play e App Store.",
     benefits: [
       "Visualize seus treinos, com vídeos explicativos sobre a execução correta dos exercícios",
       "Consulte o vencimento do seu plano",
       "Renove seu plano diretamente pelo app",
       "Confira a grade de aulas coletivas, por unidade",
-      "Receba notificações e comunicados importantes sobre a sua unidade (função disponível somente no App Treino)"
+      "Receba notificações e comunicados importantes sobre a sua unidade"
     ],
-    appLiveUrl: "https://apps.apple.com/br/app/live-academia/id6745790187",
-    appTreinoUrl: "https://apps.apple.com/br/app/treino/id862662527",
-    appLivePlayStoreUrl: "https://play.google.com/store/apps/details?id=br.com.w12.liveacademia&hl=pt_BR",
-    appTreinoPlayStoreUrl: "https://play.google.com/store/apps/details?id=com.pacto"
+    appLiveUrl: "https://apps.apple.com/br/app/live-academia-oficial/id6745840914",
+    appLivePlayStoreUrl: "https://play.google.com/store/apps/details?id=br.com.pactosolucoes.liveacademia&pcampaignid=web_share"
   }
 
   const sectionData = { ...fallbackData, ...data }
@@ -131,7 +129,7 @@ export default function AppSectionEditable() {
               </div>
             )}
 
-            {/* Download Buttons - App Treino Only */}
+            {/* Download Buttons - App Live */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -139,10 +137,10 @@ export default function AppSectionEditable() {
               viewport={{ once: true }}
               className="flex flex-wrap gap-4"
             >
-              {/* App Treino - App Store */}
-              {sectionData.appTreinoUrl && (
+              {/* App Live - App Store */}
+              {sectionData.appLiveUrl && (
                 <motion.a
-                  href={sectionData.appTreinoUrl}
+                  href={sectionData.appLiveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-8 py-4 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-4"
@@ -153,16 +151,16 @@ export default function AppSectionEditable() {
                     </svg>
                   </div>
                   <div className="text-left">
-                    <div className="text-sm font-bold text-white">App Treino</div>
+                    <div className="text-sm font-bold text-white">App Live</div>
                     <div className="text-xs text-zinc-400">Baixar na App Store</div>
                   </div>
                 </motion.a>
               )}
 
-              {/* App Treino - Google Play */}
-              {sectionData.appTreinoPlayStoreUrl && (
+              {/* App Live - Google Play */}
+              {sectionData.appLivePlayStoreUrl && (
                 <motion.a
-                  href={sectionData.appTreinoPlayStoreUrl}
+                  href={sectionData.appLivePlayStoreUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative bg-zinc-900 border border-zinc-800 rounded-2xl px-8 py-4 hover:bg-zinc-800 hover:border-yellow-500/30 transition-all duration-300 flex items-center gap-4"
@@ -173,7 +171,7 @@ export default function AppSectionEditable() {
                     </svg>
                   </div>
                   <div className="text-left">
-                    <div className="text-sm font-bold text-white">App Treino</div>
+                    <div className="text-sm font-bold text-white">App Live</div>
                     <div className="text-xs text-zinc-400">Disponível no Google Play</div>
                   </div>
                 </motion.a>
