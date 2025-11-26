@@ -13,6 +13,7 @@ interface DayUsePacote {
   descricao: string
   popular: boolean
   beneficios: string[]
+  disponibilidade?: string
 }
 
 interface DayUseFaq {
@@ -67,7 +68,8 @@ export function useDayUseData() {
               preco,
               descricao,
               popular,
-              beneficios
+              beneficios,
+              disponibilidade
             },
             faqs[] {
               pergunta,
