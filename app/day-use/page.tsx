@@ -126,7 +126,7 @@ export default function DayUse() {
           style={{
             backgroundImage: pageData.heroImage?.asset?.url
               ? `url('${pageData.heroImage.asset.url}')`
-              : "url('/images/fachada.jpg')",
+              : "url('/images/dayuse-bg.jpg')",
             backgroundPosition: "center center"
           }}
         />

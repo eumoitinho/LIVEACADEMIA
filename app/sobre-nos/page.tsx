@@ -11,21 +11,21 @@ export default function SobreNos() {
   const fallbackData = {
     title: "SOBRE A LIVE ACADEMIA",
     subtitle: "Mais do que uma academia, um estilo de vida",
-    description: "Somos a maior rede de academias de Manaus, e nosso compromisso vai além do treino: é sobre transformar vidas, inspirar hábitos saudáveis e construir uma comunidade forte e unida.",
+    description: "A Live Academia nasceu em outubro de 2012 com o propósito de transformar vidas, promovendo bem-estar e democratizando o acesso à atividade física em Manaus.",
     content: [
-      "Desde nossa inauguração em outubro de 2012, temos a missão de oferecer espaços acolhedores, onde cada pessoa se sinta motivada a superar seus limites e alcançar seus objetivos.",
-      "Nossa estrutura foi pensada e projetada para oferecer o que há de melhor em equipamentos, espaços e profissionais. Com unidades estrategicamente localizadas em todas as regiões de Manaus, garantimos fácil acesso a todos os públicos, democratizando a prática de atividades físicas.",
-      "Valorizamos a inovação, a flexibilidade e a paixão pelo movimento, e é por isso que oferecemos planos sem fidelidade, tecnologia de ponta e uma variedade de aulas coletivas que se adaptam ao seu cotidiano.",
-      "Na Live Academia, você não é apenas um aluno. Você faz parte de uma família que se apoia, se desafia e celebra cada conquista. Venha viver essa experiência e descubra o poder de uma vida mais ativa, saudável e feliz.",
-      "Juntos, vamos construir um futuro com mais energia, bem-estar e qualidade de vida para todos."
+      "Desde sua fundação, seguimos comprometidos em oferecer planos acessíveis, gerar empregos e contribuir para o desenvolvimento da comunidade local. Nossas unidades, estrategicamente distribuídas por todas as regiões da cidade, garantem praticidade, acolhimento e facilidade de acesso para todos os públicos.",
+      "Nossa estrutura foi projetada para proporcionar uma experiência completa e desempenho, unindo equipamentos modernos, tecnologia de ponta e profissionais altamente qualificados. Oferecemos um ambiente acolhedor e familiar, onde cada pessoa é respeitada em sua individualidade e treinada com segurança.",
+      "Disponibilizamos avaliação física avançada (Análise Corporal 3D, Bioimpedância ou Dobras Cutâneas), prescrição informatizada de treino na musculação, aulas coletivas diversificadas e um aplicativo exclusivo, que facilita o acesso a treinos, planos e programação diária.",
+      "Mais do que uma rede de academias, a Live já se consolida como um ECOSSISTEMA DE QUALIDADE DE VIDA E BEM-ESTAR, integrando serviços, tecnologias e experiências que promovem qualidade de vida de forma completa.",
+      "Nos próximos anos, estamos projetando ultrapassar 80 unidades em Manaus e lançar clubes wellness pioneiros na região Norte, ampliando ainda mais nosso impacto. Na Live Academia, você não é apenas um aluno, é parte de uma comunidade vibrante que se apoia, evolui e celebra cada conquista, construindo diariamente uma vida mais ativa, equilibrada e saudável."
     ],
     stats: [
-      { value: "10K+", label: "Alunos ativos" },
+      { value: "+60K", label: "Alunos ativos" },
       { value: "35+", label: "Unidades" },
-      { value: "4.9", label: "Avaliação média" },
+      { value: "5.0", label: "Avaliação média" },
       { value: "10+", label: "Anos de experiência" }
     ],
-    backgroundImage: "/images/fachada.jpg"
+    backgroundImage: "/images/sobre-bg.jpg"
   }
 
   const pageData = data || fallbackData
