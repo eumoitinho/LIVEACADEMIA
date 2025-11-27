@@ -19,12 +19,6 @@ export default function SobreNos() {
       "Mais do que uma rede de academias, a Live já se consolida como um ECOSSISTEMA DE QUALIDADE DE VIDA E BEM-ESTAR, integrando serviços, tecnologias e experiências que promovem qualidade de vida de forma completa.",
       "Nos próximos anos, estamos projetando ultrapassar 80 unidades em Manaus e lançar clubes wellness pioneiros na região Norte, ampliando ainda mais nosso impacto. Na Live Academia, você não é apenas um aluno, é parte de uma comunidade vibrante que se apoia, evolui e celebra cada conquista, construindo diariamente uma vida mais ativa, equilibrada e saudável."
     ],
-    stats: [
-      { value: "+60K", label: "Alunos ativos" },
-      { value: "35+", label: "Unidades" },
-      { value: "5.0", label: "Avaliação média" },
-      { value: "10+", label: "Anos de experiência" }
-    ],
     backgroundImage: "/images/sobre-bg.jpg"
   }
 
@@ -132,57 +126,6 @@ export default function SobreNos() {
               ))}
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 px-4 lg:px-8 bg-gradient-to-br from-zinc-900/50 to-black/50">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-              <span className="text-yellow-400 text-sm font-semibold uppercase tracking-wider">
-                Números
-              </span>
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
-              Nossa <span className="text-yellow-400">História</span> em Números
-            </h2>
-            <p className="text-white/70 text-lg max-w-3xl mx-auto">
-              Mais de uma década transformando vidas através do movimento e da paixão pelo fitness.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {pageData.stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-yellow-400/30 transition-all duration-300 p-8 text-center"
-              >
-                <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-yellow-400/20 to-amber-500/20 rounded-2xl flex items-center justify-center group-hover:from-yellow-400/30 group-hover:to-amber-500/30 transition-all">
-                  <div className="w-8 h-8 bg-yellow-400/60 rounded-full flex items-center justify-center group-hover:bg-yellow-400/80 transition-colors">
-                    <span className="text-black font-bold text-lg">{stat.value.charAt(0)}</span>
-                  </div>
-                </div>
-                <h3 className="text-3xl font-bold mb-2 text-yellow-400 group-hover:text-yellow-300 transition-colors">
-                  {stat.value}
-                </h3>
-                <p className="text-white/70 leading-relaxed">
-                  {stat.label}
-                </p>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
