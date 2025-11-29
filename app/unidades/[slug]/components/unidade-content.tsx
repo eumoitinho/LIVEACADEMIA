@@ -1,11 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 import { motion } from "framer-motion"
 import { MapPin, Clock, Check, Phone, Users, Dumbbell, ArrowRight, Star } from "lucide-react"
 import Link from "next/link"
-import UnitPlanos from '@/features/units/unit-planos'
-import CheckoutModal from '@/components/checkout/checkout-modal'
 import { useUnit } from "@/contexts/unit-context"
 import { useUnitsData } from '@/hooks/use-sanity-data'  
 
@@ -36,11 +34,9 @@ interface UnidadeContentProps {
 }
 
 export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedPlano, setSelectedPlano] = useState<{name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]} | null>(null)
   const { setCurrentUnit } = useUnit()
   const { data: sanityUnits, loading: loadingUnits } = useUnitsData()
-  
+
   useEffect(() => {
     if (unidade.logo) {
       setCurrentUnit({
@@ -53,16 +49,6 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
       setCurrentUnit(null)
     }
   }, [unidade, setCurrentUnit])
-
-  const handleMatricular = (plano: {name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[]}) => {
-    setSelectedPlano(plano)
-    setIsModalOpen(true)
-  }
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setSelectedPlano(null)
-  }
 
   return (
     <main className="min-h-screen relative">
@@ -155,7 +141,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
               </div>
             </div>
 
-            {/* Right Column - Planos Cards */}
+            {/* Right Column - Manutenção */}
             <div className="order-2 lg:order-2 lg:col-span-2">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -164,13 +150,21 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 className="opacity-0 animate-[fadeInUp_0.8s_ease-out_1.6s_forwards]"
                 style={{transform: "translateY(15px)", filter: "blur(2px)"}}
               >
-                <UnitPlanos
-                  slug={unidade.id}
-                  unidadeName={unidade.name}
-                  fallbackPlanos={unidade.planos}
-                  filters={(unidade as any).filtroPlanos}
-                  onMatricular={handleMatricular}
-                />
+                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-yellow-400/30 p-8 text-center">
+                  <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-yellow-400/20 to-amber-500/20 rounded-2xl flex items-center justify-center">
+                    <svg className="w-8 h-8 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-3">Planos em Manutenção</h3>
+                  <p className="text-white/70 text-lg mb-6">
+                    Estamos atualizando nossos planos para oferecer ainda mais benefícios para você.
+                  </p>
+                  <p className="text-yellow-400 font-semibold">
+                    Em breve, novidades incríveis!
+                  </p>
+                </div>
               </motion.div>
             </div>
           </div>
@@ -567,14 +561,6 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
         </div>
       </section>
 
-      {/* Checkout Modal */}
-      <CheckoutModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        plano={selectedPlano}
-        unidadeId={unidade.id}
-        unidadeName={unidade.name}
-      />
     </main>
   )
 }
