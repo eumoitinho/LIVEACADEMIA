@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import PlanosSelectorInput from '../components/PlanosSelectorInput'
 
 export const unitSchema = defineType({
   name: 'unit',
@@ -234,118 +235,31 @@ export const unitSchema = defineType({
     }),
     defineField({
       name: 'planosConfig',
-      title: '⭐ Configuração de Planos (Seletor Avançado)',
+      title: '⭐ Seletor de Planos',
       type: 'array',
       of: [
         {
           type: 'object',
           name: 'planoConfig',
-          title: 'Configuração do Plano',
           fields: [
-            defineField({
-              name: 'codigoApi',
-              title: 'Código do Plano (API)',
-              type: 'string',
-              validation: (Rule) => Rule.required(),
-              description: 'Código do plano retornado pela API Pacto. Exemplo: "918", "1034"',
-            }),
-            defineField({
-              name: 'nomeOriginal',
-              title: 'Nome Original (API)',
-              type: 'string',
-              readOnly: true,
-              description: 'Nome original do plano vindo da API (preenchido automaticamente)',
-            }),
-            defineField({
-              name: 'valorOriginal',
-              title: 'Valor Original (API)',
-              type: 'string',
-              readOnly: true,
-              description: 'Valor original do plano vindo da API (preenchido automaticamente)',
-            }),
-            defineField({
-              name: 'nomeExibicao',
-              title: 'Nome de Exibição (Override)',
-              type: 'string',
-              description: 'Se preenchido, substitui o nome original na exibição. O nome original é mantido no checkout.',
-            }),
-            defineField({
-              name: 'precoExibicao',
-              title: 'Preço de Exibição (Override)',
-              type: 'string',
-              description: 'Se preenchido, substitui o preço na exibição. O preço original é mantido no checkout.',
-            }),
-            defineField({
-              name: 'descricaoExibicao',
-              title: 'Descrição Personalizada',
-              type: 'text',
-              rows: 2,
-              description: 'Descrição personalizada para este plano nesta unidade',
-            }),
-            defineField({
-              name: 'beneficiosExibicao',
-              title: 'Benefícios Personalizados',
-              type: 'array',
-              of: [{ type: 'string' }],
-              description: 'Lista de benefícios para exibir. Se vazio, usa os padrões do plano.',
-            }),
-            defineField({
-              name: 'visivel',
-              title: 'Visível no Site',
-              type: 'boolean',
-              initialValue: true,
-              description: 'Se desmarcado, este plano não aparece na página da unidade',
-            }),
-            defineField({
-              name: 'destaque',
-              title: 'Plano em Destaque',
-              type: 'boolean',
-              initialValue: false,
-              description: 'Se marcado, este plano recebe destaque visual (borda dourada, badge)',
-            }),
-            defineField({
-              name: 'ordem',
-              title: 'Ordem de Exibição',
-              type: 'number',
-              initialValue: 0,
-              description: 'Ordem de exibição (menor número aparece primeiro)',
-            }),
-            defineField({
-              name: 'badge',
-              title: 'Badge do Plano',
-              type: 'string',
-              options: {
-                list: [
-                  { title: 'Nenhum', value: '' },
-                  { title: 'Mais vendido', value: 'MAIS VENDIDO' },
-                  { title: 'Recomendado', value: 'RECOMENDADO' },
-                  { title: 'Novidade', value: 'NOVIDADE' },
-                  { title: 'Oferta', value: 'OFERTA' },
-                  { title: 'Melhor custo-benefício', value: 'MELHOR CUSTO-BENEFÍCIO' },
-                ],
-              },
-            }),
+            defineField({ name: 'codigoApi', title: 'Código API', type: 'string' }),
+            defineField({ name: 'nomeOriginal', title: 'Nome Original', type: 'string' }),
+            defineField({ name: 'valorOriginal', title: 'Valor Original', type: 'string' }),
+            defineField({ name: 'nomeExibicao', title: 'Nome Exibição', type: 'string' }),
+            defineField({ name: 'precoExibicao', title: 'Preço Exibição', type: 'string' }),
+            defineField({ name: 'descricaoExibicao', title: 'Descrição', type: 'text' }),
+            defineField({ name: 'beneficiosExibicao', title: 'Benefícios', type: 'array', of: [{ type: 'string' }] }),
+            defineField({ name: 'visivel', title: 'Visível', type: 'boolean', initialValue: true }),
+            defineField({ name: 'destaque', title: 'Destaque', type: 'boolean', initialValue: false }),
+            defineField({ name: 'ordem', title: 'Ordem', type: 'number', initialValue: 0 }),
+            defineField({ name: 'badge', title: 'Badge', type: 'string' }),
           ],
-          preview: {
-            select: {
-              title: 'nomeExibicao',
-              originalName: 'nomeOriginal',
-              codigo: 'codigoApi',
-              visivel: 'visivel',
-              destaque: 'destaque',
-            },
-            prepare({ title, originalName, codigo, visivel, destaque }) {
-              const name = title || originalName || `Plano ${codigo}`
-              const status = !visivel ? '🔴 Oculto' : destaque ? '⭐ Destaque' : '✅ Visível'
-              return {
-                title: name,
-                subtitle: `Código: ${codigo} | ${status}`,
-              }
-            },
-          },
         },
       ],
-      description: 'Configure quais planos da API aparecem nesta unidade, com opção de personalizar textos de exibição. Os dados originais são preservados para o checkout.',
+      components: {
+        input: PlanosSelectorInput,
+      },
+      description: 'Clique em "Recarregar Planos da API" para ver todos os planos disponíveis e selecione quais devem aparecer nesta unidade.',
     }),
     defineField({
       name: 'filtroPlanos',

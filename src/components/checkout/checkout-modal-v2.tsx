@@ -1089,12 +1089,12 @@ export default function CheckoutModalV2({
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
 
-          {/* Modal */}
+          {/* Modal - Força tema claro para checkout */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4"
+            className="light relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4"
           >
             {/* Close button */}
             <button

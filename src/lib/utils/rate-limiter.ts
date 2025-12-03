@@ -23,11 +23,11 @@ class RateLimiter {
   /**
    * Verifica se um IP pode fazer uma requisição
    * @param ip - Endereço IP do cliente
-   * @param limit - Número máximo de requisições (padrão: 10)
+   * @param limit - Número máximo de requisições (padrão: 150)
    * @param windowMs - Janela de tempo em ms (padrão: 15 minutos)
    * @returns true se permitido, false se bloqueado
    */
-  check(ip: string, limit: number = 10, windowMs: number = 15 * 60 * 1000): boolean {
+  check(ip: string, limit: number = 150, windowMs: number = 15 * 60 * 1000): boolean {
     const now = Date.now()
     const entry = this.limits.get(ip)
 

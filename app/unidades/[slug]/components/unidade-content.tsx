@@ -6,7 +6,8 @@ import { MapPin, Clock, Check, Phone, Users, Dumbbell, ArrowRight, Star, Crown, 
 import Link from "next/link"
 import { useUnit } from "@/contexts/unit-context"
 import { useUnitsData } from '@/hooks/use-sanity-data'
-import UnitPlanos from '@/features/units/unit-planos'  
+import UnitPlanos from '@/features/units/unit-planos'
+import CheckoutModalV2 from '@/components/checkout/checkout-modal-v2'  
 
 interface PlanoConfig {
   codigoApi: string
@@ -60,19 +61,19 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   const { setCurrentUnit } = useUnit()
   const { data: sanityUnits, loading: loadingUnits } = useUnitsData()
   const [checkoutOpen, setCheckoutOpen] = useState(false)
-  const [selectedPlano, setSelectedPlano] = useState<{ name: string; price: string; codigo?: string } | null>(null)
+  const [selectedPlano, setSelectedPlano] = useState<{
+    name: string
+    price: string
+    codigo?: string
+    adesao?: number
+    fidelidade?: number
+    regimeRecorrencia?: boolean
+    modalidades?: string[]
+  } | null>(null)
 
-  const handleMatricular = (plano: { name: string; price: string; codigo?: string }) => {
+  const handleMatricular = (plano: { name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }) => {
     setSelectedPlano(plano)
-    // Redirecionar para página de checkout ou abrir modal
-    // Por enquanto, redireciona para o hotsite se existir
-    if (unidade.hotsite) {
-      window.open(unidade.hotsite, '_blank')
-    } else {
-      // Fallback: abrir WhatsApp com mensagem do plano
-      const mensagem = `Olá! Tenho interesse no plano ${plano.name} (R$ ${plano.price}) na unidade ${unidade.name}.`
-      window.open(`https://wa.me/5592999999999?text=${encodeURIComponent(mensagem)}`, '_blank')
-    }
+    setCheckoutOpen(true)
   }
 
   useEffect(() => {
@@ -600,6 +601,18 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </motion.div>
         </div>
       </section>
+
+      {/* Checkout Modal */}
+      <CheckoutModalV2
+        isOpen={checkoutOpen}
+        onClose={() => {
+          setCheckoutOpen(false)
+          setSelectedPlano(null)
+        }}
+        plano={selectedPlano}
+        unidadeName={unidade.name}
+        unidadeId={unidade.id}
+      />
 
     </main>
   )
