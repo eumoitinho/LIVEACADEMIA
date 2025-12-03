@@ -19,6 +19,12 @@ interface PlanoItem {
   fidelidade?: number
   regimeRecorrencia?: boolean
   modalidades?: string[]
+  // Props que podem vir do planosConfig
+  destaque?: boolean
+  badge?: string
+  ordem?: number
+  originalName?: string
+  originalPrice?: string
 }
 
 interface PlanosCardsProps {
@@ -43,7 +49,11 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
 
   // Separar e preparar planos
   const preparedPlanos = planos.map((plano) => {
-    const isPremium = isPremiumPlan(plano.name)
+    // Se já veio com destaque definido (do planosConfig), usar esse valor
+    // Caso contrário, usar a lógica de isPremiumPlan
+    const hasExplicitDestaque = typeof plano.destaque === 'boolean'
+    const isPremium = hasExplicitDestaque ? plano.destaque : isPremiumPlan(plano.name)
+    
     return {
       ...plano,
       nome: plano.name,
@@ -66,12 +76,20 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
       icone: isPremium ? Crown : Check,
       popular: isPremium,
       destaque: isPremium,
-      badge: isPremium ? 'O mais vendido' : undefined
+      badge: plano.badge || (isPremium ? 'O mais vendido' : undefined)
     }
   })
 
-  // Ordenar: premium primeiro
+  // Ordenar: Se tem ordem definida do planosConfig, usar ela; senão, premium primeiro
   preparedPlanos.sort((a, b) => {
+    // Se ambos têm ordem definida, usar a ordem
+    if (a.ordem !== undefined && b.ordem !== undefined) {
+      return a.ordem - b.ordem
+    }
+    // Se apenas um tem ordem, ele vem primeiro
+    if (a.ordem !== undefined) return -1
+    if (b.ordem !== undefined) return 1
+    // Fallback: destaque primeiro
     if (a.destaque && !b.destaque) return -1
     if (!a.destaque && b.destaque) return 1
     return 0

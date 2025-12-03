@@ -1,11 +1,26 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { MapPin, Clock, Check, Phone, Users, Dumbbell, ArrowRight, Star } from "lucide-react"
+import { MapPin, Clock, Check, Phone, Users, Dumbbell, ArrowRight, Star, Crown, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { useUnit } from "@/contexts/unit-context"
-import { useUnitsData } from '@/hooks/use-sanity-data'  
+import { useUnitsData } from '@/hooks/use-sanity-data'
+import UnitPlanos from '@/features/units/unit-planos'  
+
+interface PlanoConfig {
+  codigoApi: string
+  nomeOriginal?: string
+  valorOriginal?: string
+  nomeExibicao?: string
+  precoExibicao?: string
+  descricaoExibicao?: string
+  beneficiosExibicao?: string[]
+  visivel: boolean
+  destaque: boolean
+  ordem: number
+  badge?: string
+}
 
 interface UnidadeContentProps {
   unidade: {
@@ -23,7 +38,15 @@ interface UnidadeContentProps {
     planos?: Array<{
       name: string
       price: string
+      codigo?: string
     }>
+    planosConfig?: PlanoConfig[]
+    filtroPlanos?: {
+      precoMinimo?: number
+      codigosPermitidos?: string[]
+      usarPlanosSanity?: boolean
+      usarConfigAvancada?: boolean
+    }
     hotsite?: string
   }
   data: {
@@ -36,6 +59,21 @@ interface UnidadeContentProps {
 export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
   const { setCurrentUnit } = useUnit()
   const { data: sanityUnits, loading: loadingUnits } = useUnitsData()
+  const [checkoutOpen, setCheckoutOpen] = useState(false)
+  const [selectedPlano, setSelectedPlano] = useState<{ name: string; price: string; codigo?: string } | null>(null)
+
+  const handleMatricular = (plano: { name: string; price: string; codigo?: string }) => {
+    setSelectedPlano(plano)
+    // Redirecionar para página de checkout ou abrir modal
+    // Por enquanto, redireciona para o hotsite se existir
+    if (unidade.hotsite) {
+      window.open(unidade.hotsite, '_blank')
+    } else {
+      // Fallback: abrir WhatsApp com mensagem do plano
+      const mensagem = `Olá! Tenho interesse no plano ${plano.name} (R$ ${plano.price}) na unidade ${unidade.name}.`
+      window.open(`https://wa.me/5592999999999?text=${encodeURIComponent(mensagem)}`, '_blank')
+    }
+  }
 
   useEffect(() => {
     if (unidade.logo) {
@@ -141,8 +179,8 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
               </div>
             </div>
 
-            {/* Right Column - Manutenção */}
-            <div className="order-2 lg:order-2 lg:col-span-2">
+            {/* Right Column - Planos */}
+            <div className="order-2 lg:order-2 lg:col-span-2" id="planos">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -150,21 +188,23 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 className="opacity-0 animate-[fadeInUp_0.8s_ease-out_1.6s_forwards]"
                 style={{transform: "translateY(15px)", filter: "blur(2px)"}}
               >
-                <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-yellow-400/30 p-8 text-center">
-                  <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-yellow-400/20 to-amber-500/20 rounded-2xl flex items-center justify-center">
-                    <svg className="w-8 h-8 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Crown className="w-5 h-5 text-yellow-400" />
+                    <span className="text-yellow-400 text-sm font-semibold uppercase tracking-wider">
+                      Planos disponíveis
+                    </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-3">Planos em Manutenção</h3>
-                  <p className="text-white/70 text-lg mb-6">
-                    Estamos atualizando nossos planos para oferecer ainda mais benefícios para você.
-                  </p>
-                  <p className="text-yellow-400 font-semibold">
-                    Em breve, novidades incríveis!
-                  </p>
+                  <h3 className="text-2xl font-bold text-white">Escolha seu plano</h3>
                 </div>
+                <UnitPlanos
+                  slug={unidade.id}
+                  unidadeName={unidade.name}
+                  onMatricular={handleMatricular}
+                  fallbackPlanos={unidade.planos}
+                  filters={unidade.filtroPlanos}
+                  planosConfig={unidade.planosConfig}
+                />
               </motion.div>
             </div>
           </div>

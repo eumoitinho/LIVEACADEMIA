@@ -16,22 +16,78 @@ interface DynamicPlano {
   modalidades?: string[]
 }
 
+interface PlanoConfig {
+  codigoApi: string
+  nomeOriginal?: string
+  valorOriginal?: string
+  nomeExibicao?: string
+  precoExibicao?: string
+  descricaoExibicao?: string
+  beneficiosExibicao?: string[]
+  visivel: boolean
+  destaque: boolean
+  ordem: number
+  badge?: string
+}
+
 interface UnitPlanosProps {
   slug: string
   unidadeName: string
-  onMatricular: (plano: { name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }) => void
-  fallbackPlanos?: Array<{ nome?: string; name?: string; preco?: string; price?: string; periodo?: string; destaque?: boolean; badge?: string; codigo?: string }>
+  onMatricular: (plano: { 
+    name: string
+    price: string
+    codigo?: string
+    adesao?: number
+    fidelidade?: number
+    regimeRecorrencia?: boolean
+    modalidades?: string[]
+    // Dados originais da API para checkout
+    originalName?: string
+    originalPrice?: string
+  }) => void
+  fallbackPlanos?: Array<{ 
+    nome?: string
+    name?: string
+    preco?: string
+    price?: string
+    periodo?: string
+    destaque?: boolean
+    badge?: string
+    codigo?: string 
+  }>
   filters?: {
     precoMinimo?: number
     codigosPermitidos?: string[]
     usarPlanosSanity?: boolean
+    usarConfigAvancada?: boolean
   }
+  planosConfig?: PlanoConfig[]
 }
 
-export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPlanos, filters }: UnitPlanosProps) {
+export default function UnitPlanos({ 
+  slug, 
+  unidadeName, 
+  onMatricular, 
+  fallbackPlanos, 
+  filters,
+  planosConfig = []
+}: UnitPlanosProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [planos, setPlanos] = useState<Array<{ name: string; price: string; codigo?: string; adesao?: number; fidelidade?: number; regimeRecorrencia?: boolean; modalidades?: string[] }>>([])
+  const [planos, setPlanos] = useState<Array<{ 
+    name: string
+    price: string
+    codigo?: string
+    adesao?: number
+    fidelidade?: number
+    regimeRecorrencia?: boolean
+    modalidades?: string[]
+    destaque?: boolean
+    badge?: string
+    ordem?: number
+    originalName?: string
+    originalPrice?: string
+  }>>([])
 
   const formatPrice = (value: number | string | undefined) => {
     if (typeof value === 'number') {
@@ -43,15 +99,27 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
     return Number.isFinite(parsed) ? parsed.toFixed(2) : '0.00'
   }
 
-  const normalizeFallbackPlanos = (planosFallback?: Array<{ nome?: string; name?: string; preco?: string; price?: string; codigo?: string }>) =>
+  const normalizeFallbackPlanos = (planosFallback?: Array<{ nome?: string; name?: string; preco?: string; price?: string; codigo?: string; destaque?: boolean; badge?: string }>) =>
     (planosFallback || []).map((plano) => ({
       name: plano.name || plano.nome || 'Plano',
       price: formatPrice(plano.price || plano.preco),
-      codigo: plano.codigo
+      codigo: plano.codigo,
+      destaque: plano.destaque,
+      badge: plano.badge,
     }))
 
   const normalizedFallbackPlanos = useMemo(() => normalizeFallbackPlanos(fallbackPlanos), [fallbackPlanos])
   const shouldUseSanityOnly = !!(filters?.usarPlanosSanity && normalizedFallbackPlanos.length)
+  const shouldUseAdvancedConfig = filters?.usarConfigAvancada !== false && planosConfig.length > 0
+
+  // Cria um mapa de configurações por código para lookup rápido
+  const configMap = useMemo(() => {
+    const map = new Map<string, PlanoConfig>()
+    planosConfig.forEach(config => {
+      map.set(config.codigoApi, config)
+    })
+    return map
+  }, [planosConfig])
 
   const load = useCallback(async () => {
     if (shouldUseSanityOnly) {
@@ -84,27 +152,73 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
         return
       }
       
-      // Usar todos os planos por enquanto para debug
       console.log(`[UnitPlanos] Total de planos recebidos:`, fetched.length)
-      console.log(`[UnitPlanos] Primeiros 3 planos:`, fetched.slice(0, 3).map(p => ({ nome: p.nome, codigo: p.codigo })))
       
-      let mapped = fetched.map(p => ({
-        name: p.nome,
-        price: formatPrice(typeof p.mensalidade === 'number' ? p.mensalidade : p.valor),
-        codigo: p.codigo?.toString(),
-        adesao: p.adesao,
-        fidelidade: p.fidelidade,
-        regimeRecorrencia: p.regimeRecorrencia,
-        modalidades: p.modalidades || [],
-      }))
+      let mapped = fetched.map(p => {
+        const codigoStr = p.codigo?.toString()
+        const config = codigoStr ? configMap.get(codigoStr) : undefined
+        const originalPrice = formatPrice(typeof p.mensalidade === 'number' ? p.mensalidade : p.valor)
+        
+        // Se temos config avançada e o plano está configurado
+        if (shouldUseAdvancedConfig && config) {
+          // Se não está visível, retorna null para filtrar depois
+          if (!config.visivel) {
+            return null
+          }
+          
+          return {
+            // Dados de EXIBIÇÃO (podem ser overridden)
+            name: config.nomeExibicao || p.nome,
+            price: config.precoExibicao || originalPrice,
+            destaque: config.destaque,
+            badge: config.badge,
+            ordem: config.ordem,
+            // Dados ORIGINAIS (preservados para checkout)
+            originalName: p.nome,
+            originalPrice: originalPrice,
+            codigo: codigoStr,
+            adesao: p.adesao,
+            fidelidade: p.fidelidade,
+            regimeRecorrencia: p.regimeRecorrencia,
+            modalidades: p.modalidades || [],
+          }
+        }
+        
+        // Sem config avançada, usa dados originais
+        return {
+          name: p.nome,
+          price: originalPrice,
+          originalName: p.nome,
+          originalPrice: originalPrice,
+          codigo: codigoStr,
+          adesao: p.adesao,
+          fidelidade: p.fidelidade,
+          regimeRecorrencia: p.regimeRecorrencia,
+          modalidades: p.modalidades || [],
+        }
+      }).filter(Boolean) as typeof planos
 
-      if (filters?.precoMinimo) {
-        mapped = mapped.filter(plano => parseFloat(plano.price) >= filters.precoMinimo!)
+      // Se usando config avançada, filtra apenas os que estão configurados
+      if (shouldUseAdvancedConfig && planosConfig.length > 0) {
+        const configuredCodes = new Set(planosConfig.filter(c => c.visivel).map(c => c.codigoApi))
+        mapped = mapped.filter(p => p.codigo && configuredCodes.has(p.codigo))
       }
 
-      if (filters?.codigosPermitidos?.length) {
-        const allowed = filters.codigosPermitidos.map(String)
-        mapped = mapped.filter(plano => plano.codigo ? allowed.includes(plano.codigo) : true)
+      // Aplica filtros básicos se não usar config avançada
+      if (!shouldUseAdvancedConfig) {
+        if (filters?.precoMinimo) {
+          mapped = mapped.filter(plano => parseFloat(plano.price) >= filters.precoMinimo!)
+        }
+
+        if (filters?.codigosPermitidos?.length) {
+          const allowed = filters.codigosPermitidos.map(String)
+          mapped = mapped.filter(plano => plano.codigo ? allowed.includes(plano.codigo) : true)
+        }
+      }
+
+      // Ordena por ordem (config avançada) ou mantém ordem original
+      if (shouldUseAdvancedConfig) {
+        mapped.sort((a, b) => (a.ordem ?? 999) - (b.ordem ?? 999))
       }
 
       if (mapped.length === 0 && normalizedFallbackPlanos.length) {
@@ -112,17 +226,13 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
         return
       }
       
-      console.log(`[UnitPlanos] Planos mapeados:`, mapped)
+      console.log(`[UnitPlanos] Planos processados:`, mapped.length)
       setPlanos(mapped)
       
-      if (json.source === 'static') {
-        console.log('[UnitPlanos] Dados obtidos do fallback estático')
-      }
     } catch (e: any) {
       console.error('[UnitPlanos] Falha ao carregar planos', e)
       setError(`Não foi possível carregar planos: ${e.message}`)
       
-      // Usar fallback se disponível
       if (normalizedFallbackPlanos.length) {
         console.log('[UnitPlanos] Usando fallback após erro')
         setPlanos(normalizedFallbackPlanos)
@@ -131,43 +241,51 @@ export default function UnitPlanos({ slug, unidadeName, onMatricular, fallbackPl
     } finally {
       setLoading(false)
     }
-  }, [slug, fallbackPlanos])
+  }, [slug, fallbackPlanos, shouldUseSanityOnly, shouldUseAdvancedConfig, configMap, filters, normalizedFallbackPlanos, planosConfig])
 
   useEffect(() => { load() }, [load])
 
   if (loading) {
     return (
-      <section className="py-16">
-        <div className="container mx-auto px-4 text-center text-live-textSecondary">
-          Carregando planos...
-        </div>
-      </section>
+      <div className="text-center py-8">
+        <div className="w-8 h-8 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+        <p className="text-white/60 text-sm">Carregando planos...</p>
+      </div>
     )
   }
 
   if (error && planos.length === 0) {
     return (
-      <section className="py-16">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-live-textSecondary mb-4">{error}</p>
-          <button
-            onClick={load}
-            className="px-6 py-3 rounded-2xl bg-live-border/20 hover:bg-live-border/30 border border-live-border/30 hover:border-live-accent/50 text-live-textPrimary hover:text-live-accent transition-all duration-300"
-          >
-            Tentar novamente
-          </button>
-        </div>
-      </section>
+      <div className="text-center py-8">
+        <p className="text-white/60 mb-4 text-sm">{error}</p>
+        <button
+          onClick={load}
+          className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm transition-all duration-300"
+        >
+          Tentar novamente
+        </button>
+      </div>
     )
   }
 
-  if (planos.length === 0) return null
+  if (planos.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-white/60 text-sm">Nenhum plano disponível no momento.</p>
+      </div>
+    )
+  }
 
   return (
     <PlanosCards
       planos={planos}
       unidadeName={unidadeName}
-      onMatricular={(plano) => onMatricular(plano)}
+      onMatricular={(plano) => onMatricular({
+        ...plano,
+        // Garantir que dados originais sejam passados para checkout
+        name: (plano as any).originalName || plano.name,
+        price: (plano as any).originalPrice || plano.price,
+      })}
     />
   )
 }

@@ -163,12 +163,27 @@ export async function getUnits() {
           preco,
           periodo,
           destaque,
+          badge,
+          codigo
+        },
+        planosConfig[] {
+          codigoApi,
+          nomeOriginal,
+          valorOriginal,
+          nomeExibicao,
+          precoExibicao,
+          descricaoExibicao,
+          beneficiosExibicao,
+          visivel,
+          destaque,
+          ordem,
           badge
         },
         filtroPlanos {
           precoMinimo,
           codigosPermitidos,
-          usarPlanosSanity
+          usarPlanosSanity,
+          usarConfigAvancada
         }
       }
     `)

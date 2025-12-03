@@ -186,6 +186,20 @@ export interface SEO {
   keywords: string[]
 }
 
+export interface PlanoConfig {
+  codigoApi: string
+  nomeOriginal?: string
+  valorOriginal?: string
+  nomeExibicao?: string
+  precoExibicao?: string
+  descricaoExibicao?: string
+  beneficiosExibicao?: string[]
+  visivel: boolean
+  destaque: boolean
+  ordem: number
+  badge?: string
+}
+
 export interface Unit {
   _id: string
   name: string
@@ -220,11 +234,14 @@ export interface Unit {
     periodo: string
     destaque: boolean
     badge?: string
+    codigo?: string
   }>
+  planosConfig?: PlanoConfig[]
   filtroPlanos?: {
     precoMinimo?: number
     codigosPermitidos?: string[]
     usarPlanosSanity?: boolean
+    usarConfigAvancada?: boolean
   }
 }
 
