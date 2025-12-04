@@ -40,10 +40,16 @@ const difficultyLabels: Record<string, string> = {
 }
 
 export default function ModalidadesSection() {
-  const { data } = useModalidadesLandingData()
+  const { data, loading } = useModalidadesLandingData()
 
   // Transformar dados do Sanity para o formato do componente
+  // SÓ usar fallback DEPOIS que loading terminar
   const modalidadesHome = useMemo(() => {
+    // Aguardar carregamento para evitar flash de fallback
+    if (loading) {
+      return []
+    }
+    
     if (!data || !data.featuredModalidades || data.featuredModalidades.length === 0) {
       return defaultModalidadesHome
     }
@@ -63,12 +69,24 @@ export default function ModalidadesSection() {
       console.error('Error transforming modalidades data:', error)
       return defaultModalidadesHome
     }
-  }, [data])
+  }, [data, loading])
 
-  const sectionTitle = data?.title || "Energia e motivação em grupo para você ir além"
-  const sectionDescription = data?.description || "As aulas coletivas da Live Academia são a maneira perfeita de se exercitar, se divertir e fazer novas amizades! Com a energia contagiante do grupo, você se mantém motivado e alcança seus objetivos de forma mais prazerosa."
+  const sectionTitle = data?.title || (loading ? "" : "Energia e motivação em grupo para você ir além")
+  const sectionDescription = data?.description || (loading ? "" : "As aulas coletivas da Live Academia são a maneira perfeita de se exercitar, se divertir e fazer novas amizades! Com a energia contagiante do grupo, você se mantém motivado e alcança seus objetivos de forma mais prazerosa.")
   const ctaText = data?.ctaText || "VEJA TODAS AS MODALIDADES"
   const ctaHref = data?.ctaHref || "/aulas-coletivas"
+
+  // Não renderizar enquanto carrega para evitar flash de fallback
+  if (loading) {
+    return (
+      <section id="servicos" className="py-20 relative overflow-hidden">
+        <div className="container mx-auto px-4 relative z-10 min-h-[400px] flex items-center justify-center">
+          <div className="animate-pulse text-white/30">Carregando...</div>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section id="servicos" className="py-20 relative overflow-hidden">
       {/* Background transparente para usar o background fixo do layout */}

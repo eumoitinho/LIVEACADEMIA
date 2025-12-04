@@ -50,9 +50,14 @@ export default function BeneficiosSectionEditable() {
     'CheckCircle': CheckCircle,
   }
 
-  // Usar dados do Sanity ou fallback
+  // Usar dados do Sanity ou fallback - SÓ usa fallback se não estiver carregando E não houver dados
   const beneficios = useMemo(() => {
-    // Garantir que data.items é um array válido
+    // Se ainda está carregando, não usar fallback ainda - aguardar dados do Sanity
+    if (loading) {
+      return []
+    }
+    
+    // Garantir que data.items é um array válido - só usar fallback após loading terminar
     if (!data || !data.items || !Array.isArray(data.items) || data.items.length === 0) {
       return defaultBeneficios
     }
@@ -73,7 +78,18 @@ export default function BeneficiosSectionEditable() {
     }
   }, [data])
 
-  const sectionTitle = data?.title || "Mais do que treino, uma experiência completa"
+  const sectionTitle = data?.title || (loading ? "" : "Mais do que treino, uma experiência completa")
+
+  // Não renderizar nada enquanto está carregando (evita flash de fallback)
+  if (loading) {
+    return (
+      <section id="beneficios" className="relative py-24 px-4 lg:px-10 overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">
+        <div className="max-w-7xl mx-auto relative z-10 min-h-[400px] flex items-center justify-center">
+          <div className="animate-pulse text-white/30">Carregando...</div>
+        </div>
+      </section>
+    )
+  }
 
   const easing = [0.16, 1, 0.3, 1] as const
   const [active, setActive] = useState(0)

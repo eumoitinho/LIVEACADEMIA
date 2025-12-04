@@ -159,17 +159,18 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
 export default function UnidadesCarousel() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lon: number } | null>(null)
   const [sortedUnidades, setSortedUnidades] = useState<UnidadeComDistancia[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const carouselViewportRef = useRef<HTMLDivElement>(null)
   const prefersReducedMotion = useReducedMotion()
   const visibleInView = useInView(carouselViewportRef, { amount: 0.25, once: false })
 
-  // Carrega unidades da API com fallback estático
+  // Carrega unidades da API - NÃO usa fallback imediato, aguarda API primeiro
   useEffect(() => {
     let cancelled = false
     
-    // Fallback estático imediato
+    // Fallback estático - SÓ usar se API falhar
     const fallbackUnidades: UnidadeBase[] = [
       {
         id: 'torres',
@@ -217,15 +218,12 @@ export default function UnidadesCarousel() {
       }
     ]
     
-    // Setar fallback imediatamente para não ficar em "Carregando..."
-    setSortedUnidades(fallbackUnidades)
-    
-    // Tentar buscar dados dinâmicos da API
+    // Tentar buscar dados dinâmicos da API PRIMEIRO
     async function load() {
       try {
         const res = await fetch('/api/unidades', { 
           cache: 'no-store',
-          signal: AbortSignal.timeout(3000) // Timeout de 3s
+          signal: AbortSignal.timeout(5000) // Timeout de 5s
         })
         
         if (!res.ok) throw new Error('API retornou erro')
@@ -245,10 +243,20 @@ export default function UnidadesCarousel() {
         
         if (!cancelled && units.length > 0) {
           setSortedUnidades(units)
+        } else if (!cancelled) {
+          // API retornou vazio, usar fallback
+          setSortedUnidades(fallbackUnidades)
         }
       } catch (e) {
-        // Se API falhar, mantém o fallback
-        console.info('[UnidadesCarousel] Usando dados estáticos (API indisponível)')
+        // Se API falhar, usar fallback
+        if (!cancelled) {
+          console.info('[UnidadesCarousel] Usando dados estáticos (API indisponível)')
+          setSortedUnidades(fallbackUnidades)
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false)
+        }
       }
     }
     
@@ -328,6 +336,20 @@ export default function UnidadesCarousel() {
 
   const slideWidth = 420 // width + gap approximation
   const translateX = sortedUnidades.length > 0 ? -(currentIndex * slideWidth) : 0
+
+  // Mostrar loading state enquanto carrega da API
+  if (isLoading) {
+    return (
+      <section className="py-24 relative overflow-hidden bg-black">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-neutral-950 to-black" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 min-h-[400px] flex items-center justify-center">
+          <div className="animate-pulse text-white/30">Carregando unidades...</div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="py-24 relative overflow-hidden bg-black">

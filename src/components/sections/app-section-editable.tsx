@@ -10,7 +10,7 @@ import type { AppSectionData } from "@/types/sanity"
 export default function AppSectionEditable() {
   const { data, loading } = useAppSectionData()
 
-  // Dados de fallback
+  // Dados de fallback - SÓ usar quando loading terminar E não houver dados
   const fallbackData: Partial<AppSectionData> = {
     badge: undefined,
     title: "Seu treino na",
@@ -28,7 +28,19 @@ export default function AppSectionEditable() {
     appLivePlayStoreUrl: "https://play.google.com/store/apps/details?id=br.com.pactosolucoes.liveacademia&pcampaignid=web_share"
   }
 
-  const sectionData = { ...fallbackData, ...data }
+  // Não renderizar enquanto carrega para evitar flash de fallback
+  if (loading) {
+    return (
+      <section className="relative py-20 px-6 lg:px-12 overflow-hidden" id="app">
+        <div className="max-w-7xl mx-auto relative z-10 min-h-[400px] flex items-center justify-center">
+          <div className="animate-pulse text-white/30">Carregando...</div>
+        </div>
+      </section>
+    )
+  }
+
+  // Só usar fallback DEPOIS que loading terminar e não houver dados
+  const sectionData = data ? { ...fallbackData, ...data } : fallbackData
 
   const getImageUrl = () => {
     if (data?.appImage) {

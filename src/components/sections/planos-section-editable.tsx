@@ -86,7 +86,13 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
   const { data: sanityPlans, loading: plansLoading } = usePlansData()
 
   // Transform Sanity data to match original structure, or use defaults
+  // SÓ usar fallback DEPOIS que loading terminar
   const planos = useMemo(() => {
+    // Se ainda está carregando, retornar array vazio para evitar flash de fallback
+    if (plansLoading) {
+      return []
+    }
+    
     // Use Sanity plans collection first, fallback to data.plans, then to planosDefault
     const sourcePlans = (Array.isArray(sanityPlans) && sanityPlans.length > 0)
       ? sanityPlans
@@ -122,7 +128,18 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
       console.error('Error transforming plans data:', error)
       return planosDefault
     }
-  }, [sanityPlans, data])
+  }, [sanityPlans, data, plansLoading])
+
+  // Mostrar loading state enquanto carrega
+  if (plansLoading) {
+    return (
+      <section className="relative py-24 px-6 lg:px-12 overflow-hidden bg-black text-white" id="planos">
+        <div className="max-w-7xl mx-auto min-h-[400px] flex items-center justify-center">
+          <div className="animate-pulse text-white/30">Carregando planos...</div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="relative py-24 px-6 lg:px-12 overflow-hidden bg-black text-white" id="planos">
