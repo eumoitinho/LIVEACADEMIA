@@ -51,10 +51,10 @@ export default function BioimpedanciaSection() {
             Bioimpedância
           </span>
           <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mt-4 text-white">
-            {mainFeature.title || "Avaliação Corporal Completa"}
+            Acompanhe sua evolução
           </h2>
           <p className="text-lg text-white/75 mt-3 leading-relaxed">
-            {mainFeature.description || "Descubra todos os detalhes da sua composição corporal com nossa avaliação de bioimpedância de alta precisão."}
+            Descubra todos os detalhes da sua composição corporal com que há de mais moderno em avaliação física
           </p>
         </motion.header>
 
