@@ -52,18 +52,6 @@ const fallbackData = {
 export default function TrabalheConoscoPage() {
   const { data, loading } = useTrabalheConoscoData()
   
-  // Mostrar loading state enquanto carrega
-  if (loading) {
-    return (
-      <main className="min-h-screen relative bg-black text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70">Carregando...</p>
-        </div>
-      </main>
-    )
-  }
-  
   // SÓ usar fallback DEPOIS que loading terminar
   const pageData = data || fallbackData
 
@@ -107,6 +95,18 @@ export default function TrabalheConoscoPage() {
     setFormState(initialFormState)
     setFileName("")
   }, [initialFormState])
+
+  // Mostrar loading state enquanto carrega
+  if (loading) {
+    return (
+      <main className="min-h-screen relative bg-black text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70">Carregando...</p>
+        </div>
+      </main>
+    )
+  }
 
   const handleFieldChange = (name: string, value: string | File | null) => {
     setFormState((prev) => ({ ...prev, [name]: value }))
