@@ -18,6 +18,18 @@ export default function Unidades() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [loadingLocation, setLoadingLocation] = useState(false)
 
+  // Mostrar loading state enquanto carrega dados do Sanity
+  if (loadingSanity) {
+    return (
+      <main className="min-h-screen relative bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70">Carregando unidades...</p>
+        </div>
+      </main>
+    )
+  }
+
   // Merge Sanity units with static locations (Sanity takes precedence)
   const allLocations = useMemo(() => {
     if (loadingSanity || sanityUnits.length === 0) {

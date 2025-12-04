@@ -6,7 +6,19 @@ import Image from "next/image"
 import { useContatoData } from "@/hooks/use-contato-data"
 
 export default function ContatoPage() {
-  const { data: contatoData } = useContatoData()
+  const { data: contatoData, loading } = useContatoData()
+
+  // Mostrar loading state enquanto carrega
+  if (loading) {
+    return (
+      <main className="min-h-screen relative bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70">Carregando...</p>
+        </div>
+      </main>
+    )
+  }
 
   const iconMap = {
     phone: Phone,

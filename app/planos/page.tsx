@@ -74,6 +74,18 @@ export default function Planos() {
   const [loadingSanity, setLoadingSanity] = useState(true)
   const [allLocations, setAllLocations] = useState<LocationUnit[]>([])
 
+  // Mostrar loading state enquanto carrega dados do Sanity
+  if (plansLoading) {
+    return (
+      <main className="min-h-screen relative bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70">Carregando planos...</p>
+        </div>
+      </main>
+    )
+  }
+
   // Use Sanity plans or fallback to hardcoded
   // Normalizar planos do Sanity para garantir estrutura consistente
   const displayPlans = useMemo(() => {
