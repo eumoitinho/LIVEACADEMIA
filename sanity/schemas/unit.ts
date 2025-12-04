@@ -116,6 +116,30 @@ export const unitSchema = defineType({
       ],
     }),
     defineField({
+      name: 'modalidades',
+      title: '🏋️ Modalidades Disponíveis',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'modality' }],
+        },
+      ],
+      description: 'Selecione as modalidades oferecidas nesta unidade (cadastradas em "Modalidades")',
+    }),
+    defineField({
+      name: 'beneficios',
+      title: '⭐ Benefícios da Unidade',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'benefit' }],
+        },
+      ],
+      description: 'Selecione os benefícios oferecidos nesta unidade (cadastrados em "Benefícios")',
+    }),
+    defineField({
       name: 'photo',
       title: 'Foto Principal',
       type: 'image',

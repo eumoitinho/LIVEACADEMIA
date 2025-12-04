@@ -209,6 +209,31 @@ export interface Unit {
   longitude: number
   type: string
   services: string[]
+  modalidades?: Array<{
+    _id: string
+    name: string
+    description?: string
+    image?: {
+      asset?: {
+        _id: string
+        url: string
+      }
+    }
+    duration?: number
+    difficulty?: string
+  }>
+  beneficios?: Array<{
+    _id: string
+    title: string
+    description?: string
+    icon?: string
+    image?: {
+      asset?: {
+        _id: string
+        url: string
+      }
+    }
+  }>
   photo?: {
     asset?: {
       url: string

@@ -124,6 +124,10 @@ export default async function UnidadePage(props: PageProps) {
     longitude: sanityUnit.longitude || -60.0217314,
     images: sanityUnit.images?.map((img: any) => img.asset?.url).filter(Boolean) || [],
     description: sanityUnit.description,
+    // Modalidades do Sanity (referências) ou fallback estático
+    modalidades: sanityUnit.modalidades?.map((m: any) => m.name) || [],
+    // Benefícios do Sanity (referências) ou fallback estático
+    beneficios: sanityUnit.beneficios?.map((b: any) => b.title) || [],
     planos: sanityUnit.planos?.map((p: any) => ({
       name: p.nome,
       price: p.preco,
@@ -152,10 +156,20 @@ export default async function UnidadePage(props: PageProps) {
     notFound()
   }
 
+  // Usar dados do Sanity se disponíveis, senão usar fallback estático
+  const staticData = unidadeData[unidade.type as keyof typeof unidadeData] || unidadeData.tradicional
+  
   const data = {
-    ...unidadeData[unidade.type as keyof typeof unidadeData] || unidadeData.tradicional,
+    // Usar modalidades do Sanity se existirem, senão usar as estáticas por tipo
+    modalidades: (unidade as any).modalidades?.length > 0 
+      ? (unidade as any).modalidades 
+      : staticData.modalidades,
+    // Usar benefícios do Sanity se existirem, senão usar os estáticos por tipo
+    beneficios: (unidade as any).beneficios?.length > 0 
+      ? (unidade as any).beneficios 
+      : staticData.beneficios,
     // Override static photos with Sanity images if available
-    fotos: sanityUnit?.images?.map((img: any) => img.asset?.url).filter(Boolean) || unidadeData[unidade.type as keyof typeof unidadeData]?.fotos || unidadeData.tradicional.fotos
+    fotos: sanityUnit?.images?.map((img: any) => img.asset?.url).filter(Boolean) || staticData.fotos
   }
 
   return <UnidadeContent unidade={unidade} data={data} />

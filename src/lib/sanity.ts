@@ -139,6 +139,31 @@ export async function getUnits() {
         longitude,
         type,
         services,
+        modalidades[]->{
+          _id,
+          name,
+          description,
+          image {
+            asset-> {
+              _id,
+              url
+            }
+          },
+          duration,
+          difficulty
+        },
+        beneficios[]->{
+          _id,
+          title,
+          description,
+          icon,
+          image {
+            asset-> {
+              _id,
+              url
+            }
+          }
+        },
         photo {
           asset-> {
             url

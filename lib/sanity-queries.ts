@@ -160,6 +160,31 @@ export const unitsQuery = groq`
     longitude,
     type,
     services[],
+    modalidades[]->{
+      _id,
+      name,
+      description,
+      image {
+        asset-> {
+          _id,
+          url
+        }
+      },
+      duration,
+      difficulty
+    },
+    beneficios[]->{
+      _id,
+      title,
+      description,
+      icon,
+      image {
+        asset-> {
+          _id,
+          url
+        }
+      }
+    },
     images[],
     description,
     openingHours,
