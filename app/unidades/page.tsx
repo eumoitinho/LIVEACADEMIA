@@ -63,18 +63,6 @@ export default function Unidades() {
     return R * c
   }
 
-  // Mostrar loading state enquanto carrega dados do Sanity
-  if (loadingSanity) {
-    return (
-      <main className="min-h-screen relative bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70">Carregando unidades...</p>
-        </div>
-      </main>
-    )
-  }
-
   // Solicitar localização do usuário
   const requestUserLocation = () => {
     setLoadingLocation(true)
@@ -134,6 +122,18 @@ export default function Unidades() {
     premium: allLocations.filter((l: any) => l.type === 'premium').length,
     tradicional: allLocations.filter((l: any) => l.type === 'tradicional').length,
   }), [allLocations])
+
+  // Mostrar loading state enquanto carrega dados do Sanity
+  if (loadingSanity) {
+    return (
+      <main className="min-h-screen relative bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70">Carregando unidades...</p>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="min-h-screen relative bg-black text-white">
