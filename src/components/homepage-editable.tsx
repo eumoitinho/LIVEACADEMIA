@@ -14,12 +14,43 @@ import WellhubSection from "@/components/sections/wellhub-section"
 import BioimpedanciaSection from "@/components/sections/bioimpedancia-section"
 import EstruturaSection from "@/components/sections/estrutura-section"
 
+// Dados de fallback para usar APENAS quando loading=false e data=null
+const fallbackAbout = {
+  badge: "Sobre a Live Academia",
+  title: "Seu treino, suas regras",
+  description: "A Live Academia está presente em Manaus há mais de 10 anos, oferecendo estrutura moderna, equipamentos de última geração e profissionais altamente qualificados para te ajudar a alcançar seus objetivos.",
+  stats: [],
+  highlights: []
+}
+
+const fallbackPlanos = {
+  badge: "Planos",
+  title: "Escolha o plano ideal para você",
+  description: "Planos flexíveis sem fidelidade. Cancele quando quiser, sem multas ou taxas.",
+  plans: []
+}
+
 export default function HomepageEditable() {
   const { data: homepageData, loading: homepageLoading, error: homepageError } = useHomepageData()
   const { data: unitsData, loading: unitsLoading } = useUnitsData()
 
-  // Se houver erro ou dados não carregarem, use componentes estáticos originais
-  const useFallback = homepageError || (!homepageLoading && !homepageData)
+  // Mostrar loading state enquanto carrega dados principais
+  if (homepageLoading) {
+    return (
+      <main className="min-h-screen relative bg-black">
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-white/70">Carregando...</p>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  // Só usar fallback quando loading terminou E não há dados
+  const aboutData = homepageData?.about || fallbackAbout
+  const planosData = homepageData?.planos || fallbackPlanos
 
   return (
     <main className="min-h-screen relative">
@@ -29,13 +60,13 @@ export default function HomepageEditable() {
       )}
 
       {/* About Section */}
-      <AboutSectionEditable data={homepageData?.about || { badge: "Sobre a Live Academia", title: "Seu treino, suas regras", description: "A Live Academia está presente em Manaus há mais de 10 anos, oferecendo estrutura moderna, equipamentos de última geração e profissionais altamente qualificados para te ajudar a alcançar seus objetivos.", stats: [], highlights: [] }} />
+      <AboutSectionEditable data={aboutData} />
 
       {/* Units Carousel */}
       <UnidadesCarouselEditable />
 
       {/* Plans Section */}
-      <PlanosSectionEditable data={homepageData?.planos || { badge: "Planos", title: "Escolha o plano ideal para você", description: "Planos flexíveis sem fidelidade. Cancele quando quiser, sem multas ou taxas.", plans: [] }} />
+      <PlanosSectionEditable data={planosData} />
 
       {/* Benefits Section */}
       <BeneficiosSectionEditable />

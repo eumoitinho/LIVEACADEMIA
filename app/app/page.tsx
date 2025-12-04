@@ -61,9 +61,25 @@ const fallbackFeatures = [
 ]
 
 export default function AppPage() {
-  const { data: appPageData } = useAppPageData()
-  const { data: featuresData } = useAppFeaturesData()
+  const { data: appPageData, loading: appLoading } = useAppPageData()
+  const { data: featuresData, loading: featuresLoading } = useAppFeaturesData()
 
+  // Mostrar loading state enquanto carrega
+  const isLoading = appLoading || featuresLoading
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-live-bg text-live-textPrimary pt-20">
+        <div className="container mx-auto px-4 py-20 min-h-[400px] flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-white/70">Carregando...</p>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  // SÓ usar fallback DEPOIS que loading terminar
   const hero = appPageData?.hero ?? fallbackPageData.hero
   const downloadBadges = hero.downloadBadges?.length ? hero.downloadBadges : fallbackPageData.hero.downloadBadges
   const heroButtons = hero.ctaButtons?.length ? hero.ctaButtons : fallbackPageData.hero.ctaButtons
