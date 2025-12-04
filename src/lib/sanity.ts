@@ -475,8 +475,47 @@ export async function getBeneficiosSectionData() {
 }
 
 // Helper para buscar dados da seção de modalidades (com fotos)
+// Busca primeiro da collection 'modality' que tem as fotos,
+// e fallback para modalidadesSection se necessário
 export async function getModalidadesSectionData() {
   try {
+    // Primeiro: buscar modalidades da collection 'modality' (que TEM fotos)
+    const modalityDocs = await client.fetch(`
+      *[_type == "modality"] | order(order asc) {
+        _id,
+        name,
+        subtitle,
+        description,
+        image {
+          asset-> {
+            _id,
+            url
+          }
+        },
+        order,
+        active
+      }
+    `)
+    
+    // Se encontrou documentos de modalidade com fotos, usar eles
+    if (modalityDocs && modalityDocs.length > 0) {
+      return {
+        header: {
+          title: "Energia e motivação em grupo para você ir além",
+          description: "As aulas coletivas da Live Academia são a maneira perfeita de se exercitar com motivação, energia e resultados garantidos."
+        },
+        featuredModalities: modalityDocs.map((m: any) => ({
+          title: m.name,
+          subtitle: m.subtitle,
+          description: m.description,
+          image: m.image,
+          order: m.order,
+          active: m.active !== false
+        }))
+      }
+    }
+    
+    // Fallback: buscar do singleton modalidadesSection
     const data = await client.fetch(`
       *[_type == "modalidadesSection"][0] {
         header {
