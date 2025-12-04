@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation"
 import { locations } from '@/src/lib/config/locations'
-import { getUnits } from '@/lib/sanity'
+import { getUnits, getBeneficiosSectionData, getModalidadesSectionData } from '@/lib/sanity'
 import UnidadeContent from "./components/unidade-content"
 import type { Unit } from '../../../types/sanity'
 
-// Dados específicos por unidade (modalidades, benefícios, fotos)
+// Dados específicos por unidade (modalidades, benefícios, fotos) - FALLBACK apenas
 const unidadeData = {
   // Tradicional
   tradicional: {
@@ -96,8 +96,13 @@ interface PageProps { params: Promise<{ slug: string }> }
 export default async function UnidadePage(props: PageProps) {
   const { slug } = await props.params
 
-  // Fetch from Sanity first
-  const sanityUnits = await getUnits()
+  // Fetch from Sanity - unidades e seções globais (modalidades e benefícios com fotos)
+  const [sanityUnits, modalidadesSectionData, beneficiosSectionData] = await Promise.all([
+    getUnits(),
+    getModalidadesSectionData(),
+    getBeneficiosSectionData()
+  ])
+  
   const sanityUnit = sanityUnits.find((unit: Unit) => unit.slug === slug)
 
   // Fallback to static locations - tentar match exato ou normalizado
@@ -173,38 +178,43 @@ export default async function UnidadePage(props: PageProps) {
     notFound()
   }
 
-  // Usar dados do Sanity se disponíveis, senão usar fallback estático
+  // Fallback estático por tipo de unidade
   const staticData = unidadeData[unidade.type as keyof typeof unidadeData] || unidadeData.tradicional
   
-  // Fotos: Sanity > Static unidade photo > Static data fotos
-  const sanityFotos = sanityUnit?.images?.map((img: any) => img.asset?.url).filter(Boolean) || []
-  const staticFotos = staticUnidade?.photo ? [staticUnidade.photo, ...staticData.fotos] : staticData.fotos
+  // MODALIDADES: Usar dados da seção modalidades do Sanity (com fotos)
+  // Formato: { title, image: { asset: { url } } }
+  const modalidadesFromSection = modalidadesSectionData?.featuredModalities
+    ?.filter((m: any) => m.active !== false)
+    ?.map((m: any) => ({
+      name: m.title,
+      subtitle: m.subtitle,
+      description: m.description,
+      image: m.image?.asset?.url || null
+    })) || []
+
+  // BENEFÍCIOS: Usar dados da seção benefícios do Sanity (com fotos)
+  // Formato: { title, description, icon, color, image: { asset: { url } } }
+  const beneficiosFromSection = beneficiosSectionData?.items
+    ?.map((b: any) => ({
+      title: b.title,
+      description: b.description,
+      icon: b.icon,
+      color: b.color,
+      image: b.image?.asset?.url || null
+    })) || []
   
   const data = {
-    // Usar modalidades do Sanity se existirem, senão usar as estáticas por tipo
-    modalidades: (unidade as any).modalidades?.length > 0 
-      ? (unidade as any).modalidades 
-      : staticData.modalidades,
-    // Usar benefícios do Sanity se existirem, senão usar os estáticos por tipo
-    beneficios: (unidade as any).beneficios?.length > 0 
-      ? (unidade as any).beneficios 
-      : staticData.beneficios,
-    // Fotos: preferir Sanity, depois foto estática da unidade, depois fotos genéricas
-    fotos: sanityFotos.length > 0 ? sanityFotos : staticFotos
+    // Modalidades da seção do Sanity (com fotos) ou fallback estático
+    modalidades: modalidadesFromSection.length > 0 
+      ? modalidadesFromSection 
+      : staticData.modalidades.map((name: string) => ({ name, image: null })),
+    // Benefícios da seção do Sanity (com fotos) ou fallback estático
+    beneficios: beneficiosFromSection.length > 0 
+      ? beneficiosFromSection 
+      : staticData.beneficios.map((title: string) => ({ title, image: null })),
+    // Fotos genéricas como fallback adicional
+    fotos: staticData.fotos
   }
-
-  // Debug log (remover após verificar)
-  console.log('Unit page debug:', {
-    slug,
-    sanityUnitSlug: sanityUnit?.slug,
-    staticUnidadeId: staticUnidade?.id,
-    finalPhoto,
-    sanityPhoto,
-    staticPhoto,
-    modalidadesCount: (unidade as any).modalidades?.length,
-    beneficiosCount: (unidade as any).beneficios?.length,
-    usingStaticModalidades: (unidade as any).modalidades?.length === 0
-  })
 
   return <UnidadeContent unidade={unidade} data={data} />
 }

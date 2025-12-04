@@ -51,8 +51,8 @@ interface UnidadeContentProps {
     hotsite?: string
   }
   data: {
-    modalidades: string[]
-    beneficios: string[]
+    modalidades: Array<{ name: string; subtitle?: string; description?: string; image: string | null }>
+    beneficios: Array<{ title: string; description?: string; icon?: string; color?: string; image: string | null }>
     fotos: string[]
   }
 }
@@ -238,8 +238,9 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {(data?.modalidades || []).map((modalidade, index) => {
-              // Usar foto específica do array fotos, ou foto da unidade, ou fallback
-              const fotoModalidade = data?.fotos?.[index] || data?.fotos?.[index % (data?.fotos?.length || 1)] || unidade.photo || '/images/fachada.jpg'
+              // Usar foto da modalidade do Sanity, ou fallback genérico
+              const defaultFotos = ['/images/academia-1.webp', '/images/academia-2.webp', '/images/academia-3.webp', '/images/academia-4.webp']
+              const fotoModalidade = modalidade.image || defaultFotos[index % defaultFotos.length] || '/images/fachada.jpg'
               
               return (
               <motion.div
@@ -251,10 +252,10 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-yellow-400/30 transition-all duration-300"
               >
                 <div className="relative h-48">
-                  {/* Background Image - Foto específica de cada modalidade */}
+                  {/* Background Image - Foto da modalidade do Sanity */}
                   <img
                     src={fotoModalidade}
-                    alt={modalidade}
+                    alt={modalidade.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   
@@ -262,12 +263,17 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                   
                   {/* Content */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
+                    <div className="text-center px-2">
                       <div className="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mb-3 group-hover:bg-yellow-400/30 transition-colors">
                         <Dumbbell className="w-8 h-8 text-yellow-400 group-hover:scale-110 transition-transform" />
                       </div>
+                      {modalidade.subtitle && (
+                        <p className="text-yellow-400/80 text-xs font-medium uppercase tracking-wider mb-1">
+                          {modalidade.subtitle}
+                        </p>
+                      )}
                       <h3 className="text-lg font-bold text-white group-hover:text-yellow-300 transition-colors">
-                        {modalidade}
+                        {modalidade.name}
                       </h3>
                     </div>
                   </div>
@@ -312,10 +318,9 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {(data?.beneficios || []).map((beneficio, index) => {
-                // Usar foto específica do array fotos, ou foto da unidade, ou fallback
-                // Para benefícios, vamos usar as fotos após as modalidades
-                const fotoIndex = (data?.modalidades?.length || 0) + index
-                const fotoBeneficio = data?.fotos?.[fotoIndex] || data?.fotos?.[fotoIndex % (data?.fotos?.length || 1)] || unidade.photo || '/images/fachada.jpg'
+                // Usar foto do benefício do Sanity, ou fallback genérico
+                const defaultFotos = ['/images/academia-1.webp', '/images/academia-2.webp', '/images/academia-3.webp', '/images/academia-4.webp']
+                const fotoBeneficio = beneficio.image || defaultFotos[index % defaultFotos.length] || '/images/fachada.jpg'
                 
                 return (
               <motion.div
@@ -327,16 +332,16 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-amber-400/30 transition-all duration-300"
               >
                 <div className="relative h-48">
-                  {/* Background Image - Foto específica de cada benefício */}
+                  {/* Background Image - Foto do benefício do Sanity */}
                   <img
                     src={fotoBeneficio}
-                    alt={beneficio}
+                    alt={beneficio.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                   
-                  {/* Content - Nome do benefício em destaque, "Benefício" embaixo */}
+                  {/* Content - Nome do benefício em destaque */}
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-colors flex-shrink-0">
@@ -344,11 +349,13 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                       </div>
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-white mb-1 group-hover:text-amber-300 transition-colors">
-                          {beneficio}
+                          {beneficio.title}
                         </h3>
-                        <p className="text-amber-400/80 text-xs font-medium uppercase tracking-wider">
-                          Benefício
-                        </p>
+                        {beneficio.description && (
+                          <p className="text-white/70 text-sm line-clamp-2">
+                            {beneficio.description}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>

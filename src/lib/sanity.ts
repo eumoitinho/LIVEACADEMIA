@@ -473,3 +473,34 @@ export async function getBeneficiosSectionData() {
     return null
   }
 }
+
+// Helper para buscar dados da seção de modalidades (com fotos)
+export async function getModalidadesSectionData() {
+  try {
+    const data = await client.fetch(`
+      *[_type == "modalidadesSection"][0] {
+        header {
+          title,
+          description
+        },
+        featuredModalities[] {
+          subtitle,
+          title,
+          description,
+          image {
+            asset-> {
+              _id,
+              url
+            }
+          },
+          order,
+          active
+        }
+      }
+    `)
+    return data
+  } catch (error) {
+    console.error('Error fetching modalidades section data:', error)
+    return null
+  }
+}
