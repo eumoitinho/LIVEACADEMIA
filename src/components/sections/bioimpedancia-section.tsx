@@ -2,9 +2,17 @@
 
 import { motion } from "framer-motion"
 import { useBioimpedanciaFeaturesData } from "@/hooks/use-sanity-data"
-import { urlFor } from "@/lib/sanity"
 
 const easing = [0.16, 1, 0.3, 1] as const
+
+// Helper para obter URL da imagem (suporta asset.url direto ou urlFor)
+function getImageUrl(image: any): string | null {
+  if (!image) return null
+  // Se já tem URL direta no asset
+  if (image.asset?.url) return image.asset.url
+  // Se tem _ref, não podemos usar urlFor no cliente sem mais setup
+  return null
+}
 
 export default function BioimpedanciaSection() {
   const { data: bioimpedanciaData, loading } = useBioimpedanciaFeaturesData()
@@ -60,9 +68,9 @@ export default function BioimpedanciaSection() {
             viewport={{ once: true }}
             className="space-y-4"
           >
-            {mainFeature.image ? (
+            {getImageUrl(mainFeature.image) ? (
               <img
-                src={urlFor(mainFeature.image).width(600).height(400).url()}
+                src={getImageUrl(mainFeature.image)!}
                 alt={mainFeature.title}
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />
@@ -93,9 +101,9 @@ export default function BioimpedanciaSection() {
               viewport={{ once: true }}
               className="space-y-4"
             >
-              {secondFeature.image ? (
+              {getImageUrl(secondFeature.image) ? (
                 <img
-                  src={urlFor(secondFeature.image).width(600).height(400).url()}
+                  src={getImageUrl(secondFeature.image)!}
                   alt={secondFeature.title}
                   className="w-full h-auto rounded-2xl shadow-2xl"
                 />

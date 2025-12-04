@@ -39,6 +39,7 @@ const defaultBeneficios = [
 
 export default function BeneficiosSectionEditable() {
   const { data, loading } = useBeneficiosSectionData()
+  const [active, setActive] = useState(0)
 
   // Mapear ícones string para componentes Lucide
   const iconMap: Record<string, any> = {
@@ -49,6 +50,10 @@ export default function BeneficiosSectionEditable() {
     'Zap': Zap,
     'CheckCircle': CheckCircle,
   }
+
+  const handleActivate = useCallback((idx: number) => {
+    setActive(idx)
+  }, [])
 
   // Usar dados do Sanity ou fallback - SÓ usa fallback se não estiver carregando E não houver dados
   const beneficios = useMemo(() => {
@@ -76,9 +81,11 @@ export default function BeneficiosSectionEditable() {
       console.error('Error transforming beneficios data:', error)
       return defaultBeneficios
     }
-  }, [data])
+  }, [data, loading])
 
   const sectionTitle = data?.title || (loading ? "" : "Mais do que treino, uma experiência completa")
+
+  const easing = [0.16, 1, 0.3, 1] as const
 
   // Não renderizar nada enquanto está carregando (evita flash de fallback)
   if (loading) {
@@ -90,12 +97,6 @@ export default function BeneficiosSectionEditable() {
       </section>
     )
   }
-
-  const easing = [0.16, 1, 0.3, 1] as const
-  const [active, setActive] = useState(0)
-  const handleActivate = useCallback((idx: number) => {
-    setActive(idx)
-  }, [])
 
   return (
     <section id="beneficios" className="relative py-24 px-4 lg:px-10 overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black">

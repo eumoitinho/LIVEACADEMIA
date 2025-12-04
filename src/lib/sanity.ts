@@ -404,7 +404,12 @@ export async function getBioimpedanciaFeatures() {
         title,
         description,
         benefits,
-        image,
+        image {
+          asset-> {
+            _id,
+            url
+          }
+        },
         order,
         active
       }
