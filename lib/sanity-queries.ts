@@ -191,3 +191,35 @@ export const unitsQuery = groq`
     order
   }
 `
+
+export const modalitiesQuery = groq`
+  *[_type == "modality"] | order(name asc) {
+    _id,
+    name,
+    description,
+    image {
+      asset-> {
+        _id,
+        url
+      }
+    },
+    duration,
+    difficulty
+  }
+`
+
+export const benefitsQuery = groq`
+  *[_type == "benefit" && active == true] | order(order asc) {
+    _id,
+    title,
+    description,
+    icon,
+    image {
+      asset-> {
+        _id,
+        url
+      }
+    },
+    order
+  }
+`
