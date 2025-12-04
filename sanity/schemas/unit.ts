@@ -1,4 +1,4 @@
-import { defineType, defineField, type ComponentType } from 'sanity'
+import { defineType, defineField } from 'sanity'
 import PlanosSelectorInput from '../components/PlanosSelectorInput'
 
 export const unitSchema = defineType({
@@ -281,7 +281,8 @@ export const unitSchema = defineType({
         },
       ],
       components: {
-        input: PlanosSelectorInput as ComponentType<any>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        input: PlanosSelectorInput as any,
       },
       description: 'Clique em "Recarregar Planos da API" para ver todos os planos disponíveis e selecione quais devem aparecer nesta unidade.',
     }),
