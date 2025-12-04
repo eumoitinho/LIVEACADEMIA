@@ -246,21 +246,24 @@ class PactoV2API {
    */
   private async getChaveUnidade(slug: string): Promise<string | null> {
     try {
+      // Normalizar slug: converter hífens para underscores para corresponder às variáveis de ambiente
+      const slugNormalized = slug.toUpperCase().replace(/-/g, '_')
+      
       // 1. Vercel Environment Variables (produção) - TEXTO PLANO
-      const chaveVercel = process.env[`PACTO_SECRET_KEY_${slug.toUpperCase()}`]
+      const chaveVercel = process.env[`PACTO_SECRET_KEY_${slugNormalized}`]
       if (chaveVercel) {
         console.log(`[PactoV2] Chave privada da unidade ${slug} carregada via Vercel`)
         return chaveVercel
       }
 
       // 2. Desenvolvimento (.env.local) - TEXTO PLANO
-      const chaveDev = process.env[`PACTO_SECRET_KEY_DEV_${slug.toUpperCase()}`]
+      const chaveDev = process.env[`PACTO_SECRET_KEY_DEV_${slugNormalized}`]
       if (chaveDev) {
         console.log(`[PactoV2] Chave privada da unidade ${slug} carregada via dev env`)
         return chaveDev
       }
 
-      console.error(`[PactoV2] Chave privada da unidade ${slug} não encontrada`)
+      console.error(`[PactoV2] Chave privada da unidade ${slug} não encontrada (tentou: PACTO_SECRET_KEY_${slugNormalized})`)
       return null
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
