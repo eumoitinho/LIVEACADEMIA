@@ -122,12 +122,6 @@ export default function AulasColetivasPage() {
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
-                    
-                    {/* Badge sobre a imagem */}
-                    <div className="absolute left-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white ring-1 ring-white/20 backdrop-blur-sm">
-                      <span className="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_0_2px_rgba(0,0,0,0.4)]" />
-                      {modality.difficulty || 'Modalidade'}
-                    </div>
                   </div>
 
                   {/* Content */}

@@ -189,6 +189,7 @@ export default function Unidades() {
                   { value: 'todos', label: 'Todas as unidades', icon: '🏢' },
                   { value: 'diamante', label: 'Diamante' },
                   { value: 'premium', label: 'Premium' },
+                  { value: 'tradicional', label: 'Tradicional' },
                 ].map((filter) => (
                   <button
                     key={filter.value}

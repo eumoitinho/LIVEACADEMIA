@@ -212,15 +212,25 @@ export default function Planos() {
       return []
     }
 
-    // Both plans exclude Morada do Sol and Alphaville
     return allLocations.filter((unit): unit is LocationUnit => {
       if (!unit || typeof unit !== 'object') return false
       if (!unit.id || typeof unit.id !== 'string') return false
-      return (
-        unit.type !== 'inauguracao' &&
-        !unit.id.includes('morada') &&
-        !unit.id.includes('alphaville')
-      )
+
+      // Excluir unidades em inauguração
+      if (unit.type === 'inauguracao') return false
+
+      if (selectedPlan === 'TRADICIONAL') {
+        // Plano Tradicional: apenas unidades tipo "tradicional"
+        return unit.type === 'tradicional'
+      } else if (selectedPlan === 'DIAMANTE') {
+        // Plano Diamante: todas as unidades exceto Morada do Sol e Alphaville
+        return (
+          !unit.id.includes('morada') &&
+          !unit.id.includes('alphaville')
+        )
+      }
+
+      return false
     })
   }, [selectedPlan, allLocations])
 
