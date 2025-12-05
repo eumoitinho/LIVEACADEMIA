@@ -36,14 +36,7 @@ interface UnidadeBase {
 type UnidadeComDistancia = UnidadeBase & { distancia?: number }
 
 // Mapeamento de nomes para IDs das unidades
-const unidadeNameToId = {
-  "Live Academia - Centro": "centro",
-  "Live Academia - Cachoeirinha": "cachoeirinha",
-  "Live Academia - Cidade Nova": "chapeu-goiano", // Assumindo que é Chapéu Goiano baseado no endereço
-  "Live Academia - Ponta Negra": "flores", // Assumindo baseado na localização
-  "Live Academia - Adrianópolis": "adrianopolis",
-  "Live Academia - Flores": "flores"
-}
+const unidadeNameToId: Record<string, string> = {}
 
 // Componente de Card melhorado
 function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
@@ -154,46 +147,46 @@ export default function UnidadesCarousel() {
   useEffect(() => {
     let cancelled = false
     
-    // Fallback estático imediato
+    // Fallback estático imediato (unidades reais)
     const fallbackUnidades: UnidadeBase[] = [
       {
-        id: 'torres',
-        slug: 'torres',
-        nome: 'Live Academia - Torres',
-        endereco: 'Rua Mitiko, 123 - Torres, Manaus/AM',
+        id: 'flores-diamante',
+        slug: 'flores-diamante',
+        nome: 'Live Academia - Flores Diamante',
+        endereco: 'R. Visc. de Sepetiba, 220 - Flores',
         imagem: '/images/academia-1.webp',
         latitude: -3.0654,
         longitude: -60.0261,
-        badge: { text: 'Torres', variant: 'orange' },
-        link: '/unidades/torres'
+        badge: { text: 'Flores Diamante', variant: 'orange' },
+        link: '/unidades/flores-diamante'
       },
       {
-        id: 'vieiralves',
-        slug: 'vieiralves',
-        nome: 'Live Academia - Vieiralves',
-        endereco: 'Av. Djalma Batista - Vieiralves, Manaus/AM',
+        id: 'vieiralves-diamante',
+        slug: 'vieiralves-diamante',
+        nome: 'Live Academia - Vieiralves Diamante',
+        endereco: 'Av. Djalma Batista, 450 - Nossa Senhora das Graças',
         imagem: '/images/academia-2.webp',
         latitude: -3.0876,
         longitude: -60.0156,
-        badge: { text: 'Vieiralves', variant: 'amber' },
-        link: '/unidades/vieiralves'
+        badge: { text: 'Vieiralves Diamante', variant: 'amber' },
+        link: '/unidades/vieiralves-diamante'
       },
       {
-        id: 'cidade-nova',
-        slug: 'cidade-nova',
-        nome: 'Live Academia - Cidade Nova',
-        endereco: 'Av. Max Teixeira - Cidade Nova, Manaus/AM',
+        id: 'ct-cidade-nova',
+        slug: 'ct-cidade-nova',
+        nome: 'Live Academia - CT Cidade Nova',
+        endereco: 'Av. Max Teixeira, Nº 4066 - Cidade Nova',
         imagem: '/images/academia-3.webp',
         latitude: -3.0449,
         longitude: -59.9986,
-        badge: { text: 'Cidade Nova', variant: 'pink' },
-        link: '/unidades/cidade-nova'
+        badge: { text: 'CT Cidade Nova', variant: 'pink' },
+        link: '/unidades/ct-cidade-nova'
       },
       {
         id: 'centro',
         slug: 'centro',
         nome: 'Live Academia - Centro',
-        endereco: 'Av. Getúlio Vargas - Centro, Manaus/AM',
+        endereco: 'Av. Getúlio Vargas, 773, Centro',
         imagem: '/images/academia-4.webp',
         latitude: -3.1319,
         longitude: -60.0217,

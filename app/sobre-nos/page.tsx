@@ -54,7 +54,7 @@ export default function SobreNos() {
         />
         
         {/* Overlay */}
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-t from-amber-500/30 via-black/60 to-black/80" />
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-t from-black/70 via-black/80 to-black/90" />
         
         <div className="lg:px-8 max-w-7xl mx-auto px-6 pt-32 pb-32 relative z-10 w-full">
           <div className="max-w-4xl mx-auto text-center opacity-0 animate-[fadeInUp_1s_ease-out_0.2s_forwards]">
