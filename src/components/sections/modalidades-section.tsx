@@ -122,9 +122,6 @@ export default function ModalidadesSection() {
               <div className="relative h-full overflow-hidden rounded-3xl border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500 hover:transform hover:scale-[1.02] hover:-translate-y-1">
                 {/* Header com informações */}
                 <div className="absolute z-10 top-4 left-4 right-4">
-                  <p className="text-xs text-white uppercase font-bold tracking-wider mb-1 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-                    {modalidade.subtitle}
-                  </p>
                   <h4 className="text-white font-bold text-2xl leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                     {modalidade.title}
                   </h4>

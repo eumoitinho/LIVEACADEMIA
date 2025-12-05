@@ -90,13 +90,13 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
               {/* Badge sobre a imagem */}
               <div className="absolute left-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white ring-1 ring-white/20 backdrop-blur-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_0_2px_rgba(0,0,0,0.4)]" />
-                {unidade.badge?.text || unidade.slug || 'Unidade'}
+                {(unidade.badge?.text || unidade.slug || 'Unidade').replace(/^ct /i, 'CT ')}
               </div>
             </div>
           {/* Content */}
           <div className="flex flex-col gap-3">
             <h3 className="text-lg font-semibold text-white tracking-tight leading-snug">
-              {unidade.nome.replace('Live Academia - ', '')}
+              {unidade.nome.replace('Live Academia - ', '').replace(/^Ct /i, 'CT ')}
             </h3>
             <p className="text-sm text-zinc-300/90 line-clamp-2">
               {unidade.endereco}
@@ -217,7 +217,7 @@ export default function UnidadesCarousel() {
           imagem: u.imagem || '/images/academia-1.webp',
           latitude: u.latitude,
           longitude: u.longitude,
-          badge: { text: (u.slug || 'Unidade').replace(/-/g,' ').slice(0,20), variant: 'orange' },
+          badge: { text: (u.slug || 'Unidade').replace(/-/g,' ').replace(/^ct /i, 'CT ').slice(0,20), variant: 'orange' },
           link: `/unidades/${u.slug}`
         }))
         

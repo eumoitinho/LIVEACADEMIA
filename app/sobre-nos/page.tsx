@@ -7,9 +7,9 @@ import { useSobreNosData } from "@/hooks/use-sobre-nos-data"
 
 const stats = [
   { number: "2012", label: "Ano de fundação", icon: Calendar },
-  { number: "+35", label: "Unidades em Manaus", icon: MapPin },
+  { number: "+37", label: "Unidades em Manaus", icon: MapPin },
   { number: "80+", label: "Meta de unidades", icon: TrendingUp },
-  { number: "4.9", label: "Avaliação média", icon: Award },
+  { number: "5.0", label: "Avaliação média", icon: Award },
 ]
 
 const valores = [

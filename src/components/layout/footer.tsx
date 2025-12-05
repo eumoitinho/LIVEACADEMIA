@@ -29,7 +29,7 @@ export default function Footer() {
                     <ul className="space-y-2 text-sm text-neutral-300">
                       <li className="flex items-start gap-2">
                         <Check className="w-4 h-4 text-yellow-400 mt-0.5" />
-                        <span>Sem fidelidade, sem anuidade, sem pegadinhas</span>
+                        <span>Sem anuidade e sem pegadinhas</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <Check className="w-4 h-4 text-yellow-400 mt-0.5" />

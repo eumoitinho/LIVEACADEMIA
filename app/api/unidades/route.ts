@@ -8,7 +8,7 @@ export async function GET() {
     const formattedUnits = units.map((unit: any) => ({
       id: unit._id,
       slug: unit.slug,
-      nome: unit.name,
+      nome: (unit.name || '').replace(/^Ct /, 'CT '),
       endereco: unit.address,
       imagem: unit.photo?.asset?.url || unit.backgroundImage?.asset?.url || unit.images?.[0]?.asset?.url || '/images/fachada.jpg',
       latitude: unit.latitude,

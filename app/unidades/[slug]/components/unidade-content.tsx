@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { MapPin, Clock, Check, Phone, Users, Dumbbell, ArrowRight, Star, Crown, Sparkles } from "lucide-react"
+import { MapPin, Clock, Check, Users, Dumbbell, ArrowRight, Star, Crown, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { useUnit } from "@/contexts/unit-context"
 import { useUnitsData } from '@/hooks/use-sanity-data'
@@ -471,16 +471,6 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                       <span className="text-gray-600">Feriado:</span>
                       <span className="text-black font-medium">7h-12h</span>
                     </div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-yellow-400/20 flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-yellow-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold">Contato</h4>
-                    <p className="text-white/70 text-sm">(92) 3345-6789</p>
                   </div>
                 </div>
               </div>

@@ -47,10 +47,7 @@ export default function BioimpedanciaSection() {
           viewport={{ once: true, amount: 0.3 }}
           className="text-center max-w-3xl mx-auto"
         >
-          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] uppercase tracking-widest text-primary/70">
-            Bioimpedância
-          </span>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mt-4 text-white">
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-white">
             Acompanhe sua evolução
           </h2>
           <p className="text-lg text-white/75 mt-3 leading-relaxed">

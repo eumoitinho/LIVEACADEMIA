@@ -292,9 +292,6 @@ export default function PlanosSectionEditable({ data }: PlanosSectionProps) {
         >
           <p className="text-xs text-zinc-500">
             Os preços, serviços e condições promocionais podem variar de acordo com a unidade escolhida.
-            <a href="#" className="underline decoration-zinc-700 underline-offset-4 text-zinc-300 hover:text-white ml-1">
-              Ver comparação detalhada
-            </a>.
           </p>
         </motion.div>
       </div>

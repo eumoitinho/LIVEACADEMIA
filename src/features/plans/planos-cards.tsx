@@ -180,7 +180,7 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
                   )}
                   {plano.fidelidade && plano.fidelidade > 0 && (
                     <div className="mt-0.5 text-xs text-zinc-400">
-                      Fidelidade: {plano.fidelidade}m
+                      Fidelidade: {plano.fidelidade} Meses
                     </div>
                   )}
                   {(!plano.adesao || plano.adesao === 0) && (!plano.fidelidade || plano.fidelidade === 0) && (
@@ -317,7 +317,7 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="px-6 py-3 rounded-xl border border-white/20 text-white hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2 mx-auto text-sm"
+            className="px-6 py-3 rounded-xl bg-zinc-800 border border-zinc-700 text-white hover:bg-zinc-700 hover:border-zinc-600 transition-all duration-300 flex items-center justify-center gap-2 mx-auto text-sm font-medium"
           >
             {showMorePlanos ? 'Ver menos planos' : `Ver mais planos (${additionalPlanos.length} restantes)`}
             <ChevronDown className={`h-4 w-4 transition-transform ${showMorePlanos ? 'rotate-180' : ''}`} />
@@ -422,8 +422,8 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
       </Dialog>
 
       {/* Footer Note */}
-      <div className="mt-6 text-center">
-        <p className="text-xs text-zinc-500">
+      <div className="mt-6 text-center bg-zinc-900/80 rounded-xl py-4 px-6 border border-zinc-800">
+        <p className="text-sm text-zinc-300">
           Os preços, serviços e condições promocionais podem variar de acordo com a unidade escolhida.
         </p>
       </div>

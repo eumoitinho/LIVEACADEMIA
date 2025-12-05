@@ -48,13 +48,13 @@ export default function TestimonialSection() {
           transition={{ duration: 0.65 }}
           className="text-center max-w-3xl mx-auto mb-24"
         >
-          <div className="inline-flex items-center rounded-full border border-zinc-800/80 px-5 py-2 mb-6 bg-zinc-900/40 backdrop-blur">
-            <span className="text-sm font-medium tracking-wide text-zinc-400">Depoimentos reais</span>
+          <div className="inline-flex items-center rounded-full border border-zinc-700 px-5 py-2 mb-6 bg-black/50 backdrop-blur">
+            <span className="text-sm font-medium tracking-wide text-zinc-300">Depoimentos reais</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-6">
             O que dizem nossos <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">alunos</span>
           </h2>
-          <p className="text-lg text-zinc-400">Histórias de evolução e motivação para você entrar agora.</p>
+          <p className="text-lg text-zinc-200">Histórias de evolução e motivação para você entrar agora.</p>
         </motion.div>
 
         {/* Stack Desktop */}
@@ -87,7 +87,7 @@ export default function TestimonialSection() {
                     <div className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-gradient-to-r from-yellow-100 to-amber-300 ring-1 ring-black/5 mb-6">
                       <Quote className="w-4 h-4 text-black" />
                     </div>
-                    <p className="text-lg leading-relaxed text-white-900/90 mb-8 flex-1 italic">"{t.content}"</p>
+                    <p className="text-lg leading-relaxed text-white/95 mb-8 flex-1 italic">"{t.content}"</p>
                     <div className="pt-4 border-t border-black flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
                         <div className="relative h-8 w-8 rounded-full overflow-hidden ring-1 ring-black/5">
@@ -114,11 +114,11 @@ export default function TestimonialSection() {
         {/* Mobile */}
         <div className="md:hidden space-y-6">
           {visible.map(t => (
-            <div key={t.id} className="rounded-2xl border border-white/10 bg-white/10 backdrop-blur-xl p-6">
-              <div className="inline-flex items-center justify-center h-9 w-9 rounded-lg bg-white/15 ring-1 ring-white/20 mb-4">
-                <Quote className="w-4 h-4 text-white/80" />
+            <div key={t.id} className="rounded-2xl border border-white/10 bg-black/60 backdrop-blur-xl p-6">
+              <div className="inline-flex items-center justify-center h-9 w-9 rounded-lg bg-black/50 border border-yellow-400/30 mb-4">
+                <Quote className="w-4 h-4 text-yellow-400" />
               </div>
-              <p className="text-sm leading-relaxed text-zinc-100/90 mb-6 italic">"{t.content}"</p>
+              <p className="text-sm leading-relaxed text-white/95 mb-6 italic">"{t.content}"</p>
               <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="relative h-10 w-10 rounded-full overflow-hidden ring-1 ring-white/20">
@@ -169,20 +169,20 @@ export default function TestimonialSection() {
           transition={{ duration: 0.65, delay: 0.15 }}
           className="mt-20 flex flex-wrap justify-center gap-8 text-center"
         >
-          <div className="flex items-center gap-8 bg-zinc-900/60 border border-zinc-800 rounded-full px-10 py-6 backdrop-blur">
+          <div className="flex items-center gap-8 bg-black/60 border border-zinc-700 rounded-full px-10 py-6 backdrop-blur">
             <div>
               <div className="text-2xl font-bold text-white">5.0</div>
-              <div className="text-[10px] uppercase tracking-wide text-zinc-500">Avaliação média</div>
+              <div className="text-[10px] uppercase tracking-wide text-zinc-300">Avaliação média</div>
             </div>
-            <div className="w-px h-10 bg-zinc-800" />
+            <div className="w-px h-10 bg-zinc-700" />
             <div>
               <div className="text-2xl font-bold text-white">+60K</div>
-              <div className="text-[10px] uppercase tracking-wide text-zinc-500">Alunos satisfeitos</div>
+              <div className="text-[10px] uppercase tracking-wide text-zinc-300">Alunos satisfeitos</div>
             </div>
-            <div className="w-px h-10 bg-zinc-800" />
+            <div className="w-px h-10 bg-zinc-700" />
             <div>
               <div className="text-2xl font-bold text-white">100%</div>
-              <div className="text-[10px] uppercase tracking-wide text-zinc-500">Recomendariam</div>
+              <div className="text-[10px] uppercase tracking-wide text-zinc-300">Recomendariam</div>
             </div>
           </div>
         </motion.div>

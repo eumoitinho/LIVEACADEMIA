@@ -36,7 +36,7 @@ export default function Unidades() {
           ...staticLoc,
           name: sanityUnit.name,
           address: sanityUnit.address,
-          type: sanityUnit.type,
+          type: sanityUnit.type || staticLoc.type,
           photo: sanityUnit.photo?.asset?.url || sanityUnit.images?.[0]?.asset?.url || staticLoc.photo || '/images/fachada.jpg',
           features: sanityUnit.services || staticLoc.features,
           hours: sanityUnit.openingHours || staticLoc.hours,
@@ -46,7 +46,10 @@ export default function Unidades() {
           } : undefined
         }
       }
-      return staticLoc
+      return {
+        ...staticLoc,
+        type: staticLoc.type
+      }
     })
   }, [sanityUnits, loadingSanity])
 
@@ -181,21 +184,19 @@ export default function Unidades() {
               </div>
 
               {/* Type Filters */}
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {[
-                  { value: 'todos', label: 'Todas as unidades' },
+                  { value: 'todos', label: 'Todas as unidades', icon: '🏢' },
                   { value: 'diamante', label: 'Diamante' },
                   { value: 'premium', label: 'Premium' },
-                  { value: 'tradicional', label: 'Tradicional' },
-                  { value: 'inauguracao', label: 'Em breve' },
                 ].map((filter) => (
                   <button
                     key={filter.value}
                     onClick={() => setFilterType(filter.value)}
-                    className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                    className={`inline-flex items-center gap-2 px-5 py-3 rounded-full text-sm font-semibold transition-all duration-300 whitespace-nowrap ${
                       filterType === filter.value
-                        ? 'bg-white text-black shadow-lg'
-                        : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'
+                        ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black shadow-lg shadow-yellow-500/50 scale-105'
+                        : 'bg-white/10 text-white border border-white/20 hover:bg-white/20 hover:border-white/40'
                     }`}
                   >
                     {filter.label}

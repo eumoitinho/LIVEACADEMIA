@@ -13,7 +13,7 @@ const beneficios = [
   },
   {
     titulo: "MALHAR ATÉ ÀS 23H",
-    descricao: "Na Live você conta com uma unidade (Torquato Santos Dumont Diamante, Ponta Negra, Planalto, Laranjeiras e Morada do Sol) que funciona até às 23h de seg à sex",
+    descricao: "Na Live você conta com unidades que funcionam até às 23h de seg à sex",
     icon: Clock
   },
   {
@@ -379,9 +379,12 @@ export default function DayUse() {
                   {pageData.ctaDescription}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-black font-bold hover:scale-105 transition-all">
+                  <Link
+                    href="#pacotes"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-yellow-400 hover:bg-yellow-300 text-black font-bold hover:scale-105 transition-all"
+                  >
                     Comprar Day Use
-                  </button>
+                  </Link>
                   <Link
                     href="/unidades"
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all"
