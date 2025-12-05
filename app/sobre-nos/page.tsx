@@ -2,23 +2,55 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { Target, Users, Dumbbell, Heart, TrendingUp, Award, MapPin, Calendar } from "lucide-react"
 import { useSobreNosData } from "@/hooks/use-sobre-nos-data"
 
-export default function SobreNos() {
-  const { data, loading, error } = useSobreNosData()
+const stats = [
+  { number: "2012", label: "Ano de fundação", icon: Calendar },
+  { number: "+35", label: "Unidades em Manaus", icon: MapPin },
+  { number: "80+", label: "Meta de unidades", icon: TrendingUp },
+  { number: "4.9", label: "Avaliação média", icon: Award },
+]
 
-  // Dados de fallback
+const valores = [
+  {
+    icon: Target,
+    title: "Missão",
+    description: "Transformar vidas promovendo bem-estar e democratizando o acesso à atividade física em Manaus."
+  },
+  {
+    icon: Users,
+    title: "Comunidade",
+    description: "Você não é apenas um aluno, é parte de uma comunidade vibrante que se apoia e celebra cada conquista."
+  },
+  {
+    icon: Dumbbell,
+    title: "Estrutura",
+    description: "Equipamentos modernos, tecnologia de ponta e profissionais altamente qualificados."
+  },
+  {
+    icon: Heart,
+    title: "Acolhimento",
+    description: "Ambiente familiar onde cada pessoa é respeitada em sua individualidade e treinada com segurança."
+  },
+]
+
+const diferenciais = [
+  "Avaliação física avançada (Análise Corporal 3D, Bioimpedância ou Dobras Cutâneas)",
+  "Prescrição informatizada de treino na musculação",
+  "Aulas coletivas diversificadas",
+  "Aplicativo exclusivo para acesso a treinos e programação",
+  "Planos acessíveis sem fidelidade",
+  "Unidades em todas as regiões de Manaus"
+]
+
+export default function SobreNos() {
+  const { data, loading } = useSobreNosData()
+
   const fallbackData = {
-    title: "SOBRE A LIVE ACADEMIA",
+    title: "SOBRE A LIVE",
     subtitle: "Mais do que uma academia, um estilo de vida",
     description: "A Live Academia nasceu em outubro de 2012 com o propósito de transformar vidas, promovendo bem-estar e democratizando o acesso à atividade física em Manaus.",
-    content: [
-      "Desde sua fundação, seguimos comprometidos em oferecer planos acessíveis, gerar empregos e contribuir para o desenvolvimento da comunidade local. Nossas unidades, estrategicamente distribuídas por todas as regiões da cidade, garantem praticidade, acolhimento e facilidade de acesso para todos os públicos.",
-      "Nossa estrutura foi projetada para proporcionar uma experiência completa e desempenho, unindo equipamentos modernos, tecnologia de ponta e profissionais altamente qualificados. Oferecemos um ambiente acolhedor e familiar, onde cada pessoa é respeitada em sua individualidade e treinada com segurança.",
-      "Disponibilizamos avaliação física avançada (Análise Corporal 3D, Bioimpedância ou Dobras Cutâneas), prescrição informatizada de treino na musculação, aulas coletivas diversificadas e um aplicativo exclusivo, que facilita o acesso a treinos, planos e programação diária.",
-      "Mais do que uma rede de academias, a Live já se consolida como um ECOSSISTEMA DE QUALIDADE DE VIDA E BEM-ESTAR, integrando serviços, tecnologias e experiências que promovem qualidade de vida de forma completa.",
-      "Nos próximos anos, estamos projetando ultrapassar 80 unidades em Manaus e lançar clubes wellness pioneiros na região Norte, ampliando ainda mais nosso impacto. Na Live Academia, você não é apenas um aluno, é parte de uma comunidade vibrante que se apoia, evolui e celebra cada conquista, construindo diariamente uma vida mais ativa, equilibrada e saudável."
-    ],
     backgroundImage: "/images/sobre-bg.jpg"
   }
 
@@ -43,22 +75,18 @@ export default function SobreNos() {
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(245,158,11,0.1),transparent_50%)] pointer-events-none" />
 
       {/* Hero Section */}
-      <section className="relative z-10 flex min-h-[100vh] items-center">
-        {/* Background Image */}
-        <div 
+      <section className="relative z-10 flex min-h-[80vh] items-center">
+        <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url('${pageData.backgroundImage}')`,
             backgroundPosition: "center center"
           }}
         />
-        
-        {/* Overlay */}
-        <div className="absolute inset-0 w-full h-full bg-gradient-to-t from-black/70 via-black/80 to-black/90" />
-        
-        <div className="lg:px-8 max-w-7xl mx-auto px-6 pt-32 pb-32 relative z-10 w-full">
-          <div className="max-w-4xl mx-auto text-center opacity-0 animate-[fadeInUp_1s_ease-out_0.2s_forwards]">
-            {/* Badge */}
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-t from-black via-black/85 to-black/90" />
+
+        <div className="lg:px-8 max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10 w-full">
+          <div className="max-w-4xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -75,7 +103,7 @@ export default function SobreNos() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight text-white mb-8"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-none tracking-tight text-white mb-6"
             >
               {pageData.title}
             </motion.h1>
@@ -84,7 +112,7 @@ export default function SobreNos() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-2xl sm:text-3xl font-semibold mb-8 text-yellow-400"
+              className="text-xl sm:text-2xl font-medium mb-6 text-yellow-400"
             >
               {pageData.subtitle}
             </motion.h2>
@@ -93,7 +121,7 @@ export default function SobreNos() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-lg sm:text-xl leading-relaxed text-white/80 mb-12 max-w-3xl mx-auto"
+              className="text-lg leading-relaxed text-white/80 max-w-2xl mx-auto"
             >
               {pageData.description}
             </motion.p>
@@ -101,36 +129,164 @@ export default function SobreNos() {
         </div>
       </section>
 
-      {/* Content Section */}
-      <section className="py-16 px-4 lg:px-8">
+      {/* Stats Section */}
+      <section className="relative z-10 py-16 px-4 lg:px-8 border-y border-white/10 bg-black/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <stat.icon className="w-8 h-8 text-yellow-400 mx-auto mb-3" />
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{stat.number}</div>
+                <div className="text-sm text-white/60 uppercase tracking-wider">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Valores Section */}
+      <section className="relative z-10 py-20 px-4 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
+            className="text-center mb-16"
           >
-            <div className="space-y-8 text-white/80 text-lg leading-relaxed">
-              {pageData.content.map((paragraph, index) => (
-                <motion.p
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="text-lg leading-relaxed"
-                >
-                  {paragraph}
-                </motion.p>
-              ))}
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+              <span className="text-yellow-400 text-sm font-semibold uppercase tracking-wider">
+                Nossos Valores
+              </span>
             </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white">
+              O que nos <span className="text-yellow-400">move</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {valores.map((valor, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="group relative rounded-3xl overflow-hidden bg-gradient-to-br from-zinc-900/90 to-black/90 backdrop-blur-sm border border-white/10 hover:border-yellow-400/30 transition-all duration-300 p-8"
+              >
+                <div className="w-14 h-14 mb-6 bg-gradient-to-br from-yellow-400/20 to-amber-500/20 rounded-2xl flex items-center justify-center group-hover:from-yellow-400/30 group-hover:to-amber-500/30 transition-all">
+                  <valor.icon className="w-7 h-7 text-yellow-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-white group-hover:text-yellow-300 transition-colors">
+                  {valor.title}
+                </h3>
+                <p className="text-white/70 leading-relaxed text-sm">
+                  {valor.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* História Section */}
+      <section className="relative z-10 py-20 px-4 lg:px-8 bg-gradient-to-br from-zinc-900/50 to-black/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                <span className="text-yellow-400 text-sm font-semibold uppercase tracking-wider">
+                  Nossa História
+                </span>
+              </div>
+              <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+                Um ecossistema de <span className="text-yellow-400">qualidade de vida</span>
+              </h2>
+              <div className="space-y-4 text-white/80 leading-relaxed">
+                <p>
+                  Desde nossa fundação em 2012, seguimos comprometidos em oferecer planos acessíveis, gerar empregos e contribuir para o desenvolvimento da comunidade local.
+                </p>
+                <p>
+                  Nossas unidades, estrategicamente distribuídas por todas as regiões de Manaus, garantem praticidade, acolhimento e facilidade de acesso para todos os públicos.
+                </p>
+                <p>
+                  Mais do que uma rede de academias, a Live já se consolida como um <strong className="text-yellow-400">ecossistema de qualidade de vida e bem-estar</strong>, integrando serviços, tecnologias e experiências que promovem saúde de forma completa.
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              <div className="rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-zinc-900/90 to-black/90 p-8">
+                <h3 className="text-2xl font-bold text-white mb-6">Nossos Diferenciais</h3>
+                <ul className="space-y-4">
+                  {diferenciais.map((item, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: 10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="flex items-start gap-3"
+                    >
+                      <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0" />
+                      <span className="text-white/80">{item}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Visão de Futuro */}
+      <section className="relative z-10 py-20 px-4 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+              <span className="text-yellow-400 text-sm font-semibold uppercase tracking-wider">
+                Visão de Futuro
+              </span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+              Construindo o <span className="text-yellow-400">amanhã</span>
+            </h2>
+            <p className="text-lg text-white/80 leading-relaxed">
+              Nos próximos anos, estamos projetando ultrapassar <strong className="text-yellow-400">80 unidades em Manaus</strong> e lançar clubes wellness pioneiros na região Norte, ampliando ainda mais nosso impacto na vida das pessoas.
+            </p>
           </motion.div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 lg:px-8">
+      <section className="relative z-10 py-16 px-4 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
