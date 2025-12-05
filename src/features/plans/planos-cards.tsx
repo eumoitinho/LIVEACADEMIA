@@ -373,7 +373,7 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
                   )}
                   {selectedPlanoData.fidelidade && selectedPlanoData.fidelidade > 0 && (
                     <div className="text-sm text-zinc-400">
-                      Fidelidade: {selectedPlanoData.fidelidade} meses
+                      Fidelidade: {selectedPlanoData.fidelidade} Meses
                     </div>
                   )}
                   {(!selectedPlanoData.adesao || selectedPlanoData.adesao === 0) && (!selectedPlanoData.fidelidade || selectedPlanoData.fidelidade === 0) && (
