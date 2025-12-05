@@ -289,28 +289,112 @@ class PactoV3API {
 
   /**
    * Buscar chave SECRETA de uma unidade específica
-   * Cada unidade tem sua própria PACTO_SECRET_KEY_[NOME_UNIDADE]
+   * Cada unidade tem sua própria PACTO_SECRET_KEY_[NOME_UNIDADE] ou PACTO_API_KEY_[NOME_UNIDADE]
    */
   private async getChaveSecretaUnidade(slug: string): Promise<string | null> {
     try {
       // Convert hyphens to underscores for env var name
-      const envSlug = slug.toUpperCase().replace(/-/g, '_')
+      const slugNormalized = slug.toUpperCase().replace(/-/g, '_')
 
-      const chaveVercel = process.env[`PACTO_SECRET_KEY_${envSlug}`]
-      if (chaveVercel) {
-        console.log(`[PactoV3] Chave SECRETA da unidade ${slug} carregada via Vercel`)
-        return chaveVercel
+      // Gerar variações do slug removendo sufixos comuns (ex: FLORES_DIAMANTE -> FLORES)
+      const suffixesToRemove = ['_DIAMANTE', '_PREMIUM', '_CLIMATIZADA', '_GRANDE_CIRCULAR']
+      const slugVariations = [slugNormalized]
+      for (const suffix of suffixesToRemove) {
+        if (slugNormalized.endsWith(suffix)) {
+          slugVariations.push(slugNormalized.replace(suffix, ''))
+        }
       }
-
-
-      const chaveDev = process.env[`PACTO_SECRET_KEY_DEV_${envSlug}`]
-      if (chaveDev) {
-        console.log(`[PactoV3] Chave SECRETA da unidade ${slug} carregada via dev env`)
-        return chaveDev
+      // Também adicionar variação para slugs compostos (ex: CT_CIDADE_NOVA -> CIDADE_NOVA)
+      if (slugNormalized.startsWith('CT_')) {
+        slugVariations.push(slugNormalized.replace('CT_', ''))
+      }
+      // Variação para torquato-santos-dumont -> SANTOS_DUMONT  
+      if (slugNormalized.startsWith('TORQUATO_')) {
+        slugVariations.push(slugNormalized.replace('TORQUATO_', ''))
+      }
+      // Variação para torquato-bemol -> BEMOL
+      if (slugNormalized === 'TORQUATO_BEMOL') {
+        slugVariations.push('BEMOL')
+      }
+      // Variação para torquato-allegro -> ALLEGRO
+      if (slugNormalized === 'TORQUATO_ALLEGRO') {
+        slugVariations.push('ALLEGRO')
+      }
+      // Variação para chapeu-goiano -> GOIANO
+      if (slugNormalized === 'CHAPEU_GOIANO') {
+        slugVariations.push('GOIANO')
+      }
+      // Variação para morada-do-sol -> MORADA
+      if (slugNormalized.startsWith('MORADA_')) {
+        slugVariations.push('MORADA')
+      }
+      // Variação para vitoria-coroado -> COROADO ou VITORIA
+      if (slugNormalized === 'VITORIA_COROADO' || slugNormalized === 'VITORIA') {
+        slugVariations.push('COROADO')
+        slugVariations.push('VITORIA')
+      }
+      // Variação para rodrigues-grande-circular -> RODRIGUES
+      if (slugNormalized.startsWith('RODRIGUES_')) {
+        slugVariations.push('RODRIGUES')
+      }
+      // Variação para torres-diamante -> TORRES
+      if (slugNormalized === 'TORRES_DIAMANTE') {
+        slugVariations.push('TORRES')
+      }
+      // Variação para vieiralves-diamante -> VIEIRALVES
+      if (slugNormalized === 'VIEIRALVES_DIAMANTE') {
+        slugVariations.push('VIEIRALVES')
+      }
+      // Variação para margarita-diamante -> MARGARITA
+      if (slugNormalized === 'MARGARITA_DIAMANTE') {
+        slugVariations.push('MARGARITA')
+      }
+      // Variação para pedro-teixeira-diamante -> PEDRO_TEIXEIRA
+      if (slugNormalized === 'PEDRO_TEIXEIRA_DIAMANTE') {
+        slugVariations.push('PEDRO_TEIXEIRA')
+      }
+      // Variação para planalto-diamante -> PLANALTO
+      if (slugNormalized === 'PLANALTO_DIAMANTE') {
+        slugVariations.push('PLANALTO')
+      }
+      // Variação para bom-prato-diamante -> BOM_PRATO
+      if (slugNormalized === 'BOM_PRATO_DIAMANTE') {
+        slugVariations.push('BOM_PRATO')
+      }
+      // Variação para flores-diamante -> FLORES
+      if (slugNormalized === 'FLORES_DIAMANTE') {
+        slugVariations.push('FLORES')
+      }
+      // Variação para efigenio-salles ou similar
+      if (slugNormalized.includes('EFIGENIO')) {
+        slugVariations.push('EFIGENIO_SALLES')
+        slugVariations.push('EFIGENIO')
+      }
+      // Variação para veneza
+      if (slugNormalized.includes('VENEZA')) {
+        slugVariations.push('VENEZA')
+      }
+      // Variação para jacira-reis -> JACIRA
+      if (slugNormalized.startsWith('JACIRA_')) {
+        slugVariations.push('JACIRA')
+      }
+      
+      // Tentar cada variação com diferentes prefixos
+      const prefixes = ['PACTO_SECRET_KEY_', 'PACTO_API_KEY_', 'PACTO_SECRET_KEY_DEV_']
+      
+      for (const variation of slugVariations) {
+        for (const prefix of prefixes) {
+          const envKey = `${prefix}${variation}`
+          const chave = process.env[envKey]
+          if (chave) {
+            console.log(`[PactoV3] Chave SECRETA da unidade ${slug} carregada via ${envKey}`)
+            return chave
+          }
+        }
       }
 
       console.error(`[PactoV3] Chave SECRETA da unidade ${slug} não encontrada`)
-      console.error(`[PactoV3] Procurando por: PACTO_SECRET_KEY_${envSlug}`)
+      console.error(`[PactoV3] Tentativas: ${slugVariations.map(v => `PACTO_API_KEY_${v}`).join(', ')}`)
       return null
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
