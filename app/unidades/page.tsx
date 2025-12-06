@@ -26,18 +26,35 @@ export default function Unidades() {
     }
 
     return locations.map(staticLoc => {
-      const sanityUnit = sanityUnits.find((unit: any) =>
-        unit.slug === staticLoc.id
-      )
+      // Tentar encontrar unidade do Sanity por slug exato ou parcial
+      const sanityUnit = sanityUnits.find((unit: any) => {
+        const sanitySlug = unit.slug?.toLowerCase() || ''
+        const staticId = staticLoc.id.toLowerCase()
+        // Match exato ou se o slug contém o id
+        return sanitySlug === staticId ||
+               sanitySlug.includes(staticId) ||
+               staticId.includes(sanitySlug)
+      })
 
       if (sanityUnit) {
         const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
+
+        // Extrair foto do Sanity - verificar todas as possíveis estruturas
+        let sanityPhoto = null
+        if (sanityUnit.photo?.asset?.url) {
+          sanityPhoto = sanityUnit.photo.asset.url
+        } else if (sanityUnit.images && sanityUnit.images.length > 0 && sanityUnit.images[0]?.asset?.url) {
+          sanityPhoto = sanityUnit.images[0].asset.url
+        } else if (sanityUnit.backgroundImage?.asset?.url) {
+          sanityPhoto = sanityUnit.backgroundImage.asset.url
+        }
+
         return {
           ...staticLoc,
-          name: sanityUnit.name,
-          address: sanityUnit.address,
+          name: sanityUnit.name || staticLoc.name,
+          address: sanityUnit.address || staticLoc.address,
           type: sanityUnit.type || staticLoc.type,
-          photo: sanityUnit.photo?.asset?.url || sanityUnit.images?.[0]?.asset?.url || staticLoc.photo || '/images/fachada.jpg',
+          photo: sanityPhoto || staticLoc.photo || '/images/fachada.jpg',
           features: sanityUnit.services || staticLoc.features,
           hours: sanityUnit.openingHours || staticLoc.hours,
           coordinates: hasCoordinates ? {
