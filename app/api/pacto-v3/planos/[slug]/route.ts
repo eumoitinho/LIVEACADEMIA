@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pactoV2API } from '@/src/lib/api/pacto-v2'
-import { rateLimiter } from '@/src/lib/utils/rate-limiter'
 import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
 
 // Função helper para adicionar cabeçalhos CORS
@@ -12,7 +11,7 @@ function getCorsHeaders(origin?: string | null) {
     'http://localhost:3000',
     'http://localhost:3333',
   ]
-  
+
   // Verificar se a origem está na lista de permitidas
   // Aceita qualquer domínio .sanity.studio ou admin.sanity.io
   const isAllowed = origin && (
@@ -23,11 +22,11 @@ function getCorsHeaders(origin?: string | null) {
     origin.includes('localhost:3333') ||
     origin.includes('localhost:3001')
   )
-  
+
   // Retornar a origem exata da requisição se permitida
   // Isso é crítico para CORS funcionar corretamente
   const corsOrigin = isAllowed ? origin : (allowedOrigins.includes(origin || '') ? origin : allowedOrigins[0])
-  
+
   return {
     'Access-Control-Allow-Origin': corsOrigin || '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -44,36 +43,11 @@ export async function OPTIONS(req: NextRequest) {
 }
 
 // GET /api/pacto-v3/planos/:slug
-// Busca planos usando API V2 da Pacto com cache e rate limiting
+// Busca planos usando API V2 da Pacto com cache
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const origin = req.headers.get('origin')
   const corsHeaders = getCorsHeaders(origin)
-
-  // Rate limiting: 50 requisições por 15 minutos
-  const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '127.0.0.1'
-  if (!rateLimiter.check(clientIP, 50, 15 * 60 * 1000)) {
-    const info = rateLimiter.getInfo(clientIP)
-    return NextResponse.json(
-      { 
-        error: 'Rate limit exceeded. Too many requests for planos.', 
-        rateLimitInfo: {
-          limit: info.limit,
-          remaining: info.remaining,
-          resetTime: info.resetTime
-        }
-      }, 
-      { 
-        status: 429,
-        headers: {
-          ...corsHeaders,
-          'X-RateLimit-Limit': info.limit.toString(),
-          'X-RateLimit-Remaining': info.remaining.toString(),
-          'X-RateLimit-Reset': Math.ceil(info.resetTime / 1000).toString()
-        }
-      }
-    )
-  }
 
   // Verificar cache primeiro (30 minutos)
   const cacheKey = cacheKeys.planos(slug)
