@@ -2,14 +2,83 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import type { CepData } from '@/lib/api/pacto-checkout-types'
 
-// Schema for query validation
-const querySchema = z.object({
-  cep: z.string().regex(/^\d{5}-?\d{3}$/, 'CEP inválido')
-})
-
 // Cache for CEP data
 const cepCache = new Map<string, { data: CepData; timestamp: number }>()
 const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
+const FETCH_TIMEOUT = 3000 // 3 segundos de timeout
+
+// Helper para fetch com timeout
+async function fetchWithTimeout(url: string, timeout: number): Promise<Response> {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeout)
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+      signal: controller.signal
+    })
+    return response
+  } finally {
+    clearTimeout(timeoutId)
+  }
+}
+
+// Buscar no ViaCEP
+async function fetchViaCep(cep: string): Promise<CepData | null> {
+  try {
+    const response = await fetchWithTimeout(
+      `https://viacep.com.br/ws/${cep}/json/`,
+      FETCH_TIMEOUT
+    )
+
+    if (response.ok) {
+      const data = await response.json()
+      if (!data.erro) {
+        return {
+          cep: data.cep,
+          logradouro: data.logradouro || '',
+          complemento: data.complemento || '',
+          bairro: data.bairro || '',
+          localidade: data.localidade || '',
+          uf: data.uf || '',
+          ibge: data.ibge,
+          gia: data.gia,
+          ddd: data.ddd,
+          siafi: data.siafi
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('ViaCEP failed:', error)
+  }
+  return null
+}
+
+// Buscar no BrasilAPI
+async function fetchBrasilApi(cep: string): Promise<CepData | null> {
+  try {
+    const response = await fetchWithTimeout(
+      `https://brasilapi.com.br/api/cep/v1/${cep}`,
+      FETCH_TIMEOUT
+    )
+
+    if (response.ok) {
+      const data = await response.json()
+      return {
+        cep: data.cep,
+        logradouro: data.street || '',
+        complemento: '',
+        bairro: data.neighborhood || '',
+        localidade: data.city || '',
+        uf: data.state || ''
+      }
+    }
+  } catch (error) {
+    console.warn('BrasilAPI failed:', error)
+  }
+  return null
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -34,7 +103,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Check cache
+    // Check cache first (instant response)
     const cached = cepCache.get(cepClean)
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
       return NextResponse.json({
@@ -44,90 +113,37 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Try ViaCEP API first (free and reliable)
-    try {
-      const viaCepResponse = await fetch(
-        `https://viacep.com.br/ws/${cepClean}/json/`,
-        {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-          }
-        }
-      )
+    // Buscar em paralelo nas duas APIs - retorna a primeira que responder
+    const results = await Promise.allSettled([
+      fetchViaCep(cepClean),
+      fetchBrasilApi(cepClean)
+    ])
 
-      if (viaCepResponse.ok) {
-        const viaCepData = await viaCepResponse.json()
+    // Encontrar o primeiro resultado válido
+    let cepData: CepData | null = null
+    let source = ''
 
-        if (!viaCepData.erro) {
-          const cepData: CepData = {
-            cep: viaCepData.cep,
-            logradouro: viaCepData.logradouro || '',
-            complemento: viaCepData.complemento || '',
-            bairro: viaCepData.bairro || '',
-            localidade: viaCepData.localidade || '',
-            uf: viaCepData.uf || '',
-            ibge: viaCepData.ibge,
-            gia: viaCepData.gia,
-            ddd: viaCepData.ddd,
-            siafi: viaCepData.siafi
-          }
-
-          // Cache the result
-          cepCache.set(cepClean, {
-            data: cepData,
-            timestamp: Date.now()
-          })
-
-          return NextResponse.json({
-            success: true,
-            data: cepData,
-            source: 'viacep'
-          })
-        }
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i]
+      if (result.status === 'fulfilled' && result.value) {
+        cepData = result.value
+        source = i === 0 ? 'viacep' : 'brasilapi'
+        break
       }
-    } catch (viaCepError) {
-      console.warn('ViaCEP API failed:', viaCepError)
     }
 
-    // Try alternative API (CEP Aberto or Brasil API)
-    try {
-      const brasilApiResponse = await fetch(
-        `https://brasilapi.com.br/api/cep/v1/${cepClean}`,
-        {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-          }
-        }
-      )
+    if (cepData) {
+      // Cache the result
+      cepCache.set(cepClean, {
+        data: cepData,
+        timestamp: Date.now()
+      })
 
-      if (brasilApiResponse.ok) {
-        const brasilApiData = await brasilApiResponse.json()
-
-        const cepData: CepData = {
-          cep: brasilApiData.cep,
-          logradouro: brasilApiData.street || '',
-          complemento: '',
-          bairro: brasilApiData.neighborhood || '',
-          localidade: brasilApiData.city || '',
-          uf: brasilApiData.state || ''
-        }
-
-        // Cache the result
-        cepCache.set(cepClean, {
-          data: cepData,
-          timestamp: Date.now()
-        })
-
-        return NextResponse.json({
-          success: true,
-          data: cepData,
-          source: 'brasilapi'
-        })
-      }
-    } catch (brasilApiError) {
-      console.warn('Brasil API failed:', brasilApiError)
+      return NextResponse.json({
+        success: true,
+        data: cepData,
+        source
+      })
     }
 
     // If all APIs fail, return error

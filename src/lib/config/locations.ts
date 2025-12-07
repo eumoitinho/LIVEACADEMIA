@@ -725,15 +725,15 @@ export const locations = [
     tourUrl: "https://maps.app.goo.gl/ZaaU2WtH7JAQiFxo9",
   },
 
-  // Unidades em Inauguração/Planejamento
+  // Unidades em Inauguração/Planejamento (NÃO ATIVAS)
   {
     id: "morada-sol-diamante",
     name: "Morada do Sol Diamante",
     address: "Morada do Sol - Assinpa",
-    hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
+    hours: "Em breve",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
-    type: "diamante",
-    status: "open", 
+    type: "inauguracao",
+    status: "coming_soon", 
     logo: "https://www.liveacademia.com.br/wp-content/uploads/2024/10/morada-do-sol-300x228.png",
     photo: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop&crop=center",
     hotsite: "https://www.liveacademia.com.br/unidades/morada-do-sol-diamante/",

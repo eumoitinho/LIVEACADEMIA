@@ -109,6 +109,9 @@ export default function Unidades() {
 
   const filteredLocations = useMemo(() => {
     return allLocations.filter((loc: any) => {
+      // Excluir unidades em inauguração ou não ativas
+      if (loc.type === "inauguracao" || loc.status === "coming_soon") return false
+
       // Filter by type
       if (filterType !== "todos" && loc.type !== filterType) return false
 
@@ -136,12 +139,17 @@ export default function Unidades() {
     })
   }, [filterType, searchQuery, radiusFilter, userLocation, allLocations])
 
+  // Filtrar apenas unidades ativas para estatísticas
+  const activeLocations = useMemo(() => {
+    return allLocations.filter((l: any) => l.type !== "inauguracao" && l.status !== "coming_soon")
+  }, [allLocations])
+
   const stats = useMemo(() => ({
-    total: allLocations.length,
-    diamante: allLocations.filter((l: any) => l.type === 'diamante').length,
-    premium: allLocations.filter((l: any) => l.type === 'premium').length,
-    tradicional: allLocations.filter((l: any) => l.type === 'tradicional').length,
-  }), [allLocations])
+    total: activeLocations.length,
+    diamante: activeLocations.filter((l: any) => l.type === 'diamante').length,
+    premium: activeLocations.filter((l: any) => l.type === 'premium').length,
+    tradicional: activeLocations.filter((l: any) => l.type === 'tradicional').length,
+  }), [activeLocations])
 
   // Mostrar loading state enquanto carrega dados do Sanity
   if (loadingSanity) {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import PlanosCards from '@/features/plans/planos-cards'
 
 interface DynamicPlano {
@@ -241,9 +241,24 @@ export default function UnitPlanos({
     } finally {
       setLoading(false)
     }
-  }, [slug, fallbackPlanos, shouldUseSanityOnly, shouldUseAdvancedConfig, configMap, filters, normalizedFallbackPlanos, planosConfig])
+  }, [slug, normalizedFallbackPlanos, shouldUseSanityOnly, shouldUseAdvancedConfig, configMap, filters, planosConfig])
 
-  useEffect(() => { load() }, [load])
+  // Ref para evitar múltiplas chamadas
+  const hasLoadedRef = useRef(false)
+  const lastSlugRef = useRef<string>('')
+
+  useEffect(() => {
+    // Só carrega se o slug mudou ou se ainda não carregou
+    if (lastSlugRef.current !== slug) {
+      hasLoadedRef.current = false
+      lastSlugRef.current = slug
+    }
+
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true
+      load()
+    }
+  }, [slug, load])
 
   if (loading) {
     return (

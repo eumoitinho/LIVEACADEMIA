@@ -5,74 +5,75 @@
 @layer base {
   :root {
     /* Tema Forge - Dark Premium */
-    --background: 10 10 10; /* #0a0a0a */
-    --foreground: 255 255 255; /* #ffffff */
+    /* Valores HSL para shadcn/ui */
+    --background: 0 0% 4%; /* #0a0a0a */
+    --foreground: 0 0% 100%; /* #ffffff */
 
-    --card: 23 23 23; /* #171717 */
-    --card-foreground: 255 255 255; /* #ffffff */
+    --card: 0 0% 9%; /* #171717 */
+    --card-foreground: 0 0% 100%; /* #ffffff */
 
-    --popover: 23 23 23; /* #171717 */
-    --popover-foreground: 255 255 255; /* #ffffff */
+    --popover: 0 0% 9%; /* #171717 */
+    --popover-foreground: 0 0% 100%; /* #ffffff */
 
-    --primary: 255 203 0; /* #ffcb00 - amarelo Live */
-    --primary-foreground: 10 10 10; /* #0a0a0a */
+    --primary: 48 100% 50%; /* #ffcb00 - amarelo Live */
+    --primary-foreground: 0 0% 4%; /* #0a0a0a */
 
-    --secondary: 38 38 38; /* #262626 */
-    --secondary-foreground: 255 255 255; /* #ffffff */
+    --secondary: 0 0% 15%; /* #262626 */
+    --secondary-foreground: 0 0% 100%; /* #ffffff */
 
-    --muted: 38 38 38; /* #262626 */
-    --muted-foreground: 163 163 163; /* #a3a3a3 */
+    --muted: 0 0% 15%; /* #262626 */
+    --muted-foreground: 0 0% 64%; /* #a3a3a3 */
 
-    --accent: 255 215 64; /* #ffd740 - amarelo accent */
-    
-    /* Cores específicas da Live Academia */
+    --accent: 45 100% 63%; /* #ffd740 - amarelo accent */
+    --accent-foreground: 0 0% 4%; /* #0a0a0a */
+
+    --destructive: 0 84% 60%; /* #ef4444 */
+    --destructive-foreground: 0 0% 100%; /* #ffffff */
+
+    --border: 0 0% 15%; /* #262626 */
+    --input: 0 0% 15%; /* #262626 */
+    --ring: 48 100% 50%; /* #ffcb00 */
+
+    --radius: 0.75rem;
+
+    /* Cores específicas da Live Academia - RGB format */
     --live-yellow: 255 203 0; /* #ffcb00 */
     --live-yellow-light: 255 215 64; /* #ffd740 */
     --live-yellow-dark: 230 180 0; /* #e6b400 */
     --live-yellow-accent: 255 241 118; /* #fff176 */
-    --accent-foreground: 10 10 10; /* #0a0a0a */
-
-    --destructive: 239 68 68; /* #ef4444 */
-    --destructive-foreground: 255 255 255; /* #ffffff */
-
-    --border: 38 38 38; /* #262626 */
-    --input: 38 38 38; /* #262626 */
-    --ring: 255 203 0; /* #ffcb00 */
-
-    --radius: 0.75rem;
   }
 
   /* Tema Light - Forge inspired */
   .light {
-    --background: 255 255 255; /* #ffffff */
-    --foreground: 23 23 23; /* #171717 */
+    --background: 0 0% 100%; /* #ffffff */
+    --foreground: 0 0% 9%; /* #171717 */
 
-    --card: 250 250 250; /* #fafafa */
-    --card-foreground: 23 23 23; /* #171717 */
+    --card: 0 0% 98%; /* #fafafa */
+    --card-foreground: 0 0% 9%; /* #171717 */
 
-    --popover: 255 255 255; /* #ffffff */
-    --popover-foreground: 23 23 23; /* #171717 */
+    --popover: 0 0% 100%; /* #ffffff */
+    --popover-foreground: 0 0% 9%; /* #171717 */
 
-    --primary: 255 203 0; /* #ffcb00 - amarelo Live */
-    --primary-foreground: 23 23 23; /* #171717 */
+    --primary: 48 100% 50%; /* #ffcb00 - amarelo Live */
+    --primary-foreground: 0 0% 9%; /* #171717 */
 
-    --secondary: 245 245 245; /* #f5f5f5 */
-    --secondary-foreground: 64 64 64; /* #404040 */
+    --secondary: 0 0% 96%; /* #f5f5f5 */
+    --secondary-foreground: 0 0% 25%; /* #404040 */
 
-    --muted: 245 245 245; /* #f5f5f5 */
-    --muted-foreground: 115 115 115; /* #737373 */
+    --muted: 0 0% 96%; /* #f5f5f5 */
+    --muted-foreground: 0 0% 45%; /* #737373 */
 
-    --accent: 255 215 64; /* #ffd740 - amarelo accent */
-    --accent-foreground: 23 23 23; /* #171717 */
+    --accent: 45 100% 63%; /* #ffd740 - amarelo accent */
+    --accent-foreground: 0 0% 9%; /* #171717 */
 
-    --destructive: 239 68 68; /* #ef4444 */
-    --destructive-foreground: 255 255 255; /* #ffffff */
+    --destructive: 0 84% 60%; /* #ef4444 */
+    --destructive-foreground: 0 0% 100%; /* #ffffff */
 
-    --border: 229 229 229; /* #e5e5e5 */
-    --input: 229 229 229; /* #e5e5e5 */
-    --ring: 255 203 0; /* #ffcb00 */
-    
-    /* Cores específicas da Live Academia - Light */
+    --border: 0 0% 90%; /* #e5e5e5 */
+    --input: 0 0% 90%; /* #e5e5e5 */
+    --ring: 48 100% 50%; /* #ffcb00 */
+
+    /* Cores específicas da Live Academia - RGB format */
     --live-yellow: 255 203 0; /* #ffcb00 */
     --live-yellow-light: 255 215 64; /* #ffd740 */
     --live-yellow-dark: 230 180 0; /* #e6b400 */
@@ -98,6 +99,88 @@
   /* Subtítulos / Descriptions */
   .section-description, p.lead {
     @apply text-lg text-slate-300 leading-relaxed;
+  }
+
+  /* Fix para inputs em tema escuro - garantir texto visível */
+  :root input,
+  :root textarea,
+  :root select {
+    color: white;
+  }
+
+  :root input::placeholder,
+  :root textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* Fix para autofill do navegador em tema escuro */
+  :root input:-webkit-autofill,
+  :root input:-webkit-autofill:hover,
+  :root input:-webkit-autofill:focus,
+  :root input:-webkit-autofill:active,
+  :root textarea:-webkit-autofill,
+  :root select:-webkit-autofill {
+    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0 1000px hsl(0 0% 15%) inset !important;
+    box-shadow: 0 0 0 1000px hsl(0 0% 15%) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* Select options em tema escuro */
+  :root select option {
+    background-color: hsl(0 0% 9%);
+    color: white;
+  }
+
+  /* Tema claro (.light) - textos e inputs com cor escura */
+  .light {
+    color: hsl(0 0% 9%);
+    background-color: white;
+  }
+
+  .light * {
+    border-color: hsl(0 0% 90%);
+  }
+
+  .light h1, .light h2, .light h3, .light h4, .light h5, .light h6,
+  .light p, .light span, .light label, .light div {
+    color: inherit;
+  }
+
+  .light input,
+  .light textarea,
+  .light select {
+    color: hsl(0 0% 9%) !important;
+    background-color: white;
+    border-color: hsl(0 0% 85%);
+  }
+
+  .light input::placeholder,
+  .light textarea::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+  /* Autofill em tema claro */
+  .light input:-webkit-autofill,
+  .light input:-webkit-autofill:hover,
+  .light input:-webkit-autofill:focus,
+  .light input:-webkit-autofill:active,
+  .light textarea:-webkit-autofill,
+  .light select:-webkit-autofill {
+    -webkit-text-fill-color: hsl(0 0% 9%) !important;
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+  }
+
+  /* Select options em tema claro */
+  .light select option {
+    background-color: white;
+    color: hsl(0 0% 9%);
+  }
+
+  /* Botões em tema claro */
+  .light button {
+    color: inherit;
   }
 }
 
