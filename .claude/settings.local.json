@@ -48,7 +48,8 @@
       "Bash(sanity/schemas/planos-page.ts)",
       "Bash(sanity/schemas/unidades-page.ts)",
       "Bash(sanity/schemas/unidades-section.ts)",
-      "Bash(sanity/schemas/navigation.ts)"
+      "Bash(sanity/schemas/navigation.ts)",
+      "Bash(npm view:*)"
     ],
     "deny": []
   }
