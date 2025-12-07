@@ -49,7 +49,13 @@
       "Bash(sanity/schemas/unidades-page.ts)",
       "Bash(sanity/schemas/unidades-section.ts)",
       "Bash(sanity/schemas/navigation.ts)",
-      "Bash(npm view:*)"
+      "Bash(npm view:*)",
+      "Bash(for commit in 46d89943323cff018c0a588b5205a2d380651cc0 6bb89d8d3da154b47f1090047241986f6f02d5d7 74f849ae4b4d65eee620762b9019b05d6c6b84ed 4d50f28a4bb3a1df5e2644e2e2a3e9772f4776dd d2e282cf5bf73e5be65c965a3fc32fbc5dfd23b6)",
+      "Bash(do)",
+      "Bash(echo:*)",
+      "Bash(git show:*)",
+      "Bash(done)",
+      "Bash(git remote:*)"
     ],
     "deny": []
   }
