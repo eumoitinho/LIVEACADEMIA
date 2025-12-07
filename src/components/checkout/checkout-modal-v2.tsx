@@ -814,23 +814,11 @@ export default function CheckoutModalV2({
               <h3 className="text-2xl font-bold text-gray-900">Forma de Pagamento</h3>
             </div>
 
-            {/* Payment Method Selection */}
-            <div className="space-y-2">
-              {config?.apresentarCartaoVenda && (
-                <button
-                  onClick={() => setPaymentMethod('cartao')}
-                  className={`w-full p-4 border rounded-lg flex items-center justify-between ${
-                    paymentMethod === 'cartao' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <CreditCard className="h-5 w-5" />
-                    <span className="font-medium">Cartão de Crédito</span>
-                  </div>
-                  {paymentMethod === 'cartao' && <Check className="h-5 w-5 text-yellow-600" />}
-                </button>
-              )}
-
+            {/* Método de Pagamento - Apenas Cartão de Crédito */}
+            <div className="w-full p-4 border border-yellow-500 bg-yellow-50 rounded-lg flex items-center gap-3">
+              <CreditCard className="h-5 w-5 text-yellow-600" />
+              <span className="font-medium text-gray-900">Cartão de Crédito</span>
+              <Check className="h-5 w-5 text-yellow-600 ml-auto" />
             </div>
 
             {/* Plan Summary */}
