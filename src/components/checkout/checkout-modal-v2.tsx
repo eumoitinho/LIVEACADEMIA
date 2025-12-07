@@ -847,59 +847,57 @@ export default function CheckoutModalV2({
             </div>
 
             {/* Card Form */}
-            {paymentMethod === 'cartao' && (
-              <div className="space-y-4">
-                <AnimatedPaymentCard
-                  cardNumber={formData.numeroCartao}
-                  cardName={formData.nomeCartao}
-                  cardExpiry={formData.validadeCartao}
+            <div className="space-y-4">
+              <AnimatedPaymentCard
+                cardNumber={formData.numeroCartao}
+                cardName={formData.nomeCartao}
+                cardExpiry={formData.validadeCartao}
+              />
+
+              <div>
+                <Label htmlFor="numeroCartao">Número do Cartão</Label>
+                <Input
+                  id="numeroCartao"
+                  value={formData.numeroCartao}
+                  onChange={(e) => setFormData({ ...formData, numeroCartao: formatCardNumber(e.target.value) })}
+                  placeholder="0000 0000 0000 0000"
+                  maxLength={19}
                 />
+              </div>
 
+              <div>
+                <Label htmlFor="nomeCartao">Nome no Cartão</Label>
+                <Input
+                  id="nomeCartao"
+                  value={formData.nomeCartao}
+                  onChange={(e) => setFormData({ ...formData, nomeCartao: e.target.value.toUpperCase() })}
+                  placeholder="NOME COMO NO CARTÃO"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="numeroCartao">Número do Cartão</Label>
+                  <Label htmlFor="validadeCartao">Validade</Label>
                   <Input
-                    id="numeroCartao"
-                    value={formData.numeroCartao}
-                    onChange={(e) => setFormData({ ...formData, numeroCartao: formatCardNumber(e.target.value) })}
-                    placeholder="0000 0000 0000 0000"
-                    maxLength={19}
+                    id="validadeCartao"
+                    value={formData.validadeCartao}
+                    onChange={(e) => setFormData({ ...formData, validadeCartao: formatCardExpiry(e.target.value) })}
+                    placeholder="MM/AA"
+                    maxLength={5}
                   />
                 </div>
-
                 <div>
-                  <Label htmlFor="nomeCartao">Nome no Cartão</Label>
+                  <Label htmlFor="cvvCartao">CVV</Label>
                   <Input
-                    id="nomeCartao"
-                    value={formData.nomeCartao}
-                    onChange={(e) => setFormData({ ...formData, nomeCartao: e.target.value.toUpperCase() })}
-                    placeholder="NOME COMO NO CARTÃO"
+                    id="cvvCartao"
+                    value={formData.cvvCartao}
+                    onChange={(e) => setFormData({ ...formData, cvvCartao: e.target.value.replace(/\D/g, '') })}
+                    placeholder="123"
+                    maxLength={4}
                   />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="validadeCartao">Validade</Label>
-                    <Input
-                      id="validadeCartao"
-                      value={formData.validadeCartao}
-                      onChange={(e) => setFormData({ ...formData, validadeCartao: formatCardExpiry(e.target.value) })}
-                      placeholder="MM/AA"
-                      maxLength={5}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="cvvCartao">CVV</Label>
-                    <Input
-                      id="cvvCartao"
-                      value={formData.cvvCartao}
-                      onChange={(e) => setFormData({ ...formData, cvvCartao: e.target.value.replace(/\D/g, '') })}
-                      placeholder="123"
-                      maxLength={4}
-                    />
-                  </div>
                 </div>
               </div>
-            )}
+            </div>
 
 
             <div className="flex gap-3">
