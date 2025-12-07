@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, CreditCard, QrCode, FileText, Loader2, Check, Copy, ExternalLink, MapPin } from 'lucide-react'
+import { X, CreditCard, Loader2, Check, MapPin } from 'lucide-react'
 import AnimatedPaymentCard from '@/components/checkout/animated-payment-card'
 import { PreCadastroStep } from './pre-cadastro-step'
 import { ParqStep } from './parq-step'
@@ -126,7 +126,7 @@ export default function CheckoutModalV2({
   const [parqCompleted, setParqCompleted] = useState(false)
 
   // Payment state
-  const [paymentMethod, setPaymentMethod] = useState<'cartao' | 'pix' | 'boleto'>('cartao')
+  const [paymentMethod, setPaymentMethod] = useState<'cartao'>('cartao')
   const [loading, setLoading] = useState(false)
   const [paymentResult, setPaymentResult] = useState<PactoResponse | null>(null)
   const [simulation, setSimulation] = useState<SimulacaoResumo | null>(null)
@@ -310,11 +310,9 @@ export default function CheckoutModalV2({
     }
 
     if (currentStep === 'pagamento') {
-      if (paymentMethod === 'cartao') {
-        return !!(formData.numeroCartao && formData.nomeCartao &&
-                 formData.validadeCartao && formData.cvvCartao)
-      }
-      return true // PIX and Boleto don't require additional data
+      // Apenas cartão de crédito disponível - validar campos do cartão
+      return !!(formData.numeroCartao && formData.nomeCartao &&
+               formData.validadeCartao && formData.cvvCartao)
     }
 
     return true
@@ -833,35 +831,6 @@ export default function CheckoutModalV2({
                 </button>
               )}
 
-              {config?.apresentarPix && (
-                <button
-                  onClick={() => setPaymentMethod('pix')}
-                  className={`w-full p-4 border rounded-lg flex items-center justify-between ${
-                    paymentMethod === 'pix' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <QrCode className="h-5 w-5" />
-                    <span className="font-medium">PIX</span>
-                  </div>
-                  {paymentMethod === 'pix' && <Check className="h-5 w-5 text-yellow-600" />}
-                </button>
-              )}
-
-              {config?.apresentarBoleto && (
-                <button
-                  onClick={() => setPaymentMethod('boleto')}
-                  className={`w-full p-4 border rounded-lg flex items-center justify-between ${
-                    paymentMethod === 'boleto' ? 'border-yellow-500 bg-yellow-50' : 'border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5" />
-                    <span className="font-medium">Boleto Bancário</span>
-                  </div>
-                  {paymentMethod === 'boleto' && <Check className="h-5 w-5 text-yellow-600" />}
-                </button>
-              )}
             </div>
 
             {/* Plan Summary */}
@@ -944,31 +913,6 @@ export default function CheckoutModalV2({
               </div>
             )}
 
-            {/* PIX Instructions */}
-            {paymentMethod === 'pix' && (
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-2">Como funciona o PIX:</h4>
-                <ol className="text-sm text-blue-700 space-y-1">
-                  <li>1. Clique em "Finalizar Pagamento"</li>
-                  <li>2. Um QR Code será gerado</li>
-                  <li>3. Escaneie com seu app bancário</li>
-                  <li>4. Confirme o pagamento</li>
-                </ol>
-              </div>
-            )}
-
-            {/* Boleto Instructions */}
-            {paymentMethod === 'boleto' && (
-              <div className="bg-orange-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-orange-900 mb-2">Como funciona o Boleto:</h4>
-                <ol className="text-sm text-orange-700 space-y-1">
-                  <li>1. Clique em "Finalizar Pagamento"</li>
-                  <li>2. Um boleto será gerado</li>
-                  <li>3. Pague em qualquer banco ou app</li>
-                  <li>4. Aguarde a compensação (até 2 dias úteis)</li>
-                </ol>
-              </div>
-            )}
 
             <div className="flex gap-3">
               <Button
@@ -1020,27 +964,6 @@ export default function CheckoutModalV2({
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-sm text-gray-600">ID da Transação</p>
                 <p className="font-mono font-semibold">{paymentResult.transactionId}</p>
-              </div>
-            )}
-
-            {paymentResult?.pixCode && (
-              <div className="bg-blue-50 p-4 rounded-lg space-y-3">
-                <p className="font-semibold text-blue-900">QR Code PIX</p>
-                <div className="bg-white p-4 rounded">
-                  {/* QR Code would be rendered here */}
-                  <p className="text-xs font-mono break-all">{paymentResult.pixCode}</p>
-                </div>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    navigator.clipboard.writeText(paymentResult.pixCode!)
-                    alert('Código PIX copiado!')
-                  }}
-                  className="w-full"
-                >
-                  <Copy className="mr-2 h-4 w-4" />
-                  Copiar Código PIX
-                </Button>
               </div>
             )}
 
