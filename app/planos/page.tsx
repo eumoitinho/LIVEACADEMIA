@@ -696,13 +696,6 @@ export default function Planos() {
         </div>
       </section>
 
-      {/* Modal de Comparativo de Preços */}
-      <UnidadesPriceComparison
-        isOpen={showPriceComparison}
-        onClose={() => setShowPriceComparison(false)}
-        selectedPlanType={selectedPlanInfo?.type || 'TRADICIONAL'}
-        selectedPlanPrice={selectedPlanInfo?.price || 119.90}
-      />
     </main>
   )
 }
