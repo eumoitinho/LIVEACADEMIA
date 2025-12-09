@@ -1,10 +1,9 @@
 "use client"
 
-import { motion, AnimatePresence } from "framer-motion"
-import { Check, Crown, Sparkles, ChevronDown, MapPin, ChevronRight } from "lucide-react"
-import React, { useState, useEffect, useMemo } from "react"
+import { motion } from "framer-motion"
+import { Check, Crown, Sparkles, ChevronDown, MapPin } from "lucide-react"
+import React, { useState, useMemo } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { usePlansData } from "@/hooks/use-sanity-data"
 
 const planos = [
@@ -54,188 +53,51 @@ const planos = [
   }
 ]
 
-interface LocationUnit {
-  id: string
-  name: string
-  address: string
-  type: string
-  photo?: string | null
-  hours?: string
-  features: string[]
-  [key: string]: any
-}
-
-
 export default function Planos() {
   const [showComparison, setShowComparison] = useState(false)
-  const { data: sanityPlans, loading: plansLoading, error: plansError } = usePlansData()
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
-  const [sanityUnits, setSanityUnits] = useState<any[]>([])
-  const [loadingSanity, setLoadingSanity] = useState(true)
-  const [allLocations, setAllLocations] = useState<LocationUnit[]>([])
-
+  const { data: sanityPlans, loading: plansLoading } = usePlansData()
 
   // Use Sanity plans or fallback to hardcoded
-  // Normalizar planos do Sanity para garantir estrutura consistente
   const displayPlans = useMemo(() => {
-    // Garantir que sanityPlans é um array antes de processar
     if (Array.isArray(sanityPlans) && sanityPlans.length > 0) {
       try {
-        // Normalizar planos do Sanity para ter a mesma estrutura dos planos hardcoded
         return sanityPlans
-          .filter((plano: any) => plano != null) // Filtrar valores nulos/undefined
+          .filter((plano: any) => plano != null)
           .map((plano: any) => {
-            // Formatar preço: Sanity retorna em centavos, converter para reais com vírgula
             let precoFormatado = '0,00'
             if (typeof plano.price === 'number') {
-              // Dividir por 100 (centavos para reais) e formatar com vírgula
               precoFormatado = (plano.price / 100).toFixed(2).replace('.', ',')
             } else if (typeof plano.preco === 'number') {
-              // Caso venha no campo preco (também em centavos)
               precoFormatado = (plano.preco / 100).toFixed(2).replace('.', ',')
             } else if (typeof plano.price === 'string' || typeof plano.preco === 'string') {
-              // Se já vier formatado como string, usar diretamente
               precoFormatado = String(plano.price || plano.preco || '0,00')
             }
-            
+
             return {
-            nome: plano.name || plano.nome || '',
-            preco: precoFormatado,
-            periodo: plano.period || plano.periodo || 'mês',
-            descricao: plano.description || plano.descricao || '',
-            beneficios: Array.isArray(plano.features) 
-              ? plano.features 
-              : Array.isArray(plano.beneficios) 
-              ? plano.beneficios 
-              : [],
-            gradient: plano.gradient || 'from-zinc-700 to-zinc-900',
-            icone: plano.icon || Check,
-            popular: plano.highlight || plano.popular || false,
-            destaque: plano.highlight || plano.destaque || false,
-            badge: plano.badge || ''
-          }
+              nome: plano.name || plano.nome || '',
+              preco: precoFormatado,
+              periodo: plano.period || plano.periodo || 'mês',
+              descricao: plano.description || plano.descricao || '',
+              beneficios: Array.isArray(plano.features)
+                ? plano.features
+                : Array.isArray(plano.beneficios)
+                ? plano.beneficios
+                : [],
+              gradient: plano.gradient || 'from-zinc-700 to-zinc-900',
+              icone: plano.icon || Check,
+              popular: plano.highlight || plano.popular || false,
+              destaque: plano.highlight || plano.destaque || false,
+              badge: plano.badge || ''
+            }
           })
       } catch (error) {
         console.error('Error normalizing sanity plans:', error)
         return planos
       }
     }
-    // Fallback para planos estáticos
     return Array.isArray(planos) ? planos : []
   }, [sanityPlans])
 
-  // Fetch units from Sanity
-  useEffect(() => {
-    const fetchSanityUnits = async () => {
-      try {
-        setLoadingSanity(true)
-        const response = await fetch('/api/sanity/units')
-        const data = await response.json()
-        if (data.units) {
-          setSanityUnits(data.units)
-        }
-      } catch (error) {
-        console.error('Error fetching Sanity units:', error)
-      } finally {
-        setLoadingSanity(false)
-      }
-    }
-    fetchSanityUnits()
-  }, [])
-
-  // Import static locations and merge with Sanity data
-  useEffect(() => {
-    const loadLocations = async () => {
-      try {
-        const { locations } = await import('@/src/lib/config/locations')
-
-        // Garantir que locations é um array
-        if (!Array.isArray(locations)) {
-          console.error('Locations não é um array:', locations)
-          setAllLocations([])
-          return
-        }
-
-        if (loadingSanity || !Array.isArray(sanityUnits) || sanityUnits.length === 0) {
-          setAllLocations(locations)
-          return
-        }
-
-        const merged = locations
-          .filter((staticLoc) => staticLoc != null) // Filtrar valores nulos primeiro
-          .map(staticLoc => {
-            const sanityUnit = Array.isArray(sanityUnits)
-              ? sanityUnits.find((unit: any) =>
-                  unit?.slug?.current === staticLoc.id || unit?.slug === staticLoc.id
-                )
-              : null
-
-            if (sanityUnit) {
-              const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
-              return {
-                ...staticLoc,
-                name: sanityUnit.name || staticLoc.name,
-                address: sanityUnit.address || staticLoc.address,
-                type: sanityUnit.type || staticLoc.type,
-                photo: sanityUnit.images?.[0]?.asset?.url || staticLoc.photo,
-                features: Array.isArray(sanityUnit.services) ? sanityUnit.services : (Array.isArray(staticLoc.features) ? staticLoc.features : []),
-                hours: sanityUnit.openingHours || staticLoc.hours,
-                coordinates: hasCoordinates ? {
-                  lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
-                  lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
-                } : undefined
-              } as LocationUnit
-            }
-            return staticLoc
-          })
-
-        setAllLocations(merged)
-      } catch (error) {
-        console.error('Error loading locations:', error)
-        setAllLocations([])
-      }
-    }
-
-    loadLocations()
-  }, [sanityUnits, loadingSanity])
-
-  const handlePlanClick = (planName: string) => {
-    setSelectedPlan(selectedPlan === planName ? null : planName)
-  }
-
-  // Filter units based on plan
-  const filteredUnits = useMemo(() => {
-    if (!selectedPlan) return []
-
-    // Garantir que allLocations é um array antes de filtrar
-    if (!Array.isArray(allLocations)) {
-      console.warn('allLocations não é um array:', allLocations)
-      return []
-    }
-
-    return allLocations.filter((unit): unit is LocationUnit => {
-      if (!unit || typeof unit !== 'object') return false
-      if (!unit.id || typeof unit.id !== 'string') return false
-
-      // Excluir unidades em inauguração
-      if (unit.type === 'inauguracao') return false
-
-      if (selectedPlan === 'TRADICIONAL') {
-        // Plano Tradicional: apenas unidades tipo "tradicional"
-        return unit.type === 'tradicional'
-      } else if (selectedPlan === 'DIAMANTE') {
-        // Plano Diamante: todas as unidades exceto Morada do Sol e Alphaville
-        return (
-          !unit.id.includes('morada') &&
-          !unit.id.includes('alphaville')
-        )
-      }
-
-      return false
-    })
-  }, [selectedPlan, allLocations])
-
-  // Mostrar loading state enquanto carrega dados do Sanity
   if (plansLoading) {
     return (
       <main className="min-h-screen relative bg-black flex items-center justify-center">
@@ -368,9 +230,9 @@ export default function Planos() {
                       }
                     </ul>
 
-                    {/* CTA Button */}
-                    <button
-                      onClick={() => handlePlanClick((plano as any).nome)}
+                    {/* CTA Button - Link to /unidades */}
+                    <Link
+                      href="/unidades"
                       className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
                         (plano as any).destaque
                           ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
@@ -379,8 +241,7 @@ export default function Planos() {
                     >
                       <MapPin className="w-5 h-5" />
                       MATRICULAR
-                      <ChevronDown className={`w-4 h-4 transition-transform ${selectedPlan === (plano as any).nome ? 'rotate-180' : ''}`} />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </motion.div>
@@ -390,91 +251,6 @@ export default function Planos() {
               </div>
             )}
           </div>
-
-          {/* ÚNICA Seção de Unidades - Aparece abaixo dos cards quando clicar em qualquer plano */}
-          <AnimatePresence>
-            {selectedPlan && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="overflow-hidden mt-8"
-              >
-                <div className="max-w-5xl mx-auto rounded-3xl border border-zinc-800/50 bg-zinc-900/50 backdrop-blur-sm p-8">
-                  <div className="flex items-center justify-between mb-6">
-                    <h4 className="text-2xl font-bold text-white flex items-center gap-3">
-                      <MapPin className="w-6 h-6 text-yellow-500" />
-                      Unidades disponíveis para o plano {selectedPlan}
-                    </h4>
-                    <span className="text-zinc-400 text-sm">
-                      {filteredUnits.length} unidades
-                    </span>
-                  </div>
-
-                  {loadingSanity ? (
-                    <div className="text-center py-12 text-zinc-400">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500 mx-auto mb-4"></div>
-                      Carregando unidades...
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[600px] overflow-y-auto pr-2">
-                      {Array.isArray(filteredUnits) && filteredUnits.length > 0 ? filteredUnits.map((unit) => (
-                        <Link
-                          key={unit.id}
-                          href={`/unidades/${unit.id}`}
-                          className="group relative overflow-hidden rounded-xl bg-zinc-800/50 border border-zinc-700/50 hover:border-yellow-500/50 transition-all duration-300"
-                        >
-                          {/* Unit Image */}
-                          {unit.photo && (
-                            <div className="relative h-40 overflow-hidden">
-                              <Image
-                                src={unit.photo}
-                                alt={unit.name}
-                                fill
-                                className="object-cover group-hover:scale-110 transition-transform duration-500"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/50 to-transparent"></div>
-                            </div>
-                          )}
-
-                          {/* Unit Info */}
-                          <div className={`${unit.photo ? 'absolute bottom-0 inset-x-0' : ''} p-4`}>
-                            <h5 className="text-white font-semibold text-base group-hover:text-yellow-400 transition-colors mb-1">
-                              {unit.name}
-                            </h5>
-                            <p className="text-zinc-400 text-sm mb-2">
-                              {unit.address}
-                            </p>
-                            <div className="flex items-center justify-between">
-                              <span className={`text-xs px-2 py-1 rounded-full ${
-                                unit.type === 'diamante' ? 'bg-yellow-500/20 text-yellow-400' :
-                                unit.type === 'premium' ? 'bg-purple-500/20 text-purple-400' :
-                                'bg-zinc-700/50 text-zinc-300'
-                              }`}>
-                                {unit.type?.toUpperCase()}
-                              </span>
-                              <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-yellow-500 group-hover:translate-x-1 transition-all" />
-                            </div>
-                          </div>
-                        </Link>
-                      )) : (
-                        <div className="col-span-full text-center py-8 text-zinc-400">
-                          Nenhuma unidade disponível.
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {!loadingSanity && Array.isArray(filteredUnits) && filteredUnits.length === 0 && (
-                    <div className="text-center py-12 text-zinc-400">
-                      Nenhuma unidade disponível para este plano.
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           {/* Comparison Toggle */}
           <motion.div
@@ -571,22 +347,22 @@ export default function Planos() {
                   <div className="grid grid-cols-3 p-6 bg-black/20">
                     <div></div>
                     <div className="border-l border-white/10 flex justify-center px-2">
-                      <button
-                        onClick={() => handlePlanClick('TRADICIONAL')}
+                      <Link
+                        href="/unidades"
                         className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-all w-full flex items-center justify-center gap-2"
                       >
                         <MapPin className="w-4 h-4" />
                         Matricular
-                      </button>
+                      </Link>
                     </div>
                     <div className="border-l border-white/10 flex justify-center px-2">
-                      <button
-                        onClick={() => handlePlanClick('DIAMANTE')}
+                      <Link
+                        href="/unidades"
                         className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold rounded-xl transition-all hover:scale-105 w-full flex items-center justify-center gap-2"
                       >
                         <MapPin className="w-4 h-4" />
                         Matricular
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -624,13 +400,13 @@ export default function Planos() {
                     ))}
 
                     <div className="p-6 bg-black/20">
-                      <button
-                        onClick={() => handlePlanClick('TRADICIONAL')}
+                      <Link
+                        href="/unidades"
                         className="w-full px-6 py-4 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2"
                       >
                         <MapPin className="w-5 h-5" />
                         Matricular
-                      </button>
+                      </Link>
                     </div>
                   </div>
 
@@ -668,13 +444,13 @@ export default function Planos() {
                     ))}
 
                     <div className="p-6 bg-black/20">
-                      <button
-                        onClick={() => handlePlanClick('DIAMANTE')}
+                      <Link
+                        href="/unidades"
                         className="w-full px-6 py-4 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold rounded-xl transition-all flex items-center justify-center gap-2"
                       >
                         <MapPin className="w-5 h-5" />
                         Matricular
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -695,7 +471,6 @@ export default function Planos() {
           </motion.div>
         </div>
       </section>
-
     </main>
   )
 }
