@@ -21,6 +21,30 @@ function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon
   return R * c
 }
 
+// Mapeamento de correções de acentuação para nomes de unidades
+const accentCorrections: Record<string, string> = {
+  'chapeu': 'Chapéu',
+  'goiano': 'Goiano',
+  'adrianopolis': 'Adrianópolis',
+  'sao': 'São',
+  'jose': 'José',
+  'joao': 'João',
+  'raimundo': 'Raimundo',
+  'manaus': 'Manaus',
+  'silves': 'Silves',
+  'flores': 'Flores',
+  'cachoeirinha': 'Cachoeirinha',
+  'centro': 'Centro',
+  'torres': 'Torres',
+  'planalto': 'Planalto',
+  'cidade': 'Cidade',
+  'nova': 'Nova',
+  'deus': 'Deus',
+  'margarita': 'Margarita',
+  'ponta': 'Ponta',
+  'negra': 'Negra',
+}
+
 function formatUnitLabel(value?: string | null) {
   if (!value) return ''
   return value
@@ -33,6 +57,11 @@ function formatUnitLabel(value?: string | null) {
       // Preservar palavras que são abreviações em maiúsculas (ex: CT, VIP, AC)
       if (word.length <= 3 && word === word.toUpperCase()) {
         return word
+      }
+      // Verificar se há correção de acentuação para esta palavra
+      const lowerWord = word.toLowerCase()
+      if (accentCorrections[lowerWord]) {
+        return accentCorrections[lowerWord]
       }
       return word.charAt(0).toLocaleUpperCase('pt-BR') + word.slice(1).toLocaleLowerCase('pt-BR')
     })
