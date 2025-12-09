@@ -275,17 +275,42 @@ export const unitSchema = defineType({
           type: 'object',
           name: 'planoConfig',
           fields: [
+            // Dados originais da API (readonly)
             defineField({ name: 'codigoApi', title: 'Código API', type: 'string' }),
             defineField({ name: 'nomeOriginal', title: 'Nome Original', type: 'string' }),
             defineField({ name: 'valorOriginal', title: 'Valor Original', type: 'string' }),
+            defineField({ name: 'adesaoOriginal', title: 'Adesão Original', type: 'string' }),
+            defineField({ name: 'categoriaOriginal', title: 'Categoria Original', type: 'string' }),
+
+            // Dados personalizados de exibição
             defineField({ name: 'nomeExibicao', title: 'Nome Exibição', type: 'string' }),
             defineField({ name: 'precoExibicao', title: 'Preço Exibição', type: 'string' }),
+            defineField({ name: 'periodoExibicao', title: 'Período (ex: /mês, /ano)', type: 'string' }),
             defineField({ name: 'descricaoExibicao', title: 'Descrição', type: 'text' }),
             defineField({ name: 'beneficiosExibicao', title: 'Benefícios', type: 'array', of: [{ type: 'string' }] }),
+            defineField({ name: 'ctaTexto', title: 'Texto do Botão CTA', type: 'string' }),
+            defineField({ name: 'adesaoExibicao', title: 'Adesão Exibição', type: 'string' }),
+            defineField({ name: 'observacoes', title: 'Observações/Notas', type: 'text' }),
+
+            // Configurações visuais
             defineField({ name: 'visivel', title: 'Visível', type: 'boolean', initialValue: true }),
             defineField({ name: 'destaque', title: 'Destaque', type: 'boolean', initialValue: false }),
             defineField({ name: 'ordem', title: 'Ordem', type: 'number', initialValue: 0 }),
             defineField({ name: 'badge', title: 'Badge', type: 'string' }),
+            defineField({
+              name: 'corCard',
+              title: 'Cor do Card',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Padrão', value: 'default' },
+                  { title: 'Dourado (Destaque)', value: 'gold' },
+                  { title: 'Azul (Premium)', value: 'blue' },
+                  { title: 'Verde (Econômico)', value: 'green' },
+                  { title: 'Roxo (VIP)', value: 'purple' },
+                ],
+              },
+            }),
           ],
         },
       ],
