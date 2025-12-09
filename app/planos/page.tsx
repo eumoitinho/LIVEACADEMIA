@@ -1,11 +1,12 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { Check, Crown, Sparkles, ChevronDown, MapPin, ChevronRight } from "lucide-react"
+import { Check, Crown, Sparkles, ChevronDown, MapPin, ChevronRight, DollarSign } from "lucide-react"
 import React, { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePlansData } from "@/hooks/use-sanity-data"
+import { UnidadesPriceComparison } from "@/src/components/planos/UnidadesPriceComparison"
 
 const planos = [
   {
@@ -73,6 +74,13 @@ export default function Planos() {
   const [sanityUnits, setSanityUnits] = useState<any[]>([])
   const [loadingSanity, setLoadingSanity] = useState(true)
   const [allLocations, setAllLocations] = useState<LocationUnit[]>([])
+
+  // State para comparativo de preços
+  const [showPriceComparison, setShowPriceComparison] = useState(false)
+  const [selectedPlanInfo, setSelectedPlanInfo] = useState<{
+    type: string
+    price: number
+  } | null>(null)
 
   // Use Sanity plans or fallback to hardcoded
   // Normalizar planos do Sanity para garantir estrutura consistente
@@ -198,8 +206,19 @@ export default function Planos() {
     loadLocations()
   }, [sanityUnits, loadingSanity])
 
-  const handlePlanClick = (planName: string) => {
+  const handlePlanClick = (planName: string, planPrice?: string) => {
     setSelectedPlan(selectedPlan === planName ? null : planName)
+  }
+
+  // Handler para abrir comparativo de preços
+  const handleOpenPriceComparison = (planName: string, planPrice: string) => {
+    // Converter preço de string "119,90" para número 119.90
+    const priceNumber = parseFloat(planPrice.replace(',', '.'))
+    setSelectedPlanInfo({
+      type: planName,
+      price: priceNumber
+    })
+    setShowPriceComparison(true)
   }
 
   // Filter units based on plan
@@ -367,18 +386,28 @@ export default function Planos() {
                       }
                     </ul>
 
-                    {/* CTA Button */}
-                    <button
+                    {/* CTA Buttons */}
+                    <div className="space-y-3">
+                      <button
+                        onClick={() => handleOpenPriceComparison((plano as any).nome, (plano as any).preco)}
+                        className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+                          (plano as any).destaque
+                            ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
+                            : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
+                        }`}
+                      >
+                        <DollarSign className="w-5 h-5" />
+                        COMPARAR PREÇOS
+                      </button>
+                      <button
                         onClick={() => handlePlanClick((plano as any).nome)}
-                      className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
-                        (plano as any).destaque
-                          ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-[1.02]'
-                          : 'bg-zinc-900 text-white border border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
-                      }`}
-                    >
-                      MATRICULE-SE AGORA!
-                      <ChevronDown className={`w-5 h-5 transition-transform ${selectedPlan === (plano as any).nome ? 'rotate-180' : ''}`} />
-                    </button>
+                        className="w-full py-3 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700"
+                      >
+                        <MapPin className="w-4 h-4" />
+                        Ver unidades disponíveis
+                        <ChevronDown className={`w-4 h-4 transition-transform ${selectedPlan === (plano as any).nome ? 'rotate-180' : ''}`} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -570,18 +599,20 @@ export default function Planos() {
                     <div></div>
                     <div className="border-l border-white/10 flex justify-center px-2">
                       <button
-                        onClick={() => handlePlanClick('TRADICIONAL')}
-                        className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-all w-full"
+                        onClick={() => handleOpenPriceComparison('TRADICIONAL', '119,90')}
+                        className="px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-all w-full flex items-center justify-center gap-2"
                       >
-                        Escolher
+                        <DollarSign className="w-4 h-4" />
+                        Comparar
                       </button>
                     </div>
                     <div className="border-l border-white/10 flex justify-center px-2">
                       <button
-                        onClick={() => handlePlanClick('DIAMANTE')}
-                        className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold rounded-xl transition-all hover:scale-105 w-full"
+                        onClick={() => handleOpenPriceComparison('DIAMANTE', '159,90')}
+                        className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold rounded-xl transition-all hover:scale-105 w-full flex items-center justify-center gap-2"
                       >
-                        Escolher
+                        <DollarSign className="w-4 h-4" />
+                        Comparar
                       </button>
                     </div>
                   </div>
@@ -621,10 +652,11 @@ export default function Planos() {
 
                     <div className="p-6 bg-black/20">
                       <button
-                        onClick={() => handlePlanClick('TRADICIONAL')}
-                        className="w-full px-6 py-4 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-all"
+                        onClick={() => handleOpenPriceComparison('TRADICIONAL', '119,90')}
+                        className="w-full px-6 py-4 bg-zinc-800 hover:bg-zinc-700 text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2"
                       >
-                        Escolher Tradicional
+                        <DollarSign className="w-5 h-5" />
+                        Comparar Preços
                       </button>
                     </div>
                   </div>
@@ -664,10 +696,11 @@ export default function Planos() {
 
                     <div className="p-6 bg-black/20">
                       <button
-                        onClick={() => handlePlanClick('DIAMANTE')}
-                        className="w-full px-6 py-4 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold rounded-xl transition-all"
+                        onClick={() => handleOpenPriceComparison('DIAMANTE', '159,90')}
+                        className="w-full px-6 py-4 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-black font-bold rounded-xl transition-all flex items-center justify-center gap-2"
                       >
-                        Escolher Diamante
+                        <DollarSign className="w-5 h-5" />
+                        Comparar Preços
                       </button>
                     </div>
                   </div>
@@ -689,6 +722,14 @@ export default function Planos() {
           </motion.div>
         </div>
       </section>
+
+      {/* Modal de Comparativo de Preços */}
+      <UnidadesPriceComparison
+        isOpen={showPriceComparison}
+        onClose={() => setShowPriceComparison(false)}
+        selectedPlanType={selectedPlanInfo?.type || 'TRADICIONAL'}
+        selectedPlanPrice={selectedPlanInfo?.price || 119.90}
+      />
     </main>
   )
 }

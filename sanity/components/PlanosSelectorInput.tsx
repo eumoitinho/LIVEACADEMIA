@@ -16,17 +16,29 @@ interface PlanoFromAPI {
 
 interface PlanoConfig {
   _key: string
+  // Dados originais da API
   codigoApi: string
   nomeOriginal: string
   valorOriginal: string
+  adesaoOriginal?: string
+  categoriaOriginal?: string
+
+  // Dados personalizados de exibição
   nomeExibicao?: string
   precoExibicao?: string
+  periodoExibicao?: string
   descricaoExibicao?: string
   beneficiosExibicao?: string[]
+  ctaTexto?: string
+  adesaoExibicao?: string
+  observacoes?: string
+
+  // Configurações visuais
   visivel: boolean
   destaque: boolean
   ordem: number
   badge?: string
+  corCard?: string
 }
 
 interface PlanosSelectorInputProps {
@@ -71,6 +83,10 @@ const styles = {
     color: '#3b82f6',
     border: '1px solid #3b82f6',
   },
+  buttonSmall: {
+    padding: '4px 8px',
+    fontSize: '12px',
+  },
   input: {
     width: '100%',
     padding: '8px 12px',
@@ -78,6 +94,16 @@ const styles = {
     border: '1px solid #d1d5db',
     fontSize: '14px',
     marginTop: '4px',
+  },
+  textarea: {
+    width: '100%',
+    padding: '8px 12px',
+    borderRadius: '6px',
+    border: '1px solid #d1d5db',
+    fontSize: '14px',
+    marginTop: '4px',
+    minHeight: '80px',
+    resize: 'vertical' as const,
   },
   select: {
     width: '100%',
@@ -98,6 +124,13 @@ const styles = {
     fontWeight: 500,
     color: '#374151',
     marginBottom: '4px',
+    display: 'block',
+  },
+  labelSmall: {
+    fontSize: '12px',
+    fontWeight: 500,
+    color: '#6b7280',
+    marginBottom: '2px',
     display: 'block',
   },
   text: {
@@ -129,16 +162,43 @@ const styles = {
     alignItems: 'center',
     gap: '12px',
   },
+  flexWrap: {
+    display: 'flex',
+    flexWrap: 'wrap' as const,
+    gap: '8px',
+  },
   stack: {
     display: 'flex',
     flexDirection: 'column' as const,
     gap: '12px',
   },
+  grid2: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '12px',
+  },
+  grid3: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr 1fr',
+    gap: '12px',
+  },
   configPanel: {
     marginTop: '12px',
-    padding: '12px',
+    padding: '16px',
     backgroundColor: '#f9fafb',
-    borderRadius: '6px',
+    borderRadius: '8px',
+    border: '1px solid #e5e7eb',
+  },
+  section: {
+    marginTop: '16px',
+    paddingTop: '16px',
+    borderTop: '1px solid #e5e7eb',
+  },
+  sectionTitle: {
+    fontSize: '14px',
+    fontWeight: 600,
+    color: '#111827',
+    marginBottom: '12px',
   },
   spinner: {
     width: '20px',
@@ -169,17 +229,42 @@ const styles = {
     borderRadius: '6px',
     color: '#92400e',
   },
+  benefitItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: '6px 10px',
+    backgroundColor: '#fff',
+    borderRadius: '6px',
+    border: '1px solid #e5e7eb',
+    fontSize: '13px',
+  },
+  removeButton: {
+    background: 'none',
+    border: 'none',
+    color: '#ef4444',
+    cursor: 'pointer',
+    padding: '2px',
+    fontSize: '16px',
+    lineHeight: 1,
+  },
+  originalValue: {
+    fontSize: '11px',
+    color: '#9ca3af',
+    marginTop: '2px',
+  },
 }
 
 export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
   const { value = [], onChange } = props
-  
+
   const slug = useFormValue(['slug', 'current']) as string | undefined
-  
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [apiPlanos, setApiPlanos] = useState<PlanoFromAPI[]>([])
   const [expandedPlano, setExpandedPlano] = useState<string | null>(null)
+  const [newBenefit, setNewBenefit] = useState<{[key: string]: string}>({})
 
   const fetchPlanos = useCallback(async () => {
     if (!slug) {
@@ -202,9 +287,9 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
 
       const data = await response.json()
       const planos: PlanoFromAPI[] = data.planos || []
-      
+
       setApiPlanos(planos)
-      
+
       if (planos.length === 0) {
         setError('Nenhum plano encontrado para esta unidade.')
       }
@@ -240,16 +325,19 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
 
   const togglePlano = (plano: PlanoFromAPI) => {
     const codigo = plano.codigo.toString()
-    
+
     if (isPlanoSelected(codigo)) {
       const newValue = value.filter(p => p.codigoApi !== codigo)
       onChange(newValue.length > 0 ? set(newValue) : unset())
     } else {
+      const preco = formatPrice(plano.mensalidade ?? plano.valor)
       const newConfig: PlanoConfig = {
         _key: `plano_${codigo}_${Date.now()}`,
         codigoApi: codigo,
         nomeOriginal: plano.nome,
-        valorOriginal: formatPrice(plano.mensalidade ?? plano.valor),
+        valorOriginal: preco,
+        adesaoOriginal: plano.adesao ? formatPrice(plano.adesao) : undefined,
+        categoriaOriginal: plano.categoria,
         visivel: true,
         destaque: false,
         ordem: value.length,
@@ -268,17 +356,23 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
     onChange(set(newValue))
   }
 
-  const toggleVisivel = (codigo: string) => {
+  const addBenefit = (codigo: string) => {
     const config = getPlanoConfig(codigo)
-    if (config) {
-      updatePlanoConfig(codigo, { visivel: !config.visivel })
+    const benefitText = newBenefit[codigo]?.trim()
+    if (config && benefitText) {
+      const currentBenefits = config.beneficiosExibicao || []
+      updatePlanoConfig(codigo, {
+        beneficiosExibicao: [...currentBenefits, benefitText]
+      })
+      setNewBenefit(prev => ({ ...prev, [codigo]: '' }))
     }
   }
 
-  const toggleDestaque = (codigo: string) => {
+  const removeBenefit = (codigo: string, index: number) => {
     const config = getPlanoConfig(codigo)
-    if (config) {
-      updatePlanoConfig(codigo, { destaque: !config.destaque })
+    if (config && config.beneficiosExibicao) {
+      const newBenefits = config.beneficiosExibicao.filter((_, i) => i !== index)
+      updatePlanoConfig(codigo, { beneficiosExibicao: newBenefits })
     }
   }
 
@@ -293,14 +387,14 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
   return (
     <div style={styles.container}>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      
+
       <div style={{ ...styles.flex, marginBottom: '16px' }}>
         <button
           style={{ ...styles.button, ...styles.buttonPrimary }}
           onClick={fetchPlanos}
           disabled={loading}
         >
-          {loading ? 'Carregando...' : 'Recarregar Planos da API'}
+          {loading ? 'Carregando...' : '🔄 Recarregar Planos da API'}
         </button>
         {loading && <div style={styles.spinner} />}
       </div>
@@ -314,13 +408,13 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
           <div style={styles.stack}>
             <div>
               <strong style={{ fontSize: '16px' }}>
-                Planos disponíveis para {slug} ({apiPlanos.length} planos)
+                📋 Planos disponíveis para {slug} ({apiPlanos.length} planos)
               </strong>
               <p style={styles.textSmall}>
-                Selecione os planos que devem aparecer nesta unidade. Configure visibilidade, destaque e textos personalizados.
+                Selecione os planos e clique em "Configurar" para personalizar todas as informações do card.
               </p>
             </div>
-            
+
             <div style={styles.stack}>
               {apiPlanos.map((plano) => {
                 const codigo = plano.codigo.toString()
@@ -330,8 +424,8 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
                 const preco = formatPrice(plano.mensalidade ?? plano.valor)
 
                 return (
-                  <div 
-                    key={codigo} 
+                  <div
+                    key={codigo}
                     style={{
                       ...styles.card,
                       ...(selected ? styles.cardSelected : {}),
@@ -358,108 +452,268 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
                             )}
                             {config && !config.visivel && (
                               <span style={{ ...styles.badge, ...styles.badgeOculto }}>
-                                Oculto
+                                🚫 Oculto
+                              </span>
+                            )}
+                            {config?.badge && (
+                              <span style={{ ...styles.badge, backgroundColor: '#dbeafe', color: '#1e40af' }}>
+                                {config.badge}
                               </span>
                             )}
                           </div>
                           <p style={styles.textSmall}>
-                            Código: {codigo} | R$ {config?.precoExibicao || preco}/mês
+                            Código: {codigo} | R$ {config?.precoExibicao || preco}{config?.periodoExibicao || '/mês'}
                             {plano.adesao ? ` | Adesão: R$ ${plano.adesao}` : ''}
+                            {plano.categoria ? ` | ${plano.categoria}` : ''}
                           </p>
                         </div>
-                        
+
                         {selected && (
                           <button
                             style={{ ...styles.button, ...styles.buttonGhost }}
                             onClick={() => setExpandedPlano(isExpanded ? null : codigo)}
                           >
-                            {isExpanded ? 'Fechar' : 'Configurar'}
+                            {isExpanded ? '✕ Fechar' : '⚙️ Configurar'}
                           </button>
                         )}
                       </div>
 
-                      {/* Configurações expandidas */}
+                      {/* Configurações expandidas - Editor completo */}
                       {selected && isExpanded && config && (
                         <div style={styles.configPanel}>
-                          <div style={styles.stack}>
+                          {/* Seção: Visibilidade e Status */}
+                          <div style={styles.sectionTitle}>🎯 Visibilidade e Status</div>
+                          <div style={styles.grid3}>
                             <label style={{ ...styles.flex, cursor: 'pointer' }}>
                               <input
                                 type="checkbox"
                                 style={styles.checkbox}
                                 checked={config.visivel}
-                                onChange={() => toggleVisivel(codigo)}
+                                onChange={() => updatePlanoConfig(codigo, { visivel: !config.visivel })}
                               />
                               <span>Visível no site</span>
                             </label>
-                            
+
                             <label style={{ ...styles.flex, cursor: 'pointer' }}>
                               <input
                                 type="checkbox"
                                 style={styles.checkbox}
                                 checked={config.destaque}
-                                onChange={() => toggleDestaque(codigo)}
+                                onChange={() => updatePlanoConfig(codigo, { destaque: !config.destaque })}
                               />
-                              <span>Plano em destaque (visual diferenciado)</span>
+                              <span>Plano em destaque</span>
                             </label>
 
                             <div>
-                              <label style={styles.label}>Nome de exibição (opcional)</label>
-                              <input
-                                type="text"
-                                style={styles.input}
-                                value={config.nomeExibicao || ''}
-                                placeholder={plano.nome}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, { 
-                                  nomeExibicao: e.target.value || undefined 
-                                })}
-                              />
-                            </div>
-
-                            <div>
-                              <label style={styles.label}>Preço de exibição (opcional)</label>
-                              <input
-                                type="text"
-                                style={styles.input}
-                                value={config.precoExibicao || ''}
-                                placeholder={preco}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, { 
-                                  precoExibicao: e.target.value || undefined 
-                                })}
-                              />
-                              <p style={styles.textSmall}>
-                                O preço original (R$ {preco}) será usado no checkout.
-                              </p>
-                            </div>
-
-                            <div>
-                              <label style={styles.label}>Ordem de exibição</label>
+                              <label style={styles.labelSmall}>Ordem</label>
                               <input
                                 type="number"
                                 style={styles.input}
                                 value={config.ordem?.toString() || '0'}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, { 
-                                  ordem: parseInt(e.target.value) || 0 
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, {
+                                  ordem: parseInt(e.target.value) || 0
                                 })}
                               />
                             </div>
+                          </div>
 
-                            <div>
-                              <label style={styles.label}>Badge</label>
-                              <select
-                                style={styles.select}
-                                value={config.badge || ''}
-                                onChange={(e: ChangeEvent<HTMLSelectElement>) => updatePlanoConfig(codigo, { 
-                                  badge: e.target.value || undefined 
-                                })}
-                              >
-                                <option value="">Nenhum</option>
-                                <option value="MAIS VENDIDO">Mais vendido</option>
-                                <option value="RECOMENDADO">Recomendado</option>
-                                <option value="NOVIDADE">Novidade</option>
-                                <option value="OFERTA">Oferta</option>
-                                <option value="MELHOR CUSTO-BENEFÍCIO">Melhor custo-benefício</option>
-                              </select>
+                          {/* Seção: Informações principais */}
+                          <div style={{ ...styles.section }}>
+                            <div style={styles.sectionTitle}>📝 Informações Principais</div>
+                            <div style={styles.grid2}>
+                              <div>
+                                <label style={styles.label}>Nome do Plano</label>
+                                <input
+                                  type="text"
+                                  style={styles.input}
+                                  value={config.nomeExibicao || ''}
+                                  placeholder={plano.nome}
+                                  onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, {
+                                    nomeExibicao: e.target.value || undefined
+                                  })}
+                                />
+                                <p style={styles.originalValue}>Original: {plano.nome}</p>
+                              </div>
+
+                              <div>
+                                <label style={styles.label}>Preço</label>
+                                <input
+                                  type="text"
+                                  style={styles.input}
+                                  value={config.precoExibicao || ''}
+                                  placeholder={preco}
+                                  onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, {
+                                    precoExibicao: e.target.value || undefined
+                                  })}
+                                />
+                                <p style={styles.originalValue}>Original: R$ {preco}</p>
+                              </div>
+
+                              <div>
+                                <label style={styles.label}>Período</label>
+                                <select
+                                  style={styles.select}
+                                  value={config.periodoExibicao || ''}
+                                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updatePlanoConfig(codigo, {
+                                    periodoExibicao: e.target.value || undefined
+                                  })}
+                                >
+                                  <option value="">/mês (padrão)</option>
+                                  <option value="/mês">/mês</option>
+                                  <option value="/ano">/ano</option>
+                                  <option value="/semestre">/semestre</option>
+                                  <option value="/trimestre">/trimestre</option>
+                                  <option value=" mensal"> mensal</option>
+                                  <option value=" anual"> anual</option>
+                                </select>
+                              </div>
+
+                              <div>
+                                <label style={styles.label}>Taxa de Adesão</label>
+                                <input
+                                  type="text"
+                                  style={styles.input}
+                                  value={config.adesaoExibicao || ''}
+                                  placeholder={plano.adesao ? `R$ ${plano.adesao}` : 'Sem adesão'}
+                                  onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, {
+                                    adesaoExibicao: e.target.value || undefined
+                                  })}
+                                />
+                                {plano.adesao && (
+                                  <p style={styles.originalValue}>Original: R$ {plano.adesao}</p>
+                                )}
+                              </div>
                             </div>
+
+                            <div style={{ marginTop: '12px' }}>
+                              <label style={styles.label}>Descrição do Plano</label>
+                              <textarea
+                                style={styles.textarea}
+                                value={config.descricaoExibicao || ''}
+                                placeholder="Adicione uma descrição personalizada para este plano..."
+                                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updatePlanoConfig(codigo, {
+                                  descricaoExibicao: e.target.value || undefined
+                                })}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Seção: Benefícios */}
+                          <div style={{ ...styles.section }}>
+                            <div style={styles.sectionTitle}>✨ Benefícios/Features</div>
+
+                            {/* Lista de benefícios existentes */}
+                            {config.beneficiosExibicao && config.beneficiosExibicao.length > 0 && (
+                              <div style={{ ...styles.flexWrap, marginBottom: '12px' }}>
+                                {config.beneficiosExibicao.map((benefit, index) => (
+                                  <div key={index} style={styles.benefitItem}>
+                                    <span>✓ {benefit}</span>
+                                    <button
+                                      style={styles.removeButton}
+                                      onClick={() => removeBenefit(codigo, index)}
+                                      title="Remover benefício"
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Adicionar novo benefício */}
+                            <div style={styles.flex}>
+                              <input
+                                type="text"
+                                style={{ ...styles.input, flex: 1, marginTop: 0 }}
+                                value={newBenefit[codigo] || ''}
+                                placeholder="Digite um benefício e pressione Enter ou clique em Adicionar"
+                                onChange={(e) => setNewBenefit(prev => ({ ...prev, [codigo]: e.target.value }))}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') {
+                                    e.preventDefault()
+                                    addBenefit(codigo)
+                                  }
+                                }}
+                              />
+                              <button
+                                style={{ ...styles.button, ...styles.buttonPrimary, ...styles.buttonSmall }}
+                                onClick={() => addBenefit(codigo)}
+                              >
+                                + Adicionar
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Seção: Aparência */}
+                          <div style={{ ...styles.section }}>
+                            <div style={styles.sectionTitle}>🎨 Aparência do Card</div>
+                            <div style={styles.grid3}>
+                              <div>
+                                <label style={styles.label}>Badge</label>
+                                <select
+                                  style={styles.select}
+                                  value={config.badge || ''}
+                                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updatePlanoConfig(codigo, {
+                                    badge: e.target.value || undefined
+                                  })}
+                                >
+                                  <option value="">Nenhum</option>
+                                  <option value="MAIS VENDIDO">🔥 Mais vendido</option>
+                                  <option value="RECOMENDADO">⭐ Recomendado</option>
+                                  <option value="NOVIDADE">🆕 Novidade</option>
+                                  <option value="OFERTA">💰 Oferta</option>
+                                  <option value="MELHOR CUSTO-BENEFÍCIO">🏆 Melhor custo-benefício</option>
+                                  <option value="EXCLUSIVO">💎 Exclusivo</option>
+                                  <option value="PROMOÇÃO">🎁 Promoção</option>
+                                </select>
+                              </div>
+
+                              <div>
+                                <label style={styles.label}>Cor do Card</label>
+                                <select
+                                  style={styles.select}
+                                  value={config.corCard || ''}
+                                  onChange={(e: ChangeEvent<HTMLSelectElement>) => updatePlanoConfig(codigo, {
+                                    corCard: e.target.value || undefined
+                                  })}
+                                >
+                                  <option value="">Padrão</option>
+                                  <option value="gold">🌟 Dourado (Destaque)</option>
+                                  <option value="blue">💙 Azul (Premium)</option>
+                                  <option value="green">💚 Verde (Econômico)</option>
+                                  <option value="purple">💜 Roxo (VIP)</option>
+                                </select>
+                              </div>
+
+                              <div>
+                                <label style={styles.label}>Texto do Botão (CTA)</label>
+                                <input
+                                  type="text"
+                                  style={styles.input}
+                                  value={config.ctaTexto || ''}
+                                  placeholder="Matricule-se"
+                                  onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, {
+                                    ctaTexto: e.target.value || undefined
+                                  })}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Seção: Observações */}
+                          <div style={{ ...styles.section }}>
+                            <div style={styles.sectionTitle}>📋 Observações</div>
+                            <textarea
+                              style={styles.textarea}
+                              value={config.observacoes || ''}
+                              placeholder="Adicione notas, termos ou condições especiais para este plano..."
+                              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => updatePlanoConfig(codigo, {
+                                observacoes: e.target.value || undefined
+                              })}
+                            />
+                            <p style={styles.textSmall}>
+                              Estas observações podem ser exibidas junto ao plano ou nos termos.
+                            </p>
                           </div>
                         </div>
                       )}
@@ -476,6 +730,7 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
         <div style={styles.success}>
           ✅ {value.filter(p => p.visivel).length} plano(s) selecionado(s) para exibição
           {value.some(p => !p.visivel) && ` (${value.filter(p => !p.visivel).length} oculto(s))`}
+          {value.some(p => p.destaque) && ` • ${value.filter(p => p.destaque).length} em destaque`}
         </div>
       )}
     </div>

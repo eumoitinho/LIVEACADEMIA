@@ -187,17 +187,29 @@ export interface SEO {
 }
 
 export interface PlanoConfig {
+  // Dados originais da API
   codigoApi: string
   nomeOriginal?: string
   valorOriginal?: string
+  adesaoOriginal?: string
+  categoriaOriginal?: string
+
+  // Dados personalizados de exibição
   nomeExibicao?: string
   precoExibicao?: string
+  periodoExibicao?: string
   descricaoExibicao?: string
   beneficiosExibicao?: string[]
+  ctaTexto?: string
+  adesaoExibicao?: string
+  observacoes?: string
+
+  // Configurações visuais
   visivel: boolean
   destaque: boolean
   ordem: number
   badge?: string
+  corCard?: 'default' | 'gold' | 'blue' | 'green' | 'purple'
 }
 
 export interface Unit {
