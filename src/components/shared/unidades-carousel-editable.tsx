@@ -29,7 +29,13 @@ function formatUnitLabel(value?: string | null) {
     .replace(/[-_]+/g, ' ')
     .trim()
     .split(/\s+/)
-    .map((word) => word.charAt(0).toLocaleUpperCase('pt-BR') + word.slice(1).toLocaleLowerCase('pt-BR'))
+    .map((word) => {
+      // Preservar palavras que são abreviações em maiúsculas (ex: CT, VIP, AC)
+      if (word.length <= 3 && word === word.toUpperCase()) {
+        return word
+      }
+      return word.charAt(0).toLocaleUpperCase('pt-BR') + word.slice(1).toLocaleLowerCase('pt-BR')
+    })
     .join(' ')
 }
 
