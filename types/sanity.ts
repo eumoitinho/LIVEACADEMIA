@@ -252,6 +252,7 @@ export interface Unit {
   openingHours: string
   order: number
   active: boolean
+  inaugurada?: boolean
   featured: boolean
   planos?: Array<{
     nome: string

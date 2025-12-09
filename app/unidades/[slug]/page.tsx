@@ -113,7 +113,14 @@ export default async function UnidadePage(props: PageProps) {
     loc.id.replace(/-/g, '') === slug.replace(/-/g, '') // match sem hífens
   )
 
-  if (!sanityUnit && (!staticUnidade || staticUnidade.type === "inauguracao")) {
+  // Verificar se a unidade pode ser exibida
+  // Unidades inativas ou não inauguradas não devem ter página individual
+  if (sanityUnit) {
+    // Se tem unidade no Sanity, verificar se está ativa e inaugurada
+    if (sanityUnit.active === false) {
+      notFound()
+    }
+  } else if (!staticUnidade || staticUnidade.type === "inauguracao") {
     notFound()
   }
 
@@ -129,13 +136,22 @@ export default async function UnidadePage(props: PageProps) {
   const staticPhoto = staticUnidade?.photo
   const finalPhoto = sanityPhoto || staticPhoto || '/images/fachada.jpg'
 
+  // Normalizar tipo para lowercase e mapear variações
+  const normalizeType = (rawType: string | undefined): 'tradicional' | 'premium' | 'diamante' => {
+    if (!rawType) return 'tradicional'
+    const type = rawType.toLowerCase()
+    if (type.includes('diamante')) return 'diamante'
+    if (type.includes('premium')) return 'premium'
+    return 'tradicional'
+  }
+
   // Merge Sanity data with static data (Sanity takes precedence)
   const unidade = sanityUnit ? {
     ...staticUnidade,
     id: sanityUnit.slug || slug,
     name: sanityUnit.name,
     address: sanityUnit.address,
-    type: sanityUnit.type as 'tradicional' | 'premium' | 'diamante',
+    type: normalizeType(sanityUnit.type),
     photo: finalPhoto,
     features: sanityUnit.services || staticUnidade?.features || [],
     hours: sanityUnit.openingHours || staticUnidade?.hours || '',

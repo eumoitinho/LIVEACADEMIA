@@ -43,6 +43,8 @@ interface UnidadeBase {
   longitude: number | null
   badge?: { text: string; variant: 'pink' | 'amber' | 'orange' }
   link?: string
+  type?: string
+  inaugurada?: boolean
 }
 
 type UnidadeComDistancia = UnidadeBase & { distancia?: number }
@@ -66,6 +68,9 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
       .replace('live academia - ', '')
       .replace(/\s+/g, '-')
 
+  // Verificar se a unidade esta inaugurada
+  const isInauguracao = unidade.inaugurada === false || unidade.type === 'Em Inauguração'
+
   // Distância formatada (se existir)
   const distanciaFmt =
     unidade.distancia !== undefined
@@ -76,6 +81,56 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
 
   const normalizedBadge = formatUnitLabel(unidade.badge?.text || unidade.slug || 'Unidade')
   const normalizedTitle = formatUnitLabel(unidade.nome)
+
+  // Card para unidades em inauguracao (escurecido)
+  if (isInauguracao) {
+    return (
+      <div className="group block rounded-2xl">
+        <div
+          className={cn(
+            "relative rounded-2xl bg-gradient-to-b from-neutral-900/90 to-neutral-950/90 p-5 lg:p-6",
+            "border border-white/10 backdrop-blur-sm overflow-hidden",
+            "opacity-60",
+            "min-h-[360px]"
+          )}
+        >
+          <div className="relative z-10 flex flex-col h-full">
+            {/* Media */}
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-5 ring-1 ring-white/10">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-black/20 flex items-center justify-center">
+                <div className="text-center space-y-3">
+                  <div className="w-16 h-16 mx-auto rounded-full bg-white/10 flex items-center justify-center">
+                    <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  </div>
+                  <p className="text-sm font-medium text-white/60">Em breve</p>
+                </div>
+              </div>
+              {/* Badge sobre a imagem */}
+              <div className="absolute left-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-zinc-700/90 px-2.5 py-1 text-[11px] font-medium text-white ring-1 ring-white/20 backdrop-blur-sm">
+                <span className="inline-block w-2 h-2 rounded-full bg-zinc-400 shadow-[0_0_0_2px_rgba(0,0,0,0.4)]" />
+                Em breve
+              </div>
+            </div>
+            {/* Content */}
+            <div className="flex flex-col gap-3">
+              <h3 className="text-lg font-semibold text-neutral-300 tracking-tight leading-snug">
+                {normalizedTitle}
+              </h3>
+              <p className="text-sm text-zinc-500 line-clamp-2">
+                {unidade.endereco}
+              </p>
+            </div>
+
+            <div className="mt-auto pt-4 flex items-center justify-center">
+              <span className="text-xs text-neutral-500">
+                Inauguracao em breve
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <Link href={`/unidades/${unidadeId}`} className="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400/70 rounded-2xl">
@@ -109,11 +164,7 @@ function UnidadeCard({ unidade }: { unidade: UnidadeComDistancia }) {
                 priority={false}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
-              {/* Badge sobre a imagem */}
-              <div className="absolute left-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-medium text-white ring-1 ring-white/20 backdrop-blur-sm">
-                <span className="inline-block w-2 h-2 rounded-full bg-yellow-300 shadow-[0_0_0_2px_rgba(0,0,0,0.4)]" />
-                {normalizedBadge}
-              </div>
+              
             </div>
           {/* Content */}
           <div className="flex flex-col gap-3">

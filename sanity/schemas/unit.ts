@@ -183,15 +183,24 @@ export const unitSchema = defineType({
     }),
     defineField({
       name: 'active',
-      title: 'Ativa',
+      title: 'Unidade Ativa',
       type: 'boolean',
       initialValue: true,
+      description: 'Se desmarcado, a unidade nao aparecera na listagem do site',
+    }),
+    defineField({
+      name: 'inaugurada',
+      title: 'Unidade Inaugurada',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Se desmarcado, a unidade aparecera escurecida com "Em breve" (ainda nao inaugurada)',
     }),
     defineField({
       name: 'featured',
       title: 'Destaque',
       type: 'boolean',
       initialValue: false,
+      description: 'Se marcado, a unidade tera destaque especial na listagem',
     }),
     defineField({
       name: 'planos',

@@ -148,7 +148,7 @@ export const unitsQuery = groq`
   *[_type == "unit"] | order(order asc) {
     _id,
     name,
-    slug,
+    "slug": slug.current,
     address,
     city,
     state,
@@ -160,6 +160,15 @@ export const unitsQuery = groq`
     longitude,
     type,
     services[],
+    active,
+    inaugurada,
+    featured,
+    photo {
+      asset-> {
+        _id,
+        url
+      }
+    },
     modalidades[]->{
       _id,
       name,
@@ -185,7 +194,12 @@ export const unitsQuery = groq`
         }
       }
     },
-    images[],
+    images[] {
+      asset-> {
+        _id,
+        url
+      }
+    },
     description,
     openingHours,
     order

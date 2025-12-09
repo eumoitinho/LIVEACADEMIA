@@ -4,8 +4,11 @@ import { getUnits } from '@/lib/sanity'
 export async function GET() {
   try {
     const units = await getUnits()
-    
-    const formattedUnits = units.map((unit: any) => ({
+
+    // Filtrar unidades inativas (active === false)
+    const activeUnits = units.filter((unit: any) => unit.active !== false)
+
+    const formattedUnits = activeUnits.map((unit: any) => ({
       id: unit._id,
       slug: unit.slug,
       nome: (unit.name || '').replace(/^Ct /, 'CT '),
@@ -15,6 +18,8 @@ export async function GET() {
       longitude: unit.longitude,
       cidade: unit.city || 'Manaus',
       estado: unit.state || 'AM',
+      type: unit.type,
+      inaugurada: unit.inaugurada !== false, // true por padrao
     }))
 
     return NextResponse.json({ units: formattedUnits })

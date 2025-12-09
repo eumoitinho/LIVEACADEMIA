@@ -1,14 +1,12 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
-import { MapPin, Filter, Search, Navigation, X } from "lucide-react"
+import { Search, Navigation, X } from "lucide-react"
 import Link from "next/link"
 import { locations } from '@/src/lib/config/locations'
-import { UnidadeCard } from '@/src/components/unidade-card'
 import { UnidadeCardModern } from '@/src/components/unidade-card-modern'
 import { useUnitsData } from '@/hooks/use-sanity-data'
-import type { Unit } from '@/types/sanity'
 
 export default function Unidades() {
   const { data: sanityUnits, loading: loadingSanity } = useUnitsData()
@@ -49,23 +47,42 @@ export default function Unidades() {
           sanityPhoto = sanityUnit.backgroundImage.asset.url
         }
 
+        // Determinar tipo baseado no campo inaugurada e type do Sanity
+        // Normalizar tipo para lowercase (Sanity pode retornar "Diamante", "Premium", etc.)
+        let rawType = sanityUnit.type || staticLoc.type
+        let finalType = rawType?.toLowerCase() || 'tradicional'
+
+        // Mapear tipos com espaços para slugs
+        if (finalType === 'tradicional climatizada') finalType = 'tradicional'
+        if (finalType === 'em inauguração') finalType = 'inauguracao'
+
+        // Se nao inaugurada, forcar tipo inauguracao para escurecer o card
+        if (sanityUnit.inaugurada === false) {
+          finalType = 'inauguracao'
+        }
+
         return {
           ...staticLoc,
           name: sanityUnit.name || staticLoc.name,
           address: sanityUnit.address || staticLoc.address,
-          type: sanityUnit.type || staticLoc.type,
+          type: finalType,
           photo: sanityPhoto || staticLoc.photo || '/images/fachada.jpg',
           features: sanityUnit.services || staticLoc.features,
           hours: sanityUnit.openingHours || staticLoc.hours,
+          active: sanityUnit.active !== false, // true por padrao
+          inaugurada: sanityUnit.inaugurada !== false, // true por padrao
           coordinates: hasCoordinates ? {
             lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
             lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
           } : undefined
         }
       }
+      // Unidade sem match no Sanity - usar dados estáticos com defaults
       return {
         ...staticLoc,
-        type: staticLoc.type
+        type: staticLoc.type?.toLowerCase() || 'tradicional',
+        active: staticLoc.status !== 'coming_soon', // true se não for "em breve"
+        inaugurada: staticLoc.type !== 'inauguracao' && staticLoc.status !== 'coming_soon'
       }
     })
   }, [sanityUnits, loadingSanity])
@@ -109,8 +126,11 @@ export default function Unidades() {
 
   const filteredLocations = useMemo(() => {
     return allLocations.filter((loc: any) => {
-      // Excluir unidades em inauguração ou não ativas
-      if (loc.type === "inauguracao" || loc.status === "coming_soon") return false
+      // Excluir unidades nao ativas (active === false no Sanity)
+      if (loc.active === false) return false
+
+      // NAO excluir unidades em inauguracao - elas devem aparecer escurecidas
+      // if (loc.type === "inauguracao" || loc.status === "coming_soon") return false
 
       // Filter by type
       if (filterType !== "todos" && loc.type !== filterType) return false
@@ -139,9 +159,9 @@ export default function Unidades() {
     })
   }, [filterType, searchQuery, radiusFilter, userLocation, allLocations])
 
-  // Filtrar apenas unidades ativas para estatísticas
+  // Filtrar apenas unidades ativas e inauguradas para estatísticas
   const activeLocations = useMemo(() => {
-    return allLocations.filter((l: any) => l.type !== "inauguracao" && l.status !== "coming_soon")
+    return allLocations.filter((l: any) => l.active !== false && l.inaugurada !== false)
   }, [allLocations])
 
   const stats = useMemo(() => ({
@@ -211,10 +231,10 @@ export default function Unidades() {
               {/* Type Filters */}
               <div className="flex flex-wrap gap-2">
                 {[
-                  { value: 'todos', label: 'Todas as unidades', icon: '🏢' },
-                  { value: 'diamante', label: 'Diamante' },
-                  { value: 'premium', label: 'Premium' },
-                  { value: 'tradicional', label: 'Tradicional' },
+                  { value: 'todos', label: 'Todas as unidades', count: stats.total },
+                  { value: 'diamante', label: 'Diamante', count: stats.diamante },
+                  { value: 'premium', label: 'Premium', count: stats.premium },
+                  { value: 'tradicional', label: 'Tradicional', count: stats.tradicional },
                 ].map((filter) => (
                   <button
                     key={filter.value}
@@ -226,6 +246,15 @@ export default function Unidades() {
                     }`}
                   >
                     {filter.label}
+                    {filter.count > 0 && (
+                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                        filterType === filter.value
+                          ? 'bg-black/20 text-black'
+                          : 'bg-white/10 text-white/70'
+                      }`}>
+                        {filter.count}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -394,7 +423,7 @@ export default function Unidades() {
                     Ver planos e preços
                   </Link>
                   <a
-                    href="https://wa.me/5592999999999"
+                    href="https://wa.me/5592984054003"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all"

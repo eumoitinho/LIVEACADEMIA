@@ -14,11 +14,14 @@ interface UnidadeCardModernProps {
     planos?: Array<{ price: string; name: string }>
     hours?: string
     logo?: string | null
+    inaugurada?: boolean
+    active?: boolean
   }
 }
 
 export function UnidadeCardModern({ location }: UnidadeCardModernProps) {
-  const isInauguracao = location.type === 'inauguracao'
+  // Verificar se a unidade está em inauguração (ainda não inaugurada)
+  const isInauguracao = location.type === 'inauguracao' || location.inaugurada === false
 
   const typeConfig = {
     diamante: {
