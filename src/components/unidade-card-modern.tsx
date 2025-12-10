@@ -44,8 +44,6 @@ export function UnidadeCardModern({ location }: UnidadeCardModernProps) {
 
   // Ensure we have a valid config with fallback
   const config = typeConfig[location.type as keyof typeof typeConfig] || typeConfig.tradicional
-  const hasPlanos = location.planos && location.planos.length > 0
-  const featuresCount = location.features.length
 
   if (isInauguracao) {
     return (
@@ -111,12 +109,6 @@ export function UnidadeCardModern({ location }: UnidadeCardModernProps) {
             </p>
           </div>
 
-          {/* Features count */}
-          {featuresCount > 0 && (
-            <div className="mt-3 text-[11px] text-neutral-400 font-geist">
-              {featuresCount} serviço{featuresCount !== 1 ? 's' : ''} • {hasPlanos && location.planos ? location.planos.length : 0} plano{location.planos && location.planos.length !== 1 ? 's' : ''}
-            </div>
-          )}
 
           <div className="mt-4 flex items-center justify-between">
             <button className="inline-flex items-center gap-2 text-xs font-medium tracking-tight text-neutral-200 bg-white/5 hover:bg-white/10 rounded-full px-3 py-1.5 border border-white/10 font-geist transition-colors">
