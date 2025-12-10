@@ -6,7 +6,6 @@ import AboutSectionEditable from "@/components/sections/about-section-editable"
 import BeneficiosSectionEditable from "@/components/sections/beneficios-section-editable"
 import PlanosSectionEditable from "@/components/sections/planos-section-editable"
 import UnidadesCarouselEditable from "@/components/shared/unidades-carousel-editable"
-import FloatingButton from "@/components/layout/floating-button"
 import TestimonialSection from "@/components/sections/testimonial-section"
 import AppSectionEditable from "@/components/sections/app-section-editable"
 import ModalidadesSection from "@/components/sections/modalidades-section"
@@ -88,9 +87,6 @@ export default function HomepageEditable() {
       {homepageData?.testimonials && (
         <TestimonialSection />
       )}
-
-      {/* Floating Button */}
-      <FloatingButton />
     </main>
   )
 }
