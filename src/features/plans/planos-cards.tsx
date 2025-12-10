@@ -17,6 +17,8 @@ interface PlanoItem {
   codigo?: string
   adesao?: number
   fidelidade?: number
+  mostrarAdesao?: boolean
+  mostrarFidelidade?: boolean
   regimeRecorrencia?: boolean
   modalidades?: string[]
   // Props que podem vir do planosConfig
@@ -53,13 +55,13 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
     // Caso contrário, usar a lógica de isPremiumPlan
     const hasExplicitDestaque = typeof plano.destaque === 'boolean'
     const isPremium = hasExplicitDestaque ? plano.destaque : isPremiumPlan(plano.name)
-    
+
     return {
       ...plano,
       nome: plano.name,
       preco: plano.price.replace('.', ',').replace(/(\d)(\d{2})$/, '$1,$2'), // Garantir formato brasileiro
       periodo: 'mês',
-      descricao: isPremium 
+      descricao: isPremium
         ? `Treine em todas as unidades Premium e Diamante da rede Live Academia.`
         : `Treine em todas as unidades Tradicionais e Premium da rede Live Academia.`,
       beneficios: [
@@ -76,7 +78,10 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
       icone: isPremium ? Crown : Check,
       popular: isPremium,
       destaque: isPremium,
-      badge: plano.badge || (isPremium ? 'O mais vendido' : undefined)
+      badge: plano.badge || (isPremium ? 'O mais vendido' : undefined),
+      // Preservar flags de visibilidade
+      mostrarAdesao: plano.mostrarAdesao,
+      mostrarFidelidade: plano.mostrarFidelidade,
     }
   })
 
@@ -173,17 +178,18 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
                     </span>
                     <span className="text-zinc-400 text-base">/{plano.periodo}</span>
                   </div>
-                  {plano.adesao && plano.adesao > 0 && (
+                  {plano.mostrarAdesao !== false && plano.adesao && plano.adesao > 0 && (
                     <div className="mt-1 text-xs text-zinc-400">
                       + Adesão: R$ {plano.adesao.toFixed(2).replace('.', ',')}
                     </div>
                   )}
-                  {plano.fidelidade && plano.fidelidade > 0 && (
+                  {plano.mostrarFidelidade !== false && plano.fidelidade && plano.fidelidade > 0 && (
                     <div className="mt-0.5 text-xs text-zinc-400">
-                      Fidelidade: {plano.fidelidade} Meses
+                      Fidelidade: {plano.fidelidade} {plano.fidelidade === 1 ? 'mês' : 'meses'}
                     </div>
                   )}
-                  {(!plano.adesao || plano.adesao === 0) && (!plano.fidelidade || plano.fidelidade === 0) && (
+                  {(plano.mostrarAdesao === false || !plano.adesao || plano.adesao === 0) &&
+                   (plano.mostrarFidelidade === false || !plano.fidelidade || plano.fidelidade === 0) && (
                     <p className="text-yellow-400 text-xs font-medium mt-1">Sem taxas adicionais</p>
                   )}
                 </div>
@@ -248,6 +254,8 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
                   codigo: plano.codigo,
                   adesao: plano.adesao,
                   fidelidade: plano.fidelidade,
+                  mostrarAdesao: plano.mostrarAdesao,
+                  mostrarFidelidade: plano.mostrarFidelidade,
                   regimeRecorrencia: plano.regimeRecorrencia,
                   modalidades: plano.modalidades
                 }
@@ -288,7 +296,8 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
                         </span>
                         <span className="text-zinc-400 text-sm">/{plano.periodo}</span>
                       </div>
-                      {(!plano.adesao || plano.adesao === 0) && (!plano.fidelidade || plano.fidelidade === 0) && (
+                      {(plano.mostrarAdesao === false || !plano.adesao || plano.adesao === 0) &&
+                       (plano.mostrarFidelidade === false || !plano.fidelidade || plano.fidelidade === 0) && (
                         <p className="text-yellow-400 text-xs font-medium mt-1">Sem taxas adicionais</p>
                       )}
                     </div>
@@ -366,17 +375,18 @@ export default function PlanosCards({ planos, unidadeName, onMatricular }: Plano
                     </span>
                     <span className="text-zinc-400 text-lg">/{selectedPlanoData.periodo}</span>
                   </div>
-                  {selectedPlanoData.adesao && selectedPlanoData.adesao > 0 && (
+                  {selectedPlanoData.mostrarAdesao !== false && selectedPlanoData.adesao && selectedPlanoData.adesao > 0 && (
                     <div className="text-sm text-zinc-400">
                       + Taxa de adesão: R$ {selectedPlanoData.adesao.toFixed(2).replace('.', ',')}
                     </div>
                   )}
-                  {selectedPlanoData.fidelidade && selectedPlanoData.fidelidade > 0 && (
+                  {selectedPlanoData.mostrarFidelidade !== false && selectedPlanoData.fidelidade && selectedPlanoData.fidelidade > 0 && (
                     <div className="text-sm text-zinc-400">
-                      Fidelidade: {selectedPlanoData.fidelidade} Meses
+                      Fidelidade: {selectedPlanoData.fidelidade} {selectedPlanoData.fidelidade === 1 ? 'mês' : 'meses'}
                     </div>
                   )}
-                  {(!selectedPlanoData.adesao || selectedPlanoData.adesao === 0) && (!selectedPlanoData.fidelidade || selectedPlanoData.fidelidade === 0) && (
+                  {(selectedPlanoData.mostrarAdesao === false || !selectedPlanoData.adesao || selectedPlanoData.adesao === 0) &&
+                   (selectedPlanoData.mostrarFidelidade === false || !selectedPlanoData.fidelidade || selectedPlanoData.fidelidade === 0) && (
                     <p className="text-yellow-400 text-sm font-medium mt-2">Sem taxas adicionais</p>
                   )}
                 </div>

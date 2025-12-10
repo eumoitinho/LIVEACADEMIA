@@ -280,6 +280,7 @@ export const unitSchema = defineType({
             defineField({ name: 'nomeOriginal', title: 'Nome Original', type: 'string' }),
             defineField({ name: 'valorOriginal', title: 'Valor Original', type: 'string' }),
             defineField({ name: 'adesaoOriginal', title: 'Adesão Original', type: 'string' }),
+            defineField({ name: 'fidelidadeOriginal', title: 'Fidelidade Original (meses)', type: 'string' }),
             defineField({ name: 'categoriaOriginal', title: 'Categoria Original', type: 'string' }),
 
             // Dados personalizados de exibição
@@ -289,7 +290,10 @@ export const unitSchema = defineType({
             defineField({ name: 'descricaoExibicao', title: 'Descrição', type: 'text' }),
             defineField({ name: 'beneficiosExibicao', title: 'Benefícios', type: 'array', of: [{ type: 'string' }] }),
             defineField({ name: 'ctaTexto', title: 'Texto do Botão CTA', type: 'string' }),
-            defineField({ name: 'adesaoExibicao', title: 'Adesão Exibição', type: 'string' }),
+            defineField({ name: 'adesaoExibicao', title: 'Adesão Exibição (R$)', type: 'string', description: 'Ex: 99.90 - deixe vazio para usar valor da API' }),
+            defineField({ name: 'mostrarAdesao', title: 'Mostrar Taxa de Adesão', type: 'boolean', initialValue: true }),
+            defineField({ name: 'fidelidadeExibicao', title: 'Fidelidade Exibição (meses)', type: 'string', description: 'Ex: 12 - deixe vazio para usar valor da API' }),
+            defineField({ name: 'mostrarFidelidade', title: 'Mostrar Fidelidade', type: 'boolean', initialValue: true }),
             defineField({ name: 'observacoes', title: 'Observações/Notas', type: 'text' }),
 
             // Configurações visuais

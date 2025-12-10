@@ -1,10 +1,39 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Check, Crown, Sparkles, ChevronDown, MapPin } from "lucide-react"
+import { Check, Crown, Sparkles, ChevronDown, MapPin, LucideIcon } from "lucide-react"
 import React, { useState, useMemo } from "react"
 import Link from "next/link"
 import { usePlanosPageData } from "@/hooks/use-sanity-data"
+
+// Tipo para planos exibidos
+interface DisplayPlan {
+  nome: string
+  preco: string
+  periodo: string
+  descricao: string
+  beneficios: string[]
+  gradient: string
+  icone: LucideIcon
+  popular: boolean
+  destaque: boolean
+  badge: string
+  taxaAdesao: number
+  fidelidade: number
+  priceLabel: string
+}
+
+// Tipo para comparação
+interface ComparisonItem {
+  label: string
+  tradicional: string
+  diamante: string
+}
+
+interface ComparisonSection {
+  section: string
+  items: ComparisonItem[]
+}
 
 // Fallback planos (caso Sanity não tenha dados)
 const fallbackPlanos = [
@@ -94,11 +123,11 @@ export default function Planos() {
   const { data: pageData, loading } = usePlanosPageData()
 
   // Normalizar planos do Sanity
-  const displayPlans = useMemo(() => {
+  const displayPlans: DisplayPlan[] = useMemo(() => {
     if (pageData?.plansOrder && Array.isArray(pageData.plansOrder) && pageData.plansOrder.length > 0) {
       return pageData.plansOrder
         .filter((plano: any) => plano != null && plano.active !== false)
-        .map((plano: any) => {
+        .map((plano: any): DisplayPlan => {
           // Formatar preço (já vem em reais)
           let precoFormatado = '0,00'
           if (typeof plano.price === 'number') {
@@ -128,11 +157,11 @@ export default function Planos() {
   }, [pageData])
 
   // Normalizar dados de comparação do Sanity
-  const comparisonFeatures = useMemo(() => {
+  const comparisonFeatures: ComparisonSection[] = useMemo(() => {
     if (pageData?.comparison?.sections && Array.isArray(pageData.comparison.sections)) {
-      return pageData.comparison.sections.map((section: any) => ({
+      return pageData.comparison.sections.map((section: any): ComparisonSection => ({
         section: section.sectionTitle || '',
-        items: Array.isArray(section.items) ? section.items.map((item: any) => ({
+        items: Array.isArray(section.items) ? section.items.map((item: any): ComparisonItem => ({
           label: item.label || '',
           tradicional: item.tradicional || 'false',
           diamante: item.diamante || 'false'

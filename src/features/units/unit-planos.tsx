@@ -20,8 +20,14 @@ interface PlanoConfig {
   codigoApi: string
   nomeOriginal?: string
   valorOriginal?: string
+  adesaoOriginal?: string
+  fidelidadeOriginal?: string
   nomeExibicao?: string
   precoExibicao?: string
+  adesaoExibicao?: string
+  mostrarAdesao?: boolean
+  fidelidadeExibicao?: string
+  mostrarFidelidade?: boolean
   descricaoExibicao?: string
   beneficiosExibicao?: string[]
   visivel: boolean
@@ -74,12 +80,14 @@ export default function UnitPlanos({
 }: UnitPlanosProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [planos, setPlanos] = useState<Array<{ 
+  const [planos, setPlanos] = useState<Array<{
     name: string
     price: string
     codigo?: string
     adesao?: number
     fidelidade?: number
+    mostrarAdesao?: boolean
+    mostrarFidelidade?: boolean
     regimeRecorrencia?: boolean
     modalidades?: string[]
     destaque?: boolean
@@ -165,7 +173,11 @@ export default function UnitPlanos({
           if (!config.visivel) {
             return null
           }
-          
+
+          // Calcular adesão e fidelidade com override
+          const adesaoExibicao = config.adesaoExibicao ? parseFloat(config.adesaoExibicao) : p.adesao
+          const fidelidadeExibicao = config.fidelidadeExibicao ? parseInt(config.fidelidadeExibicao) : p.fidelidade
+
           return {
             // Dados de EXIBIÇÃO (podem ser overridden)
             name: config.nomeExibicao || p.nome,
@@ -173,12 +185,15 @@ export default function UnitPlanos({
             destaque: config.destaque,
             badge: config.badge,
             ordem: config.ordem,
+            // Adesão e fidelidade com override e visibilidade
+            adesao: adesaoExibicao,
+            fidelidade: fidelidadeExibicao,
+            mostrarAdesao: config.mostrarAdesao !== false, // default true
+            mostrarFidelidade: config.mostrarFidelidade !== false, // default true
             // Dados ORIGINAIS (preservados para checkout)
             originalName: p.nome,
             originalPrice: originalPrice,
             codigo: codigoStr,
-            adesao: p.adesao,
-            fidelidade: p.fidelidade,
             regimeRecorrencia: p.regimeRecorrencia,
             modalidades: p.modalidades || [],
           }

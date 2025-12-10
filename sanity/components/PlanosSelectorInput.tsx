@@ -21,6 +21,7 @@ interface PlanoConfig {
   nomeOriginal: string
   valorOriginal: string
   adesaoOriginal?: string
+  fidelidadeOriginal?: string
   categoriaOriginal?: string
 
   // Dados personalizados de exibição
@@ -31,6 +32,9 @@ interface PlanoConfig {
   beneficiosExibicao?: string[]
   ctaTexto?: string
   adesaoExibicao?: string
+  mostrarAdesao?: boolean
+  fidelidadeExibicao?: string
+  mostrarFidelidade?: boolean
   observacoes?: string
 
   // Configurações visuais
@@ -337,10 +341,13 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
         nomeOriginal: plano.nome,
         valorOriginal: preco,
         adesaoOriginal: plano.adesao ? formatPrice(plano.adesao) : undefined,
+        fidelidadeOriginal: plano.fidelidade ? String(plano.fidelidade) : undefined,
         categoriaOriginal: plano.categoria,
         visivel: true,
         destaque: false,
         ordem: value.length,
+        mostrarAdesao: true,
+        mostrarFidelidade: true,
       }
       onChange(set([...value, newConfig]))
     }
@@ -464,6 +471,7 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
                           <p style={styles.textSmall}>
                             Código: {codigo} | R$ {config?.precoExibicao || preco}{config?.periodoExibicao || '/mês'}
                             {plano.adesao ? ` | Adesão: R$ ${plano.adesao}` : ''}
+                            {plano.fidelidade ? ` | Fidelidade: ${plano.fidelidade} meses` : ''}
                             {plano.categoria ? ` | ${plano.categoria}` : ''}
                           </p>
                         </div>
@@ -570,17 +578,55 @@ export default function PlanosSelectorInput(props: PlanosSelectorInputProps) {
 
                               <div>
                                 <label style={styles.label}>Taxa de Adesão</label>
-                                <input
-                                  type="text"
-                                  style={styles.input}
-                                  value={config.adesaoExibicao || ''}
-                                  placeholder={plano.adesao ? `R$ ${plano.adesao}` : 'Sem adesão'}
-                                  onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, {
-                                    adesaoExibicao: e.target.value || undefined
-                                  })}
-                                />
+                                <div style={{ ...styles.flex, marginTop: '4px' }}>
+                                  <input
+                                    type="text"
+                                    style={{ ...styles.input, flex: 1, marginTop: 0 }}
+                                    value={config.adesaoExibicao || ''}
+                                    placeholder={plano.adesao ? `${plano.adesao}` : '0'}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, {
+                                      adesaoExibicao: e.target.value || undefined
+                                    })}
+                                  />
+                                  <label style={{ ...styles.flex, cursor: 'pointer', fontSize: '12px' }}>
+                                    <input
+                                      type="checkbox"
+                                      style={{ ...styles.checkbox, width: '14px', height: '14px' }}
+                                      checked={config.mostrarAdesao !== false}
+                                      onChange={() => updatePlanoConfig(codigo, { mostrarAdesao: !config.mostrarAdesao })}
+                                    />
+                                    <span>Exibir</span>
+                                  </label>
+                                </div>
                                 {plano.adesao && (
                                   <p style={styles.originalValue}>Original: R$ {plano.adesao}</p>
+                                )}
+                              </div>
+
+                              <div>
+                                <label style={styles.label}>Fidelidade (meses)</label>
+                                <div style={{ ...styles.flex, marginTop: '4px' }}>
+                                  <input
+                                    type="text"
+                                    style={{ ...styles.input, flex: 1, marginTop: 0 }}
+                                    value={config.fidelidadeExibicao || ''}
+                                    placeholder={plano.fidelidade ? `${plano.fidelidade}` : '0'}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => updatePlanoConfig(codigo, {
+                                      fidelidadeExibicao: e.target.value || undefined
+                                    })}
+                                  />
+                                  <label style={{ ...styles.flex, cursor: 'pointer', fontSize: '12px' }}>
+                                    <input
+                                      type="checkbox"
+                                      style={{ ...styles.checkbox, width: '14px', height: '14px' }}
+                                      checked={config.mostrarFidelidade !== false}
+                                      onChange={() => updatePlanoConfig(codigo, { mostrarFidelidade: !config.mostrarFidelidade })}
+                                    />
+                                    <span>Exibir</span>
+                                  </label>
+                                </div>
+                                {plano.fidelidade && (
+                                  <p style={styles.originalValue}>Original: {plano.fidelidade} meses</p>
                                 )}
                               </div>
                             </div>
