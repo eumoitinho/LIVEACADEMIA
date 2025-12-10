@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { locations } from '@/src/lib/config/locations'
-import { getUnits, getBeneficiosSectionData, getModalidadesSectionData } from '@/lib/sanity'
+import { getUnits } from '@/lib/sanity'
 import UnidadeContent from "./components/unidade-content"
 import type { Unit } from '../../../types/sanity'
 
@@ -96,12 +96,8 @@ interface PageProps { params: Promise<{ slug: string }> }
 export default async function UnidadePage(props: PageProps) {
   const { slug } = await props.params
 
-  // Fetch from Sanity - unidades e seções globais (modalidades e benefícios com fotos)
-  const [sanityUnits, modalidadesSectionData, beneficiosSectionData] = await Promise.all([
-    getUnits(),
-    getModalidadesSectionData(),
-    getBeneficiosSectionData()
-  ])
+  // Fetch from Sanity - apenas unidades
+  const sanityUnits = await getUnits()
   
   const sanityUnit = sanityUnits.find((unit: Unit) => unit.slug === slug)
 
@@ -196,34 +192,35 @@ export default async function UnidadePage(props: PageProps) {
 
   // Fallback estático por tipo de unidade
   const staticData = unidadeData[unidade.type as keyof typeof unidadeData] || unidadeData.tradicional
-  
-  // MODALIDADES: Usar dados da seção modalidades do Sanity (com fotos)
-  // Formato: { title, image: { asset: { url } } }
-  const modalidadesFromSection = modalidadesSectionData?.featuredModalities
-    ?.filter((m: any) => m.active !== false)
+
+  // MODALIDADES: Usar modalidades específicas da UNIDADE no Sanity (referências)
+  // Só mostra se a unidade tem modalidades cadastradas
+  const modalidadesDaUnidade = sanityUnit?.modalidades
+    ?.filter((m: any) => m && m.name)
     ?.map((m: any) => ({
-      name: m.title,
-      subtitle: m.subtitle,
-      description: m.description,
+      name: m.name,
+      subtitle: m.subtitle || '',
+      description: m.description || '',
       image: m.image?.asset?.url || null
     })) || []
 
-  // BENEFÍCIOS: Usar dados da seção benefícios do Sanity (com fotos)
-  // Formato: { title, description, icon, color, image: { asset: { url } } }
-  const beneficiosFromSection = beneficiosSectionData?.items
+  // BENEFÍCIOS: Usar benefícios específicos da UNIDADE no Sanity (referências)
+  // Só mostra se a unidade tem benefícios cadastrados
+  const beneficiosDaUnidade = sanityUnit?.beneficios
+    ?.filter((b: any) => b && b.title)
     ?.map((b: any) => ({
       title: b.title,
-      description: b.description,
-      icon: b.icon,
-      color: b.color,
+      description: b.description || '',
+      icon: b.icon || '',
+      color: b.color || '',
       image: b.image?.asset?.url || null
     })) || []
-  
+
   const data = {
-    // Modalidades APENAS do Sanity - sem fallback
-    modalidades: modalidadesFromSection,
-    // Benefícios APENAS do Sanity - sem fallback
-    beneficios: beneficiosFromSection,
+    // Modalidades APENAS da unidade no Sanity - sem fallback
+    modalidades: modalidadesDaUnidade,
+    // Benefícios APENAS da unidade no Sanity - sem fallback
+    beneficios: beneficiosDaUnidade,
     // Fotos genéricas como fallback adicional
     fotos: staticData.fotos
   }
