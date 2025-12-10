@@ -506,7 +506,10 @@ export async function getPlanosPageData() {
           highlight,
           badge,
           order,
-          active
+          active,
+          mostrarAdesao,
+          mostrarFidelidade,
+          mostrarLabel
         },
         comparison {
           title,

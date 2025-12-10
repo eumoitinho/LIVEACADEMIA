@@ -21,6 +21,9 @@ interface DisplayPlan {
   taxaAdesao: number
   fidelidade: number
   priceLabel: string
+  mostrarAdesao: boolean
+  mostrarFidelidade: boolean
+  mostrarLabel: boolean
 }
 
 // Tipo para comparação
@@ -57,7 +60,10 @@ const fallbackPlanos = [
     badge: "",
     taxaAdesao: 0,
     fidelidade: 0,
-    priceLabel: ""
+    priceLabel: "",
+    mostrarAdesao: true,
+    mostrarFidelidade: true,
+    mostrarLabel: true
   },
   {
     nome: "DIAMANTE",
@@ -82,7 +88,10 @@ const fallbackPlanos = [
     badge: "",
     taxaAdesao: 0,
     fidelidade: 0,
-    priceLabel: ""
+    priceLabel: "",
+    mostrarAdesao: true,
+    mostrarFidelidade: true,
+    mostrarLabel: true
   }
 ]
 
@@ -149,7 +158,10 @@ export default function Planos() {
             badge: plano.badge || '',
             taxaAdesao: plano.enrollmentFee || 0,
             fidelidade: plano.loyaltyMonths || 0,
-            priceLabel: plano.priceLabel || ''
+            priceLabel: plano.priceLabel || '',
+            mostrarAdesao: plano.mostrarAdesao !== false,
+            mostrarFidelidade: plano.mostrarFidelidade !== false,
+            mostrarLabel: plano.mostrarLabel !== false
           }
         })
     }
@@ -267,23 +279,29 @@ export default function Planos() {
                         <span className="text-zinc-400 text-lg">/{plano.periodo}</span>
                       </div>
 
-                      {/* Taxa de Adesão e Fidelidade */}
-                      <div className="mt-3 space-y-1">
-                        <p className="text-zinc-400 text-sm">
-                          {plano.taxaAdesao > 0
-                            ? `Taxa de adesão: R$ ${plano.taxaAdesao.toFixed(2).replace('.', ',')}`
-                            : 'Sem taxa de adesão'
-                          }
-                        </p>
-                        <p className="text-zinc-400 text-sm">
-                          {plano.fidelidade > 0
-                            ? `Fidelidade: ${plano.fidelidade} ${plano.fidelidade === 1 ? 'mês' : 'meses'}`
-                            : 'Sem fidelidade'
-                          }
-                        </p>
-                      </div>
+                      {/* Taxa de Adesão e Fidelidade - Controlado por visibilidade */}
+                      {(plano.mostrarAdesao || plano.mostrarFidelidade) && (
+                        <div className="mt-3 space-y-1">
+                          {plano.mostrarAdesao && (
+                            <p className="text-zinc-400 text-sm">
+                              {plano.taxaAdesao > 0
+                                ? `Taxa de adesão: R$ ${plano.taxaAdesao.toFixed(2).replace('.', ',')}`
+                                : 'Sem taxa de adesão'
+                              }
+                            </p>
+                          )}
+                          {plano.mostrarFidelidade && (
+                            <p className="text-zinc-400 text-sm">
+                              {plano.fidelidade > 0
+                                ? `Fidelidade: ${plano.fidelidade} ${plano.fidelidade === 1 ? 'mês' : 'meses'}`
+                                : 'Sem fidelidade'
+                              }
+                            </p>
+                          )}
+                        </div>
+                      )}
 
-                      {plano.priceLabel && (
+                      {plano.mostrarLabel && plano.priceLabel && (
                         <p className="text-yellow-400 text-sm font-medium mt-3">{plano.priceLabel}</p>
                       )}
                     </div>

@@ -79,6 +79,30 @@ export const planoSchema = defineType({
 
     // === EXIBIÇÃO ===
     defineField({
+      name: 'mostrarAdesao',
+      title: 'Mostrar Taxa de Adesão',
+      description: 'Exibir taxa de adesão no card do plano',
+      type: 'boolean',
+      initialValue: true,
+      group: 'display',
+    }),
+    defineField({
+      name: 'mostrarFidelidade',
+      title: 'Mostrar Fidelidade',
+      description: 'Exibir período de fidelidade no card do plano',
+      type: 'boolean',
+      initialValue: true,
+      group: 'display',
+    }),
+    defineField({
+      name: 'mostrarLabel',
+      title: 'Mostrar Label Promocional',
+      description: 'Exibir label promocional no card do plano',
+      type: 'boolean',
+      initialValue: true,
+      group: 'display',
+    }),
+    defineField({
       name: 'highlight',
       title: 'Plano em Destaque',
       description: 'Destacar este plano na página de planos',
