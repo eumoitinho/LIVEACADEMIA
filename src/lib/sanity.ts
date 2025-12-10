@@ -474,6 +474,59 @@ export async function getBeneficiosSectionData() {
   }
 }
 
+// Helper para buscar dados da página de planos
+export async function getPlanosPageData() {
+  try {
+    const data = await client.fetch(`
+      *[_type == "planosPage"][0] {
+        _id,
+        seo {
+          title,
+          description
+        },
+        header {
+          title,
+          description
+        },
+        plansOrder[]-> {
+          _id,
+          name,
+          description,
+          price,
+          priceLabel,
+          features,
+          highlight,
+          badge,
+          order,
+          active
+        },
+        comparison {
+          title,
+          sections[] {
+            sectionTitle,
+            items[] {
+              label,
+              tradicional,
+              diamante
+            }
+          }
+        },
+        footer {
+          disclaimer
+        },
+        displaySettings {
+          showComparison,
+          showUnitsSection
+        }
+      }
+    `)
+    return data
+  } catch (error) {
+    console.error('Error fetching planos page data:', error)
+    return null
+  }
+}
+
 // Helper para buscar dados da seção de modalidades (com fotos)
 // Busca primeiro da collection 'modality' que tem as fotos,
 // e fallback para modalidadesSection se necessário

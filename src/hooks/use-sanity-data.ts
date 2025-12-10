@@ -11,7 +11,8 @@ import {
   getWellhubFeatures,
   getBioimpedanciaFeatures,
   getAppSectionData,
-  getBeneficiosSectionData
+  getBeneficiosSectionData,
+  getPlanosPageData
 } from '@/lib/sanity'
 import type {
   HomepageContent,
@@ -329,6 +330,32 @@ export function useBeneficiosSectionData() {
       } catch (err) {
         console.error('Error fetching beneficios section data:', err)
         setError('Erro ao carregar dados da seção de benefícios')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  return { data, loading, error }
+}
+
+export function usePlanosPageData() {
+  const [data, setData] = useState<any | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const planosPageData = await getPlanosPageData()
+        setData(planosPageData)
+        setError(null)
+      } catch (err) {
+        console.error('Error fetching planos page data:', err)
+        setError('Erro ao carregar dados da página de planos')
       } finally {
         setLoading(false)
       }
