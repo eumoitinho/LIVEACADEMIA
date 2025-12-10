@@ -40,6 +40,7 @@ const defaultBeneficios = [
 export default function BeneficiosSectionEditable() {
   const { data, loading } = useBeneficiosSectionData()
   const [active, setActive] = useState(0)
+  const [mobileActive, setMobileActive] = useState<number | null>(null)
 
   // Mapear ícones string para componentes Lucide
   const iconMap: Record<string, any> = {
@@ -120,9 +121,70 @@ export default function BeneficiosSectionEditable() {
           </h2>
         </motion.div>
 
-        {/* Expanding horizontal cards */}
+        {/* Mobile: Vertical accordion cards */}
+        <div className="md:hidden flex flex-col gap-3">
+          {beneficios.map((beneficio, idx) => {
+            const isExpanded = mobileActive === idx
+            const IconComponent = beneficio.icon
+            return (
+              <motion.div
+                key={beneficio.title}
+                onClick={() => setMobileActive(isExpanded ? null : idx)}
+                className="relative overflow-hidden rounded-xl bg-zinc-900/60 border border-zinc-800/50 backdrop-blur-md cursor-pointer"
+                animate={{ height: isExpanded ? 'auto' : 80 }}
+                transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                  <Image
+                    src={beneficio.image}
+                    alt={beneficio.title}
+                    fill
+                    quality={75}
+                    className={[
+                      'object-cover transition-all duration-500',
+                      isExpanded ? 'opacity-40 scale-105' : 'opacity-20'
+                    ].join(' ')}
+                    sizes="100vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
+                </div>
+
+                {/* Header - always visible */}
+                <div className="relative z-10 flex items-center gap-4 p-4">
+                  <div className={`w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-xl bg-gradient-to-br ${beneficio.color} shadow-lg shadow-yellow-500/20`}>
+                    <IconComponent className="w-6 h-6 text-black" />
+                  </div>
+                  <h3 className="text-white font-semibold text-base flex-1">{beneficio.title}</h3>
+                  <div className={`w-6 h-6 flex items-center justify-center transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                    <svg className="w-5 h-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+
+                {/* Expanded content */}
+                {isExpanded && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="relative z-10 px-4 pb-4"
+                  >
+                    <p className="text-sm text-zinc-300 leading-relaxed mb-3">{beneficio.description}</p>
+                    <div className="flex items-center gap-2 text-yellow-400 text-xs font-medium tracking-wide uppercase">
+                      <CheckCircle className="w-4 h-4" /> Disponível agora
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* Desktop: Expanding horizontal cards */}
         <div
-          className="relative flex gap-1.5 w-full h-[460px] rounded-lg"
+          className="hidden md:flex relative gap-1.5 w-full h-[460px] rounded-lg"
           role="tablist"
           aria-label="Benefícios da Live Academia"
         >
