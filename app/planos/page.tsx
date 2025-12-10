@@ -24,7 +24,11 @@ const fallbackPlanos = [
     gradient: "from-zinc-700 to-zinc-900",
     icone: Check,
     popular: false,
-    destaque: false
+    destaque: false,
+    badge: "",
+    taxaAdesao: 0,
+    fidelidade: 0,
+    priceLabel: ""
   },
   {
     nome: "DIAMANTE",
@@ -46,7 +50,10 @@ const fallbackPlanos = [
     icone: Crown,
     popular: false,
     destaque: true,
-    badge: ""
+    badge: "",
+    taxaAdesao: 0,
+    fidelidade: 0,
+    priceLabel: ""
   }
 ]
 
@@ -92,10 +99,10 @@ export default function Planos() {
       return pageData.plansOrder
         .filter((plano: any) => plano != null && plano.active !== false)
         .map((plano: any) => {
-          // Formatar preço (vem em centavos)
+          // Formatar preço (já vem em reais)
           let precoFormatado = '0,00'
           if (typeof plano.price === 'number') {
-            precoFormatado = (plano.price / 100).toFixed(2).replace('.', ',')
+            precoFormatado = plano.price.toFixed(2).replace('.', ',')
           } else if (typeof plano.price === 'string') {
             precoFormatado = plano.price
           }
@@ -110,7 +117,10 @@ export default function Planos() {
             icone: plano.highlight ? Crown : Check,
             popular: false,
             destaque: plano.highlight || false,
-            badge: plano.badge || ''
+            badge: plano.badge || '',
+            taxaAdesao: plano.enrollmentFee || 0,
+            fidelidade: plano.loyaltyMonths || 0,
+            priceLabel: plano.priceLabel || ''
           }
         })
     }
@@ -227,7 +237,26 @@ export default function Planos() {
                         </span>
                         <span className="text-zinc-400 text-lg">/{plano.periodo}</span>
                       </div>
-                      <p className="text-yellow-400 text-sm font-medium mt-2">Oferta por tempo limitado</p>
+
+                      {/* Taxa de Adesão e Fidelidade */}
+                      <div className="mt-3 space-y-1">
+                        <p className="text-zinc-400 text-sm">
+                          {plano.taxaAdesao > 0
+                            ? `Taxa de adesão: R$ ${plano.taxaAdesao.toFixed(2).replace('.', ',')}`
+                            : 'Sem taxa de adesão'
+                          }
+                        </p>
+                        <p className="text-zinc-400 text-sm">
+                          {plano.fidelidade > 0
+                            ? `Fidelidade: ${plano.fidelidade} ${plano.fidelidade === 1 ? 'mês' : 'meses'}`
+                            : 'Sem fidelidade'
+                          }
+                        </p>
+                      </div>
+
+                      {plano.priceLabel && (
+                        <p className="text-yellow-400 text-sm font-medium mt-3">{plano.priceLabel}</p>
+                      )}
                     </div>
 
                     {/* Benefits */}

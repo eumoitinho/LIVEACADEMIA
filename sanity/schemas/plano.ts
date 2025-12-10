@@ -4,11 +4,19 @@ export const planoSchema = defineType({
   name: 'plano',
   title: 'Plano',
   type: 'document',
+  groups: [
+    { name: 'info', title: 'Informações', default: true },
+    { name: 'pricing', title: 'Preços e Condições' },
+    { name: 'benefits', title: 'Benefícios' },
+    { name: 'display', title: 'Exibição' },
+  ],
   fields: [
+    // === INFORMAÇÕES ===
     defineField({
       name: 'name',
       title: 'Nome do Plano',
       type: 'string',
+      group: 'info',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -16,53 +24,82 @@ export const planoSchema = defineType({
       title: 'Descrição',
       type: 'text',
       rows: 3,
+      group: 'info',
     }),
     defineField({
+      name: 'active',
+      title: 'Ativo',
+      type: 'boolean',
+      initialValue: true,
+      group: 'info',
+    }),
+
+    // === PREÇOS E CONDIÇÕES ===
+    defineField({
       name: 'price',
-      title: 'Preço (em centavos)',
+      title: 'Preço Mensal',
+      description: 'Valor em reais (ex: 159.90)',
       type: 'number',
+      group: 'pricing',
       validation: (Rule) => Rule.required().min(0),
     }),
     defineField({
-      name: 'priceLabel',
-      title: 'Label do Preço',
-      type: 'string',
-      initialValue: 'Oferta por tempo limitado',
+      name: 'enrollmentFee',
+      title: 'Taxa de Adesão',
+      description: 'Taxa de matrícula em reais (deixe 0 para "Sem taxa")',
+      type: 'number',
+      initialValue: 0,
+      group: 'pricing',
     }),
+    defineField({
+      name: 'loyaltyMonths',
+      title: 'Fidelidade (Meses)',
+      description: 'Período de fidelidade em meses (0 = sem fidelidade)',
+      type: 'number',
+      initialValue: 0,
+      group: 'pricing',
+    }),
+    defineField({
+      name: 'priceLabel',
+      title: 'Label Promocional',
+      description: 'Ex: "Oferta por tempo limitado"',
+      type: 'string',
+      group: 'pricing',
+    }),
+
+    // === BENEFÍCIOS ===
     defineField({
       name: 'features',
       title: 'Benefícios/Recursos',
+      description: 'Lista de benefícios inclusos no plano',
       type: 'array',
       of: [{ type: 'string' }],
+      group: 'benefits',
     }),
-    defineField({
-      name: 'cta',
-      title: 'Texto do CTA',
-      type: 'string',
-      initialValue: 'MATRICULE-SE AGORA',
-    }),
-    defineField({
-      name: 'ctaUrl',
-      title: 'URL do CTA',
-      type: 'url',
-      description: 'Link de destino quando o usuário clicar no botão CTA',
-    }),
+
+    // === EXIBIÇÃO ===
     defineField({
       name: 'highlight',
-      title: 'Destaque',
+      title: 'Plano em Destaque',
+      description: 'Destacar este plano na página de planos',
       type: 'boolean',
       initialValue: false,
+      group: 'display',
     }),
     defineField({
       name: 'badge',
-      title: 'Badge de Destaque',
+      title: 'Badge',
+      description: 'Tag de destaque que aparece no card',
       type: 'string',
+      group: 'display',
       options: {
         list: [
-          { title: 'Mais vendido', value: 'mais_vendido' },
-          { title: 'Recomendado', value: 'recomendado' },
-          { title: 'Novidade', value: 'novidade' },
-          { title: 'Oferta', value: 'oferta' },
+          { title: 'Nenhum', value: '' },
+          { title: 'O mais vendido', value: 'O mais vendido' },
+          { title: 'Recomendado', value: 'Recomendado' },
+          { title: 'Novidade', value: 'Novidade' },
+          { title: 'Oferta Especial', value: 'Oferta Especial' },
+          { title: 'Melhor Custo-Benefício', value: 'Melhor Custo-Benefício' },
         ],
       },
     }),
@@ -71,26 +108,40 @@ export const planoSchema = defineType({
       title: 'Ordem de Exibição',
       type: 'number',
       initialValue: 0,
+      group: 'display',
     }),
     defineField({
-      name: 'active',
-      title: 'Ativo',
-      type: 'boolean',
-      initialValue: true,
+      name: 'cta',
+      title: 'Texto do Botão',
+      type: 'string',
+      initialValue: 'MATRICULE-SE AGORA',
+      group: 'display',
+    }),
+    defineField({
+      name: 'ctaUrl',
+      title: 'URL do Botão',
+      type: 'url',
+      description: 'Link de destino (deixe vazio para ir para /unidades)',
+      group: 'display',
     }),
   ],
   preview: {
     select: {
       title: 'name',
-      subtitle: 'price',
-      badge: 'badge',
+      price: 'price',
+      highlight: 'highlight',
+      active: 'active',
     },
-    prepare({ title, subtitle, badge }) {
-      const price = subtitle ? `R$ ${(subtitle / 100).toFixed(2).replace('.', ',')}` : 'Preço não definido'
-      const badgeText = badge ? ` - ${badge}` : ''
+    prepare({ title, price, highlight, active }) {
+      const priceFormatted = price
+        ? `R$ ${price.toFixed(2).replace('.', ',')}`
+        : 'Preço não definido'
+      const status = !active ? ' (Inativo)' : ''
+      const star = highlight ? ' ⭐' : ''
+
       return {
-        title: `${title}${badgeText}`,
-        subtitle: price,
+        title: `${title}${star}${status}`,
+        subtitle: priceFormatted,
       }
     },
   },

@@ -493,6 +493,8 @@ export async function getPlanosPageData() {
           name,
           description,
           price,
+          enrollmentFee,
+          loyaltyMonths,
           priceLabel,
           features,
           highlight,
