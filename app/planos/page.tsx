@@ -8,7 +8,7 @@ import { usePlansData } from "@/hooks/use-sanity-data"
 
 const planos = [
   {
-    nome: "TRADICIONAL",
+    nome: "BASIC",
     preco: "119,90",
     periodo: "mês",
     descricao: "Treine em todas as unidades Tradicionais, incluindo as Tradicionais Climatizadas.",
@@ -47,9 +47,9 @@ const planos = [
     ],
     gradient: "from-amber-500 to-yellow-600",
     icone: Crown,
-    popular: true,
+    popular: false,
     destaque: true,
-    badge: "O mais vendido"
+    badge: ""
   }
 ]
 
@@ -284,20 +284,15 @@ export default function Planos() {
                   <div className="grid grid-cols-3 border-b border-white/10">
                     <div className="p-6 bg-black/20"></div>
 
-                    {/* Tradicional Plan Header */}
+                    {/* Basic Plan Header */}
                     <div className="p-6 border-l border-white/10 text-center bg-black/20 hover:bg-black/30 transition-all">
-                      <div className="text-lg font-medium text-white">TRADICIONAL</div>
+                      <div className="text-lg font-medium text-white">BASIC</div>
                       <div className="mt-2 text-4xl font-bold text-white">R$ 119,90</div>
                       <div className="mt-1 text-gray-400 text-sm">/mês</div>
                     </div>
 
                     {/* Diamante Plan Header */}
-                    <div className="p-6 border-l border-white/10 text-center bg-yellow-500/10 relative hover:bg-yellow-500/15 transition-all">
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">
-                          MAIS POPULAR
-                        </div>
-                      </div>
+                    <div className="p-6 border-l border-white/10 text-center bg-yellow-500/10 hover:bg-yellow-500/15 transition-all">
                       <div className="text-lg font-medium text-white">DIAMANTE</div>
                       <div className="mt-2 text-4xl font-bold text-yellow-400">R$ 159,90</div>
                       <div className="mt-1 text-gray-400 text-sm">/mês</div>
@@ -369,10 +364,10 @@ export default function Planos() {
 
                 {/* Mobile Version - Cards */}
                 <div className="md:hidden space-y-6">
-                  {/* Tradicional Card */}
+                  {/* Basic Card */}
                   <div className="rounded-2xl overflow-hidden border border-white/10 shadow-xl bg-zinc-900/50 backdrop-blur-sm">
                     <div className="p-6 bg-black/20 text-center border-b border-white/10">
-                      <div className="text-xl font-bold text-white">TRADICIONAL</div>
+                      <div className="text-xl font-bold text-white">BASIC</div>
                       <div className="mt-3 text-4xl font-bold text-white">R$ 119,90</div>
                       <div className="mt-1 text-gray-400 text-sm">/mês</div>
                     </div>
@@ -412,13 +407,8 @@ export default function Planos() {
 
                   {/* Diamante Card */}
                   <div className="rounded-2xl overflow-hidden border border-yellow-500/30 shadow-xl bg-zinc-900/50 backdrop-blur-sm">
-                    <div className="p-6 bg-yellow-500/10 text-center border-b border-white/10 relative">
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <div className="bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">
-                          MAIS POPULAR
-                        </div>
-                      </div>
-                      <div className="text-xl font-bold text-white mt-2">DIAMANTE</div>
+                    <div className="p-6 bg-yellow-500/10 text-center border-b border-white/10">
+                      <div className="text-xl font-bold text-white">DIAMANTE</div>
                       <div className="mt-3 text-4xl font-bold text-yellow-400">R$ 159,90</div>
                       <div className="mt-1 text-gray-400 text-sm">/mês</div>
                     </div>

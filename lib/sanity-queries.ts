@@ -237,3 +237,47 @@ export const benefitsQuery = groq`
     order
   }
 `
+
+export const planosPageQuery = groq`
+  *[_type == "planosPage"][0] {
+    _id,
+    seo {
+      title,
+      description
+    },
+    header {
+      title,
+      description
+    },
+    plansOrder[]-> {
+      _id,
+      nome,
+      preco,
+      periodo,
+      descricao,
+      beneficios[],
+      gradient,
+      destaque,
+      badge,
+      icon
+    },
+    comparison {
+      title,
+      sections[] {
+        sectionTitle,
+        items[] {
+          label,
+          tradicional,
+          diamante
+        }
+      }
+    },
+    footer {
+      disclaimer
+    },
+    displaySettings {
+      showComparison,
+      showUnitsSection
+    }
+  }
+`

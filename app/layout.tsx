@@ -84,18 +84,7 @@ export default async function RootLayout({
         </head>
         <body className={`${inter.className} min-h-screen antialiased overflow-x-hidden text-white bg-neutral-950`}>
           <UnitProvider>
-                {/* Background parallax - hero.jpg com blur progressivo */}
-                <div 
-                  className="fixed top-0 w-full h-screen bg-cover bg-center -z-10" 
-                  style={{
-                    backgroundImage: "url('/hero.jpg')",
-                    animation: "scrollBlur linear both",
-                    animationTimeline: "view()",
-                    animationRange: "entry 100% exit 50%"
-                  }}
-                />
-            
-            <div className="relative z-20 min-h-screen flex flex-col">
+            <div className="relative min-h-screen flex flex-col">
               <Header />
               <div className="flex-grow">{children}</div>
               <Footer />
