@@ -131,23 +131,13 @@ export default function Header() {
                   >
                     Day Use
                   </Link>
-                  <Link 
-                    href="/planos" 
+                  <Link
+                    href="/planos"
                     className="block hover:text-white transition text-2xl font-normal text-white/80"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Planos
                   </Link>
-                  <button 
-                    onClick={() => {
-                      const element = document.getElementById("contato")
-                      if (element) element.scrollIntoView({ behavior: "smooth" })
-                      setIsMenuOpen(false)
-                    }}
-                    className="block w-full text-left hover:text-white transition text-2xl font-normal text-white/80"
-                  >
-                    Contato
-                  </button>
                 </div>
                 
                 <div className="mt-12 pt-8 border-t border-white/10">
