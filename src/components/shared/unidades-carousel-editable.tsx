@@ -252,70 +252,21 @@ export default function UnidadesCarousel() {
   const prefersReducedMotion = useReducedMotion()
   const visibleInView = useInView(carouselViewportRef, { amount: 0.25, once: false })
 
-  // Carrega unidades da API - NÃO usa fallback imediato, aguarda API primeiro
+  // Carrega unidades da API - SEM fallback estático
   useEffect(() => {
     let cancelled = false
-    
-    // Fallback estático - SÓ usar se API falhar
-    const fallbackUnidades: UnidadeBase[] = [
-      {
-        id: 'torres',
-        slug: 'torres',
-        nome: 'Live Academia - Torres',
-        endereco: 'Rua Mitiko, 123 - Torres, Manaus/AM',
-        imagem: '/images/academia-1.webp',
-        latitude: -3.0654,
-        longitude: -60.0261,
-        badge: { text: 'Torres', variant: 'orange' },
-        link: '/unidades/torres'
-      },
-      {
-        id: 'vieiralves',
-        slug: 'vieiralves',
-        nome: 'Live Academia - Vieiralves',
-        endereco: 'Av. Djalma Batista - Vieiralves, Manaus/AM',
-        imagem: '/images/academia-2.webp',
-        latitude: -3.0876,
-        longitude: -60.0156,
-        badge: { text: 'Vieiralves', variant: 'amber' },
-        link: '/unidades/vieiralves'
-      },
-      {
-        id: 'cidade-nova',
-        slug: 'cidade-nova',
-        nome: 'Live Academia - Cidade Nova',
-        endereco: 'Av. Max Teixeira - Cidade Nova, Manaus/AM',
-        imagem: '/images/academia-3.webp',
-        latitude: -3.0449,
-        longitude: -59.9986,
-        badge: { text: 'Cidade Nova', variant: 'pink' },
-        link: '/unidades/cidade-nova'
-      },
-      {
-        id: 'centro',
-        slug: 'centro',
-        nome: 'Live Academia - Centro',
-        endereco: 'Av. Getúlio Vargas - Centro, Manaus/AM',
-        imagem: '/images/academia-4.webp',
-        latitude: -3.1319,
-        longitude: -60.0217,
-        badge: { text: 'Centro', variant: 'orange' },
-        link: '/unidades/centro'
-      }
-    ]
-    
-    // Tentar buscar dados dinâmicos da API PRIMEIRO
+
     async function load() {
       try {
-        const res = await fetch('/api/unidades', { 
+        const res = await fetch('/api/unidades', {
           cache: 'no-store',
-          signal: AbortSignal.timeout(5000) // Timeout de 5s
+          signal: AbortSignal.timeout(10000) // Timeout de 10s
         })
-        
+
         if (!res.ok) throw new Error('API retornou erro')
-        
+
         const json = await res.json()
-        const units: UnidadeBase[] = (json.units || []).map((u: any) => ({
+        const allUnits: UnidadeBase[] = (json.units || []).map((u: any) => ({
           id: u.id,
           slug: u.slug,
           nome: u.nome,
@@ -326,18 +277,23 @@ export default function UnidadesCarousel() {
           badge: { text: (u.slug || 'Unidade').replace(/-/g,' ').slice(0,20), variant: 'orange' },
           link: `/unidades/${u.slug}`
         }))
-        
-        if (!cancelled && units.length > 0) {
+
+        // Remover duplicatas baseado no slug
+        const seenSlugs = new Set<string>()
+        const units = allUnits.filter(u => {
+          if (!u.slug || seenSlugs.has(u.slug)) return false
+          seenSlugs.add(u.slug)
+          return true
+        })
+
+        if (!cancelled) {
           setSortedUnidades(units)
-        } else if (!cancelled) {
-          // API retornou vazio, usar fallback
-          setSortedUnidades(fallbackUnidades)
         }
       } catch (e) {
-        // Se API falhar, usar fallback
+        // Se API falhar, manter lista vazia (sem fallback)
         if (!cancelled) {
-          console.info('[UnidadesCarousel] Usando dados estáticos (API indisponível)')
-          setSortedUnidades(fallbackUnidades)
+          console.error('[UnidadesCarousel] Erro ao carregar unidades:', e)
+          setSortedUnidades([])
         }
       } finally {
         if (!cancelled) {
@@ -345,7 +301,7 @@ export default function UnidadesCarousel() {
         }
       }
     }
-    
+
     load()
     return () => { cancelled = true }
   }, [])

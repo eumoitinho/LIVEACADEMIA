@@ -407,7 +407,7 @@ export const locations = [
   {
     id: "adrianopolis-diamante",
     name: "Adrianópolis",
-    address: "Av. Getúlio Vargas - Adrianópolis",
+    address: "Rua Neves da Fontoura, 254, Adrianópolis",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
     type: "diamante",

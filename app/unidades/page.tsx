@@ -4,7 +4,6 @@ import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import { Search, Navigation, X } from "lucide-react"
 import Link from "next/link"
-import { locations } from '@/src/lib/config/locations'
 import { UnidadeCardModern } from '@/src/components/unidade-card-modern'
 import { useUnitsData } from '@/hooks/use-sanity-data'
 
@@ -16,73 +15,51 @@ export default function Unidades() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [loadingLocation, setLoadingLocation] = useState(false)
 
-  // Merge Sanity units with static locations (Sanity takes precedence)
-  // IMPORTANTE: Todos os hooks devem ser declarados ANTES de qualquer return condicional
+  // APENAS Sanity - sem fallback para arquivo estático
   const allLocations = useMemo(() => {
-    if (loadingSanity || sanityUnits.length === 0) {
-      return locations
+    if (loadingSanity) {
+      return []
     }
 
-    return locations.map(staticLoc => {
-      // Tentar encontrar unidade do Sanity por slug exato ou parcial
-      const sanityUnit = sanityUnits.find((unit: any) => {
-        const sanitySlug = unit.slug?.toLowerCase() || ''
-        const staticId = staticLoc.id.toLowerCase()
-        // Match exato ou se o slug contém o id
-        return sanitySlug === staticId ||
-               sanitySlug.includes(staticId) ||
-               staticId.includes(sanitySlug)
-      })
-
-      if (sanityUnit) {
-        const hasCoordinates = 'coordinates' in staticLoc && staticLoc.coordinates && typeof staticLoc.coordinates === 'object'
-
-        // Extrair foto do Sanity - verificar todas as possíveis estruturas
-        let sanityPhoto = null
-        if (sanityUnit.photo?.asset?.url) {
-          sanityPhoto = sanityUnit.photo.asset.url
-        } else if (sanityUnit.images && sanityUnit.images.length > 0 && sanityUnit.images[0]?.asset?.url) {
-          sanityPhoto = sanityUnit.images[0].asset.url
-        } else if (sanityUnit.backgroundImage?.asset?.url) {
-          sanityPhoto = sanityUnit.backgroundImage.asset.url
-        }
-
-        // Determinar tipo baseado no campo inaugurada e type do Sanity
-        // Normalizar tipo para lowercase (Sanity pode retornar "Diamante", "Premium", etc.)
-        let rawType = sanityUnit.type || staticLoc.type
-        let finalType = rawType?.toLowerCase() || 'tradicional'
-
-        // Mapear tipos com espaços para slugs
-        if (finalType === 'tradicional climatizada') finalType = 'tradicional'
-        if (finalType === 'em inauguração') finalType = 'inauguracao'
-
-        // Se nao inaugurada, forcar tipo inauguracao para escurecer o card
-        if (sanityUnit.inaugurada === false) {
-          finalType = 'inauguracao'
-        }
-
-        return {
-          ...staticLoc,
-          name: sanityUnit.name || staticLoc.name,
-          address: sanityUnit.address || staticLoc.address,
-          type: finalType,
-          photo: sanityPhoto || staticLoc.photo || '/images/fachada.jpg',
-          features: sanityUnit.services || staticLoc.features,
-          hours: sanityUnit.openingHours || staticLoc.hours,
-          active: sanityUnit.active !== false, // true por padrao
-          inaugurada: sanityUnit.inaugurada !== false, // true por padrao
-          coordinates: hasCoordinates ? {
-            lat: sanityUnit.latitude || (staticLoc.coordinates as any).lat,
-            lng: sanityUnit.longitude || (staticLoc.coordinates as any).lng,
-          } : undefined
-        }
+    return sanityUnits.map((unit: any) => {
+      // Extrair foto do Sanity - verificar todas as possíveis estruturas
+      let photo = '/images/fachada.jpg'
+      if (unit.photo?.asset?.url) {
+        photo = unit.photo.asset.url
+      } else if (unit.images && unit.images.length > 0 && unit.images[0]?.asset?.url) {
+        photo = unit.images[0].asset.url
+      } else if (unit.backgroundImage?.asset?.url) {
+        photo = unit.backgroundImage.asset.url
       }
-      // Unidade sem match no Sanity - usar dados estáticos com defaults
+
+      // Normalizar tipo para lowercase
+      let finalType = (unit.type || 'tradicional').toLowerCase()
+
+      // Mapear tipos com espaços para slugs
+      if (finalType === 'tradicional climatizada') finalType = 'tradicional'
+      if (finalType === 'em inauguração') finalType = 'inauguracao'
+
+      // Se nao inaugurada, forcar tipo inauguracao para escurecer o card
+      if (unit.inaugurada === false) {
+        finalType = 'inauguracao'
+      }
+
       return {
-        ...staticLoc,
-        type: staticLoc.type?.toLowerCase() || 'tradicional',
-        active: staticLoc.status !== 'coming_soon', // true se não for "em breve"
-        inaugurada: staticLoc.type !== 'inauguracao' && staticLoc.status !== 'coming_soon'
+        id: unit.slug || unit._id,
+        name: unit.name || '',
+        address: unit.address || '',
+        type: finalType,
+        photo: photo,
+        features: unit.services || [],
+        hours: unit.openingHours || '',
+        active: unit.active !== false,
+        inaugurada: unit.inaugurada !== false,
+        hotsite: unit.hotsite || '',
+        mapLink: unit.mapLink || '',
+        coordinates: unit.latitude && unit.longitude ? {
+          lat: unit.latitude,
+          lng: unit.longitude
+        } : undefined
       }
     })
   }, [sanityUnits, loadingSanity])
