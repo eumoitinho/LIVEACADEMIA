@@ -297,15 +297,6 @@ export const locations = [
     type: "inauguracao",
     tourUrl: null,
   },
-  {
-    id: "morada-do-sol-assinpa",
-    name: "Morada do Sol Assinpa",
-    address: "EM BREVE | Aguardando informações",
-    hours: "Aguardando informações",
-    features: [],
-    type: "inauguracao",
-    tourUrl: null,
-  },
 ]
 
 export default function LocationCarousel() {

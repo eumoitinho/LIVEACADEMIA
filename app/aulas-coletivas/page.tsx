@@ -4,11 +4,24 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import { useModalitiesData } from "@/hooks/use-sanity-data"
 import { urlFor } from "@/lib/sanity"
-
-const easing = [0.16, 1, 0.3, 1] as const
+import { useState } from "react"
+import { ChevronDown } from "lucide-react"
 
 export default function AulasColetivasPage() {
   const { data: modalitiesData, loading } = useModalitiesData()
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set())
+
+  const toggleExpand = (id: string) => {
+    setExpandedCards(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(id)) {
+        newSet.delete(id)
+      } else {
+        newSet.add(id)
+      }
+      return newSet
+    })
+  }
 
   if (loading) {
     return (
@@ -129,9 +142,20 @@ export default function AulasColetivasPage() {
                     <h3 className="text-lg font-semibold text-white tracking-tight leading-snug">
                       {modality.name}
                     </h3>
-                    <p className="text-sm text-zinc-300/90 line-clamp-2">
-                      {modality.description || 'Descubra esta modalidade incrível na Live Academia e transforme sua rotina de exercícios!'}
-                    </p>
+                    <div>
+                      <p className={`text-sm text-zinc-300/90 ${expandedCards.has(modality._id) ? '' : 'line-clamp-2'}`}>
+                        {modality.description || 'Descubra esta modalidade incrível na Live Academia e transforme sua rotina de exercícios!'}
+                      </p>
+                      {modality.description && modality.description.length > 80 && (
+                        <button
+                          onClick={() => toggleExpand(modality._id)}
+                          className="mt-2 text-xs text-yellow-400 hover:text-yellow-300 transition-colors flex items-center gap-1 font-medium"
+                        >
+                          {expandedCards.has(modality._id) ? 'Ver menos' : 'Ver mais'}
+                          <ChevronDown className={`w-3 h-3 transition-transform ${expandedCards.has(modality._id) ? 'rotate-180' : ''}`} />
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   {/* Tags */}

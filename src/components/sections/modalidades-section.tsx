@@ -1,12 +1,12 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, ChevronDown } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useModalidadesLandingData } from "@/hooks/use-modalidades-landing-data"
 import { urlFor } from "@/lib/sanity"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 
 const defaultModalidadesHome = [
   {
@@ -41,6 +41,21 @@ const difficultyLabels: Record<string, string> = {
 
 export default function ModalidadesSection() {
   const { data, loading } = useModalidadesLandingData()
+  const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set())
+
+  const toggleExpand = (index: number, e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setExpandedCards(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(index)) {
+        newSet.delete(index)
+      } else {
+        newSet.add(index)
+      }
+      return newSet
+    })
+  }
 
   // Transformar dados do Sanity para o formato do componente
   // SÓ usar fallback DEPOIS que loading terminar
@@ -142,9 +157,18 @@ export default function ModalidadesSection() {
 
                 {/* Descrição no rodapé */}
                 <div className="absolute bottom-4 left-4 right-4 z-10">
-                  <p className="text-white/90 text-sm leading-relaxed line-clamp-3">
+                  <p className={`text-white/90 text-sm leading-relaxed ${expandedCards.has(index) ? '' : 'line-clamp-3'}`}>
                     {modalidade.description}
                   </p>
+                  {modalidade.description && modalidade.description.length > 100 && (
+                    <button
+                      onClick={(e) => toggleExpand(index, e)}
+                      className="mt-2 text-xs text-yellow-400 hover:text-yellow-300 transition-colors flex items-center gap-1 font-medium"
+                    >
+                      {expandedCards.has(index) ? 'Ver menos' : 'Ver mais'}
+                      <ChevronDown className={`w-3 h-3 transition-transform ${expandedCards.has(index) ? 'rotate-180' : ''}`} />
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>

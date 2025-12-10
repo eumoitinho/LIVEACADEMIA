@@ -304,7 +304,7 @@ export const locations = [
   // Unidades Premium
   {
     id: "belem-premium",
-    name: "Belém Premium",
+    name: "Belém",
     address: "Av. Sete de Setembro, 1200 - Centro",
     hours: "Seg-Sex: 5h-22h | Sáb: 8h-17h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Aulas coletivas", "Climatização", "App acesso"],
@@ -324,7 +324,7 @@ export const locations = [
   },
   {
     id: "franceses-mirage-premium",
-    name: "Franceses Mirage Premium",
+    name: "Franceses Mirage",
     address: "Av. Djalma Batista - Franceses",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Aulas coletivas", "Climatização", "App acesso"],
@@ -344,7 +344,7 @@ export const locations = [
   },
   {
     id: "jacira-reis-premium",
-    name: "Jacira Reis Premium",
+    name: "Jacira Reis",
     address: "Rua Jacira Reis - Flores",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Aulas coletivas", "Climatização", "App acesso"],
@@ -364,7 +364,7 @@ export const locations = [
   },
   {
     id: "parque-10-premium",
-    name: "Parque 10 Premium",
+    name: "Parque 10",
     address: "Parque Dez de Novembro",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Aulas coletivas", "Climatização", "App acesso"],
@@ -384,7 +384,7 @@ export const locations = [
   },
   {
     id: "petropolis-premium",
-    name: "Petrópolis Premium",
+    name: "Petrópolis",
     address: "Av. Getúlio Vargas - Petrópolis",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Aulas coletivas", "Climatização", "App acesso"],
@@ -406,7 +406,7 @@ export const locations = [
   // Unidades Diamante
   {
     id: "adrianopolis-diamante",
-    name: "Adrianópolis Diamante",
+    name: "Adrianópolis",
     address: "Av. Getúlio Vargas - Adrianópolis",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -426,7 +426,7 @@ export const locations = [
   },
   {
     id: "alphaville-diamante",
-    name: "Alphaville Diamante",
+    name: "Alphaville",
     address: "Alphaville - Manaus",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -446,7 +446,7 @@ export const locations = [
   },
   {
     id: "bom-prato-diamante",
-    name: "Bom Prato Diamante",
+    name: "Bom Prato",
     address: "R. Santa Cecília, 165 - Col. Santo Antônio (Bom Prato)",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -486,7 +486,7 @@ export const locations = [
   },
   {
     id: "flores-diamante",
-    name: "Flores Diamante",
+    name: "Flores",
     address: "R. Visc. de Sepetiba, 220 - Flores",
     hours: "Seg-Sex: 5h-24h | Sáb: 8h-17h | Dom: 8h-14h | Feriado: 7h-17h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Espaço Pose", "Studio de Bike", "Aulas coletivas", "Climatização", "Atendimento domingos", "App acesso"],
@@ -506,7 +506,7 @@ export const locations = [
   },
   {
     id: "margarita-diamante",
-    name: "Margarita Diamante", 
+    name: "Margarita", 
     address: "Av. Margarita, nº 695 - Nova Cidade",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -526,7 +526,7 @@ export const locations = [
   },
   {
     id: "pedro-teixeira-diamante",
-    name: "Pedro Teixeira Diamante",
+    name: "Pedro Teixeira",
     address: "Av. Pedro Teixeira, 700 - Dom Pedro",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -546,7 +546,7 @@ export const locations = [
   },
   {
     id: "planalto-diamante",
-    name: "Planalto Diamante",
+    name: "Planalto",
     address: "Rua Salim Kahane, 3586 - Planalto",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -566,11 +566,11 @@ export const locations = [
   },
   {
     id: "rodrigues-grande-circular",
-    name: "Rodrigues Grande Circular Premium",
+    name: "Rodrigues Grande Circular",
     address: "Av. Autaz Mirim, 7451 - Tancredo Neves",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
-    type: "premium",
+    type: "diamante",
     status: "open",
     logo: "https://www.liveacademia.com.br/wp-content/uploads/2024/04/21-300x228.png",
     photo: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=500&h=300&fit=crop&crop=center",
@@ -586,7 +586,7 @@ export const locations = [
   },
   {
     id: "torquato-santos-dumont-diamante",
-    name: "Torquato Santos Dumont Diamante",
+    name: "Torquato Santos Dumont",
     address: "Av. Torquato Tapajós, 5555, Da Paz",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -606,7 +606,7 @@ export const locations = [
   },
   {
     id: "efigenio-salles-diamante",
-    name: "Efigênio Salles Diamante",
+    name: "Efigênio Salles",
     address: "Rua Efigênio Salles - Adrianópolis",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -626,7 +626,7 @@ export const locations = [
   },
   {
     id: "laranjeiras-diamante",
-    name: "Laranjeiras Diamante",
+    name: "Laranjeiras",
     address: "Av. Darcy Vargas - Laranjeiras",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -646,7 +646,7 @@ export const locations = [
   },
   {
     id: "ponta-negra-diamante",
-    name: "Ponta Negra Diamante",
+    name: "Ponta Negra",
     address: "Av. Coronel Teixeira - Ponta Negra",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -666,7 +666,7 @@ export const locations = [
   },
   {
     id: "torres-diamante",
-    name: "Torres Diamante",
+    name: "CT Torres",
     address: "Rua Mitiko, 397, Parque Dez de Novembro",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -686,7 +686,7 @@ export const locations = [
   },
   {
     id: "vieiralves-diamante",
-    name: "Vieiralves Diamante",
+    name: "Vieiralves",
     address: "Av. Djalma Batista, 450 - Nossa Senhora das Graças",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
@@ -706,11 +706,11 @@ export const locations = [
   },
   {
     id: "vitoria-coroado",
-    name: "Vitória Coroado Premium",
-    address: "Avenida Cosme Ferreira, 1620,  Coroado I - Vitória Supermercados",
+    name: "Vitória Coroado",
+    address: "Avenida Cosme Ferreira, 1620, Coroado I - Vitória Supermercados",
     hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: Fechado | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
-    type: "premium",
+    type: "diamante",
     status: "open",
     logo: "https://www.liveacademia.com.br/wp-content/uploads/2023/12/22-300x228.png",
     photo: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=500&h=300&fit=crop&crop=center",
@@ -725,15 +725,15 @@ export const locations = [
     tourUrl: "https://maps.app.goo.gl/ZaaU2WtH7JAQiFxo9",
   },
 
-  // Unidades em Inauguração/Planejamento (NÃO ATIVAS)
+  // Unidade Morada do Sol - ATIVA
   {
     id: "morada-sol-diamante",
-    name: "Morada do Sol Diamante",
-    address: "Morada do Sol - Assinpa",
-    hours: "Em breve",
+    name: "Morada do Sol",
+    address: "Av. Desembargador João Machado, 8955 - Aleixo",
+    hours: "Seg-Sex: 5h30-22h | Sáb: 7h-15h | Dom: 8h-14h | Feriado: 7h-12h",
     features: ["Sem fidelidade", "Espaço Relax", "Espaço Yoga", "Studio de Bike", "Aulas coletivas", "Climatização", "App acesso"],
-    type: "inauguracao",
-    status: "coming_soon", 
+    type: "diamante",
+    status: "open",
     logo: "https://www.liveacademia.com.br/wp-content/uploads/2024/10/morada-do-sol-300x228.png",
     photo: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop&crop=center",
     hotsite: "https://www.liveacademia.com.br/unidades/morada-do-sol-diamante/",
@@ -746,6 +746,8 @@ export const locations = [
     ],
     tourUrl: "",
   },
+
+  // Unidades em Inauguração/Planejamento (NÃO ATIVAS)
   {
     id: "veneza-turismo",
     name: "Veneza Turismo",
