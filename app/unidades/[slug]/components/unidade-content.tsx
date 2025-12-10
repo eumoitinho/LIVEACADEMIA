@@ -154,8 +154,11 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                 Sua jornada de transformação começa aqui. Equipamentos de ponta, ambiente motivador e resultados reais.
               </p>
 
+              {/* Botões de navegação - só mostra se tiver dados no Sanity */}
+              {(data?.modalidades?.length > 0 || data?.beneficios?.length > 0) && (
               <div className="border-t border-white/10 pt-6 mb-6 opacity-0 animate-[fadeInScale_0.8s_ease-out_1s_forwards]" style={{transform: "scale(0.95)", filter: "blur(3px)"}}>
                 <div className="flex flex-wrap gap-4 gap-x-4 gap-y-4 items-center">
+                  {data?.modalidades?.length > 0 && (
                   <Link
                     href="#modalidades"
                     className="animate-[slideInBlur_0.8s_ease-out_1.2s_forwards] z-10 transition-colors duration-200 text-black bg-amber-400 hover:bg-amber-300 opacity-0 rounded-full pt-3 pr-6 pb-3 pl-6 cursor-pointer"
@@ -166,9 +169,13 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                       <ArrowRight className="h-5 w-5" />
                     </span>
                   </Link>
+                  )}
 
+                  {data?.modalidades?.length > 0 && data?.beneficios?.length > 0 && (
                   <div className="w-px h-6 bg-white/20"></div>
+                  )}
 
+                  {data?.beneficios?.length > 0 && (
                   <Link
                     href="#beneficios"
                     className="inline-flex gap-2 transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 animate-[fadeInSlide_0.8s_ease-out_1.4s_forwards] text-base font-medium text-white opacity-0 border-white/30 border rounded-full pt-2.5 pr-5 pb-2.5 pl-5 backdrop-blur gap-x-2 gap-y-2 items-center cursor-pointer bg-white/10"
@@ -176,8 +183,10 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
                   >
                     Ver Benefícios
                   </Link>
+                  )}
                 </div>
               </div>
+              )}
             </div>
 
             {/* Right Column - Planos */}
@@ -212,7 +221,8 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
         </div>
       </section>
 
-      {/* Modalidades Section */}
+      {/* Modalidades Section - SÓ mostra se tiver modalidades no Sanity */}
+      {data?.modalidades && data.modalidades.length > 0 && (
       <section id="modalidades" className="py-16 px-4 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -237,7 +247,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {(data?.modalidades || []).map((modalidade, index) => {
+            {data.modalidades.map((modalidade, index) => {
               // Usar foto da modalidade do Sanity, ou fallback genérico
               const defaultFotos = ['/images/academia-1.webp', '/images/academia-2.webp', '/images/academia-3.webp', '/images/academia-4.webp']
               const fotoModalidade = modalidade.image || defaultFotos[index % defaultFotos.length] || '/images/fachada.jpg'
@@ -291,8 +301,10 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </div>
         </div>
       </section>
+      )}
 
-      {/* Benefícios Section */}
+      {/* Benefícios Section - SÓ mostra se tiver benefícios no Sanity */}
+      {data?.beneficios && data.beneficios.length > 0 && (
       <section id="beneficios" className="py-16 px-4 lg:px-8 bg-gradient-to-br from-zinc-900/50 to-black/50">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -317,7 +329,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(data?.beneficios || []).map((beneficio, index) => {
+              {data.beneficios.map((beneficio, index) => {
                 // Usar foto do benefício do Sanity, ou fallback genérico
                 const defaultFotos = ['/images/academia-1.webp', '/images/academia-2.webp', '/images/academia-3.webp', '/images/academia-4.webp']
                 const fotoBeneficio = beneficio.image || defaultFotos[index % defaultFotos.length] || '/images/fachada.jpg'
@@ -373,6 +385,7 @@ export default function UnidadeContent({ unidade, data }: UnidadeContentProps) {
           </div>
         </div>
       </section>
+      )}
 
       {/* Mapa Section */}
       <section className="py-16 px-4 lg:px-8">

@@ -220,14 +220,10 @@ export default async function UnidadePage(props: PageProps) {
     })) || []
   
   const data = {
-    // Modalidades da seção do Sanity (com fotos) ou fallback estático
-    modalidades: modalidadesFromSection.length > 0 
-      ? modalidadesFromSection 
-      : staticData.modalidades.map((name: string) => ({ name, image: null })),
-    // Benefícios da seção do Sanity (com fotos) ou fallback estático
-    beneficios: beneficiosFromSection.length > 0 
-      ? beneficiosFromSection 
-      : staticData.beneficios.map((title: string) => ({ title, image: null })),
+    // Modalidades APENAS do Sanity - sem fallback
+    modalidades: modalidadesFromSection,
+    // Benefícios APENAS do Sanity - sem fallback
+    beneficios: beneficiosFromSection,
     // Fotos genéricas como fallback adicional
     fotos: staticData.fotos
   }
