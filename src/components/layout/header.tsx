@@ -55,9 +55,6 @@ export default function Header() {
             <Link href="/planos" className="hover:text-white/90 transition text-sm font-normal text-white/80">
               Planos
             </Link>
-            <Link href="/contato" className="hover:text-white/90 transition text-sm font-normal text-white/80">
-              Contato
-            </Link>
             <Link
               href="/planos"
               className="inline-flex gap-2 transition hover:from-amber-200 hover:to-amber-300 hover:shadow-[0_8px_20px_rgba(251,191,36,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 text-sm font-bold text-black bg-gradient-to-b from-amber-300 to-amber-400 rounded-full pt-2.5 pr-5 pb-2.5 pl-5 shadow-[0_4px_12px_rgba(251,191,36,0.3)] items-center"
