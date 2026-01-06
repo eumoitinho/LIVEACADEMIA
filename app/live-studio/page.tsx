@@ -116,73 +116,83 @@ export default function LiveStudioPage() {
       <div className="fixed inset-0 -z-10 opacity-[0.2]" style={{backgroundImage: 'url("https://www.transparenttextures.com/patterns/carbon-fibre.png")'}}></div>
 
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex flex-col justify-center px-6 lg:px-12 pt-32 pb-20 overflow-hidden">
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 lg:px-12 pt-32 pb-32 overflow-hidden">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-yellow-400/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         
-        <div className="max-w-[1400px] mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
-          <div className="space-y-10 z-10">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.9] text-white">
-                TREINO <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">VIP</span><br /> 
-                PERSONALIZADO
-              </h1>
-            </motion.div>
+        <div className="max-w-[1400px] mx-auto w-full flex flex-col items-center text-center space-y-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="space-y-6 max-w-4xl"
+          >
+            <h1 className="text-4xl md:text-6xl lg:text-7xl tracking-tight text-white leading-[1.1]">
+              <span className="font-extrabold uppercase block mb-1">Aulas direcionadas</span>
+              <span className="font-light italic text-white/90 block my-1">e acompanhadas, com</span>
+              <span className="font-black uppercase text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 block mt-1">
+                até 4 alunos por horário
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl text-white/80 font-light max-w-2xl mx-auto">
+              Mais atenção, orientação e treinos otimizados para você!
+            </p>
+          </motion.div>
 
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="space-y-6 max-w-xl"
-            >
-              <h2 className="text-2xl md:text-3xl font-light text-white/90 leading-tight">
-                Aulas direcionadas e acompanhadas, com até 4 alunos por horário
-              </h2>
-              <p className="text-lg text-white/60">
-                Mais atenção, orientação e treinos otimizados para você!
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative w-full max-w-5xl aspect-video rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-yellow-900/10 bg-neutral-900/50"
+          >
+            <video
+              src={videoSrc}
+              className="absolute inset-0 w-full h-full object-cover"
+              controls
+              playsInline
+              muted
+              loop
+              autoPlay
+            />
+            <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-left">
+              <p className="text-white/90 text-sm font-medium tracking-wide uppercase">
+                Exclusividade, eficiência e atenção total em cada movimento
               </p>
-              
-              <div className="pt-4">
-                <Link
-                  href="#planos"
-                  className="group relative inline-flex items-center gap-3 bg-yellow-400 text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-300 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.4)]"
-                >
-                  COMPRE CRÉDITOS E AGENDE SEU TREINO!
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
 
-          <div className="relative z-10 lg:h-[600px] w-full flex items-center justify-center">
-             <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8 }}
-                className="relative w-full aspect-[4/5] md:aspect-video lg:aspect-[4/5] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-yellow-900/10"
-             >
-                <video
-                  src={videoSrc}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  controls
-                  playsInline
-                  muted
-                  loop
-                  autoPlay
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
-                  <p className="text-white/90 text-sm font-medium tracking-wide uppercase">
-                    Exclusividade, eficiência e atenção total em cada movimento
-                  </p>
-                </div>
-             </motion.div>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="pt-4"
+          >
+            <Link
+              href="#planos"
+              className="group relative inline-flex items-center gap-3 bg-yellow-400 text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-300 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.4)]"
+            >
+              COMPRE CRÉDITOS E AGENDE SEU TREINO!
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
         </div>
       </section>
+
+      {/* Fixed Bottom Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/70 backdrop-blur-md border-t border-white/10 py-4 px-6 lg:px-12 animate-in slide-in-from-bottom duration-500">
+        <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-center sm:text-left">
+            <h3 className="text-white font-bold text-lg">Live Studio</h3>
+            <p className="text-white/60 text-sm">Treino VIP personalizado com foco em resultados.</p>
+          </div>
+          <Link
+            href="#planos"
+            className="bg-white/10 hover:bg-white/20 text-white px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-wide transition-colors flex items-center gap-2"
+          >
+            Começar Agora
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
 
       {/* Intro Text Block */}
       <section className="py-20 px-6 lg:px-12 border-y border-white/5 bg-neutral-900/30">
@@ -313,8 +323,8 @@ export default function LiveStudioPage() {
         
         <div className="max-w-[1400px] mx-auto relative z-10">
           <header className="text-center mb-20">
-             <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6">
-              Adquira seus créditos
+             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6">
+              Adquira créditos e tenha acesso exclusivo ao Live Studio
              </h2>
              <p className="text-xl text-white/60 max-w-2xl mx-auto">
                Escolha o pacote que melhor se adequa aos seus objetivos, agende sua aula e comece sua transformação hoje mesmo.
@@ -356,7 +366,7 @@ export default function LiveStudioPage() {
       </section>
 
       {/* Footer / Contact Block */}
-      <footer className="py-20 px-6 lg:px-12 border-t border-white/10 bg-black">
+      <footer className="py-20 px-6 lg:px-12 border-t border-white/10 bg-black pb-32">
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
            <div className="flex items-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
                <img src={logoUrl} alt="LIVE STUDIO" className="h-10 w-auto" />
@@ -377,6 +387,16 @@ export default function LiveStudioPage() {
            </div>
         </div>
       </footer>
+
+      {/* Fixed Bottom Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-md border-t border-white/10 py-4 px-6 lg:px-12 animate-in slide-in-from-bottom duration-500">
+        <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 h-10">
+          <div className="text-center sm:text-left">
+            <h3 className="text-white font-bold text-lg">Live Studio</h3>
+            <p className="text-white/60 text-sm hidden sm:block">Treino VIP personalizado</p>
+          </div>
+        </div>
+      </div>
     </main>
   )
 }
