@@ -1,11 +1,16 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Instagram, Facebook, Youtube, MapPin, Mail, BadgeCheck, Check, Send, Github, Twitter, Linkedin } from "lucide-react"
 import LiveLogo from "@/components/shared/live-logo"
 import ScrollToTopButton from '@/components/layout/scroll-to-top-button'
 
 export default function Footer() {
+  const pathname = usePathname()
+
+  if (pathname?.startsWith('/live-studio')) return null
+
   return (
     <footer className="w-full sm:px-6 md:px-10 max-w-7xl mr-auto ml-auto pt-12 pr-4 pb-10 pl-4">
       <div className="relative overflow-hidden bg-neutral-900 rounded-3xl">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import LiveLogo from "@/components/shared/live-logo"
 import { useUnit } from "@/contexts/unit-context"
@@ -9,6 +10,9 @@ import { useUnit } from "@/contexts/unit-context"
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { currentUnit } = useUnit()
+  const pathname = usePathname()
+
+  if (pathname?.startsWith('/live-studio')) return null
 
   // Prevent body scroll when menu is open
   useEffect(() => {
