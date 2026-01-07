@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { pactoNegociacaoAPI, resolveNegociacaoAuth, ConfigsContratoDTO } from '@/src/lib/api/pacto-negociacao'
+import { pactoNegociacaoAPI, resolveNegociacaoAuth, ConfigsContratoDTO, PlanoModalidadeDTO } from '@/src/lib/api/pacto-negociacao'
 import { rateLimiter } from '@/src/lib/utils/rate-limiter'
 
 // POST /api/pacto-v3/venda/:slug
@@ -33,22 +33,24 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
 
   try {
     const body = await req.json().catch(() => null)
-    const config = (body?.config || body?.configsContrato || body?.negociacao || body) as ConfigsContratoDTO
-
-    if (!config || !config.cliente) {
-      return NextResponse.json({
-        error: 'Payload inválido. Envie config com cliente e dados da negociação.'
-      }, { status: 400 })
-    }
+    const rawConfig = (body?.config || body?.configsContrato || body?.negociacao || body) as ConfigsContratoDTO | null
 
     const { token, empresaId } = await resolveNegociacaoAuth(req.headers, slug)
     if (!token || !empresaId) {
       return NextResponse.json({ error: 'Token ou empresaId não configurados para negociação.' }, { status: 401 })
     }
 
-    const empresaNumero = Number(empresaId)
-    if (!config.empresa && !Number.isNaN(empresaNumero)) {
-      config.empresa = empresaNumero
+    const config = await buildNegotiationConfig({
+      token,
+      empresaId,
+      payload: body,
+      config: rawConfig,
+    })
+
+    if (!config) {
+      return NextResponse.json({
+        error: 'Payload inválido. Envie config com cliente e dados da negociação.'
+      }, { status: 400 })
     }
 
     if (config.gerarLink === undefined) {
@@ -72,5 +74,90 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
       message: error.message,
       source: 'error'
     }, { status: 500 })
+  }
+}
+
+async function buildNegotiationConfig({
+  token,
+  empresaId,
+  payload,
+  config,
+}: {
+  token: string
+  empresaId: string
+  payload: any
+  config: ConfigsContratoDTO | null
+}): Promise<ConfigsContratoDTO | null> {
+  if (config?.cliente) {
+    const empresaNumero = Number(empresaId)
+    if (!config.empresa && !Number.isNaN(empresaNumero)) {
+      config.empresa = empresaNumero
+    }
+    return config
+  }
+
+  const clienteNome = payload?.cliente?.nome || payload?.customer?.nome
+  const planoId = payload?.planoId || payload?.plano
+
+  if (!clienteNome || !planoId) {
+    return null
+  }
+
+  const clientes = await pactoNegociacaoAPI.buscarClientes(token, empresaId, clienteNome)
+  const clienteEncontrado = clientes[0]
+  if (!clienteEncontrado) {
+    throw new Error('Cliente não encontrado para negociação')
+  }
+
+  const check = await pactoNegociacaoAPI.checkNegociacao(token, empresaId, clienteEncontrado.codigo, 0, true)
+  const contratoBase = check?.codigoContratoRenovacao ?? 0
+  const planoDetalhe = await pactoNegociacaoAPI.obterDadosPlano(token, empresaId, Number(planoId), contratoBase, 'ATIVO')
+  if (!planoDetalhe) {
+    throw new Error('Não foi possível obter dados do plano para negociação')
+  }
+
+  const duracao = planoDetalhe.duracoes?.[0]
+  const condicao = duracao?.condicoes?.[0]
+  const horario = planoDetalhe.horarios?.[0]
+
+  if (!duracao || !condicao || !horario) {
+    throw new Error('Dados insuficientes do plano para negociação')
+  }
+
+  const modalidades = (planoDetalhe.modalidades || []).map((modalidade): PlanoModalidadeDTO => {
+    const configsVezes = (modalidade.configsVezes || []).map((configVezes) => ({
+      ...configVezes,
+      horario: configVezes.horario || horario.codigo,
+    }))
+    return {
+      ...modalidade,
+      configsVezes: configsVezes.length ? configsVezes : [{
+        codigo: modalidade.codigo,
+        vezes: modalidade.nrvezes || 1,
+        duracao: duracao.codigo,
+        horario: horario.codigo,
+      }],
+    }
+  })
+
+  const empresaNumero = Number(empresaId)
+  const usuario = payload?.usuario || payload?.usuarioId
+
+  return {
+    contratoBase,
+    plano: Number(planoId),
+    empresa: Number.isNaN(empresaNumero) ? undefined : empresaNumero,
+    usuario: usuario ? Number(usuario) : undefined,
+    cliente: clienteEncontrado.codigo,
+    duracao: duracao.codigo,
+    condicao: condicao.codigo,
+    horario: horario.codigo,
+    dataLancamento: Date.now(),
+    diaPrimeiraParcela: payload?.diaPrimeiraParcela || 10,
+    tipoContrato: 'ESPONTANEO',
+    inicio: Date.now(),
+    gerarLink: true,
+    modalidades,
+    produtos: [],
   }
 }

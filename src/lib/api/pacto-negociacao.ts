@@ -174,6 +174,91 @@ export interface NegociacaoFinalizada {
   whatsapp: string
 }
 
+function buildSlugVariations(slug: string) {
+  const slugNormalized = slug.toUpperCase().replace(/-/g, '_')
+  const suffixesToRemove = ['_DIAMANTE', '_PREMIUM', '_CLIMATIZADA', '_GRANDE_CIRCULAR']
+  const slugVariations = [slugNormalized]
+
+  for (const suffix of suffixesToRemove) {
+    if (slugNormalized.endsWith(suffix)) {
+      slugVariations.push(slugNormalized.replace(suffix, ''))
+    }
+  }
+
+  if (slugNormalized.startsWith('CT_')) {
+    slugVariations.push(slugNormalized.replace('CT_', ''))
+  }
+  if (slugNormalized.startsWith('TORQUATO_')) {
+    slugVariations.push(slugNormalized.replace('TORQUATO_', ''))
+  }
+  if (slugNormalized === 'TORQUATO_BEMOL') {
+    slugVariations.push('BEMOL')
+  }
+  if (slugNormalized === 'TORQUATO_ALLEGRO') {
+    slugVariations.push('ALLEGRO')
+  }
+  if (slugNormalized === 'CHAPEU_GOIANO') {
+    slugVariations.push('GOIANO')
+  }
+  if (slugNormalized.startsWith('MORADA_')) {
+    slugVariations.push('MORADA')
+  }
+  if (slugNormalized === 'VITORIA_COROADO' || slugNormalized === 'VITORIA') {
+    slugVariations.push('COROADO')
+    slugVariations.push('VITORIA')
+  }
+  if (slugNormalized.startsWith('RODRIGUES_')) {
+    slugVariations.push('RODRIGUES')
+  }
+  if (slugNormalized === 'TORRES_DIAMANTE') {
+    slugVariations.push('TORRES')
+  }
+  if (slugNormalized === 'VIEIRALVES_DIAMANTE') {
+    slugVariations.push('VIEIRALVES')
+  }
+  if (slugNormalized === 'MARGARITA_DIAMANTE') {
+    slugVariations.push('MARGARITA')
+  }
+  if (slugNormalized === 'PEDRO_TEIXEIRA_DIAMANTE') {
+    slugVariations.push('PEDRO_TEIXEIRA')
+  }
+  if (slugNormalized === 'PLANALTO_DIAMANTE') {
+    slugVariations.push('PLANALTO')
+  }
+  if (slugNormalized === 'BOM_PRATO_DIAMANTE') {
+    slugVariations.push('BOM_PRATO')
+  }
+  if (slugNormalized === 'FLORES_DIAMANTE') {
+    slugVariations.push('FLORES')
+  }
+  if (slugNormalized.includes('EFIGENIO')) {
+    slugVariations.push('EFIGENIO_SALLES')
+    slugVariations.push('EFIGENIO')
+  }
+  if (slugNormalized.includes('VENEZA')) {
+    slugVariations.push('VENEZA')
+  }
+  if (slugNormalized.startsWith('JACIRA_')) {
+    slugVariations.push('JACIRA')
+  }
+
+  return slugVariations
+}
+
+function getEnvBySlug(prefixes: string[], slug: string): string | null {
+  const variations = buildSlugVariations(slug)
+  for (const variation of variations) {
+    for (const prefix of prefixes) {
+      const envKey = `${prefix}${variation}`
+      const value = process.env[envKey]
+      if (value) {
+        return value
+      }
+    }
+  }
+  return null
+}
+
 export async function resolveNegociacaoAuth(headers: Headers, slug?: string) {
   let token = headers.get('authorization') || headers.get('x-api-key') || headers.get('x-pacto-token')
   if (token?.toLowerCase().startsWith('bearer ')) {
@@ -181,6 +266,14 @@ export async function resolveNegociacaoAuth(headers: Headers, slug?: string) {
   }
 
   if (!token && slug) {
+    const envToken = getEnvBySlug(
+      ['PACTO_NEGOCIACAO_TOKEN_', 'PACTO_API_TOKEN_', 'PACTO_API_KEY_', 'PACTO_SECRET_KEY_'],
+      slug
+    )
+    if (envToken) {
+      token = envToken
+    }
+
     const unidade = await getUnitBySlug(slug)
     if (unidade?.apiKeyPlain) {
       token = unidade.apiKeyPlain
@@ -191,7 +284,13 @@ export async function resolveNegociacaoAuth(headers: Headers, slug?: string) {
     token = process.env.PACTO_NEGOCIACAO_TOKEN || process.env.PACTO_API_TOKEN || process.env.PACTO_API_KEY || null
   }
 
-  const empresaId = headers.get('empresaId') || headers.get('x-empresa-id') || headers.get('empresaid') || process.env.PACTO_EMPRESA_ID || process.env.PACTO_EMPRESAID || null
+  let empresaId = headers.get('empresaId') || headers.get('x-empresa-id') || headers.get('empresaid') || null
+  if (!empresaId && slug) {
+    empresaId = getEnvBySlug(['PACTO_EMPRESA_ID_', 'PACTO_EMPRESAID_'], slug)
+  }
+  if (!empresaId) {
+    empresaId = process.env.PACTO_EMPRESA_ID || process.env.PACTO_EMPRESAID || null
+  }
 
   return { token, empresaId }
 }
