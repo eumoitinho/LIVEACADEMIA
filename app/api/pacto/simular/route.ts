@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { pactoV2API, formatVendaData } from '@/src/lib/api/pacto-v2'
-import { getUnitBySlug } from '@/src/lib/api/supabase-repository'
+import { pactoNegociacaoAPI, resolveNegociacaoAuth, ConfigsContratoDTO } from '@/src/lib/api/pacto-negociacao'
 import { rateLimiter } from '@/src/lib/utils/rate-limiter'
-import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
+import { cacheManager } from '@/src/lib/utils/cache-manager'
 
 // POST /api/pacto/simular
-// Body: { slug: string; planoId: string; cliente: PactoCliente; paymentMethod: string; cartao?: PactoCartao }
+// Body: ConfigsContratoDTO ou { config: ConfigsContratoDTO }
 export async function POST(req: NextRequest) {
   let body: any
   try {
@@ -14,10 +13,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'JSON inválido' }, { status: 400 })
   }
 
-  const { slug, planoId, cliente, paymentMethod, cartao } = body || {}
-  if (!slug || !planoId || !cliente || !paymentMethod) {
+  const config = (body?.config || body?.configsContrato || body?.negociacao || body) as ConfigsContratoDTO
+  if (!config || !config.cliente) {
     return NextResponse.json({
-      error: 'slug, planoId, cliente e paymentMethod são obrigatórios'
+      error: 'config com dados de negociação é obrigatório'
     }, { status: 400 })
   }
 
@@ -45,41 +44,36 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  const { token, empresaId } = await resolveNegociacaoAuth(req.headers)
+  if (!token || !empresaId) {
+    return NextResponse.json({ error: 'Token ou empresaId não configurados para negociação.' }, { status: 401 })
+  }
+
+  const empresaNumero = Number(empresaId)
+  if (!config.empresa && !Number.isNaN(empresaNumero)) {
+    config.empresa = empresaNumero
+  }
+
   // Criar hash dos dados para cache (evitar simulações idênticas)
-  const simulationHash = Buffer.from(JSON.stringify({ slug, planoId, cliente, paymentMethod })).toString('base64')
-  const cacheKey = cacheKeys.simulacao(slug, planoId, simulationHash)
+  const simulationHash = Buffer.from(JSON.stringify({ empresaId, config })).toString('base64')
+  const cacheKey = `negociacao-simulacao:${empresaId}:${simulationHash}`
   
   // Verificar cache (5 minutos para simulações)
   const cached = cacheManager.get(cacheKey)
   if (cached) {
-    console.log(`[Cache] Simulação encontrada no cache para ${slug}/${planoId}`)
+    console.log(`[Cache] Simulação de negociação encontrada no cache`)
     return NextResponse.json({ success: true, data: cached, source: 'cache' })
   }
 
   try {
-    console.log(`[Simular V2] Processando simulação para unidade: ${slug}`)
-    
-    // Registrar acesso para anti-fraude
-    const clientIP = pactoV2API.getClientIP(req)
-    await pactoV2API.registrarInicioAcesso(clientIP, `https://liveacademia.com.br/unidades/${slug}`, `simulacao-plano-${planoId}`)
+    console.log(`[Simular Negociacao] Processando simulação para empresa ${empresaId}`)
 
-    // Preparar dados para simulação V2
-    const dadosVenda = formatVendaData(
-      slug, // Usar slug como codigo_rede
-      cliente,
-      cartao || null,
-      1, // codigo_unidade padrão
-      parseInt(planoId),
-      paymentMethod,
-      clientIP
-    )
-
-    // Simular venda usando API V2
-    const simulacao = await pactoV2API.simularVenda(slug, 1, dadosVenda) // codigo_unidade padrão
+    // Simular negociação usando API
+    const simulacao = await pactoNegociacaoAPI.simularNegociacao(token, empresaId, config)
 
     // Armazenar no cache por 5 minutos
     cacheManager.set(cacheKey, simulacao, 5 * 60 * 1000)
-    console.log(`[Cache] Simulação armazenada no cache para ${slug}/${planoId}`)
+    console.log(`[Cache] Simulação de negociação armazenada no cache`)
 
     return NextResponse.json({
       success: true,
@@ -87,7 +81,7 @@ export async function POST(req: NextRequest) {
       source: 'api'
     })
   } catch (error: any) {
-    console.error('[POST /api/pacto/simular V2]', error)
+    console.error('[POST /api/pacto/simular Negociacao]', error)
     return NextResponse.json({
       success: false,
       error: error.message || 'Falha na simulação'
