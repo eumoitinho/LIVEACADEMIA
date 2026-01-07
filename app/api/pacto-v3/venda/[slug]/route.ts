@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { pactoV3API } from '@/src/lib/api/pacto-v3'
+import { pactoNegociacaoAPI, resolveNegociacaoAuth, ConfigsContratoDTO, PlanoModalidadeDTO } from '@/src/lib/api/pacto-negociacao'
 import { rateLimiter } from '@/src/lib/utils/rate-limiter'
 
 // POST /api/pacto-v3/venda/:slug
-// Processa venda usando API V3 da Pacto
+// Finaliza negociação usando API de negociação
 export async function POST(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
@@ -32,131 +32,132 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
   }
 
   try {
-    const body = await req.json()
-    const { slug: bodySlug, planoId, paymentMethod, cliente, captchaToken, cartaoToken } = body
+    const body = await req.json().catch(() => null)
+    const rawConfig = (body?.config || body?.configsContrato || body?.negociacao || body) as ConfigsContratoDTO | null
 
-    // Validar dados obrigatórios
-    if (!planoId || !paymentMethod || !cliente || !captchaToken) {
-      return NextResponse.json({ 
-        error: 'Dados obrigatórios: planoId, paymentMethod, cliente, captchaToken' 
-      }, { status: 400 })
+    const { token, empresaId } = await resolveNegociacaoAuth(req.headers, slug)
+    if (!token || !empresaId) {
+      return NextResponse.json({ error: 'Token ou empresaId não configurados para negociação.' }, { status: 401 })
     }
 
-    // Se for cartão, validar token do cartão
-    if (paymentMethod === 'cartao' && !cartaoToken) {
+    const config = await buildNegotiationConfig({
+      token,
+      empresaId,
+      payload: body,
+      config: rawConfig,
+    })
+
+    if (!config) {
       return NextResponse.json({
-        error: 'Token do cartão é obrigatório para pagamento com cartão'
+        error: 'Payload inválido. Envie config com cliente e dados da negociação.'
       }, { status: 400 })
     }
 
-    // Gerar token de venda
-    console.log(`[Venda V3] Gerando token para ${slug}...`)
-    const tokenResponse = await pactoV3API.gerarToken(slug, clientIP)
-    const vendaToken = tokenResponse.retorno.token
-
-    // Preparar dados da venda conforme formato da API V3
-    const dadosVenda = {
-      // Dados do cliente
-      nome: cliente.nome,
-      email: cliente.email,
-      telefone: cliente.telefone,
-      cpf: cliente.cpf,
-      endereco: cliente.endereco || '',
-      numero: cliente.numero || '',
-      complemento: cliente.complemento || '',
-      bairro: cliente.bairro || '',
-      cidade: cliente.cidade || '',
-      estado: cliente.estado || '',
-      cep: cliente.cep || '',
-      dataNascimento: cliente.dataNascimento || '01/01/1990',
-      sexo: cliente.sexo || 'M',
-      rg: cliente.rg || '',
-      
-      // Dados da venda
-      unidade: 1, // código da unidade sempre 1
-      plano: parseInt(planoId),
-      token: vendaToken,
-      termoDeUsoAceito: true,
-      origemSistema: 9,
-      dataUtilizacao: new Date().toLocaleDateString('pt-BR'),
-      ipPublico: clientIP,
-      
-      // Dados do cartão (se aplicável)
-      ...(paymentMethod === 'cartao' && cartaoToken ? {
-        numeroCartao: cartaoToken, // Token do cartão tokenizado
-        nomeCartao: cliente.nome,
-        validade: '', // Não necessário para token
-        cvv: '', // Não necessário para token
-        cpftitularcard: cliente.cpf,
-        tipoParcelamentoCredito: 'CREDITO'
-      } : {}),
-      
-      // Campos obrigatórios com valores padrão
-      aulasMarcadas: [],
-      clientesCadastradosComoDependentesPlanoCompartilhado: [],
-      cnpj: '',
-      cobrancaAntecipada: 0,
-      cobrarParcelasEmAberto: false,
-      codigoCategoriaPlano: 0,
-      codigoColaborador: 0,
-      codigoEvento: 0,
-      codigoRegistroAcessoPagina: 0,
-      convenioCobranca: 0,
-      cpfMae: '',
-      cpfPai: '',
-      cpfResponsavelEmpresa: '',
-      dataInicioContrato: new Date().toLocaleDateString('pt-BR'),
-      dataInicioVendaProdutos: new Date().toLocaleDateString('pt-BR'),
-      dataLancamento: new Date().toLocaleDateString('pt-BR'),
-      diaVencimento: 10,
-      enviarEmail: true,
-      horariosSelecionados: [],
-      locacaoAmbiente: false,
-      locacoesSelecionadas: [],
-      modalidadesSelecionadas: [],
-      nomeResponsavelEmpresa: '',
-      nowLocationIp: clientIP,
-      nrVezesDividir: 1,
-      nrVezesDividirMatricula: 1,
-      observacaoCliente: '',
-      origemCobranca: 1,
-      pactoPayComunicacao: 1,
-      pais: 1,
-      parcelasSelecionadas: null,
-      passaporte: '',
-      permiteInformarDataUtilizacao: false,
-      permitirRenovacao: false,
-      produtos: [],
-      responsavelLink: 0,
-      responsavelMae: '',
-      responsavelPai: '',
-      respostaParqJson: '',
-      todasEmAberto: false,
-      usuarioResponsavel: 0,
-      utm_data: '',
-      vencimentoFatura: 10,
-      vendaConsultor: false
+    if (config.gerarLink === undefined) {
+      config.gerarLink = true
     }
 
-    console.log(`[Venda V3] Processando venda para ${slug}, plano ${planoId}, método ${paymentMethod}`)
-    
-    // Processar venda usando API V3
-    const resultado = await pactoV3API.cadastrarVenda(slug, dadosVenda, vendaToken)
+    console.log(`[Negociacao] Finalizando negociação para ${slug}`)
 
-    return NextResponse.json({ 
-      resultado, 
-      source: 'api-v3',
-      paymentMethod,
-      planoId,
-      slug
+    const resultado = await pactoNegociacaoAPI.finalizarNegociacao(token, empresaId, config)
+
+    return NextResponse.json({
+      success: true,
+      data: resultado,
+      source: 'negociacao'
     })
   } catch (error: any) {
-    console.error('[POST /api/pacto-v3/venda V3]', error)
+    console.error('[POST /api/pacto-v3/venda Negociacao]', error)
 
     return NextResponse.json({ 
-      error: 'Falha ao processar venda',
+      error: 'Falha ao finalizar negociação',
       message: error.message,
       source: 'error'
     }, { status: 500 })
+  }
+}
+
+async function buildNegotiationConfig({
+  token,
+  empresaId,
+  payload,
+  config,
+}: {
+  token: string
+  empresaId: string
+  payload: any
+  config: ConfigsContratoDTO | null
+}): Promise<ConfigsContratoDTO | null> {
+  if (config?.cliente) {
+    const empresaNumero = Number(empresaId)
+    if (!config.empresa && !Number.isNaN(empresaNumero)) {
+      config.empresa = empresaNumero
+    }
+    return config
+  }
+
+  const clienteNome = payload?.cliente?.nome || payload?.customer?.nome
+  const planoId = payload?.planoId || payload?.plano
+
+  if (!clienteNome || !planoId) {
+    return null
+  }
+
+  const clientes = await pactoNegociacaoAPI.buscarClientes(token, empresaId, clienteNome)
+  const clienteEncontrado = clientes[0]
+  if (!clienteEncontrado) {
+    throw new Error('Cliente não encontrado para negociação')
+  }
+
+  const check = await pactoNegociacaoAPI.checkNegociacao(token, empresaId, clienteEncontrado.codigo, 0, true)
+  const contratoBase = check?.codigoContratoRenovacao ?? 0
+  const planoDetalhe = await pactoNegociacaoAPI.obterDadosPlano(token, empresaId, Number(planoId), contratoBase, 'ATIVO')
+  if (!planoDetalhe) {
+    throw new Error('Não foi possível obter dados do plano para negociação')
+  }
+
+  const duracao = planoDetalhe.duracoes?.[0]
+  const condicao = duracao?.condicoes?.[0]
+  const horario = planoDetalhe.horarios?.[0]
+
+  if (!duracao || !condicao || !horario) {
+    throw new Error('Dados insuficientes do plano para negociação')
+  }
+
+  const modalidades = (planoDetalhe.modalidades || []).map((modalidade): PlanoModalidadeDTO => {
+    const configsVezes = (modalidade.configsVezes || []).map((configVezes) => ({
+      ...configVezes,
+      horario: configVezes.horario || horario.codigo,
+    }))
+    return {
+      ...modalidade,
+      configsVezes: configsVezes.length ? configsVezes : [{
+        codigo: modalidade.codigo,
+        vezes: modalidade.nrvezes || 1,
+        duracao: duracao.codigo,
+        horario: horario.codigo,
+      }],
+    }
+  })
+
+  const empresaNumero = Number(empresaId)
+  const usuario = payload?.usuario || payload?.usuarioId
+
+  return {
+    contratoBase,
+    plano: Number(planoId),
+    empresa: Number.isNaN(empresaNumero) ? undefined : empresaNumero,
+    usuario: usuario ? Number(usuario) : undefined,
+    cliente: clienteEncontrado.codigo,
+    duracao: duracao.codigo,
+    condicao: condicao.codigo,
+    horario: horario.codigo,
+    dataLancamento: Date.now(),
+    diaPrimeiraParcela: payload?.diaPrimeiraParcela || 10,
+    tipoContrato: 'ESPONTANEO',
+    inicio: Date.now(),
+    gerarLink: true,
+    modalidades,
+    produtos: [],
   }
 }
