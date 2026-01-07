@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Clock3, Dumbbell, HeartPulse, Shield, ShieldCheck, Sparkles, Users, Baby, ChevronDown } from "lucide-react"
@@ -109,6 +109,8 @@ const socialLinks = [
 
 export default function LiveStudioPage() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -118,6 +120,36 @@ export default function LiveStudioPage() {
   const scale = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0.8, 1, 1, 0.8])
   const borderRadius = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], ["2rem", "0rem", "0rem", "2rem"])
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0])
+
+  // Handle Video Volume on Scroll
+  useEffect(() => {
+    return scrollYProgress.on("change", (latest) => {
+      if (videoRef.current) {
+        // Ramp volume from 0 to 1 as scroll goes from 0 to 0.4
+        // Fade out volume from 0.6 to 1
+        let volume = 0
+        if (latest < 0.4) {
+          volume = latest / 0.4
+        } else if (latest > 0.6) {
+          volume = 1 - ((latest - 0.6) / 0.4)
+        } else {
+          volume = 1
+        }
+        
+        // Clamp volume between 0 and 1
+        volume = Math.max(0, Math.min(1, volume))
+        
+        videoRef.current.volume = volume
+        
+        // Unmute if volume is up
+        if (volume > 0.05) {
+          videoRef.current.muted = false
+        } else {
+          videoRef.current.muted = true
+        }
+      }
+    })
+  }, [scrollYProgress])
 
   return (
     <main className="min-h-screen bg-black text-white selection:bg-yellow-500/30">
@@ -172,6 +204,7 @@ export default function LiveStudioPage() {
             className="relative w-full md:w-[90%] aspect-video md:aspect-[21/9] overflow-hidden shadow-2xl shadow-yellow-900/10 bg-neutral-900/50"
           >
             <video
+              ref={videoRef}
               src={videoSrc}
               className="absolute inset-0 w-full h-full object-cover"
               playsInline
