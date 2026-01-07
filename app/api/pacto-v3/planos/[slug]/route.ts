@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { pactoV2API } from '@/src/lib/api/pacto-v2'
-import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
+import { pactoNegociacaoAPI, resolveNegociacaoAuth } from '@/src/lib/api/pacto-negociacao'
+import { cacheManager } from '@/src/lib/utils/cache-manager'
 
 // Função helper para adicionar cabeçalhos CORS
 function getCorsHeaders(origin?: string | null) {
@@ -43,17 +43,28 @@ export async function OPTIONS(req: NextRequest) {
 }
 
 // GET /api/pacto-v3/planos/:slug
-// Busca planos usando API V2 da Pacto com cache
+// Busca planos usando API de negociação com cache
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const origin = req.headers.get('origin')
   const corsHeaders = getCorsHeaders(origin)
+  const { searchParams } = req.nextUrl
+
+  const codigoCliente = Number(searchParams.get('cliente') || searchParams.get('codigoCliente'))
+  const contrato = searchParams.get('contrato') ? Number(searchParams.get('contrato')) : undefined
+  const incluirBolsaParam = searchParams.get('incluirBolsa')
+  const incluirBolsa = incluirBolsaParam ? incluirBolsaParam === 'true' : undefined
+  const planoForcar = searchParams.get('planoForcar') ? Number(searchParams.get('planoForcar')) : undefined
+
+  if (!codigoCliente || Number.isNaN(codigoCliente)) {
+    return NextResponse.json({ error: 'Parâmetro cliente é obrigatório para listar planos de negociação.' }, { status: 400, headers: corsHeaders })
+  }
 
   // Verificar cache primeiro (30 minutos)
-  const cacheKey = cacheKeys.planos(slug)
+  const cacheKey = `negociacao-planos:${slug}:${codigoCliente}:${contrato ?? '0'}:${planoForcar ?? '0'}:${incluirBolsa ?? 'default'}`
   const cached = cacheManager.get(cacheKey)
   if (cached) {
-    console.log(`[Cache] Planos encontrados no cache para ${slug}`)
+    console.log(`[Cache] Planos de negociação encontrados no cache para ${slug}`)
     return NextResponse.json(
       { planos: cached, fallback: false, source: 'cache' },
       { headers: corsHeaders }
@@ -61,34 +72,30 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
   }
 
   try {
-    // Buscar planos usando API V2
-    const planos = await pactoV2API.getPlanosUnidade(slug)
+    const { token, empresaId } = await resolveNegociacaoAuth(req.headers, slug)
+    if (!token || !empresaId) {
+      return NextResponse.json({ error: 'Token ou empresaId não configurados para negociação.' }, { status: 401, headers: corsHeaders })
+    }
+
+    const planos = await pactoNegociacaoAPI.listarPlanos(token, empresaId, codigoCliente, contrato, incluirBolsa, planoForcar)
 
     // Armazenar no cache por 30 minutos
     cacheManager.set(cacheKey, planos, 30 * 60 * 1000)
-    console.log(`[Cache] Planos armazenados no cache para ${slug}`)
+    console.log(`[Cache] Planos de negociação armazenados no cache para ${slug}`)
 
     return NextResponse.json(
       { planos, fallback: false, source: 'api' },
       { headers: corsHeaders }
     )
   } catch (error: any) {
-    console.error('[GET /api/pacto-v3/planos V2]', error)
-
-    // Fallback estático em caso de erro
-    const fallbackPlanos = [
-      { codigo: 1, nome: "Plano Básico", mensalidade: 99.90, adesao: 0, fidelidade: 12 },
-      { codigo: 2, nome: "Plano Premium", mensalidade: 149.90, adesao: 0, fidelidade: 12 }
-    ]
+    console.error('[GET /api/pacto-v3/planos Negociacao]', error)
 
     return NextResponse.json(
       { 
-        planos: fallbackPlanos, 
-        fallback: true, 
-        source: 'static', 
-        error: error.message 
+        error: 'Falha ao obter planos',
+        message: error.message,
       },
-      { headers: corsHeaders }
+      { status: 500, headers: corsHeaders }
     )
   }
 }
