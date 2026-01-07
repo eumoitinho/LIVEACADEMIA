@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
   const planoForcar = searchParams.get('planoForcar') ? Number(searchParams.get('planoForcar')) : undefined
 
   if (!codigoCliente || Number.isNaN(codigoCliente)) {
-    const cacheKey = cacheKeys.planos(slug)
+    const cacheKey = `planos:${slug}`
     const cached = cacheManager.get(cacheKey)
     if (cached) {
       console.log(`[Cache] Planos encontrados no cache para ${slug}`)

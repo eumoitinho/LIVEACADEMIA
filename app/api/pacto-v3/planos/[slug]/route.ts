@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pactoNegociacaoAPI, resolveNegociacaoAuth } from '@/src/lib/api/pacto-negociacao'
 import { pactoV2API } from '@/src/lib/api/pacto-v2'
-import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
+import { cacheManager } from '@/src/lib/utils/cache-manager'
 import { locations } from '@/src/lib/config/locations'
 
 // Função helper para adicionar cabeçalhos CORS
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
   const planoForcar = searchParams.get('planoForcar') ? Number(searchParams.get('planoForcar')) : undefined
 
   if (!codigoCliente || Number.isNaN(codigoCliente)) {
-    const cacheKey = cacheKeys.planos(slug)
+    const cacheKey = `planos:${slug}`
     const cached = cacheManager.get(cacheKey)
     if (cached) {
       console.log(`[Cache] Planos encontrados no cache para ${slug}`)
