@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { pactoNegociacaoAPI, resolveNegociacaoAuth } from '@/src/lib/api/pacto-negociacao'
 import { pactoV2API } from '@/src/lib/api/pacto-v2'
 import { locations } from '@/src/lib/config/locations'
-import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
+import { cacheManager } from '@/src/lib/utils/cache-manager'
 
 // GET /api/pacto/planos/:slug
 // Busca planos usando API de negociação com cache
