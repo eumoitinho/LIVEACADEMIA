@@ -1,7 +1,9 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { useRef } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight, Clock3, Dumbbell, HeartPulse, Shield, ShieldCheck, Sparkles, Users, Baby, ChevronDown } from "lucide-react"
 import StudioHeader from "./studio-header"
 
@@ -106,25 +108,35 @@ const socialLinks = [
 ]
 
 export default function LiveStudioPage() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  })
+
+  // Animation values for Video
+  const scale = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0.8, 1, 1, 0.8])
+  const borderRadius = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], ["2rem", "0rem", "0rem", "2rem"])
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0])
+
   return (
     <main className="min-h-screen bg-black text-white selection:bg-yellow-500/30">
       <StudioHeader />
       
-      {/* Background Gradients */}
+      {/* Background Gradients (Restored) */}
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(255,203,0,0.08),transparent_40%)]" />
       <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_bottom_left,rgba(255,203,0,0.05),transparent_40%)]" />
       <div className="fixed inset-0 -z-10 opacity-[0.2]" style={{backgroundImage: 'url("https://www.transparenttextures.com/patterns/carbon-fibre.png")'}}></div>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 lg:px-12 pt-32 pb-32 overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-yellow-400/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        
-        <div className="max-w-[1400px] mx-auto w-full flex flex-col items-center text-center space-y-12">
-          <motion.div 
+      {/* Hero Text Only */}
+      <section className="relative pt-24 pb-0 px-6 lg:px-12 flex flex-col items-center justify-center text-center overflow-hidden">
+         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-yellow-400/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+         
+         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="space-y-6 max-w-4xl"
+            className="space-y-6 max-w-4xl relative z-10"
           >
             <h1 className="text-4xl md:text-6xl lg:text-7xl tracking-tight text-white leading-[1.1]">
               <span className="font-extrabold uppercase block mb-1">Aulas direcionadas</span>
@@ -136,82 +148,79 @@ export default function LiveStudioPage() {
             <p className="text-xl md:text-2xl text-white/80 font-light max-w-2xl mx-auto">
               Mais atenção, orientação e treinos otimizados para você!
             </p>
+            <div className="pt-8">
+               <Link
+                href="#planos"
+                className="group relative inline-flex items-center gap-3 bg-yellow-400 text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-300 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.4)]"
+              >
+                COMPRE CRÉDITOS E AGENDE SEU TREINO!
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
           </motion.div>
+      </section>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative w-full max-w-5xl aspect-video rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-yellow-900/10 bg-neutral-900/50"
+      {/* Sticky Scroll Video Section */}
+      <section ref={containerRef} className="relative h-[250vh]">
+        <div className="sticky top-0 h-screen flex flex-col items-center pt-24 overflow-hidden">
+          <motion.div 
+            style={{ 
+              scaleX: scale,
+              scaleY: scale,
+              borderRadius 
+            }}
+            className="relative w-full md:w-[90%] aspect-video md:aspect-[21/9] overflow-hidden shadow-2xl shadow-yellow-900/10 bg-neutral-900/50"
           >
             <video
               src={videoSrc}
               className="absolute inset-0 w-full h-full object-cover"
-              controls
               playsInline
               muted
               loop
               autoPlay
             />
-            <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-left">
+            <motion.div 
+              style={{ opacity }}
+              className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-left pointer-events-none"
+            >
               <p className="text-white/90 text-sm font-medium tracking-wide uppercase">
                 Exclusividade, eficiência e atenção total em cada movimento
               </p>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="pt-4"
-          >
-            <Link
-              href="#planos"
-              className="group relative inline-flex items-center gap-3 bg-yellow-400 text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-300 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.4)]"
-            >
-              COMPRE CRÉDITOS E AGENDE SEU TREINO!
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Fixed Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/70 backdrop-blur-md border-t border-white/10 py-4 px-6 lg:px-12 animate-in slide-in-from-bottom duration-500">
-        <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-center sm:text-left">
-            <h3 className="text-white font-bold text-lg">Live Studio</h3>
-            <p className="text-white/60 text-sm">Treino VIP personalizado com foco em resultados.</p>
-          </div>
-          <Link
-            href="#planos"
-            className="bg-white/10 hover:bg-white/20 text-white px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-wide transition-colors flex items-center gap-2"
-          >
-            Começar Agora
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </div>
-
-      {/* Intro Text Block */}
+      {/* Intro Text Block with Original BG Image */}
       <section className="py-20 px-6 lg:px-12 border-y border-white/5 bg-neutral-900/30">
-        <div className="max-w-4xl mx-auto text-center space-y-8">
-          <p className="text-xl md:text-2xl font-light text-white/80 leading-relaxed">
-            O <strong className="text-yellow-400 font-bold">Live Studio</strong> é o mais novo produto da Live Academia: um espaço exclusivo e inovador projetado para otimizar seus resultados. Com aulas direcionadas e acompanhamento de especialistas, o espaço receberá apenas quatro alunos por horário, garantindo atenção individualizada e um treino que vai muito além dos equipamentos convencionais.
-          </p>
-          <div className="h-px w-24 bg-yellow-400/30 mx-auto" />
-          <p className="text-xl md:text-2xl font-light text-white/80 leading-relaxed">
-            O Live Studio surgiu para transformar seu corpo e mente, proporcionando segurança, eficiência e um ambiente acolhedor. Inicialmente disponível na unidade Live Veneza, com planos de expansão para outras unidades, o Live Studio é a escolha ideal para quem busca um treino VIP e personalizado.
-          </p>
-          
-          <div className="pt-8">
-            <Link
-              href="#planos"
-              className="inline-flex items-center text-sm font-bold tracking-widest uppercase text-yellow-400 hover:text-white transition-colors border-b border-yellow-400 pb-1 hover:border-white"
-            >
-              COMPRE CRÉDITOS E AGENDE SEU TREINO!
-            </Link>
+        <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 items-center">
+          <div className="relative aspect-[4/5] lg:aspect-square w-full max-w-md mx-auto lg:max-w-none rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+             <Image 
+               src="/studio/bg-live.jpg" 
+               alt="Aulas personalizadas" 
+               fill 
+               className="object-cover"
+             />
+             {/* Gradient overlay for text readability if needed, though visually it's distinct */}
+             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+          </div>
+          <div className="flex flex-col space-y-8 text-center lg:text-left">
+            <p className="text-xl md:text-2xl font-light text-white/80 leading-relaxed">
+              O <strong className="text-yellow-400 font-bold">Live Studio</strong> é o mais novo produto da Live Academia: um espaço exclusivo e inovador projetado para otimizar seus resultados. Com aulas direcionadas e acompanhamento de especialistas, o espaço receberá apenas quatro alunos por horário, garantindo atenção individualizada e um treino que vai muito além dos equipamentos convencionais.
+            </p>
+            <div className="h-px w-24 bg-yellow-400/30 mx-auto lg:mx-0" />
+            <p className="text-xl md:text-2xl font-light text-white/80 leading-relaxed">
+              O Live Studio surgiu para transformar seu corpo e mente, proporcionando segurança, eficiência e um ambiente acolhedor. Inicialmente disponível na unidade Live Veneza, com planos de expansão para outras unidades, o Live Studio é a escolha ideal para quem busca um treino VIP e personalizado.
+            </p>
+            
+            <div className="pt-8">
+              <Link
+                href="#planos"
+                className="inline-flex items-center text-sm font-bold tracking-widest uppercase text-yellow-400 hover:text-white transition-colors border-b border-yellow-400 pb-1 hover:border-white"
+              >
+                COMPRE CRÉDITOS E AGENDE SEU TREINO!
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -249,40 +258,51 @@ export default function LiveStudioPage() {
         </div>
       </section>
 
-      {/* Differentiators Section */}
+      {/* Differentiators Section with Feature Image */}
       <section className="py-32 px-6 lg:px-12 bg-zinc-900/50 relative">
         <div className="max-w-[1400px] mx-auto">
-          <div className="flex flex-col lg:flex-row gap-16 lg:items-end mb-20">
-             <div className="lg:w-1/2">
-                <span className="block text-sm uppercase tracking-[0.35em] text-white/40 mb-6">
-                  Diferenciais
-                </span>
-                <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-[0.9]">
-                  O que torna o <span className="text-yellow-400">Live Studio</span> único?
-                </h2>
-             </div>
-             <div className="lg:w-1/2 pb-2">
-                <p className="text-white/60 text-lg">
-                  Uma experiência completa que une a eficiência do personal trainer com a energia do ambiente de studio.
-                </p>
-             </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
-            {differentiators.map((item, i) => (
-              <div key={i} className="flex gap-6 group hover:translate-x-2 transition-transform duration-300">
-                <div className="shrink-0 pt-1">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-zinc-800 to-black border border-white/10 flex items-center justify-center group-hover:border-yellow-400/50 transition-colors">
-                    <item.icon className="w-6 h-6 text-yellow-400" />
-                  </div>
-                </div>
+           {/* Section Header with Feature Image integrated */}
+           <div className="grid lg:grid-cols-2 gap-16 items-start mb-20">
+              <div className="space-y-8">
                 <div>
-                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">{item.title}</h3>
-                   <p className="text-white/50 leading-relaxed">{item.description}</p>
+                   <span className="block text-sm uppercase tracking-[0.35em] text-white/40 mb-6">
+                     Diferenciais
+                   </span>
+                   <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-[0.9]">
+                     O que torna o <span className="text-yellow-400">Live Studio</span> único?
+                   </h2>
+                </div>
+                <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-white/10 grayscale hover:grayscale-0 transition-all duration-500">
+                  <Image 
+                    src="/studio/feature-live.jpg" 
+                    alt="Diferenciais Live Studio" 
+                    fill 
+                    className="object-cover"
+                  />
                 </div>
               </div>
-            ))}
-          </div>
+              
+              <div className="space-y-12 lg:pt-8">
+                 <p className="text-white/60 text-xl leading-relaxed">
+                   Uma experiência completa que une a eficiência do personal trainer com a energia do ambiente de studio.
+                 </p>
+                 <div className="grid gap-8">
+                    {differentiators.map((item, i) => (
+                      <div key={i} className="flex gap-6 group">
+                        <div className="shrink-0 pt-1">
+                          <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-yellow-400 group-hover:bg-yellow-400 group-hover:text-black transition-all">
+                            <item.icon className="w-5 h-5" />
+                          </div>
+                        </div>
+                        <div>
+                           <h3 className="text-lg font-bold text-white mb-1">{item.title}</h3>
+                           <p className="text-white/50 text-sm leading-relaxed">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                 </div>
+              </div>
+           </div>
         </div>
       </section>
 
