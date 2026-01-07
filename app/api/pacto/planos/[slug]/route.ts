@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pactoNegociacaoAPI, resolveNegociacaoAuth } from '@/src/lib/api/pacto-negociacao'
+import { pactoV2API } from '@/src/lib/api/pacto-v2'
 import { locations } from '@/src/lib/config/locations'
-import { cacheManager } from '@/src/lib/utils/cache-manager'
+import { cacheManager, cacheKeys } from '@/src/lib/utils/cache-manager'
 
 // GET /api/pacto/planos/:slug
 // Busca planos usando API de negociação com cache
@@ -16,12 +17,28 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
   const planoForcar = searchParams.get('planoForcar') ? Number(searchParams.get('planoForcar')) : undefined
 
   if (!codigoCliente || Number.isNaN(codigoCliente)) {
-    const loc = locations.find(l => l.id === slug)
-    if (loc?.planos?.length) {
-      const staticPlanos = (loc.planos || []).map(p => ({ codigo: undefined, nome: p.name, valor: p.price }))
-      return NextResponse.json({ planos: staticPlanos, fallback: true, source: 'static' })
+    const cacheKey = cacheKeys.planos(slug)
+    const cached = cacheManager.get(cacheKey)
+    if (cached) {
+      console.log(`[Cache] Planos encontrados no cache para ${slug}`)
+      return NextResponse.json({ planos: cached, fallback: false, source: 'cache' })
     }
-    return NextResponse.json({ planos: [], fallback: true, source: 'static' })
+
+    try {
+      const planos = await pactoV2API.getPlanosUnidade(slug)
+      cacheManager.set(cacheKey, planos, 30 * 60 * 1000)
+      console.log(`[Cache] Planos armazenados no cache para ${slug}`)
+      return NextResponse.json({ planos, fallback: false, source: 'api' })
+    } catch (error: any) {
+      console.error('[GET /api/pacto/planos V2 fallback]', error)
+
+      const loc = locations.find(l => l.id === slug)
+      if (loc?.planos?.length) {
+        const staticPlanos = (loc.planos || []).map(p => ({ codigo: undefined, nome: p.name, valor: p.price }))
+        return NextResponse.json({ planos: staticPlanos, fallback: true, source: 'static', error: error.message })
+      }
+      return NextResponse.json({ planos: [], fallback: true, source: 'static', error: error.message })
+    }
   }
 
   // Verificar cache primeiro (30 minutos)
