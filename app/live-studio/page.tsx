@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Clock3, Dumbbell, HeartPulse, Shield, ShieldCheck, Sparkles, Users, Baby, ChevronDown } from "lucide-react"
@@ -110,6 +110,7 @@ const socialLinks = [
 export default function LiveStudioPage() {
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [audioEnabled, setAudioEnabled] = useState(false)
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -121,35 +122,44 @@ export default function LiveStudioPage() {
   const borderRadius = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], ["2rem", "0rem", "0rem", "2rem"])
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.8, 1, 1, 0])
 
-  // Handle Video Volume on Scroll
+  // Keep autoplay reliable: start muted and only enable audio on explicit user gesture.
+  // If audio is enabled, we can still fade volume on scroll without toggling `muted`.
   useEffect(() => {
     return scrollYProgress.on("change", (latest) => {
-      if (videoRef.current) {
-        // Ramp volume from 0 to 1 as scroll goes from 0 to 0.4
-        // Fade out volume from 0.6 to 1
-        let volume = 0
-        if (latest < 0.4) {
-          volume = latest / 0.4
-        } else if (latest > 0.6) {
-          volume = 1 - ((latest - 0.6) / 0.4)
-        } else {
-          volume = 1
-        }
-        
-        // Clamp volume between 0 and 1
-        volume = Math.max(0, Math.min(1, volume))
-        
-        videoRef.current.volume = volume
-        
-        // Unmute if volume is up
-        if (volume > 0.05) {
-          videoRef.current.muted = false
-        } else {
-          videoRef.current.muted = true
-        }
+      if (!audioEnabled) return
+      const videoEl = videoRef.current
+      if (!videoEl) return
+
+      // Ramp volume from 0 to 1 as scroll goes from 0 to 0.4
+      // Fade out volume from 0.6 to 1
+      let volume = 0
+      if (latest < 0.4) {
+        volume = latest / 0.4
+      } else if (latest > 0.6) {
+        volume = 1 - ((latest - 0.6) / 0.4)
+      } else {
+        volume = 1
       }
+
+      videoEl.volume = Math.max(0, Math.min(1, volume))
     })
-  }, [scrollYProgress])
+  }, [scrollYProgress, audioEnabled])
+
+  const enableAudio = () => {
+    const videoEl = videoRef.current
+    if (!videoEl) return
+
+    setAudioEnabled(true)
+
+    // Must be inside a user gesture (click/tap) to work across browsers.
+    try {
+      videoEl.muted = false
+      videoEl.volume = Math.max(videoEl.volume, 0.8)
+      void videoEl.play()
+    } catch {
+      // Ignore: some browsers may still block; controls will still allow manual enable.
+    }
+  }
 
   return (
     <main className="min-h-screen bg-black text-white selection:bg-yellow-500/30">
@@ -208,10 +218,20 @@ export default function LiveStudioPage() {
               src={videoSrc}
               className="absolute inset-0 w-full h-full object-cover"
               playsInline
-              muted
+              muted={!audioEnabled}
               loop
               autoPlay
             />
+
+            {!audioEnabled && (
+              <button
+                type="button"
+                onClick={enableAudio}
+                className="absolute bottom-6 right-6 z-10 rounded-full bg-black/70 text-white border border-white/15 px-5 py-3 text-sm font-bold tracking-widest uppercase hover:bg-black/80 transition-colors"
+              >
+                Ativar som
+              </button>
+            )}
             <motion.div 
               style={{ opacity }}
               className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-left pointer-events-none"
